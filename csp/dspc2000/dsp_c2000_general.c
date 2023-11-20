@@ -1,3 +1,4 @@
+
 #include "DSP28x_Project.h" 
 
 // I2CA_Init - From C2000Ware
@@ -56,6 +57,12 @@ GMP_LENGTH_T gmp_iic_transmit(GMP_IIC_HANDLE_T hi2c, GMP_LENGTH_T iic_dev_addr, 
 	I2caRegs.I2CMDR.all = 0x6E20;
 
 	return len;
+}
 
+GMP_LENGTH_T gmp_iic_receive(GMP_IIC_HANDLE_T hi2c, GMP_LENGTH_T iic_dev_addr, GMP_DATA_ELEMENT_T* data, GMP_LENGTH_T len)
+{
 
+	
+
+	return I2C_SUCCESS;
 }

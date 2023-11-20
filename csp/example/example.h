@@ -21,4 +21,8 @@
 #define GMP_LENGTH_T uint32_t
 #endif
 
+#ifndef GMP_CMD_T
+#define GMP_CMD_T uint32_t 
+#endif
+
 #endif // _FILE_EXAMPLE_H_

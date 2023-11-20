@@ -62,5 +62,22 @@ typedef struct _tag_gmp_phy_mapping_t
 	gmp_peripheral_t* peripheral;
 }gmp_phy_mapping_t;
 
+// IIC
+typedef struct _tag_dev_iic_mapping_t
+{
+	gmp_phy_mapping_t base;
+	gmp_length_t device_id;
+	gmp_cmd_t cmd;
+	gmp_length_t cmd_length;
+}gmp_iic_mapping_t;
+
+typedef struct _tag_dev_iic_mem_mapping_t
+{
+	gmp_phy_mapping_t base;
+	gmp_length_t device_id;
+	gmp_cmd_t cmd;
+	gmp_length_t mem_length;
+}gmp_iic_mem_mapping_t;
+
 #endif // _FILE_PROTOTYPE_H_
 

@@ -53,6 +53,14 @@ extern gmp_stat_t last_fatal;
 #define GMP_STAT_BUSY                   ((GMP_STAT_WARN_BEGIN  + 6))
 // Device is not ready, maybe you haven't init the peripheral
 #define GMP_STAT_NOT_READY              ((GMP_STAT_ERRO_BEGIN  + 7))
+// MM module to less memory too small
+#define GMP_STAT_MM_NOT_ENOUGH_MEM      ((GMP_STAT_ERRO_BEGIN  + 8))
+// MM module cannot write these memory, or memory check fault
+#define GMP_STAT_MM_WRITE_REFUSE        ((GMP_STAT_ERRO_BEGIN  + 8))
+// MM module pass an invalid parameter into the function
+#define GMP_STAT_INVALID_PARAM          ((GMP_STAT_ERRO_BEGIN  + 9))
+// MM module unable to find the specified memory block
+#define GMP_STAT_MM_NO_SPECIFIED_BLOCK  ((GMP_STAT_ERRO_BEGIN  + 10))
 
 #ifdef __cplusplus
 }
