@@ -1,3 +1,3 @@
-// 状态机:shutdown, config, ready, busy,
+// 状态机:shutdown, config, wfr_ready, busy,
 // 读写
 // 主值
