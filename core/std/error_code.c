@@ -1,5 +1,4 @@
-#include <stdint.h>
-#include "error_code.h"
+#include <core/gmp_core.h>
 
 // This variable may save the last error (not fatal) code.
 // These code may help developer locate faults rapidly.
