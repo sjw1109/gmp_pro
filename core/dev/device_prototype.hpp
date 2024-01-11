@@ -1,5 +1,8 @@
 // 
 
+// TODO BUG REPORT: local variables is not inited.
+// must use `data_type result = 0;` instead `data_type result;`.
+
 #include <stdint.h>
 #include <assert.h>
 #include <string.h>

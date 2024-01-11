@@ -54,7 +54,7 @@ void gmp_entry(void)
 #endif // SPECIFY_ENABLE_TEST_ENVIRONMENT
 
 	// take over `main loop`
-#ifdef GMP_WINDOWS
+#ifdef SPECIFY_PC_TEST_ENV
 	gmp_loop();
 #else
 	while (1) gmp_loop();

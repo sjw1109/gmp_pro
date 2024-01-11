@@ -38,6 +38,9 @@
 // As a common user, we strongly suggest you disable the macro
 //#define SPECIFY_ENABLE_TEST_ENVIRONMENT
 
+// Specify the test environment is PC operation system
+//#define SPECIFY_PC_TEST_ENV
+
 // specify what happened when error happened.
 // when you enable the flag, the system will stuck when error occurred.
 // Or, when error occurred, the program will continue running.
