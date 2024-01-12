@@ -18,11 +18,17 @@ extern "C"
 
 	//////////////////////////////////////////////////////////////////////////
 	// Handle Type definition, copy from <main.c>
-extern I2C_HandleTypeDef hi2c1;
+extern	CAN_HandleTypeDef hcan;
 
-extern UART_HandleTypeDef huart1;
-extern UART_HandleTypeDef huart2;
-extern UART_HandleTypeDef huart3;
+extern	CRC_HandleTypeDef hcrc;
+
+extern	I2C_HandleTypeDef hi2c1;
+
+extern	SPI_HandleTypeDef hspi1;
+
+extern	UART_HandleTypeDef huart1;
+extern	UART_HandleTypeDef huart2;
+
 
 
 
@@ -32,6 +38,9 @@ extern UART_HandleTypeDef huart3;
 // This is the default debug device handle
 extern gmp_concept_write_direct* default_debug_dev;
 #endif // SPECIFY_ENABLE_DEFUALT_DEBUG_PRINT_FUNC
+
+extern gmp_iic_stm32_impl_t iic;
+extern gmp_uart_stm32_impl_t dbg_uart;
 
 	//////////////////////////////////////////////////////////////////////////
 	// Devices on the peripheral

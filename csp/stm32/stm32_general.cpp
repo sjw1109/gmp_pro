@@ -287,7 +287,7 @@ gmp_size_t gmp_iic_stm32_impl_t::write(addr_type device_addr, addr_type reg_addr
 #endif // HAL_I2C_MODULE_ENABLED
 
 #if defined HAL_SPI_MODULE_ENABLED
-data_type gmp_spi_stm32_impl_t::read() 
+gmp_spi_stm32_impl_t::data_type gmp_spi_stm32_impl_t::read() 
 {
 	data_type data;
 
@@ -356,7 +356,7 @@ gmp_size_t gmp_spi_stm32_impl_t::write(data_type data)
 	}
 }
 
-data_type gmp_spi_stm32_impl_t::readwrite(data_type data) 
+gmp_spi_stm32_impl_t::data_type gmp_spi_stm32_impl_t::readwrite(data_type data) 
 {
 	data_type recv;
 	HAL_StatusTypeDef stat = HAL_SPI_TransmitReceive(handle, (uint8_t*)&data,

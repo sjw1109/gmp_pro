@@ -27,6 +27,8 @@
 #include <csp/stm32/stm32h7/stm32h7_general.h>
 #elif defined STM32F103xB
 #include <csp/stm32/stm32f1/stm32f1_general.h>
+#elif defined STM32F103x6
+#include <csp/stm32/stm32f1/stm32f1_general.h>
 #endif
 
 // Texas Instrument

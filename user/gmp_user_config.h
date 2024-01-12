@@ -70,7 +70,7 @@
 
 // The default print function rely on the allocation function,
 // so the alloc_function and free_function is necessary
-//#define SPECIFY_ENABLE_DEFUALT_DEBUG_PRINT_FUNC
+#define SPECIFY_ENABLE_DEFUALT_DEBUG_PRINT_FUNC
 
 // In default case, the print function may use gmp_malloc function,
 // if you have to avoid the malloc and free you should enable the following function 

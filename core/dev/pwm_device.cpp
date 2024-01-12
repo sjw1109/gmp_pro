@@ -1,7 +1,7 @@
 // This file provide a set of PWM write function prototype
 
 #include <core/gmp_core.hpp>
-#include <ctrl/ctrl_config.h>
+#include <ctl/ctrl_config.h>
 
 #include <core/dev/pwm_device.h>
 

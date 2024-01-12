@@ -10,6 +10,8 @@
 #include "stm32l1xx_hal.h"
 #elif defined STM32F103xB
 #include "stm32f1xx_hal.h"
+#elif defined STM32F103x6
+#include "stm32f1xx_hal.h"
 #endif
 
 

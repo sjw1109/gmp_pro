@@ -17,6 +17,7 @@
 //gmp_gpio_stm32_impl_t da_load(GPIOD, GPIO_PIN_3);
 //gmp_gpio_stm32_impl_t da_sync(GPIOB, GPIO_PIN_5);
 gmp_iic_stm32_impl_t iic(&hi2c1);
+gmp_uart_stm32_impl_t dbg_uart(&huart1);
 
 //////////////////////////////////////////////////////////////////////////
 // Devices on the peripheral
