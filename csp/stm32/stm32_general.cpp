@@ -99,7 +99,7 @@ gmp_size_t gmp_uart_stm32_impl_t::read(gmp_data_t* data, gmp_size_t length)
 	}
 }
 
-gmp_size_t write(data_type* data, gmp_size_t length) 
+gmp_size_t gmp_uart_stm32_impl_t::write(data_type* data, gmp_size_t length) 
 {
 	HAL_StatusTypeDef stat = HAL_UART_Transmit(handle, reinterpret_cast<uint8_t*>(data), length, g_delay_ms);
 

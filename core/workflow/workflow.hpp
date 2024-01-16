@@ -432,8 +432,8 @@ class gmp_wf_node_base_gt
 public:
 	// ctor & dtor
 	gmp_wf_node_base_gt()
-:id(0)
-{}
+		:id(0)
+	{}
 
 	gmp_wf_node_base_gt(gmp_size_t id)
 		:id(id)
@@ -496,7 +496,15 @@ class gmp_wf_node_gt
 {
 public:
 	// ctor & dtor
-	gmp_wf_node_gt() = default;
+
+	// default constructor
+	gmp_wf_node_gt()
+		:
+#if defined SPECIFY_WORKFLOW_NODE_OWN_LEAVE
+		leave(nullptr),
+#endif // SPECIFY_WORKFLOW_START_END_CALLBACK
+		routine(nullptr), transfer(nullptr)
+	{}
 
 	// The following constructor is generally in use.
 	gmp_wf_node_gt(gmp_size_t id)
@@ -601,8 +609,8 @@ class gmp_wf_delay_node_t
 public:
 	// ctor & dtor
 	gmp_wf_delay_node_t()
-:t0(0), default_node(wf_end_node)
-{}
+		:t0(0), default_node(wf_end_node)
+	{}
 
 	gmp_wf_delay_node_t(gmp_time_t delay, gmp_wf_node_base_gt* target)
 		:t0(delay), default_node(target)
@@ -665,7 +673,9 @@ class gmp_wf_node_t0_t
 {
 public:
 	// ctor & dtor
-	gmp_wf_node_t0_t() = default;
+	gmp_wf_node_t0_t()
+		:t0(0), default_node(wf_end_node)
+	{}
 
 public:
 	gmp_wf_node_base_gt* node_routine(gmp_workflow_t* wf) override
@@ -689,7 +699,7 @@ public:
 	gmp_time_t t0;
 
 	// default transfer target
-	gmp_wf_node_gt* default_node;
+	gmp_wf_node_base_gt* default_node;
 
 
 };
@@ -701,7 +711,9 @@ class gmp_wf_node_t2_t
 {
 public:
 	// ctor & dtor
-	gmp_wf_node_t2_t() = default;
+	gmp_wf_node_t2_t()
+		:	t1(0), t2(0), last_exec_time(0)
+	{}
 
 public:
 	virtual gmp_wf_node_base_gt* node_routine(gmp_workflow_t* wf) override
@@ -755,7 +767,11 @@ class gmp_wf_node_t3_t
 {
 public:
 	// ctor & dtor
-	gmp_wf_node_t3_t() = default;
+//	gmp_wf_node_t3_t() = default;
+
+	gmp_wf_node_t3_t()
+		:t0(0), default_node(wf_end_node)
+	{}
 
 public:
 	virtual gmp_wf_node_base_gt* node_routine(gmp_workflow_t* wf) override
@@ -811,7 +827,11 @@ class gmp_wf_barrier_gt
 {
 public:
 	//ctor & dtor
-	gmp_wf_barrier_gt() = default;
+	gmp_wf_barrier_gt()
+		:gmp_wf_node_base_gt(0)
+	{
+
+	}
 
 public:
 	gmp_wf_node_base_gt* node_routine(gmp_workflow_t* wf) override
