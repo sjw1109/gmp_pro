@@ -26,9 +26,11 @@
 #define GMP_PORT_SIZE_T			uint32_t
 
 // Basic handle definition
+#define GMP_PORT_HGPIO_T    GPIO_HandleTypeDef*
 #define GMP_PORT_HIIC_T		I2C_HandleTypeDef*
 #define GMP_PORT_HUART_T	UART_HandleTypeDef*
 #define GMP_PORT_HSPI_T		SPI_HandleTypeDef*
+#define GMP_PORT_HCAN_T     CAN_HandleTypeDef*
 #define GMP_PORT_HIIS_T
 #define GMP_PORT_HUSART_T
 

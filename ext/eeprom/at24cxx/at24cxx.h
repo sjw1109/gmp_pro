@@ -3,7 +3,7 @@
 #define _FILE_AT24CXX_H_
 
 // This device is for ATMEL AT24Cxx(xx = 01,02,04,08,16)
-class at24cxx
+class at24cxx final
 	:public iic_storage_device_t
 {
 public:
@@ -50,11 +50,11 @@ public:
 
 	virtual cell_type read(addr_type addr);
 
-	virtual gmp_size_t write(addr_type addr, const cell_type data);
+	virtual gmp_size_t write(addr_type addr, cell_type data);
 
 	virtual gmp_size_t read(addr_type addr, data_type* data, gmp_size_t length);
 
-	virtual gmp_size_t write(addr_type addr, const data_type* data, gmp_size_t length);
+	virtual gmp_size_t write(addr_type addr, data_type* data, gmp_size_t length);
 
 public:
 	// Higher address mask

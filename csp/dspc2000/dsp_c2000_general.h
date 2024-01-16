@@ -31,9 +31,11 @@
 #define GMP_PORT_SIZE_T			uint16_t 
 
 // Basic handle definition
+#deifne GMP_PORT_HGPIO_T    volatile struct GPIO_CTRL_REGS*
 #define GMP_PORT_HIIC_T		volatile struct I2C_REGS*
 #define GMP_PORT_HUART_T	volatile struct SCI_REGS*
 #define GMP_PORT_HSPI_T		volatile struct SPI_REGS*
+#define GMP_PORT_HCAN_T     volatile struct ECAN_REGS*
 //#define GMP_PORT_HIIS_T
 //#define GMP_PORT_HUSART_T
 

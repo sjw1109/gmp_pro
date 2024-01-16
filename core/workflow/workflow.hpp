@@ -431,7 +431,9 @@ class gmp_wf_node_base_gt
 {
 public:
 	// ctor & dtor
-	gmp_wf_node_base_gt() = default;
+	gmp_wf_node_base_gt()
+:id(0)
+{}
 
 	gmp_wf_node_base_gt(gmp_size_t id)
 		:id(id)
@@ -598,7 +600,9 @@ class gmp_wf_delay_node_t
 {
 public:
 	// ctor & dtor
-	gmp_wf_delay_node_t() = default;
+	gmp_wf_delay_node_t()
+:t0(0), default_node(wf_end_node)
+{}
 
 	gmp_wf_delay_node_t(gmp_time_t delay, gmp_wf_node_base_gt* target)
 		:t0(delay), default_node(target)

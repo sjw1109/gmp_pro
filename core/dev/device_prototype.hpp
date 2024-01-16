@@ -39,9 +39,9 @@ public:
 		return result;
 	}
 
-	gmp_size_t write(addr_type addr, const data_type data) override
+	gmp_size_t write(addr_type addr, data_type data) override
 	{
-		iic->write(dev_addr, addr, (const gmp_data_t*)&data, reg_size);
+		iic->write(dev_addr, addr, (gmp_data_t*)&data, reg_size);
 		return reg_size;
 	}
 
@@ -78,9 +78,9 @@ public:
 		return result;
 	}
 
-	gmp_size_t write(const data_type data) override
+	gmp_size_t write( data_type data) override
 	{
-		iic->write(dev_addr, (const gmp_data_t*)&data, cmd_size);
+		iic->write(dev_addr, ( gmp_data_t*)&data, cmd_size);
 		return cmd_size;
 	}
 
@@ -121,9 +121,9 @@ public:
 		return result;
 	}
 
-	gmp_size_t write(addr_type addr, const cell_type data) override
+	gmp_size_t write(addr_type addr, cell_type data) override
 	{
-		return iic->write(dev_addr, addr, (const gmp_data_t*)&data, reg_size);
+		return iic->write(dev_addr, addr, (gmp_data_t*)&data, reg_size);
 	}
 
 	gmp_size_t read(addr_type addr, data_type* data, gmp_size_t length) override
@@ -131,7 +131,7 @@ public:
 		return iic->read(dev_addr, addr, (gmp_data_t*)data, length);
 	}
 
-	gmp_size_t write(addr_type addr, const data_type* data, gmp_size_t length) override
+	gmp_size_t write(addr_type addr, data_type* data, gmp_size_t length) override
 	{
 		return iic->write(dev_addr, addr, (gmp_data_t*)data, length);
 	}
@@ -179,7 +179,7 @@ public:
 			return 0;
 	}
 
-	gmp_size_t write(addr_type addr, const data_type* data, gmp_size_t length) override
+	gmp_size_t write(addr_type addr, data_type* data, gmp_size_t length) override
 	{
 		uint8_t addr_size = reg_addr_size;
 		uint8_t data_buf[16];
@@ -197,16 +197,16 @@ public:
 		{
 			memcpy(&data_buf[buf_pos], data, length);
 			buf_pos += length;
-			return spi->write((const gmp_spi_entity::data_type*)data_buf, buf_pos);
+			return spi->write((gmp_spi_entity::data_type*)data_buf, buf_pos);
 		}
 		else
 		{
-			spi->write((const gmp_spi_entity::data_type*)data_buf, buf_pos);
+			spi->write((gmp_spi_entity::data_type*)data_buf, buf_pos);
 		}
 
 
 		if (last_error == GMP_STAT_OK)
-			return spi->write((const gmp_spi_entity::data_type*)data, length);
+			return spi->write((gmp_spi_entity::data_type*)data, length);
 		else
 			return 0;
 	}

@@ -5,11 +5,23 @@
 #define _FILE_COMPILER_SUP_H_
 
 // Check C++ compiler, and ensure it is fulfilling the requirement.
-#if defined __cplusplus
-#if __cplusplus <= 199711L
-#error This library needs at least a C++11 compliant compiler.
-#endif
-#endif
+ #if defined __cplusplus
+
+// In this case some additional features must be ignored
+#if __cplusplus < 201103L
+#define constexpr const
+#define override
+#define final
+#endif // __cplusplus <= 201103L
+
+// Wrong C++ version
+ #if __cplusplus < 199711L
+ #error This library needs at least a C++03 compliant compiler.
+ #endif // __cplusplus <= 199711L
+
+ #endif // __cplusplus
+
+
 
 // To mark a function that shouldn't be optimize by compiler
 #ifndef GMP_NO_OPT

@@ -42,7 +42,7 @@ public:
 	virtual void toggle() = 0;
 	virtual void set_mode(uint8_t mode) = 0;
 
-	virtual gmp_size_t write(const data_type data) = 0;
+	virtual gmp_size_t write(data_type data) = 0;
 	virtual data_type read() = 0;
 
 
@@ -59,6 +59,7 @@ public:
 // entity of the UART device
 class gmp_uart_entity
 	:public virtual gmp_concept_rw_direct,
+	public virtual gmp_concept_write_direct_const,
 	public virtual gmp_concept_rw_single
 {
 public:
@@ -84,7 +85,9 @@ public:
 
 	virtual gmp_size_t write(const data_type* data, gmp_size_t length) = 0;
 
-	virtual  gmp_size_t write(const data_type data) = 0;
+	virtual gmp_size_t write( data_type* data, gmp_size_t length) = 0;
+
+	virtual  gmp_size_t write(data_type data) = 0;
 
 	virtual data_type read() = 0;
 
@@ -138,11 +141,11 @@ public:
 	// Select 7-bit or 11-bit
 	virtual void set_device_addr_length(uint32_t addr_length) = 0;
 
-	virtual gmp_size_t write(addr1_type addr1, addr2_type addr2, const data_type* data, gmp_size_t length) = 0;
+	virtual gmp_size_t write(addr1_type addr1, addr2_type addr2, data_type* data, gmp_size_t length) = 0;
 
 	virtual gmp_size_t read(addr1_type addr1, addr2_type addr2, data_type* data, gmp_size_t length) = 0;
 
-	virtual gmp_size_t write(addr_type addr, const data_type* data, gmp_size_t length) = 0;
+	virtual gmp_size_t write(addr_type addr, data_type* data, gmp_size_t length) = 0;
 
 	virtual gmp_size_t read(addr_type addr, data_type* data, gmp_size_t length) = 0;
 
@@ -209,12 +212,12 @@ public:
 		// The rest config of SPI peripheral need to be complete by user.
 	}
 
-	virtual data_type readwrite(const data_type data) = 0;
-	virtual gmp_size_t write(const data_type data) = 0;
+	virtual data_type readwrite(data_type data) = 0;
+	virtual gmp_size_t write(data_type data) = 0;
 	virtual data_type read() = 0;
-	virtual gmp_size_t readwrite(data_type* data_in, const data_type* data_out, gmp_size_t length) = 0;
+	virtual gmp_size_t readwrite(data_type* data_in, data_type* data_out, gmp_size_t length) = 0;
 	virtual gmp_size_t read(data_type* data, gmp_size_t length) = 0;
-	virtual gmp_size_t write(const data_type* data, gmp_size_t length) = 0;
+	virtual gmp_size_t write(data_type* data, gmp_size_t length) = 0;
 
 
 public:
@@ -269,12 +272,12 @@ public:
 	// utilities function
 
 	// In general, this function only send a standard data frame.
-	virtual gmp_size_t write(addr_type addr, const data_type* data, gmp_size_t length) = 0;
+	virtual gmp_size_t write(addr_type addr, data_type* data, gmp_size_t length) = 0;
 	virtual gmp_size_t read(addr_type addr, data_type* data, gmp_size_t length) = 0;
 
 	// The first address is the frame type:
 	// standard frame or extension frame; data frame or remote frame
-	virtual gmp_size_t write(addr1_type frame_type, addr2_type addr, const data_type* data, gmp_size_t length) = 0;
+	virtual gmp_size_t write(addr1_type frame_type, addr2_type addr, data_type* data, gmp_size_t length) = 0;
 	virtual gmp_size_t read(addr1_type frame_type, addr2_type addr, data_type* data, gmp_size_t length) = 0;
 
 

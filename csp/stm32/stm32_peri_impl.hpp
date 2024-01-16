@@ -1,5 +1,5 @@
 
-
+// base classes headers
 #include <core/dev/peripheral_driver.hpp>
 
 
@@ -8,7 +8,7 @@
 
 #if defined HAL_GPIO_MODULE_ENABLED
 
-#define GMP_PORT_HGPIO_T GPIO_HandleTypeDef*
+//#define GMP_PORT_HGPIO_T GPIO_HandleTypeDef*
 
 class gmp_gpio_stm32_impl_t
 	: public gmp_gpio_entity
@@ -29,13 +29,14 @@ public:
 	void toggle() override;
 
 	// Write and Read function
-	gmp_size_t write(const data_type data) override;
+	gmp_size_t write( data_type data) override;
 	data_type read() override;
 
 	// The following function is determined by chips, not implement
 	void set_mode(uint8_t mode)override
 	{
-		// This function is not implemented
+		// This function is not implemented here
+		gmp_not_impl(__FILE__, __LINE__);
 	}
 
 
@@ -95,11 +96,13 @@ public:
 	// Basic IO functions is defined here.
 	gmp_size_t read(gmp_data_t* data, gmp_size_t length) override;
 
+	gmp_size_t write(data_type* data, gmp_size_t length) override;
+
 	gmp_size_t write(const gmp_data_t* data, gmp_size_t length) override;
 
 	gmp_data_t read() override;
 
-	gmp_size_t write(const gmp_data_t data) override;
+	gmp_size_t write( gmp_data_t data) override;
 
 protected:
 	UART_HandleTypeDef* handle;
@@ -142,13 +145,14 @@ public:
 
 public:
 	// read or write function implement
+
 	gmp_size_t read(addr_type device_addr, data_type* data, gmp_size_t length) override;
 
-	gmp_size_t write(addr_type device_addr, const data_type* data, gmp_size_t length) override;
+	gmp_size_t write(addr_type device_addr,  data_type* data, gmp_size_t length) override;
 
 	gmp_size_t read(addr_type device_addr, addr_type reg_addr, data_type* data, gmp_size_t length) override;
 
-	gmp_size_t write(addr_type device_addr, addr_type reg_addr, const data_type* data, gmp_size_t length) override;
+	gmp_size_t write(addr_type device_addr, addr_type reg_addr,  data_type* data, gmp_size_t length) override;
 
 protected:
 	I2C_HandleTypeDef* handle;
@@ -207,15 +211,15 @@ public:
 	// Basic IO functions defined here
 	data_type read() override;
 
-	gmp_size_t write(const data_type data) override;
+	gmp_size_t write( data_type data) override;
 
-	data_type readwrite(const data_type data) override;
+	data_type readwrite( data_type data) override;
 
 	gmp_size_t read(data_type* data, gmp_size_t length) override;
 
-	gmp_size_t write(const data_type* data, gmp_size_t length) override;
+	gmp_size_t write( data_type* data, gmp_size_t length) override;
 
-	gmp_size_t readwrite(data_type* data_in, const data_type* data_out, gmp_size_t length) override;
+	gmp_size_t readwrite(data_type* data_in,  data_type* data_out, gmp_size_t length) override;
 
 protected:
 	SPI_HandleTypeDef* handle;
