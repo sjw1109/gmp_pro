@@ -22,8 +22,8 @@
 //#define GMP_DATA_ELEMENT_T		uint8_t
 //#define GMP_LENGTH_T			uint16_t
 
-#define GMP_PORT_DATA_T			uint8_t
-#define GMP_PORT_SIZE_T			uint16_t
+#define GMP_PORT_DATA_T			char     // not for sure signed or unsigned
+#define GMP_PORT_SIZE_T			uint32_t
 
 // Basic handle definition
 #define GMP_PORT_HIIC_T		I2C_HandleTypeDef*

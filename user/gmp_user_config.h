@@ -42,9 +42,13 @@
 //#define SPECIFY_PC_TEST_ENV
 
 // specify what happened when error happened.
-// when you enable the flag, the system will stuck when error occurred.
+// When you enable the flag, the system will stuck when error occurred.
 // Or, when error occurred, the program will continue running.
 //#define SPECIFY_STUCK_WHEN_ERROR
+
+// specify GMP should feed watch dog
+// The program will invoke feed watch dog
+#define SPECIFY_ENABLE_FEED_WATCHDOG
 
 //////////////////////////////////////////////////////////////////////////
 // MEMORY CONTROLLER SETTINGS

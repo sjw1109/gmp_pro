@@ -26,6 +26,15 @@ extern "C"
 		void
 	);
 
+#if defined SPECIFY_ENABLE_FEED_WATCHDOG
+	// This function should be implemented by user,
+	// Every Loop routine, this function would be called.
+	// And user should ensure that the function has only one thing is to feed the watchdog
+	void gmp_port_feed_dog(
+		void
+	);
+#endif // SPECIFY_ENABLE_FEED_WATCHDOG
+
 	
 	//////////////////////////////////////////////////////////////////////////
 	// These function have implemented by GMP

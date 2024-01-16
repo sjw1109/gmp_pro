@@ -18,7 +18,7 @@ template<typename data_type>
 class concept_write_direct
 {
 public:
-	virtual gmp_size_t write(data_type* data, gmp_size_t length);
+	virtual gmp_size_t write(const data_type* data, gmp_size_t length) = 0;
 };
 
 typedef concept_write_direct<gmp_data_t> gmp_concept_write_direct;
@@ -27,7 +27,7 @@ template<typename data_type>
 class concept_read_direct
 {
 public:
-	virtual gmp_size_t read(data_type* data, gmp_size_t length);
+	virtual gmp_size_t read(data_type* data, gmp_size_t length) = 0;
 };
 
 typedef concept_read_direct<gmp_data_t> gmp_concept_read_direct;
@@ -44,7 +44,7 @@ template<typename data_type>
 class concept_readwrite_direct
 {
 public:
-	virtual gmp_size_t readwrite(data_type* data_in, data_type* data_out, gmp_size_t length);
+	virtual gmp_size_t readwrite(data_type* data_in, const data_type* data_out, gmp_size_t length) = 0;
 };
 
 typedef concept_readwrite_direct <gmp_data_t> gmp_concept_readwrite_direct;
@@ -62,7 +62,7 @@ template<typename addr_type, typename data_type>
 class concept_read_with_addr
 {
 public:
-	virtual gmp_size_t read(addr_type addr, data_type* data, gmp_size_t length);
+	virtual gmp_size_t read(addr_type addr, data_type* data, gmp_size_t length) = 0;
 };
 
 typedef concept_read_with_addr<gmp_addr_t, gmp_data_t> gmp_concept_read_with_addr;
@@ -71,7 +71,7 @@ template<typename addr_type, typename data_type>
 class concept_write_with_addr
 {
 public:
-	virtual gmp_size_t write(addr_type addr, data_type* data, gmp_size_t length);
+	virtual gmp_size_t write(addr_type addr, const data_type* data, gmp_size_t length) = 0;
 };
 
 typedef concept_write_with_addr<gmp_addr_t, gmp_data_t> gmp_concept_write_with_addr;
@@ -89,14 +89,14 @@ template<typename addr1_type, typename addr2_type, typename data_type>
 class concept_read_with_dualaddr
 {
 public:
-	virtual gmp_size_t read(addr1_type addr1, addr2_type addr2, data_type* data, gmp_size_t length);
+	virtual gmp_size_t read(addr1_type addr1, addr2_type addr2, data_type* data, gmp_size_t length) = 0;
 };
 
 template<typename addr1_type, typename addr2_type, typename data_type>
 class concept_write_with_dualaddr
 {
 public:
-	virtual gmp_size_t write(addr1_type addr1, addr2_type addr2, data_type* data, gmp_size_t length);
+	virtual gmp_size_t write(addr1_type addr1, addr2_type addr2, const data_type* data, gmp_size_t length) = 0;
 };
 
 template<typename addr1_type, typename addr2_type, typename data_type>
@@ -112,14 +112,14 @@ template<typename data_type>
 class concept_read_single
 {
 public:
-	virtual data_type read();
+	virtual data_type read() = 0;
 };
 
 template<typename data_type>
 class concept_write_single
 {
 public:
-	virtual gmp_size_t write(data_type data);
+	virtual gmp_size_t write(const data_type data) = 0;
 };
 
 template<typename data_type>
@@ -133,7 +133,7 @@ typedef concept_rw_single<gmp_data_t> gmp_concept_rw_single;
 class gmp_concept_seek
 {
 public:
-	virtual gmp_size_t seek(gmp_size_t pos);
+	virtual gmp_size_t seek(gmp_size_t pos) = 0;
 };
 
 template<typename data_type>
@@ -148,7 +148,7 @@ template<typename data_type>
 class concept_readwrite_single
 {
 public:
-	virtual data_type readwrite(data_type data);
+	virtual data_type readwrite(const data_type data) = 0;
 };
 
 template<typename data_type>
@@ -172,14 +172,14 @@ template<typename addr_type, typename data_type>
 class concept_read_single_addr
 {
 public:
-	virtual data_type read(addr_type addr);
+	virtual data_type read(addr_type addr) = 0;
 };
 
 template<typename addr_type, typename data_type>
 class concept_write_single_addr
 {
 public:
-	virtual gmp_size_t write(addr_type addr, data_type data);
+	virtual gmp_size_t write(addr_type addr, const data_type data) = 0;
 };
 
 template<typename addr_type, typename data_type>
@@ -226,3 +226,7 @@ typedef concept_wr_single_addr<gmp_addr_t, gmp_data_t> gmp_concept_wr_single_add
 
 
 #endif // _FILE_IO_CONCEPT_HPP_
+
+//////////////////////////////////////////////////////////////////////////
+// Update record
+// BUG REPORT: write function should use const parameters instead of non-const parameters.

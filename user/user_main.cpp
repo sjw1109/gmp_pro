@@ -8,24 +8,27 @@
 
 // Core 
 #include <core/gmp_core.hpp>
-
 #include <core/util/ds/data_ring_buffer.h>
 
-
+// extensions
+#include <ext/eeprom/at24cxx/at24cxx.h>
 
 //////////////////////////////////////////////////////////////////////////
 // global variables here
 
-
+at24cxx eeprom04(&iic, at24cxx::at24c04, 0);
 
 
 //////////////////////////////////////////////////////////////////////////
 // initialize routine here
 void user_init(void)
 {
+	dbg_uart.write("Hello World!\r\n",14);
+	
+	eeprom04.write(255,0x17);
+	uint32_t result = eeprom04.read(255);
 
-
-
+	gmp_dbg_prt("result: %x,error code: %d\r\n", result,eeprom04.iic->last_error);
 }
 
 
@@ -33,8 +36,11 @@ void user_init(void)
 // endless loop function here
 void user_loop(void)
 {
+//	eeprom04.write(255, 0x17);
+	uint32_t result = eeprom04.read(255);
 
-
+	gmp_dbg_prt("result: %x,error code: %d\r\n", result, eeprom04.iic->last_error);
+	HAL_Delay(500);
 }
 
 

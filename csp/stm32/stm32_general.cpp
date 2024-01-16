@@ -24,6 +24,20 @@ void gmp_port_system_stuck(
 	Error_Handler();
 }
 
+// IDWG handle
+#if defined HAL_IWDG_MODULE_ENABLED
+extern IWDG_HandleTypeDef hiwdg;
+#endif // HAL_IWDG_MODULE_ENABLED, IWDG enabled
+
+// The following function is a feed a dog routine
+// For STM32, the watchdog is IWDG.
+void gmp_port_feed_dog()
+{
+#if defined HAL_IWDG_MODULE_ENABLED
+	HAL_IWDG_Refresh(&hiwdg);
+#endif // HAL_IWDG_MODULE_ENABLED, IWDG enabled
+}
+
 //////////////////////////////////////////////////////////////////////////
 // IO peripheral function implement
 #if defined HAL_GPIO_MODULE_ENABLED
@@ -43,7 +57,7 @@ void gmp_gpio_stm32_impl_t::toggle()
 	HAL_GPIO_TogglePin(gpio_group, pin_index);
 }
 
-gmp_size_t gmp_gpio_stm32_impl_t::write(data_type data)
+gmp_size_t gmp_gpio_stm32_impl_t::write(const data_type data)
 {
 	HAL_GPIO_WritePin(gpio_group, pin_index, (GPIO_PinState)data);
 	return 1;
@@ -86,9 +100,9 @@ gmp_size_t gmp_uart_stm32_impl_t::read(gmp_data_t* data, gmp_size_t length)
 }
 
 
-gmp_size_t gmp_uart_stm32_impl_t::write(gmp_data_t* data, gmp_size_t length)
+gmp_size_t gmp_uart_stm32_impl_t::write(const gmp_data_t* data, gmp_size_t length)
 {
-	HAL_StatusTypeDef stat = HAL_UART_Transmit(handle, reinterpret_cast<uint8_t*>(data), length, g_delay_ms);
+	HAL_StatusTypeDef stat = HAL_UART_Transmit(handle, reinterpret_cast<const uint8_t*>(data), length, g_delay_ms);
 
 	// translate error code
 	if (stat == HAL_OK)
@@ -142,9 +156,9 @@ gmp_data_t gmp_uart_stm32_impl_t::read()
 	}
 }
 
-gmp_size_t gmp_uart_stm32_impl_t::write(gmp_data_t data)
+gmp_size_t gmp_uart_stm32_impl_t::write(const gmp_data_t data)
 {
-	HAL_StatusTypeDef stat = HAL_UART_Transmit(handle, reinterpret_cast<uint8_t*>(&data), 1, g_delay_ms);
+	HAL_StatusTypeDef stat = HAL_UART_Transmit(handle, reinterpret_cast<const uint8_t*>(&data), 1, g_delay_ms);
 
 	// translate error code
 	if (stat == HAL_OK)
@@ -173,7 +187,7 @@ gmp_size_t gmp_uart_stm32_impl_t::write(gmp_data_t data)
 #if defined HAL_I2C_MODULE_ENABLED
 gmp_size_t gmp_iic_stm32_impl_t::read(addr_type device_addr, data_type* data, gmp_size_t length) 
 {
-	HAL_StatusTypeDef stat = HAL_I2C_Master_Receive(handle, device_addr << 1 | 1, data,
+	HAL_StatusTypeDef stat = HAL_I2C_Master_Receive(handle, device_addr << 1 | 1, (uint8_t *)data,
 		length, g_delay_ms);
 
 	// translate error code
@@ -199,10 +213,11 @@ gmp_size_t gmp_iic_stm32_impl_t::read(addr_type device_addr, data_type* data, gm
 	}
 }
 
-gmp_size_t gmp_iic_stm32_impl_t::write(addr_type device_addr, data_type* data, gmp_size_t length)
+gmp_size_t gmp_iic_stm32_impl_t::write(addr_type device_addr, const data_type* data, gmp_size_t length)
 {
-	HAL_StatusTypeDef stat = HAL_I2C_Master_Transmit(handle, device_addr << 1, data,
-		length, g_delay_ms);
+	HAL_StatusTypeDef stat = HAL_I2C_Master_Transmit(handle, device_addr << 1, 
+	reinterpret_cast<uint8_t*>(&data), length, g_delay_ms);
+	
 
 	// translate error code
 	if (stat == HAL_OK)
@@ -229,8 +244,9 @@ gmp_size_t gmp_iic_stm32_impl_t::write(addr_type device_addr, data_type* data, g
 
 gmp_size_t gmp_iic_stm32_impl_t::read(addr_type device_addr, addr_type reg_addr, data_type* data, gmp_size_t length)
 {
-	HAL_StatusTypeDef stat = HAL_I2C_Mem_Read(handle, device_addr << 1 | 1, reg_addr,
-		reg_addr_len, data, length, g_delay_ms);
+	HAL_StatusTypeDef stat = HAL_I2C_Mem_Read(handle, 
+	device_addr << 1 | 1, reg_addr,reg_addr_len,
+	reinterpret_cast<uint8_t*>(data), length, g_delay_ms);
 
 	// translate error code
 	if (stat == HAL_OK)
@@ -256,10 +272,10 @@ gmp_size_t gmp_iic_stm32_impl_t::read(addr_type device_addr, addr_type reg_addr,
 
 }
 
-gmp_size_t gmp_iic_stm32_impl_t::write(addr_type device_addr, addr_type reg_addr, data_type* data, gmp_size_t length)
+gmp_size_t gmp_iic_stm32_impl_t::write(addr_type device_addr, addr_type reg_addr, const data_type* data, gmp_size_t length)
 {
 	HAL_StatusTypeDef stat = HAL_I2C_Mem_Write(handle, device_addr << 1, reg_addr,
-		reg_addr_len, data, length, g_delay_ms);
+		reg_addr_len, reinterpret_cast<uint8_t*>(&data), length, g_delay_ms);
 
 	// translate error code
 	if (stat == HAL_OK)
@@ -325,7 +341,7 @@ gmp_spi_stm32_impl_t::data_type gmp_spi_stm32_impl_t::read()
 	}
 }
 
-gmp_size_t gmp_spi_stm32_impl_t::write(data_type data) 
+gmp_size_t gmp_spi_stm32_impl_t::write(const data_type data) 
 {
 	HAL_StatusTypeDef stat = HAL_SPI_Transmit(handle, (uint8_t*)&data, 1, g_delay_ms);
 
@@ -356,7 +372,7 @@ gmp_size_t gmp_spi_stm32_impl_t::write(data_type data)
 	}
 }
 
-gmp_spi_stm32_impl_t::data_type gmp_spi_stm32_impl_t::readwrite(data_type data) 
+gmp_spi_stm32_impl_t::data_type gmp_spi_stm32_impl_t::readwrite(const data_type data) 
 {
 	data_type recv;
 	HAL_StatusTypeDef stat = HAL_SPI_TransmitReceive(handle, (uint8_t*)&data,
@@ -420,7 +436,7 @@ gmp_size_t gmp_spi_stm32_impl_t::read(data_type* data, gmp_size_t length)
 	}
 }
 
-gmp_size_t gmp_spi_stm32_impl_t::write(data_type* data, gmp_size_t length) 
+gmp_size_t gmp_spi_stm32_impl_t::write(const data_type* data, gmp_size_t length) 
 {
 	// 		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_0, GPIO_PIN_SET);
 
@@ -459,7 +475,7 @@ gmp_size_t gmp_spi_stm32_impl_t::write(data_type* data, gmp_size_t length)
 	}
 }
 
-gmp_size_t gmp_spi_stm32_impl_t::readwrite(data_type* data_in, data_type* data_out, gmp_size_t length)
+gmp_size_t gmp_spi_stm32_impl_t::readwrite(data_type* data_in, const data_type* data_out, gmp_size_t length)
 {
 	HAL_StatusTypeDef stat = HAL_SPI_TransmitReceive(handle, (uint8_t*)data_in, (uint8_t*)data_out, length, g_delay_ms);
 

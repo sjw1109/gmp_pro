@@ -43,7 +43,7 @@
 // This macro is to enable the scheduling extension.
 // Generally, we recommend you to provide each task a workflow.
 // And then let workflow scheduling to manage them.
-#define SPECIFY_WORKFLOW_ENABLE_SCHEDULING
+//#define SPECIFY_WORKFLOW_ENABLE_SCHEDULING
 
 // If user don't specify the workflow object id, the id will be an invalid value.
 // The invalid value is here.

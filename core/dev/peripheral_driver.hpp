@@ -25,7 +25,7 @@ void gmp_port_gpio_write();
 
 // entity of the GPIO device
 class gmp_gpio_entity
-	:public gmp_concept_rw_single
+	:public virtual gmp_concept_rw_single
 {
 public:
 	//ctor & dtor
@@ -37,13 +37,14 @@ public:
 
 public:
 	// utility function
-	virtual void set();
-	virtual void clear();
-	virtual void toggle();
-	virtual void set_mode(uint8_t mode);
+	virtual void set() = 0;
+	virtual void clear() = 0;
+	virtual void toggle() = 0;
+	virtual void set_mode(uint8_t mode) = 0;
 
-	virtual gmp_size_t write(data_type data);
-	virtual data_type read();
+	virtual gmp_size_t write(const data_type data) = 0;
+	virtual data_type read() = 0;
+
 
 public:
 	// The following parameters are for write function and read function.
@@ -57,8 +58,8 @@ public:
 
 // entity of the UART device
 class gmp_uart_entity
-	:public gmp_concept_rw_direct,
-	public gmp_concept_rw_single
+	:public virtual gmp_concept_rw_direct,
+	public virtual gmp_concept_rw_single
 {
 public:
 	// ctor & dtor
@@ -71,15 +72,23 @@ public:
 
 public:
 	// utility function
-	virtual void set_baudrate(uint32_t BaudRate);
-	virtual void set_stop_bit(uint8_t stopbit);
-	virtual void set_data_bit(uint8_t databit);
-	virtual void set_parity(uint8_t parity_check);
+	virtual void set_baudrate(uint32_t BaudRate) = 0;
 
-	virtual gmp_size_t read(data_type* data, gmp_size_t length);
-	virtual gmp_size_t write(data_type* data, gmp_size_t length);
-	virtual gmp_size_t write(data_type data);
-	virtual data_type read();
+	virtual void set_stop_bit(uint8_t stopbit) = 0;
+
+	virtual void set_data_bit(uint8_t databit) = 0;
+
+	virtual void set_parity(uint8_t parity_check) = 0;
+
+	virtual gmp_size_t read(data_type* data, gmp_size_t length) = 0;
+
+	virtual gmp_size_t write(const data_type* data, gmp_size_t length) = 0;
+
+	virtual  gmp_size_t write(const data_type data) = 0;
+
+	virtual data_type read() = 0;
+
+
 public:
 	// last error code
 	gmp_stat_t last_error;
@@ -107,8 +116,8 @@ public:
 
 // entity of the IIC device
 class gmp_iic_entity
-	:public gmp_concept_rw_with_dualaddr,  // This is for memory operation
-	public gmp_concept_rw_with_addr		  // This is for direct operation
+	:public virtual gmp_concept_rw_with_dualaddr,  // This is for memory operation
+	public virtual gmp_concept_rw_with_addr		  // This is for direct operation
 {
 public:
 	// ctor & dtor
@@ -124,15 +133,18 @@ public:
 
 public:
 	// utility function
-	virtual void set_speed(uint32_t speed);
+	virtual void set_speed(uint32_t speed) = 0;
 
 	// Select 7-bit or 11-bit
-	virtual void set_device_addr_length(uint32_t addr_length);
+	virtual void set_device_addr_length(uint32_t addr_length) = 0;
 
-	virtual gmp_size_t write(addr1_type addr1, addr2_type addr2, data_type* data, gmp_size_t length);
-	virtual gmp_size_t read(addr1_type addr1, addr2_type addr2, data_type* data, gmp_size_t length);
-	virtual gmp_size_t write(addr_type addr, data_type* data, gmp_size_t length);
-	virtual gmp_size_t read(addr_type addr, data_type* data, gmp_size_t length);
+	virtual gmp_size_t write(addr1_type addr1, addr2_type addr2, const data_type* data, gmp_size_t length) = 0;
+
+	virtual gmp_size_t read(addr1_type addr1, addr2_type addr2, data_type* data, gmp_size_t length) = 0;
+
+	virtual gmp_size_t write(addr_type addr, const data_type* data, gmp_size_t length) = 0;
+
+	virtual gmp_size_t read(addr_type addr, data_type* data, gmp_size_t length) = 0;
 
 public:
 	// Set register memory address length, unit Byte
@@ -171,8 +183,8 @@ public:
 
 // entity of the SPI device
 class gmp_spi_entity
-	:public concept_rwd_single<uint16_t>,
-	public concept_rwd_direct<uint16_t>
+	: public virtual concept_rwd_single<uint16_t>,
+	public virtual concept_rwd_direct<uint16_t>
 {
 public:
 	// ctor & dtor
@@ -184,11 +196,11 @@ public:
 	typedef uint16_t data_type;
 
 public:
-	virtual void set_clk_div(uint32_t div);
+	virtual void set_clk_div(uint32_t div) = 0;
 
-	virtual void set_mode(uint8_t polarity);
+	virtual void set_mode(uint8_t polarity) = 0;
 
-	virtual void set_bit_order(uint8_t order);
+	virtual void set_bit_order(uint8_t order) = 0;
 
 	// from 4 bits to 16 bits
 	virtual void set_frame_size(uint8_t size)
@@ -197,12 +209,12 @@ public:
 		// The rest config of SPI peripheral need to be complete by user.
 	}
 
-	virtual data_type readwrite(data_type data);
-	virtual gmp_size_t write(data_type data);
-	virtual data_type read();
-	virtual gmp_size_t readwrite(data_type* data_in, data_type* data_out, gmp_size_t length);
-	virtual gmp_size_t read(data_type* data, gmp_size_t length);
-	virtual gmp_size_t write(data_type* data, gmp_size_t length);
+	virtual data_type readwrite(const data_type data) = 0;
+	virtual gmp_size_t write(const data_type data) = 0;
+	virtual data_type read() = 0;
+	virtual gmp_size_t readwrite(data_type* data_in, const data_type* data_out, gmp_size_t length) = 0;
+	virtual gmp_size_t read(data_type* data, gmp_size_t length) = 0;
+	virtual gmp_size_t write(const data_type* data, gmp_size_t length) = 0;
 
 
 public:
@@ -221,6 +233,53 @@ public:
 	// The following parameters are used to set SPI bit order
 	static constexpr uint8_t order_lsb = 0;
 	static constexpr uint8_t order_msb = 1;
+};
+
+// entity of the modulator device
+// It's a PWM modulator.
+class gmp_modulator_entity
+{
+public:
+	// ctor & dtor
+	gmp_modulator_entity()
+	{}
+
+public:
+	// utilities function 
+
+
+public:
+
+
+};
+
+// entity of the CAN controller device
+class gmp_can_entity
+	:public virtual concept_rw_with_addr<uint16_t, gmp_data_t>,   // For standard frame
+	public virtual concept_rw_with_dualaddr<uint16_t, uint16_t, gmp_data_t> // For each frame type
+{
+public:
+	// ctor & dtor
+	typedef uint16_t addr1_type;
+	typedef uint16_t addr2_type;
+	typedef addr2_type addr_type;
+	typedef gmp_data_t data_type;
+
+public:
+	// utilities function
+
+	// In general, this function only send a standard data frame.
+	virtual gmp_size_t write(addr_type addr, const data_type* data, gmp_size_t length) = 0;
+	virtual gmp_size_t read(addr_type addr, data_type* data, gmp_size_t length) = 0;
+
+	// The first address is the frame type:
+	// standard frame or extension frame; data frame or remote frame
+	virtual gmp_size_t write(addr1_type frame_type, addr2_type addr, const data_type* data, gmp_size_t length) = 0;
+	virtual gmp_size_t read(addr1_type frame_type, addr2_type addr, data_type* data, gmp_size_t length) = 0;
+
+
+public:
+
 };
 
 #endif // _FILE_PERIPHERAL_PROTOTYPE_HPP_

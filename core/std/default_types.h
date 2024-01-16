@@ -56,7 +56,7 @@
 // GMP_PORT_ADDR_T: the default address type.
 
 #ifndef GMP_PORT_DATA_T
-#define GMP_PORT_DATA_T				unsigned char
+#define GMP_PORT_DATA_T				char
 #endif // GMP_PORT_DATA_T
 
 #ifndef GMP_BASIC_SIZE_PER_BITS

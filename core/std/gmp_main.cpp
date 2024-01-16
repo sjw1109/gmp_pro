@@ -90,6 +90,10 @@ void gmp_loop()
 #endif // SPECIFY_ENABLE_TEST_ENVIRONMENT
 
 	user_loop();
+
+#if defined SPECIFY_ENABLE_FEED_WATCHDOG
+	gmp_port_feed_dog();
+#endif 
 }
 
 void gmp_setup_label()
@@ -206,7 +210,7 @@ void gmp_not_impl(const char* file, uint32_t line)
 
 #if defined SPECIFY_STUCK_WHEN_UNIMPL_FUNC
 #if defined SPECIFY_ENABLE_UNIMPL_FUNC_WARNING
-	gmp_dbg_prt("[INFO] Program has stuck!");
+	gmp_dbg_prt("[INFO] Program has stuck!\r\n");
 #endif // SPECIFY_ENABLE_UNIMPL_FUNC_WARNING
 
 	// Stop program right now
