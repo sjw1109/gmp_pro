@@ -25,9 +25,12 @@ void user_init(void)
 {
 	dbg_uart.write("Hello World!\r\n",14);
 	
-	eeprom04.write(255,0x17);
-	uint32_t result = eeprom04.read(255);
-
+	eeprom04.write(255, 0x17);
+	eeprom04.write(254, 0x18);
+	eeprom04.write(253, 0x19);
+	uint32_t result = eeprom04.read(253);
+	gmp_dbg_prt("result: %x,error code: %d\r\n", result,eeprom04.iic->last_error);
+	result = eeprom04.read(254);
 	gmp_dbg_prt("result: %x,error code: %d\r\n", result,eeprom04.iic->last_error);
 }
 
@@ -36,11 +39,10 @@ void user_init(void)
 // endless loop function here
 void user_loop(void)
 {
-//	eeprom04.write(255, 0x17);
-	uint32_t result = eeprom04.read(255);
+	uint32_t result = eeprom04.read(253);
 
 	gmp_dbg_prt("result: %x,error code: %d\r\n", result, eeprom04.iic->last_error);
-	HAL_Delay(500);
+	HAL_Delay(1000);
 }
 
 

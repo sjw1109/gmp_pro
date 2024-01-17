@@ -33,7 +33,7 @@ public:
 public:
 	data_type read(addr_type addr) override
 	{
-		data_type result;
+		data_type result = 0;
 
 		iic->read(dev_addr, addr, (gmp_data_t*)&result, reg_size);
 		return result;
@@ -72,7 +72,7 @@ public:
 public:
 	data_type read() override
 	{
-		data_type result;
+		data_type result = 0;
 
 		iic->read(dev_addr, (gmp_data_t*)&result, cmd_size);
 		return result;
@@ -88,13 +88,11 @@ public:
 	gmp_iic_entity* iic;
 	gmp_addr_t dev_addr;
 	gmp_addr_t cmd_size;
-
-
 };
 
 class iic_storage_device_t
-	:virtual public concept_wr_single_addr<gmp_addr_t, uint32_t>,
-	virtual public gmp_concept_rw_with_addr
+	:virtual public concept_wr_single_addr<uint32_t, uint32_t>,
+	virtual public concept_rw_with_addr<uint32_t,gmp_data_t>
 {
 public:
 	// ctor & dtor
@@ -108,14 +106,14 @@ public:
 	}
 
 public:
-	typedef gmp_addr_t addr_type;
+	typedef uint32_t addr_type;
 	typedef uint32_t cell_type;
 	typedef gmp_data_t data_type;
 
 public:
 	cell_type read(addr_type addr) override
 	{
-		data_type result;
+		data_type result = 0;
 
 		iic->read(dev_addr, addr, (gmp_data_t*)&result, reg_size);
 		return result;

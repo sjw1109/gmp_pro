@@ -35,7 +35,7 @@ extern "C"
 	);
 #endif // SPECIFY_ENABLE_FEED_WATCHDOG
 
-	
+
 	//////////////////////////////////////////////////////////////////////////
 	// These function have implemented by GMP
 	void gmp_entry(void);
@@ -119,6 +119,66 @@ extern "C"
 
 	//////////////////////////////////////////////////////////////////////////
 	// Error Handle function
+
+	//////////////////////////////////////////////////////////////////////////
+	// big-endian to little-endian
+// 	uint16_t gmp_l2b12(uint16_t data);
+	uint16_t gmp_l2b16(uint16_t data);
+	uint32_t gmp_l2b32(uint32_t data);
+#ifdef SPECIFY_ENABLE_INTEGER64
+	uint64_t gmp_l2b64(uint64_t data);
+#endif // SPECIFY_ENABLE_INTEGER64
+
+
+	// Give Big-endian and little-endian an alias
+	// User may config these function by <user_config.h>
+// #ifndef L2B12
+// #define L2B12 gmp_l2b12
+// #endif // L2B12
+
+#ifndef L2B16
+#define L2B16 gmp_l2b16
+#endif // L2B16
+
+#ifndef L2B32
+#define L2B32 gmp_l2b32
+#endif // L2B32
+
+#ifdef SPECIFY_ENABLE_INTEGER64
+#ifndef L2B64
+#define L2B64 gmp_l2b64
+#endif // L2B64
+#endif // SPECIFY_ENABLE_INTEGER64
+
+#ifdef BIG_ENDIAN
+#define BE12(x) ((x))
+#define BE16(x) ((x))
+#define BE32(x) ((x))
+#ifdef SPECIFY_ENABLE_INTEGER64
+#define BE64(x) ((x))
+#endif // SPECIFY_ENABLE_INTEGER64
+#define LE12 L2B12
+#define LE16 L2B16
+#define LE32 L2B32
+#ifdef SPECIFY_ENABLE_INTEGER64
+#define LE64 L2B64
+#endif // SPECIFY_ENABLE_INTEGER64
+#endif // BIG_ENDIAN
+
+#ifdef LITTLE_ENDIAN
+#define BE12 L2B12
+#define BE16 L2B16
+#define BE32 L2B32
+#ifdef SPECIFY_ENABLE_INTEGER64
+#define BE64 L2B64
+#endif // SPECIFY_ENABLE_INTEGER64
+#define LE12(x) ((x))
+#define LE16(x) ((x))
+#define LE32(x) ((x))
+#ifdef SPECIFY_ENABLE_INTEGER64
+#define LE64(x) ((x))
+#endif // SPECIFY_ENABLE_INTEGER64
+#endif // LITTLE_ENDIAN
 
 
 

@@ -24,6 +24,13 @@
 // GMP Master chip set select
 #define MASTER_CHIP_SET NULL
 
+// little-endian OR big-endian
+#define LITTLE_ENDIAN
+// #define BIG_ENDIAN
+
+// enable int64_t & uint64_t
+#define SPECIFY_ENABLE_INTEGER64
+
 // Compiler options
 #define COMPILER_AC6
 
@@ -74,7 +81,7 @@
 
 // The default print function rely on the allocation function,
 // so the alloc_function and free_function is necessary
-#define SPECIFY_ENABLE_DEFUALT_DEBUG_PRINT_FUNC
+//#define SPECIFY_ENABLE_DEFUALT_DEBUG_PRINT_FUNC
 
 // In default case, the print function may use gmp_malloc function,
 // if you have to avoid the malloc and free you should enable the following function 
@@ -122,5 +129,10 @@
 
 #endif // GMP_AUTO
 
+//////////////////////////////////////////////////////////////////////////
+// validate parameters
+#if defined BIG_ENDIAN && defined LITTLE_ENDIAN
+#error "You should chose big-endian or little-endian."
+#endif // BIG_ENDIAN && LITTLE_ENDIAN
 
 #endif // GENERAL_MOTOR_PLAT

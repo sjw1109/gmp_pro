@@ -221,3 +221,35 @@ void gmp_not_impl(const char* file, uint32_t line)
 
 }
 
+//////////////////////////////////////////////////////////////////////////
+// default little-endian to big-endian
+
+// uint16_t gmp_l2b12(uint16_t data)
+// {
+// 	return ((data & 0xFF) << 8) | ((data & 0xFF00) >> 8);
+// }
+
+uint16_t gmp_l2b16(uint16_t data)
+{
+	return ((data & 0xFF) << 8) | ((data & 0xFF00) >> 8);
+}
+
+uint32_t gmp_l2b32(uint32_t data)
+{
+	return ((data & 0xFF000000) >> 24) | ((data & 0xFF0000) >> 8)
+			| ((data & 0xFF00) << 8) | ((data & 0xFF) << 24);
+}
+
+#ifdef SPECIFY_ENABLE_INTEGER64
+uint64_t gmp_l2b64(uint64_t data)
+{
+	return ((data & 0xFF00000000000000) >> 56) 
+			| ((data & 0xFF000000000000) >> 40)
+			| ((data & 0xFF0000000000) >> 24)
+			| ((data & 0xFF00000000) >> 8)
+			| ((data & 0xFF000000) << 8)
+			| ((data & 0xFF0000) << 24)
+			| ((data & 0xFF00) << 40)
+			| ((data & 0xFF) << 56);
+}
+#endif // SPECIFY_ENABLE_INTEGER64
