@@ -1,7 +1,7 @@
 // This file is  GMP library C source header
 
 // user config
-#include <user/gmp_user_config.h>
+#include <.config.h>
 
 // System includes
 #include <stdint.h>

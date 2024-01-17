@@ -31,16 +31,11 @@ gmp_mem_area_head* default_mem_heap;
 // NOTICE: This function will not return!
 void gmp_entry(void)
 {
-	// initialize peripheral
-	// This function was defined in <bsp/user/peripheral_mapping.c>
-	gmp_setup_peripheral();
-
-	// initialize peripheral tree
-	// This function was defined in <bsp/user/peripheral_mapping.c>
-	gmp_init_peripheral_tree();
-
 	// user initialize section
 	gmp_init();
+
+	// Call user initialize
+	user_init();
 
 	// Debug information print
 	gmp_setup_label();
@@ -63,9 +58,21 @@ void gmp_entry(void)
 }
 
 
+// Main function
 // GMP library initialization function
+// If you won't let GMP take over your whole program,
+// you should invoke this function in your main() function.
+// An the other things should be completed in your own main() process.
 void gmp_init()
 {
+	// initialize peripheral
+	// This function was defined in <bsp/user/peripheral_mapping.c>
+	gmp_setup_peripheral();
+
+	// initialize peripheral tree
+	// This function was defined in <bsp/user/peripheral_mapping.c>
+	gmp_init_peripheral_tree();
+
 	// Setup GMP library
 
 #if defined SPECIFY_GMP_BLOCK_MEMORY_ENABLE
@@ -77,11 +84,12 @@ void gmp_init()
 	g_delay = TIMEOUT_CNT;
 	g_delay_ms = TIMEOUT_MS;
 
-	// Call user initialize
-	user_init();
+
 }
 
-// This function would 
+// This function would invoke some GMP based loop routine.
+// If your main function take over by GMP library,
+// the following function would be invoked as a loop routine.
 void gmp_loop()
 {
 #if defined SPECIFY_ENABLE_TEST_ENVIRONMENT
@@ -96,6 +104,8 @@ void gmp_loop()
 #endif 
 }
 
+
+// This function would print a GMP label
 void gmp_setup_label()
 {
 	gmp_dbg_prt("................................................\r\n");

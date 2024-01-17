@@ -1,4 +1,4 @@
-// 
+// This file provide a set of base classes.
 
 // TODO BUG REPORT: local variables is not inited.
 // must use `data_type result = 0;` instead `data_type result;`.

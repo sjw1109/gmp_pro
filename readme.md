@@ -14,20 +14,30 @@ GMP contains a set of tools for user, you may find then in specified folders.
 ## Quick Start
 
 Start a project with GMP library is quite a easy routine. You may follow the four steps.
+Notice, this section of quick start may help you start your project based on GMP framework,
+if YOU DON'T WANT TO USE THE GMP FRAMEWORK, please use the next section.
 
 ### compliment your GMP library configure
 
-This file is located in `<user/gmp_user_config.h>`, user may open this file, and change it based on what you need.
+This file is located in `<.config.h>`, user may open this file, and change it based on what you need.
 Worth mentioning, you should firstly pay attention to the first section of the file.
 That is, you should tell the correct `MASTERCHIP`, `MASTER_CHIP_SET` and `COMPILER_TYPE`.
 
+Some example for chip set or board may provided in user folder.
+You may just copy and cover the `<.config.h>` file.
+
 And then change your compiler settings, let your compiler support C++11 standard.
+
+> NOTICE: the C++ compiler should support at least C++03 version.
+> Using compiler supporting C++11 will greatly good at performance and compiler comments.
+> The compatible definition of C++11 is defined here `<core/std/compiler_sup.h>`.
+>
 
 ### Add the GMP source to your projects
 
 You should add all the source file (*.c and *.cpp) to compiler candidate.
 By the way, you need to add the location of GMP library root PATH to your include path.
-All the include command is write using raletive path, based on the GMP library root path.
+All the include command is write using relative path, based on the GMP library root path.
 
 
 ### Call the `gmp_entry()` function and entry the GMP world
@@ -67,4 +77,76 @@ void main (void)
 ### Final step: just enjoy!
 
 You may start your own work in the `<user/>` folder.
+
+## Quick Start again
+ 
+If the reason why you choose the GMP library is you need some key parts of the GMP library,
+such as workflow module and CTL (Controller Template Library),
+that is you just need these modules without the whole structure,
+you may follow the quick start guide, and that's helpful.
+
+### Follow the instruction of the last Quick Start section
+
+You should follow the first two part of Quick Start.
+
++ compliment your GMP library configure
++ Add the GMP source to your projects
+
+### Invoke GMP initialization function
+
+In this situation, you will call `void gmp_init()` function. 
+This function will NOT let GMP library take over the whole program.
+Just initialize GMP library, that is setup peripherals and setup GMP peripheral trees,
+open the watch dog module, including setup GMP heap size.
+And this function will return after these process completed.
+
+NOTICE, the things that would be completed in main loop by GMP, will not called.
+So you should call the `gmp_loop();` function or you should implement these process by yourself.
+For instance, in `gmp_loop()` will invoke feeding watch dog routine.
+
+In order to call the `gmp_init()` function, you should add headers first.
+The same as the Quick Start section says.
+
+For `main.c` you may include the C headers.
+
+``` C
+#include <core/gmp_core.h>
+```
+
+For `main.cpp` you may include the C++ headers.
+
+``` C++
+#include <cire/gmp_core.hpp>
+```
+
+And then, call the  `gmp_init()` function in main function.
+
+``` C++
+void main (void)
+{
+	// Do your preparing code
+
+	// ...
+
+	// After all your preparing, initialize the GMP library
+	gmp_init(); // invoke the GMP library
+
+	// When GMP library is ready, this function may return.
+
+	// Some other things.
+	// 
+
+	while(1)
+	{
+		// Your main-loop code here.
+		//
+		// ... 
+
+		// GMP maintaining code
+		// This part of code is completed by GMP loop routine.
+		// You may call the `gmp_loop()` directly, or implement by yourself.
+		gmp_loop();
+	}
+}
+```
 

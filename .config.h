@@ -24,7 +24,8 @@
 // GMP Master chip set select
 #define MASTER_CHIP_SET NULL
 
-// little-endian OR big-endian
+// little-endian OR big-endian, 
+// use only one of them
 #define LITTLE_ENDIAN
 // #define BIG_ENDIAN
 
