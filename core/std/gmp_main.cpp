@@ -52,7 +52,15 @@ void gmp_entry(void)
 #ifdef SPECIFY_PC_TEST_ENV
 	gmp_loop();
 #else
-	while (1) gmp_loop();
+	while (1)
+	{
+		// Call GMP general loop routine
+		// This function may call watch-dog feeding function and scheduling function.
+		gmp_loop();
+
+		// Call user general loop routine
+		user_loop();
+	}
 #endif
 	return;
 }
@@ -97,7 +105,6 @@ void gmp_loop()
 	gmp_test_loop();
 #endif // SPECIFY_ENABLE_TEST_ENVIRONMENT
 
-	user_loop();
 
 #if defined SPECIFY_ENABLE_FEED_WATCHDOG
 	gmp_port_feed_dog();

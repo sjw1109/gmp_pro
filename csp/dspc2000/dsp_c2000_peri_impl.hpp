@@ -67,26 +67,20 @@ public:
 	void set() override
 	{
 		ENABLE_PROTECTED_REGISTER_WRITE_MODE;
-		
-		gpio_dat_handle[gpio_mux].set = (uint32_t)1 << gpio_pin;
-		
+		gpio_dat_handle[gpio_mux].set |= (uint32_t)1 << gpio_pin;
 		DISABLE_PROTECTED_REGISTER_WRITE_MODE;
 	}
 	void clear() override
 	{
 		ENABLE_PROTECTED_REGISTER_WRITE_MODE;
-
-		gpio_dat_handle[gpio_mux].clear = (uint32_t)1 << gpio_pin;
-
+		gpio_dat_handle[gpio_mux].clear |= (uint32_t)1 << gpio_pin;
 		DISABLE_PROTECTED_REGISTER_WRITE_MODE;
 
 	}
 	void toggle() override
 	{
 		ENABLE_PROTECTED_REGISTER_WRITE_MODE;
-
-		gpio_dat_handle[gpio_mux].toggle = (uint32_t)1 << gpio_pin;
-
+		gpio_dat_handle[gpio_mux].toggle |= (uint32_t)1 << gpio_pin;
 		DISABLE_PROTECTED_REGISTER_WRITE_MODE;
 	}
 
@@ -94,9 +88,7 @@ public:
 	gmp_size_t write(const data_type data) override
 	{
 		ENABLE_PROTECTED_REGISTER_WRITE_MODE;
-
-		gpio_dat_handle[gpio_mux].toggle = (uint32_t)1 << gpio_pin;
-
+		gpio_dat_handle[gpio_mux].toggle |= (uint32_t)1 << gpio_pin;
 		DISABLE_PROTECTED_REGISTER_WRITE_MODE;
 	}
 

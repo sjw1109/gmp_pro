@@ -25,10 +25,13 @@ void gmp_port_system_stuck(
 
 
 // The following function is a feed a dog routine
-// For STM32, the watchdog is IWDG.
 void gmp_port_feed_dog()
 {
-
+	// This function is defined in TI C2000ware.
+	// you may find the function definition in 
+	// <ti/c2000/C2000Ware_<version>/device_support/<device>/common/source/<device>_SysCtrl.c>
+	// prototype is void ServiceDog(void);
+	ServiceDog(void);
 }
 
 //////////////////////////////////////////////////////////////////////////

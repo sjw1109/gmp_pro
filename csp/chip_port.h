@@ -2,13 +2,13 @@
 
 // Select Master chip
 
-#if (MASTERCHIP == GMP_STM32)
+#if (MASTERCHIP == GMP_AUTO_STM32)
 #include <csp/stm32/stm32_general.h>
 
-#elif (MASTERCHIP == GMP_TIC2000)
+#elif (MASTERCHIP == GMP_AUTO_TIC2000)
 #include <csp/dspc2000/dsp_c2000_general.h>
 
-#elif (MASTERCHIP == GMP_WINDOWS)
+#elif (MASTERCHIP == GMP_AUTO_WINDOWS)
 #include <csp/windows/win_include.h>
 
 #endif//MASTERCHIP
