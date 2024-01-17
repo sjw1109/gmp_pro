@@ -54,6 +54,7 @@
 // GMP_BASIC_SIZE_PER_BITS: the smallest unit length.
 // GMP_PORT_SIZE_T: the default counter type.
 // GMP_PORT_ADDR_T: the default address type.
+// GMP_PORT_TIMER_CMP_T: The type is for timer comparation register.
 
 #ifndef GMP_PORT_DATA_T
 #define GMP_PORT_DATA_T				char
@@ -83,6 +84,10 @@
 #define GMP_PORT_WPARAM_T			uint32_t
 #endif // GMP_PORT_WPARAM_T
 
+#ifndef GMP_PORT_TIMER_CMP_T
+#define GMP_PORT_TIMER_CMP_T		uint32_t
+#endif // GMP_PORT_TIMER_CMP_T
+
 #endif // _FILE_CHIP_DEFAULT_TYPE_H_
 
 
@@ -99,6 +104,7 @@ typedef GMP_PORT_SIZE_T gmp_size_t;
 typedef GMP_PORT_ADDR_T gmp_addr_t;
 typedef GMP_PORT_TIME_T gmp_time_t;
 typedef GMP_PORT_WPARAM_T gmp_param_t;
+typedef GMP_PORT_TIMER_CMP_T gmp_timer_cmp_t;
 
 //typedef GMP_PORT_CMD_T gmp_cmd_t;
 

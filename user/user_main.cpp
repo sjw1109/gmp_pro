@@ -22,6 +22,7 @@ at24cxx eeprom04(&iic, at24cxx::at24c04, 0);
 //////////////////////////////////////////////////////////////////////////
 // initialize routine here
 void user_init(void)
+	GMP_NO_OPT
 {
 	dbg_uart.write("Hello World!\r\n",14);
 	
@@ -32,6 +33,8 @@ void user_init(void)
 	gmp_dbg_prt("result: %x,error code: %d\r\n", result,eeprom04.iic->last_error);
 	result = eeprom04.read(254);
 	gmp_dbg_prt("result: %x,error code: %d\r\n", result,eeprom04.iic->last_error);
+
+	pwm_ch1.enable();
 }
 
 

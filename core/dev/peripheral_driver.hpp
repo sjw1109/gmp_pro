@@ -239,21 +239,112 @@ public:
 };
 
 // entity of the modulator device
-// It's a PWM modulator.
-class gmp_modulator_entity
+// It's a PWM modulator class prototype.
+// The following 4 classes, is different number of channels.
+
+// This class has only one channel
+class gmp_modulator_entity_1ch
 {
 public:
 	// ctor & dtor
-	gmp_modulator_entity()
+	gmp_modulator_entity_1ch()
 	{}
 
 public:
 	// utilities function 
 
+	// Set modulator compare value
+	virtual void set_modulator_cmp(gmp_timer_cmp_t cmp_value);
+
+	// Set frequency of timer
+	virtual void set_modulator_freq(gmp_timer_cmp_t freq_value);
+
+	// Enable modulator output
+	virtual void enable();
+
+	// Disable modulator output
+	virtual void disable();
+
+};
+
+// This class has 2 channels
+class gmp_modulator_entity_2ch
+{
+public:
+	// ctor & dtor
+	gmp_modulator_entity_2ch()
+	{}
 
 public:
+	// utilities function
 
+	// Set modulator compare value
+	virtual void set_modulator_cmp(
+		gmp_timer_cmp_t cmp1_value, gmp_timer_cmp_t cmp2_value
+	);
 
+	// Set frequency of timer
+	virtual void set_modulator_freq(gmp_timer_cmp_t freq_value);
+
+	// Enable modulator output
+	virtual void enable();
+
+	// Disable modulator output
+	virtual void disable();
+};
+
+// This class has 3 channels
+class gmp_modulator_entity_3ch
+{
+public:
+	// ctor & dtor
+	gmp_modulator_entity_3ch()
+	{}
+
+public:
+	// utilities function
+
+	// Set modulator compare value
+	virtual void set_modulator_cmp(
+		gmp_timer_cmp_t cmp1_value, gmp_timer_cmp_t cmp2_value,
+		gmp_timer_cmp_t cmp3_value
+	);
+
+	// Set frequency of timer
+	virtual void set_modulator_freq(gmp_timer_cmp_t freq_value);
+
+	// Enable modulator output
+	virtual void enable();
+
+	// Disable modulator output
+	virtual void disable();
+};
+
+// This class has 4 channels
+class gmp_modulator_entity_4ch
+{
+public:
+	// ctor & dtor
+	gmp_modulator_entity_4ch()
+	{}
+
+public:
+	// utilities function
+
+	// Set modulator compare value
+	virtual void set_modulator_cmp(
+		gmp_timer_cmp_t cmp1_value, gmp_timer_cmp_t cmp2_value,
+		gmp_timer_cmp_t cmp3_value, gmp_timer_cmp_t cmp4_value
+	);
+
+	// Set frequency of timer
+	virtual void set_modulator_freq(gmp_timer_cmp_t freq_value);
+
+	// Enable modulator output
+	virtual void enable();
+
+	// Disable modulator output
+	virtual void disable();
 };
 
 // entity of the CAN controller device

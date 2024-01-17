@@ -29,6 +29,7 @@ extern	SPI_HandleTypeDef hspi1;
 extern	UART_HandleTypeDef huart1;
 extern	UART_HandleTypeDef huart2;
 
+extern TIM_HandleTypeDef htim1;
 
 
 
@@ -41,6 +42,7 @@ extern gmp_concept_write_direct* default_debug_dev;
 
 extern gmp_iic_stm32_impl_t iic;
 extern gmp_uart_stm32_impl_t dbg_uart;
+extern gmp_timer_stm32_impl_t pwm_ch1;
 
 	//////////////////////////////////////////////////////////////////////////
 	// Devices on the peripheral
