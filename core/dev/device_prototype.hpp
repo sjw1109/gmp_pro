@@ -18,7 +18,7 @@ public:
 	// ctor & dtor
 	iic_register_device_t(gmp_iic_entity* iic,
 		gmp_addr_t dev_addr,
-		uint8_t reg_size = 1
+		gmp_element_t reg_size = 1
 	)
 		:iic(iic), dev_addr(dev_addr), reg_size(reg_size)
 	{
@@ -59,7 +59,7 @@ public:
 	// ctor & dtor
 	iic_command_device_t(gmp_iic_entity* iic,
 		gmp_addr_t dev_addr,
-		uint8_t command_size = 1)
+		gmp_element_t command_size = 1)
 		: iic(iic), dev_addr(dev_addr), cmd_size(command_size)
 	{
 		assert(cmd_size <= 4);
@@ -98,7 +98,7 @@ public:
 	// ctor & dtor
 	iic_storage_device_t(gmp_iic_entity* iic,
 		uint16_t dev_base_addr,
-		uint8_t reg_size = 1)
+		gmp_element_t reg_size = 1)
 		:iic(iic), dev_base_addr(dev_base_addr), dev_addr(dev_base_addr), reg_size(reg_size)
 	{
 		assert(iic);
@@ -151,7 +151,7 @@ class spi_register_device_t
 public:
 	// ctor & dtor
 	spi_register_device_t(gmp_spi_entity* spi,
-		uint8_t reg_addr_size = 1)
+		gmp_element_t reg_addr_size = 1)
 		:spi(spi), reg_addr_size(reg_addr_size)
 	{
 		assert(reg_addr_size <= 4);
@@ -164,7 +164,7 @@ public:
 public:
 	gmp_size_t read(addr_type addr, data_type* data, gmp_size_t length)	override
 	{
-		uint8_t addr_size = reg_addr_size;
+		gmp_element_t addr_size = reg_addr_size;
 
 		while (addr_size--)
 		{
@@ -179,9 +179,9 @@ public:
 
 	gmp_size_t write(addr_type addr, data_type* data, gmp_size_t length) override
 	{
-		uint8_t addr_size = reg_addr_size;
-		uint8_t data_buf[16];
-		uint8_t buf_pos = 0;
+		gmp_element_t addr_size = reg_addr_size;
+		gmp_element_t data_buf[16];
+		gmp_element_t buf_pos = 0;
 
 		memset(data_buf, 0, 16);
 
@@ -211,7 +211,7 @@ public:
 
 public:
 	gmp_spi_entity* spi;
-	uint8_t reg_addr_size;
+	gmp_element_t reg_addr_size;
 };
 
 

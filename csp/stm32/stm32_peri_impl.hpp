@@ -243,7 +243,7 @@ public:
 	// utilities function
 
 	// Set frequency of timer
-	virtual void set_freq(gmp_timer_cmp_t freq_value)
+	virtual void set_freq(gmp_timer_t freq_value)
 	{
 		// ensure parameter
 		assert(handle);
@@ -252,7 +252,7 @@ public:
 	}
 
 	// get frequency of timer
-	virtual gmp_timer_cmp_t get_freq()
+	virtual gmp_timer_t get_freq()
 	{
 		assert(handle);
 
@@ -303,7 +303,7 @@ public:
 	// utilities function 
 
 	// Get modulator frequency
-	gmp_timer_cmp_t get_modulator_freq() override
+	gmp_timer_t get_modulator_freq() override
 	{
 		assert(handle);
 
@@ -311,7 +311,7 @@ public:
 	}
 
 	// Set modulator frequency
-	void set_modulator_freq(gmp_timer_cmp_t freq_value) override
+	void set_modulator_freq(gmp_timer_t freq_value) override
 	{
 		// ensure parameter
 		assert(handle);
@@ -320,7 +320,7 @@ public:
 	}
 
 	// Set modulator compare value
-	void set_modulator_cmp(gmp_timer_cmp_t cmp_tick) override
+	void set_modulator_cmp(gmp_timer_t cmp_tick) override
 	{
 		__HAL_TIM_SET_COMPARE(handle, channel, cmp_tick);
 	}
@@ -394,7 +394,7 @@ public:
 	// utilities function 
 
 	// Get modulator frequency
-	gmp_timer_cmp_t get_modulator_freq() override
+	gmp_timer_t get_modulator_freq() override
 	{
 		assert(handle);
 
@@ -402,7 +402,7 @@ public:
 	}
 
 	// Set modulator frequency
-	void set_modulator_freq(gmp_timer_cmp_t freq_value) override
+	void set_modulator_freq(gmp_timer_t freq_value) override
 	{
 		// ensure parameter
 		assert(handle);
@@ -411,8 +411,8 @@ public:
 	}
 
 	// Set modulator compare value
-	void set_modulator_cmp(gmp_timer_cmp_t cmp_tick1,
-		gmp_timer_cmp_t cmp_tick2) override
+	void set_modulator_cmp(gmp_timer_t cmp_tick1,
+		gmp_timer_t cmp_tick2) override
 	{
 		__HAL_TIM_SET_COMPARE(handle, channel1, cmp_tick1);
 		__HAL_TIM_SET_COMPARE(handle, channel2, cmp_tick2);
@@ -496,7 +496,7 @@ public:
 	// utilities function 
 
 	// Get modulator frequency
-	gmp_timer_cmp_t get_modulator_freq() override
+	gmp_timer_t get_modulator_freq() override
 	{
 		assert(handle);
 
@@ -504,7 +504,7 @@ public:
 	}
 
 	// Set modulator frequency
-	void set_modulator_freq(gmp_timer_cmp_t freq_value) override
+	void set_modulator_freq(gmp_timer_t freq_value) override
 	{
 		// ensure parameter
 		assert(handle);
@@ -513,9 +513,9 @@ public:
 	}
 
 	// Set modulator compare value
-	void set_modulator_cmp(gmp_timer_cmp_t cmp_tick1,
-		gmp_timer_cmp_t cmp_tick2,
-		gmp_timer_cmp_t cmp_tick3) override
+	void set_modulator_cmp(gmp_timer_t cmp_tick1,
+		gmp_timer_t cmp_tick2,
+		gmp_timer_t cmp_tick3) override
 	{
 		__HAL_TIM_SET_COMPARE(handle, channel1, cmp_tick1);
 		__HAL_TIM_SET_COMPARE(handle, channel2, cmp_tick2);

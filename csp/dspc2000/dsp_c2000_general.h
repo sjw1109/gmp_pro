@@ -25,13 +25,16 @@
 #ifndef _FILE_DSP_C2000_GENERAL_H_
 #define _FILE_DSP_C2000_GENERAL_H_
 
+#define GMP_TIMER_BASE_FREQ (100000000U)
+
 // Basic type definition
 #define GMP_PORT_DATA_T			uint16_t 
 #define GMP_BASIC_SIZE_PER_BITS ((16))
 #define GMP_PORT_SIZE_T			uint16_t 
+#define GMP_PORT_ELEMENT_T      uint16_t
 
 // Basic handle definition
-#deifne GMP_PORT_HGPIO_T    volatile struct GPIO_CTRL_REGS*
+#define GMP_PORT_HGPIO_T    volatile struct GPIO_CTRL_REGS*
 #define GMP_PORT_HIIC_T		volatile struct I2C_REGS*
 #define GMP_PORT_HUART_T	volatile struct SCI_REGS*
 #define GMP_PORT_HSPI_T		volatile struct SPI_REGS*

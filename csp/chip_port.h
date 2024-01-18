@@ -47,3 +47,5 @@
 #include <csp/dspc2000/dsp_c2000_general.h>
 #endif
 
+// The rest key definitions will be filled.
+#include <core/std/default_types.h>

@@ -22,31 +22,27 @@
 
 //////////////////////////////////////////////////////////////////////////
 // initialize routine here
+
+//GMP_NO_OPT(user_init)
+
+GMP_NO_OPT_PREFIX
 void user_init(void)
-	GMP_NO_OPT
+GMP_NO_OPT_SUFFIX
 {
-	dbg_uart.write("Hello World!\r\n",14);
+//	dbg_uart.write("Hello World!\r\n",14);
 	
 
-	pwm_ch1.enable();
 
-	HAL_Delay(2000);
-
-	for (int i = 0; i < 32; ++i)
-	{
-		pwm_ch1.set_modulator_cmp(100*i);
-		HAL_Delay(1000);
-	}
-
-	//pwm_ch1.disable();
 }
 
 
 //////////////////////////////////////////////////////////////////////////
 // endless loop function here
+GMP_NO_OPT_PREFIX
 void user_loop(void)
+GMP_NO_OPT_SUFFIX
 {
-	HAL_Delay(1000);
+
 }
 
 

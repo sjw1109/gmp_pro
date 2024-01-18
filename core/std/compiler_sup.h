@@ -26,7 +26,11 @@
 // To mark a function that shouldn't be optimize by compiler
 #ifndef GMP_NO_OPT
 #if defined COMPILER_AC6
-#define GMP_NO_OPT __attribute__((optnone))
+#define GMP_NO_OPT_PREFIX
+#define GMP_NO_OPT_SUFFIX __attribute__((optnone))
+#elif defined COMPILER_CCS_C2000
+#define GMP_NO_OPT_PREFIX _Pragma("FUNCTION_OPTIONS(\"--opt_level=0\")")
+#define GMP_NO_OPT_SUFFIX
 #else
 #define GMP_NO_OPT
 #endif // GMP_NO_OPT

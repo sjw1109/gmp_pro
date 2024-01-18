@@ -10,7 +10,7 @@ GMP_PORT_TIME_T gmp_port_system_tick(
 	void
 )
 {
-	return HAL_GetTick();
+	return 0;
 }
 
 // This function would invoke when system meets some fatal errors.
@@ -31,7 +31,7 @@ void gmp_port_feed_dog()
 	// you may find the function definition in 
 	// <ti/c2000/C2000Ware_<version>/device_support/<device>/common/source/<device>_SysCtrl.c>
 	// prototype is void ServiceDog(void);
-	ServiceDog(void);
+	ServiceDog();
 }
 
 //////////////////////////////////////////////////////////////////////////

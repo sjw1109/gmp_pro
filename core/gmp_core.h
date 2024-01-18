@@ -19,9 +19,6 @@
 // <csp> default chip type definition
 #include <csp/chip_port.h>
 
-// The rest key definitions will be filled.
-#include <core/std/default_types.h>
-
 // public C ports function
 // memory management support
 #include <core/std/gmp_cport.h>

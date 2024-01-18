@@ -40,7 +40,7 @@ public:
 	virtual void set() = 0;
 	virtual void clear() = 0;
 	virtual void toggle() = 0;
-	virtual void set_mode(uint8_t mode) = 0;
+	virtual void set_mode(gmp_element_t mode) = 0;
 
 	virtual gmp_size_t write(data_type data) = 0;
 	virtual data_type read() = 0;
@@ -48,12 +48,12 @@ public:
 
 public:
 	// The following parameters are for write function and read function.
-	static constexpr uint8_t pin_reset = 0;
-	static constexpr uint8_t pin_set = 1;
+	static constexpr gmp_element_t pin_reset = 0;
+	static constexpr gmp_element_t pin_set = 1;
 
 	// The following parameters are for set_mode function
-	static constexpr uint8_t pin_input = 0;
-	static constexpr uint8_t pin_output = 1;
+	static constexpr gmp_element_t pin_input = 0;
+	static constexpr gmp_element_t pin_output = 1;
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -77,11 +77,11 @@ public:
 	// utility function
 	virtual void set_baudrate(uint32_t BaudRate) = 0;
 
-	virtual void set_stop_bit(uint8_t stopbit) = 0;
+	virtual void set_stop_bit(gmp_element_t stopbit) = 0;
 
-	virtual void set_data_bit(uint8_t databit) = 0;
+	virtual void set_data_bit(gmp_element_t databit) = 0;
 
-	virtual void set_parity(uint8_t parity_check) = 0;
+	virtual void set_parity(gmp_element_t parity_check) = 0;
 
 	virtual gmp_size_t read(data_type* data, gmp_size_t length) = 0;
 
@@ -102,20 +102,20 @@ public:
 	// constant
 
 	// The following parameters are to set UART stop bits 
-	static constexpr uint8_t stop_bit_1 = 0;
-	static constexpr uint8_t stop_bit_1_5 = 1;
-	static constexpr uint8_t stop_bit_2 = 2;
+	static constexpr gmp_element_t stop_bit_1 = 0;
+	static constexpr gmp_element_t stop_bit_1_5 = 1;
+	static constexpr gmp_element_t stop_bit_2 = 2;
 
 	// The following parameters are to set UART data bits
-	static constexpr uint8_t data_bit_5 = 5;
-	static constexpr uint8_t data_bit_6 = 6;
-	static constexpr uint8_t data_bit_7 = 7;
-	static constexpr uint8_t data_bit_8 = 8;
+	static constexpr gmp_element_t data_bit_5 = 5;
+	static constexpr gmp_element_t data_bit_6 = 6;
+	static constexpr gmp_element_t data_bit_7 = 7;
+	static constexpr gmp_element_t data_bit_8 = 8;
 
 	// The following parameters are to set UART parity check
-	static constexpr uint8_t parity_none = 0;
-	static constexpr uint8_t parity_even = 1;
-	static constexpr uint8_t parity_odd = 2;
+	static constexpr gmp_element_t parity_none = 0;
+	static constexpr gmp_element_t parity_even = 1;
+	static constexpr gmp_element_t parity_odd = 2;
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -154,20 +154,20 @@ public:
 
 public:
 	// Set register memory address length, unit Byte
-	inline void set_reg_addr_length(uint8_t length)
+	inline void set_reg_addr_length(gmp_element_t length)
 	{
 		reg_addr_len = length;
 	}
 
 	// get register memory address length, unit Byte
-	inline uint8_t get_reg_addr_length()
+	inline gmp_element_t get_reg_addr_length()
 	{
 		return reg_addr_len;
 	}
 
 protected:
 	// reg or memory address length
-	uint8_t reg_addr_len;
+	gmp_element_t reg_addr_len;
 
 public:
 	// last error
@@ -176,15 +176,15 @@ public:
 public:
 	// The following parameters are to set IIC register or memory address length.
 	// unit: Byte
-	static constexpr uint8_t reg_addr_len_1 = 1; // (default)
-	static constexpr uint8_t reg_addr_len_2 = 2;
-	static constexpr uint8_t reg_addr_len_3 = 3;
-	static constexpr uint8_t reg_addr_len_4 = 4;
+	static constexpr gmp_element_t reg_addr_len_1 = 1; // (default)
+	static constexpr gmp_element_t reg_addr_len_2 = 2;
+	static constexpr gmp_element_t reg_addr_len_3 = 3;
+	static constexpr gmp_element_t reg_addr_len_4 = 4;
 
 	// The following parameters are to set IIC slave address length.
 	// unit: Bit
-	static constexpr uint8_t dev_addr_length_7 = 1; // (default)
-	static constexpr uint8_t dev_addr_length_11 = 2;
+	static constexpr gmp_element_t dev_addr_length_7 = 1; // (default)
+	static constexpr gmp_element_t dev_addr_length_11 = 2;
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -206,12 +206,12 @@ public:
 public:
 	virtual void set_clk_div(uint32_t div) = 0;
 
-	virtual void set_mode(uint8_t polarity) = 0;
+	virtual void set_mode(gmp_element_t polarity) = 0;
 
-	virtual void set_bit_order(uint8_t order) = 0;
+	virtual void set_bit_order(gmp_element_t order) = 0;
 
 	// from 4 bits to 16 bits
-	virtual void set_frame_size(uint8_t size)
+	virtual void set_frame_size(gmp_element_t size)
 	{
 		frame_size = size;
 		// The rest config of SPI peripheral need to be complete by user.
@@ -233,14 +233,14 @@ public:
 public:
 	// The following parameters are used to set SPI mode.
 	// The SPI mode is decided by CPOL & CPHA
-	static constexpr uint8_t mode_0 = 0;
-	static constexpr uint8_t mode_1 = 1;
-	static constexpr uint8_t mode_2 = 2;
-	static constexpr uint8_t mode_3 = 3;
+	static constexpr gmp_element_t mode_0 = 0;
+	static constexpr gmp_element_t mode_1 = 1;
+	static constexpr gmp_element_t mode_2 = 2;
+	static constexpr gmp_element_t mode_3 = 3;
 
 	// The following parameters are used to set SPI bit order
-	static constexpr uint8_t order_lsb = 0;
-	static constexpr uint8_t order_msb = 1;
+	static constexpr gmp_element_t order_lsb = 0;
+	static constexpr gmp_element_t order_msb = 1;
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -258,7 +258,7 @@ public:
 	{}
 
 	// specify the timer base frequency
-	gmp_timer_entity(gmp_timer_cmp_t base_freq)
+	gmp_timer_entity(gmp_timer_t base_freq)
 		: base_freq(base_freq)
 	{}
 
@@ -266,10 +266,10 @@ public:
 	// configure
 
 	// Set frequency of timer
-	virtual void set_freq(gmp_timer_cmp_t freq_tick);
+	virtual void set_freq(gmp_timer_t freq_tick);
 
 	// Get frequency of timer, unit tick
-	virtual gmp_timer_cmp_t get_freq();
+	virtual gmp_timer_t get_freq();
 
 	// Enable modulator output
 	virtual void enable();
@@ -279,14 +279,14 @@ public:
 
 	// utilities
 	// transfer frequency to tick
-	inline gmp_timer_cmp_t freq2tick(gmp_timer_cmp_t freq)
+	inline gmp_timer_t freq2tick(gmp_timer_t freq)
 	{
 		return base_freq / freq;
 	}
 
 public:
 	// The base frequency of timer.
-	gmp_timer_cmp_t base_freq;
+	gmp_timer_t base_freq;
 
 };
 
@@ -303,7 +303,7 @@ public:
 		: base_freq(GMP_TIMER_BASE_FREQ)
 	{}
 
-	gmp_modulator_entity_1ch(gmp_timer_cmp_t base_freq)
+	gmp_modulator_entity_1ch(gmp_timer_t base_freq)
 		: base_freq(base_freq)
 	{}
 
@@ -311,13 +311,13 @@ public:
 	// utilities function 
 
 	// Set modulator compare value
-	virtual void set_modulator_cmp(gmp_timer_cmp_t cmp_tick);
+	virtual void set_modulator_cmp(gmp_timer_t cmp_tick);
 
 	// Set frequency of timer
-	virtual void set_modulator_freq(gmp_timer_cmp_t freq_tick);
+	virtual void set_modulator_freq(gmp_timer_t freq_tick);
 
 	// Get frequency of timer, unit tick
-	virtual gmp_timer_cmp_t get_modulator_freq();
+	virtual gmp_timer_t get_modulator_freq();
 
 	// Enable modulator output
 	virtual void enable();
@@ -329,10 +329,10 @@ public:
 	// The following parameter(s) is/are for controller
 
 	// The frequency of the timer or PWM peripheral
-	gmp_timer_cmp_t base_freq;
+	gmp_timer_t base_freq;
 
 	// How many ticks do the timer or PWM peripheral has.
-//	gmp_timer_cmp_t freq_tick;
+//	gmp_timer_t freq_tick;
 
 };
 
@@ -348,12 +348,12 @@ public:
 	// utilities function 
 
 	// Set modulator compare value
-	virtual void set_modulator_cmp(gmp_timer_cmp_t cmp_tick1, 
-		gmp_timer_cmp_t gmp_tick2);
+	virtual void set_modulator_cmp(gmp_timer_t cmp_tick1,
+		gmp_timer_t gmp_tick2);
 
 	// Set frequency of timer
 	// Default implement
-	virtual void set_modulator_freq(gmp_timer_cmp_t freq_tick);
+	virtual void set_modulator_freq(gmp_timer_t freq_tick);
 
 	// Enable modulator output
 	// This is a default implement
@@ -377,12 +377,12 @@ public:
 	// utilities function 
 
 	// Set modulator compare value
-	virtual void set_modulator_cmp(gmp_timer_cmp_t cmp_tick1, 
-		gmp_timer_cmp_t gmp_tick2, gmp_timer_cmp_t gmp_tick3);
+	virtual void set_modulator_cmp(gmp_timer_t cmp_tick1,
+		gmp_timer_t gmp_tick2, gmp_timer_t gmp_tick3);
 
 	// Set frequency of timer
 	// Default implement
-	virtual void set_modulator_freq(gmp_timer_cmp_t freq_tick);
+	virtual void set_modulator_freq(gmp_timer_t freq_tick);
 
 	// Enable modulator output
 	// This is a default implement
