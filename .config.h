@@ -122,6 +122,13 @@
 // GMP/ext
 
 
+//////////////////////////////////////////////////////////////////////////
+// Timer of the STM32 device
+
+// The base frequency of timer peripheral
+// generally, this macro will be implemented by chip selection and auto config.
+//#define GMP_TIMER_BASE_FREQ ((72000000U))
+
 
 //////////////////////////////////////////////////////////////////////////
 // GMP WF settings

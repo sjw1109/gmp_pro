@@ -20,7 +20,7 @@ typedef enum
 }gmp_prototype_t;
 
 
-
+//////////////////////////////////////////////////////////////////////////
 void gmp_port_gpio_write();
 
 // entity of the GPIO device
@@ -56,6 +56,8 @@ public:
 	static constexpr uint8_t pin_output = 1;
 };
 
+//////////////////////////////////////////////////////////////////////////
+// 
 // entity of the UART device
 class gmp_uart_entity
 	:public virtual gmp_concept_rw_direct,
@@ -85,7 +87,7 @@ public:
 
 	virtual gmp_size_t write(const data_type* data, gmp_size_t length) = 0;
 
-	virtual gmp_size_t write( data_type* data, gmp_size_t length) = 0;
+	virtual gmp_size_t write(data_type* data, gmp_size_t length) = 0;
 
 	virtual  gmp_size_t write(data_type data) = 0;
 
@@ -116,7 +118,8 @@ public:
 	static constexpr uint8_t parity_odd = 2;
 };
 
-
+//////////////////////////////////////////////////////////////////////////
+// 
 // entity of the IIC device
 class gmp_iic_entity
 	:public virtual gmp_concept_rw_with_dualaddr,  // This is for memory operation
@@ -184,6 +187,8 @@ public:
 	static constexpr uint8_t dev_addr_length_11 = 2;
 };
 
+//////////////////////////////////////////////////////////////////////////
+// 
 // entity of the SPI device
 class gmp_spi_entity
 	: public virtual concept_rwd_single<uint16_t>,
@@ -238,9 +243,56 @@ public:
 	static constexpr uint8_t order_msb = 1;
 };
 
+//////////////////////////////////////////////////////////////////////////
+// 
+// Provide a abstract class of Timer
+
+class gmp_timer_entity
+{
+public:
+	// ctor & dtor
+
+	// Use default timer base frequency
+	gmp_timer_entity()
+		: base_freq(GMP_TIMER_BASE_FREQ)
+	{}
+
+	// specify the timer base frequency
+	gmp_timer_entity(gmp_timer_cmp_t base_freq)
+		: base_freq(base_freq)
+	{}
+
+public:
+	// configure
+
+	// Set frequency of timer
+	virtual void set_freq(gmp_timer_cmp_t freq_tick);
+
+	// Get frequency of timer, unit tick
+	virtual gmp_timer_cmp_t get_freq();
+
+	// Enable modulator output
+	virtual void enable();
+
+	// Disable modulator output
+	virtual void disable();
+
+	// utilities
+	// transfer frequency to tick
+	inline gmp_timer_cmp_t freq2tick(gmp_timer_cmp_t freq)
+	{
+		return base_freq / freq;
+	}
+
+public:
+	// The base frequency of timer.
+	gmp_timer_cmp_t base_freq;
+
+};
+
 // entity of the modulator device
 // It's a PWM modulator class prototype.
-// The following 4 classes, is different number of channels.
+// The following 3 classes, is different number of channels.
 
 // This class has only one channel
 class gmp_modulator_entity_1ch
@@ -248,22 +300,39 @@ class gmp_modulator_entity_1ch
 public:
 	// ctor & dtor
 	gmp_modulator_entity_1ch()
+		: base_freq(GMP_TIMER_BASE_FREQ)
+	{}
+
+	gmp_modulator_entity_1ch(gmp_timer_cmp_t base_freq)
+		: base_freq(base_freq)
 	{}
 
 public:
 	// utilities function 
 
 	// Set modulator compare value
-	virtual void set_modulator_cmp(gmp_timer_cmp_t cmp_value);
+	virtual void set_modulator_cmp(gmp_timer_cmp_t cmp_tick);
 
 	// Set frequency of timer
-	virtual void set_modulator_freq(gmp_timer_cmp_t freq_value);
+	virtual void set_modulator_freq(gmp_timer_cmp_t freq_tick);
+
+	// Get frequency of timer, unit tick
+	virtual gmp_timer_cmp_t get_modulator_freq();
 
 	// Enable modulator output
 	virtual void enable();
 
 	// Disable modulator output
 	virtual void disable();
+
+public:
+	// The following parameter(s) is/are for controller
+
+	// The frequency of the timer or PWM peripheral
+	gmp_timer_cmp_t base_freq;
+
+	// How many ticks do the timer or PWM peripheral has.
+//	gmp_timer_cmp_t freq_tick;
 
 };
 
@@ -276,21 +345,24 @@ public:
 	{}
 
 public:
-	// utilities function
+	// utilities function 
 
 	// Set modulator compare value
-	virtual void set_modulator_cmp(
-		gmp_timer_cmp_t cmp1_value, gmp_timer_cmp_t cmp2_value
-	);
+	virtual void set_modulator_cmp(gmp_timer_cmp_t cmp_tick1, 
+		gmp_timer_cmp_t gmp_tick2);
 
 	// Set frequency of timer
-	virtual void set_modulator_freq(gmp_timer_cmp_t freq_value);
+	// Default implement
+	virtual void set_modulator_freq(gmp_timer_cmp_t freq_tick);
 
 	// Enable modulator output
+	// This is a default implement
 	virtual void enable();
 
 	// Disable modulator output
+	// This is a default implement
 	virtual void disable();
+
 };
 
 // This class has 3 channels
@@ -302,51 +374,29 @@ public:
 	{}
 
 public:
-	// utilities function
+	// utilities function 
 
 	// Set modulator compare value
-	virtual void set_modulator_cmp(
-		gmp_timer_cmp_t cmp1_value, gmp_timer_cmp_t cmp2_value,
-		gmp_timer_cmp_t cmp3_value
-	);
+	virtual void set_modulator_cmp(gmp_timer_cmp_t cmp_tick1, 
+		gmp_timer_cmp_t gmp_tick2, gmp_timer_cmp_t gmp_tick3);
 
 	// Set frequency of timer
-	virtual void set_modulator_freq(gmp_timer_cmp_t freq_value);
+	// Default implement
+	virtual void set_modulator_freq(gmp_timer_cmp_t freq_tick);
 
 	// Enable modulator output
+	// This is a default implement
 	virtual void enable();
 
 	// Disable modulator output
+	// This is a default implement
 	virtual void disable();
+
 };
 
-// This class has 4 channels
-class gmp_modulator_entity_4ch
-{
-public:
-	// ctor & dtor
-	gmp_modulator_entity_4ch()
-	{}
 
-public:
-	// utilities function
-
-	// Set modulator compare value
-	virtual void set_modulator_cmp(
-		gmp_timer_cmp_t cmp1_value, gmp_timer_cmp_t cmp2_value,
-		gmp_timer_cmp_t cmp3_value, gmp_timer_cmp_t cmp4_value
-	);
-
-	// Set frequency of timer
-	virtual void set_modulator_freq(gmp_timer_cmp_t freq_value);
-
-	// Enable modulator output
-	virtual void enable();
-
-	// Disable modulator output
-	virtual void disable();
-};
-
+//////////////////////////////////////////////////////////////////////////
+// 
 // entity of the CAN controller device
 class gmp_can_entity
 	:public virtual concept_rw_with_addr<uint16_t, gmp_data_t>,   // For standard frame

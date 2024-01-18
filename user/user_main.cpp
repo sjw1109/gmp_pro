@@ -35,6 +35,16 @@ void user_init(void)
 	gmp_dbg_prt("result: %x,error code: %d\r\n", result,eeprom04.iic->last_error);
 
 	pwm_ch1.enable();
+
+	HAL_Delay(2000);
+
+	for (int i = 0; i < 32; ++i)
+	{
+		pwm_ch1.set_modulator_cmp(100*i);
+		HAL_Delay(1000);
+	}
+
+	//pwm_ch1.disable();
 }
 
 

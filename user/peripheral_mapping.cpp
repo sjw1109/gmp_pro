@@ -11,7 +11,7 @@
 
 gmp_iic_stm32_impl_t iic(&hi2c1);
 gmp_uart_stm32_impl_t dbg_uart(&huart1);
-gmp_timer_stm32_impl_t pwm_ch1(&htim1, TIM_CHANNEL_1);
+gmp_pwm1ch_stm32_impl_t pwm_ch1(&htim1, TIM_CHANNEL_1);
 
 //////////////////////////////////////////////////////////////////////////
 // Devices on the peripheral
