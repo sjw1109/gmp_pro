@@ -17,21 +17,13 @@ gmp_pwm1ch_stm32_impl_t pwm_ch1(&htim1, TIM_CHANNEL_1);
 // Devices on the peripheral
 
 
-
-void gmp_setup_peripheral()
+// This function should be implement by bsp_c1
+void gmp_init_peripheral_tree()
 {
 	// enable debug port
 #if defined SPECIFY_ENABLE_DEFUALT_DEBUG_PRINT_FUNC
 	default_debug_dev = &dbg_uart;
 #endif // SPECIFY_ENABLE_DEFUALT_DEBUG_PRINT_FUNC
-
-	
-}
-
-
-// This function should be implement by bsp_c1
-void gmp_init_peripheral_tree()
-{
 
 
 }

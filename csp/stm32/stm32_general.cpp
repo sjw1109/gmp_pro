@@ -38,6 +38,11 @@ void gmp_port_feed_dog()
 #endif // HAL_IWDG_MODULE_ENABLED, IWDG enabled
 }
 
+// This function is implemented by CubeMX so this function is generally a null function.
+void gmp_setup_peripheral()
+{}
+
+
 //////////////////////////////////////////////////////////////////////////
 // IO peripheral function implement
 #if defined HAL_GPIO_MODULE_ENABLED
