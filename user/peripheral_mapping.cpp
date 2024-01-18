@@ -15,7 +15,7 @@ gmp_pwm1ch_stm32_impl_t pwm_ch1(&htim1, TIM_CHANNEL_1);
 
 //////////////////////////////////////////////////////////////////////////
 // Devices on the peripheral
-//dac8563 da(&spi, &da_c	lr, &da_load, &da_sync);
+
 
 
 void gmp_setup_peripheral()
@@ -25,14 +25,7 @@ void gmp_setup_peripheral()
 	default_debug_dev = &dbg_uart;
 #endif // SPECIFY_ENABLE_DEFUALT_DEBUG_PRINT_FUNC
 
-	//default_dbg_hdev = (gmp_phy_mapping_t*) &gmp_uart_dbg_port;
 	
-	// IIC1 
-	//init_ring_buffer(gmp_iic1.rx_buf);
-
-	// IIC2 receive buffer
-// 	init_ring_buffer((gmp_ring_buffer_t**)&gmp_uart_dbg.rx_buf,
-// 		GMP_DEFAULT_BUFFER_SIZE);
 }
 
 
@@ -47,49 +40,4 @@ void gmp_init_peripheral_tree()
 // interrupt reaction
 
 
-//void HAL_UART_RxCpltCallback(UART_HandleTypeDef* huart)
-//{
-//	gmp_param_t timeout = 0;
 
-//	gmp_data_t rx_buffer;
-
-//	// Check UART state
-//	while (HAL_UART_GetState(&huart1) != HAL_UART_STATE_READY)
-//		if (timeout++ > TIMEOUT_CNT)
-//			return;
-
-//	// Check Receive buffer
-//	timeout = 0;
-//	while (HAL_UART_Receive_IT(&huart1, &rx_buffer, 1) != HAL_OK)
-//		if (timeout++ > TIMEOUT_CNT) 
-//			return;
-
-//	// tell GMP the received message
-//	gmp_port_recv_int_response(
-//		&gmp_uart_dbg,
-//		&rx_buffer, 1,
-//		0
-//	);
-
-//	return;
-//}
-
-//////////////////////////////////////////////////////////////////////////
-// PWM function
-
-// enable PWM 
-//void enable_pwm(pwm_dev_handle_t dev)
-//{
-//	HAL_TIM_PWM_Start(dev, TIM_CHANNEL_1);
-//	HAL_TIMEx_PWMN_Start(dev, TIM_CHANNEL_1);
-//	HAL_TIM_PWM_Start(dev, TIM_CHANNEL_2);
-//	HAL_TIMEx_PWMN_Start(dev, TIM_CHANNEL_2);
-//}
-
-//void disable_pwm(pwm_dev_handle_t dev)
-//{
-//	HAL_TIM_PWM_Stop(dev, TIM_CHANNEL_1);
-//	HAL_TIMEx_PWMN_Stop(dev, TIM_CHANNEL_1);
-//	HAL_TIM_PWM_Stop(dev, TIM_CHANNEL_2);
-//	HAL_TIMEx_PWMN_Stop(dev, TIM_CHANNEL_2);
-//}
