@@ -37,8 +37,10 @@ void gmp_entry(void)
 	// Call user initialize
 	user_init();
 
+#ifndef SPECIFY_DISABLE_GMP_LOGO
 	// Debug information print
 	gmp_setup_label();
+#endif // SPECIFY_DISABLE_GMP_LOGO
 
 #if defined SPECIFY_ENABLE_TEST_ENVIRONMENT
 	// print warning informations
@@ -62,7 +64,8 @@ void gmp_entry(void)
 		user_loop();
 	}
 #endif
-	return;
+	// Unreachable region
+	//return;
 }
 
 
@@ -111,7 +114,7 @@ void gmp_loop()
 #endif 
 }
 
-
+#ifndef SPECIFY_DISABLE_GMP_LOGO
 // This function would print a GMP label
 void gmp_setup_label()
 {
@@ -131,6 +134,7 @@ void gmp_setup_label()
 	gmp_dbg_prt("................................................\r\n");
 	gmp_dbg_prt("[okay] General motor platform ready.\r\n");
 }
+#endif // SPECIFY_DISABLE_GMP_LOGO
 
 //////////////////////////////////////////////////////////////////////////
 // The prototype of the following two functions would be found in

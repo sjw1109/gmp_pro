@@ -8,7 +8,7 @@
 
 //////////////////////////////////////////////////////////////////////////
 // Peripherals implement classes
-gmp_uart_stm32_impl_t dbg_uart(&huart1);
+
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -18,9 +18,11 @@ gmp_uart_stm32_impl_t dbg_uart(&huart1);
 // This function should be implement by bsp_c1
 void gmp_init_peripheral_tree()
 {
+	uart.init();
+
 	// enable debug port
 #if defined SPECIFY_ENABLE_DEFUALT_DEBUG_PRINT_FUNC
-	default_debug_dev = &dbg_uart;
+	default_debug_dev = &uart;
 #endif // SPECIFY_ENABLE_DEFUALT_DEBUG_PRINT_FUNC
 
 

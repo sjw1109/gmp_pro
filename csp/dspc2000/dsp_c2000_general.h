@@ -28,7 +28,7 @@
 #define GMP_TIMER_BASE_FREQ (100000000U)
 
 // Basic type definition
-#define GMP_PORT_DATA_T			uint16_t 
+#define GMP_PORT_DATA_T			char 
 #define GMP_BASIC_SIZE_PER_BITS ((16))
 #define GMP_PORT_SIZE_T			uint16_t 
 #define GMP_PORT_ELEMENT_T      uint16_t
@@ -40,7 +40,7 @@
 #define GMP_PORT_HSPI_T		volatile struct SPI_REGS*
 #define GMP_PORT_HCAN_T     volatile struct ECAN_REGS*
 //#define GMP_PORT_HIIS_T
-//#define GMP_PORT_HUSART_T
+//#define GMP_PORT_HUSART_T 
 
 
 

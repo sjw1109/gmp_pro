@@ -18,26 +18,33 @@
 //////////////////////////////////////////////////////////////////////////
 // global variables here
 
-
+gmp_uart_dspc2000_impl_t uart(&SciaRegs);
 
 //////////////////////////////////////////////////////////////////////////
 // initialize routine here
+
+
+
+GMP_NO_OPT_PREFIX
 void user_init(void)
-	GMP_NO_OPT
+GMP_NO_OPT_SUFFIX
 {
-//	dbg_uart.write("Hello World!\r\n",14);
-	gmp_dbg_prt("Hello World!\r\n");
+    uart.write((const char*)"Hello World!\r\n",14);
+    
 
 
-	//pwm_ch1.disable();
 }
 
 
 //////////////////////////////////////////////////////////////////////////
 // endless loop function here
+GMP_NO_OPT_PREFIX
 void user_loop(void)
+GMP_NO_OPT_SUFFIX
 {
-	HAL_Delay(1000);
+for (int i =0; i< 10000; ++i);
+
+gmp_dbg_prt("Hello World!\r\n");
 }
 
 

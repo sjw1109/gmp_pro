@@ -39,7 +39,7 @@
 #define GMP_AUTO_LINUX   4
 
 // GMP support chip select
-#define MASTERCHIP GMP_AUTO_TIC2000
+#define MASTERCHIP GMP_AUTO_STM32
 
 // GMP Master chip set select
 #define MASTER_CHIP_SET NULL
@@ -54,7 +54,7 @@
 
 // Compiler options
 // using CCS C2000 compiler
-#define COMPILER_CCS_C2000
+//#define COMPILER_CCS_C2000
 
 // Enable unimplemented function warning 
 #define SPECIFY_ENABLE_UNIMPL_FUNC_WARNING
@@ -78,6 +78,10 @@
 // specify GMP should feed watch dog
 // The program will invoke feed watch dog
 #define SPECIFY_ENABLE_FEED_WATCHDOG
+
+// Disable the GMP LOGO output
+// The code size will greatly lessen
+#define SPECIFY_DISABLE_GMP_LOGO
 
 //////////////////////////////////////////////////////////////////////////
 // MEMORY CONTROLLER SETTINGS
@@ -103,12 +107,14 @@
 
 // The default print function rely on the allocation function,
 // so the alloc_function and free_function is necessary
-//#define SPECIFY_ENABLE_DEFUALT_DEBUG_PRINT_FUNC
+#define SPECIFY_ENABLE_DEFUALT_DEBUG_PRINT_FUNC
 
 // In default case, the print function may use gmp_malloc function,
 // if you have to avoid the malloc and free you should enable the following function 
-//#define SPECIFY_DISABLE_DYNAMIC_ALLOC_OF_DBGPTR
+#define SPECIFY_DISABLE_DYNAMIC_ALLOC_OF_DBGPTR
 
+
+#define GMP_TIMER_BASE_FREQ 64000000
 
 //////////////////////////////////////////////////////////////////////////
 // Device and IO device controller Settings

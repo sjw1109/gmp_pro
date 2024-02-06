@@ -109,3 +109,11 @@ Choose C Dialect and C++ Dialect.
 
 + try to compile the project
 
+## Preparing to load the program
+
+For now, you still cannot program the board. You should create a new target configuration file first.
+You should find the "File" Menu and expand "New" items, and select "New Target Configuration"
+
+And you should select which chip you will use to program.
+
+W
