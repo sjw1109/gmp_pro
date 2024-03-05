@@ -37,7 +37,7 @@ void user_init(void)
 // endless loop function here
 void user_loop(void)
 {
-	HAL_Delay(1000);
+	
 }
 
 

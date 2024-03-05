@@ -39,7 +39,7 @@
 #define GMP_AUTO_LINUX   4
 
 // GMP support chip select
-#define MASTERCHIP GMP_AUTO_STM32
+#define MASTERCHIP GMP_AUTO_WINDOWS
 
 // GMP Master chip set select
 #define MASTER_CHIP_SET NULL
@@ -81,7 +81,31 @@
 
 // Disable the GMP LOGO output
 // The code size will greatly lessen
-#define SPECIFY_DISABLE_GMP_LOGO
+//#define SPECIFY_DISABLE_GMP_LOGO
+
+//////////////////////////////////////////////////////////////////////////
+// This module permit GMP auto detect what chip is in use and configure it automatically.
+#if defined GMP_AUTO
+
+#if (MASTERCHIP == GMP_AUTO_WINDOWS)
+
+// redirect debug print to std C library `printf`
+#define gmp_dbg_prt printf
+
+// Specify the environment is PC test environment
+#define SPECIFY_PC_TEST_ENV
+
+// Number of Test Cycles
+#define SPECIFY_PC_TEST_CYCLE_CNT 1000
+
+// Enable GMP LOGO
+#undef SPECIFY_DISABLE_GMP_LOGO
+//#define SPECIFY_DISABLE_GMP_LOGO
+
+#endif // MASTERCHIP
+
+#endif // GMP_AUTO
+
 
 //////////////////////////////////////////////////////////////////////////
 // MEMORY CONTROLLER SETTINGS
@@ -159,10 +183,7 @@
 //////////////////////////////////////////////////////////////////////////
 // Functional blocks
 
-// This module permit user may auto detect what chip in use.
-#if defined GMP_AUTO
 
-#endif // GMP_AUTO
 
 //////////////////////////////////////////////////////////////////////////
 // validate parameters

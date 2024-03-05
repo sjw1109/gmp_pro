@@ -12,6 +12,11 @@
 #define constexpr const
 #define override
 #define final
+
+#ifndef nullptr
+#define nullptr (0x00000000)
+#endif // nullptr definition
+
 #endif // __cplusplus <= 201103L
 
 // Wrong C++ version
@@ -20,7 +25,6 @@
  #endif // __cplusplus <= 199711L
 
  #endif // __cplusplus
-
 
 
 // To mark a function that shouldn't be optimize by compiler
@@ -61,5 +65,14 @@
 #ifndef FAST_FUNCTION
 #define FAST_FUNCTION 
 #endif // FAST_FUNCTION
+
+//////////////////////////////////////////////////////////////////////////
+// MSVC Configure
+
+#if (_MSC_VER >= 1600)  
+
+// Disable the _s(safe) functions.
+#define _CRT_SECURE_NO_WARNINGS
+#endif // _MSC_VER
 
 #endif // _FILE_COMPILER_SUP_H_

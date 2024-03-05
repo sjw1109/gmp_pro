@@ -123,7 +123,7 @@ protected:
 	// When user intervene the normal workflow, the flag may set to 1,
 	// and `next_node_usr` will take count.
 	// If the class is not in Fault situation the user decision may prevail.
-	gmp_element_t flag_usr_modify;
+	uint8_t flag_usr_modify;
 
 	// When this flag is enable, the gmp_workflow will start running.
 	// (Default) When a whole process is complete, and workflow meets the end,
@@ -133,7 +133,7 @@ protected:
 	// the work flow would be stuck. This is dangerous.
 	// User may choose resumption from the stuck by function `play()`, 
 	// or choose to forget the step and start anew by function `reset()`.
-	gmp_element_t flag_enable;
+	uint8_t flag_enable;
 
 	// This variables store the switch time of the current node.
 	// The counter will treat this value as original.
@@ -248,7 +248,7 @@ public:
 	// return time consuming of the last node 
 	inline gmp_time_t get_last_duration()
 	{
-		if (switch_time > last_switch_time)
+		if (switch_time >= last_switch_time)
 		{
 			return switch_time - last_switch_time;
 		}
@@ -258,6 +258,24 @@ public:
 			return max_timer_tick - last_switch_time + switch_time;
 #else
 			return GMP_MAX_TIME_ITEM - last_switch_time + switch_time;
+#endif // SPECIFY_WORKFLOW_MULTITIMER_TICK
+		}
+	}
+
+	inline gmp_time_t get_current_duration()
+	{
+		gmp_time_t now = get_current_tick();
+
+		if (now >= switch_time)
+		{
+			return now - switch_time;
+		}
+		else // overflow
+		{
+#if defined SPECIFY_WORKFLOW_MULTITIMER_TICK
+			return max_timer_tick - switch_time + now;
+#else
+			return GMP_MAX_TIME_ITEM - switch_time + now;
 #endif // SPECIFY_WORKFLOW_MULTITIMER_TICK
 		}
 	}
@@ -340,6 +358,9 @@ public:
 		if (head_callback)
 			head_callback(this);
 #endif // SPECIFY_WORKFLOW_START_END_CALLBACK
+
+		switch_time = get_current_tick();
+		last_switch_time = switch_time;
 
 		flag_enable = 1;
 
@@ -712,7 +733,7 @@ class gmp_wf_node_t2_t
 public:
 	// ctor & dtor
 	gmp_wf_node_t2_t()
-		:	t1(0), t2(0), last_exec_time(0)
+		: t1(0), t2(0), last_exec_time(0)
 	{}
 
 public:
@@ -770,18 +791,18 @@ public:
 //	gmp_wf_node_t3_t() = default;
 
 	gmp_wf_node_t3_t()
-		:t0(0), default_node(wf_end_node)
+		:t0(-1), default_node(wf_end_node)
 	{}
 
 public:
 	virtual gmp_wf_node_base_gt* node_routine(gmp_workflow_t* wf) override
 	{
-		gmp_time_t duration = wf->get_last_duration();
+		gmp_time_t duration = wf->get_current_duration();
 
 		if (duration > t0)
 			return default_node;
 
-		if (duration > t1)
+		if (duration >= t1)
 		{
 			duration = duration - last_exec_time;
 

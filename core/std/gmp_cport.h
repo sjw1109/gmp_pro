@@ -75,7 +75,10 @@ extern "C"
 	gmp_size_t gmp_dbg_prt_fn(const char* p_fmt, ...);
 
 	// debug output mode
+#ifndef gmp_dbg_prt
 #define gmp_dbg_prt gmp_dbg_prt_fn
+#endif // gmp_dbg_prt
+
 #endif // SPECIFY_ENABLE_DEFUALT_DEBUG_PRINT_FUNC
 
 #ifndef gmp_dbg_prt

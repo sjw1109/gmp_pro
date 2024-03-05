@@ -1,8 +1,7 @@
+#include <csp/windows/win_include.h>
+
 #ifndef _FILE_WIN_INCLUDE_H_
 #define _FILE_WIN_INCLUDE_H_
-
-// default types
-#define GMP_PORT_SIZE_T size_t
 
 
 #ifdef __cplusplus
@@ -10,12 +9,11 @@ extern "C"
 {
 #endif // __cplusplus
 
-#include <Windows.h>
+
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
 
+#endif //  _FILE_WIN_INCLUDE_H_
 
-
-#endif // _FILE_WIN_INCLUDE_H_

@@ -181,7 +181,7 @@ public:
 	{
 		gmp_element_t addr_size = reg_addr_size;
 		gmp_element_t data_buf[16];
-		gmp_element_t buf_pos = 0;
+		gmp_size_t buf_pos = 0;
 
 		memset(data_buf, 0, 16);
 
@@ -191,7 +191,7 @@ public:
 			//			spi->write((addr >> addr_size) & 0xFF);
 		}
 
-		if (length < 16 - buf_pos)
+		if (length < 16U - buf_pos)
 		{
 			memcpy(&data_buf[buf_pos], data, length);
 			buf_pos += length;

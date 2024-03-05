@@ -1,4 +1,6 @@
 
+#define _CRT_SECURE_NO_WARNINGS
+
 // necessary System headers 
 #include <stdarg.h>
 #include <string.h>

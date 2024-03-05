@@ -9,9 +9,7 @@
 #define NULL ((0))
 #endif // NULL
 
-#ifndef nullptr
-#define nullptr (0x00000000)
-#endif // nullptr
+
 
 
 //////////////////////////////////////////////////////////////////////////
