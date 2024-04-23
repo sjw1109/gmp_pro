@@ -8,7 +8,7 @@ gmp_wf_node_base_gt wf_end_node_entity(gmp_workflow_t::gmp_wf_end_id);
 gmp_wf_node_base_gt* wf_end_node = &wf_end_node_entity;
 
 
-gmp_size_t gmp_workflow_t::get_curr_node_id()
+size_gt gmp_workflow_t::get_curr_node_id()
 {
 	// BUG 
 	if (last_node == nullptr)
@@ -16,7 +16,7 @@ gmp_size_t gmp_workflow_t::get_curr_node_id()
 	return curr_node->get_id();
 }
 
-gmp_size_t gmp_workflow_t::get_last_node_id()
+size_gt gmp_workflow_t::get_last_node_id()
 {
 	if (last_node == nullptr)
 		return gmp_workflow_t::gmp_wf_end_id;
@@ -53,7 +53,7 @@ gmp_stat_t gmp_workflow_t::process()
 //         }
 
 		// in this case the process permit user using loop to itself.
-		// WARNING, the
+		// WARNING
 		if (next_node == nullptr)
 		{
 			return GMP_STAT_OK;

@@ -39,7 +39,7 @@
 #define GMP_AUTO_LINUX   4
 
 // GMP support chip select
-#define MASTERCHIP GMP_AUTO_WINDOWS
+#define MASTERCHIP GMP_AUTO_STM32
 
 // GMP Master chip set select
 #define MASTER_CHIP_SET NULL
@@ -190,5 +190,11 @@
 #if defined BIG_ENDIAN && defined LITTLE_ENDIAN
 #error "You should chose big-endian or little-endian."
 #endif // BIG_ENDIAN && LITTLE_ENDIAN
+
+
+//////////////////////////////////////////////////////////////////////////
+// include default configuration
+//
+#include <core/std/default.config.h>
 
 #endif // GENERAL_MOTOR_PLAT

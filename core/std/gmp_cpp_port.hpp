@@ -3,8 +3,9 @@
 #ifndef _FILE_GMP_CPP_PORT_HPP
 #define _FILE_GMP_CPP_PORT_HPP
 
-// Global definitions of new and delete operator
-// TODO impl
+//////////////////////////////////////////////////////////////////////////
+// + Global definitions of new and delete operator
+// 
 
 
 

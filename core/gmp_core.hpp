@@ -1,6 +1,10 @@
 // This file contains all the core functions
 // If you need to use GMP library you should include this header first
 
+//////////////////////////////////////////////////////////////////////////
+// Step I import all C headers and extern to C headers
+//
+
 extern "C"
 {
 
@@ -12,23 +16,33 @@ extern "C"
 // This file should be included by C++ source files
 
 //////////////////////////////////////////////////////////////////////////
-// include GMP C++ interface
-// + memory management of new and delete
-#include <core/std/gmp_cpp_port.hpp>
+// Step II import System headers
+//
+// Three basic cases
+
+
 
 
 //////////////////////////////////////////////////////////////////////////
+// Step III import GMP basement
+// 
+// import GMP C++ interface
+#include <core/std/gmp_cpp_port.hpp>
+
+// + memory management of new and delete
+
+
 // invoke chip support package
 #include <csp/chip_port.hpp>
 
 
 //////////////////////////////////////////////////////////////////////////
-// introduce core system modules
-
-// invoke basic io concepts
+// Step IV import core system modules
+//
+// invoke basic IO concepts
 #include <core/dev/io_concept.hpp>
 
-// invoke peripheral entity class
+// invoke peripheral driver entity class
 #include <core/dev/peripheral_driver.hpp>
 
 // invoke devices abstract
@@ -36,6 +50,11 @@ extern "C"
 
 
 //////////////////////////////////////////////////////////////////////////
-// include peripheral mapping
+// Step V import peripheral mapping
+//
+
 #include <user/peripheral_mapping.hpp>
+
+//////////////////////////////////////////////////////////////////////////
+// Step VI import other necessary modules
 

@@ -5,16 +5,16 @@
 
 gmp_stat_t init_ring_buffer(
 	gmp_ring_buffer_t** buffer,
-	gmp_size_t length
+	size_gt length
 )
 {
 	// check variables
 	assert(buffer);
 
-	*buffer = gmp_malloc(length * sizeof(gmp_data_t) + sizeof(buffer));
+	*buffer = gmp_malloc(length * sizeof(data_gt) + sizeof(buffer));
 
 	// initialize ring buffer
-	(*buffer)->buffer = (gmp_data_t*)((*buffer) + 1);
+	(*buffer)->buffer = (data_gt*)((*buffer) + 1);
 	(*buffer)->length = length;
 	(*buffer)->write_pos = 0;
 	(*buffer)->read_pos = 0;
@@ -30,7 +30,7 @@ void release_ring_buffer(
 	gmp_free(buf->buffer);
 }
 
-gmp_size_t rb_size(
+size_gt rb_size(
 	gmp_ring_buffer_t* buf
 )
 {
@@ -40,7 +40,7 @@ gmp_size_t rb_size(
 		return buf->read_pos + buf->length - buf->write_pos;
 }
 
-gmp_size_t rb_capacity(
+size_gt rb_capacity(
 	gmp_ring_buffer_t* buf
 )
 {
@@ -49,7 +49,7 @@ gmp_size_t rb_capacity(
 
 gmp_stat_t rb_push(
 	gmp_ring_buffer_t* buf,
-	gmp_data_t dat
+	data_gt dat
 )
 {
 	buf->buffer[buf->write_pos++] = dat;
@@ -66,14 +66,14 @@ gmp_stat_t rb_push(
 	return GMP_STAT_OK;
 }
 
-gmp_data_t rb_peek(
+data_gt rb_peek(
 	gmp_ring_buffer_t* buf
 )
 {
 	return buf->buffer[buf->read_pos];
 }
 
-gmp_data_t rb_pop(
+data_gt rb_pop(
 	gmp_ring_buffer_t* buf
 )
 {
@@ -95,15 +95,15 @@ void rb_empty(
 	buf->read_pos = 0;
 }
 
-gmp_size_t rb_extract(
+size_gt rb_extract(
 	gmp_ring_buffer_t* buf,
 	void* dst,
-	gmp_size_t cap
+	size_gt cap
 )
 {
-	gmp_size_t size = rb_size(buf);
-	gmp_size_t cur_pos;
-	gmp_size_t cnt;
+	size_gt size = rb_size(buf);
+	size_gt cur_pos;
+	size_gt cnt;
 
 	if (size == 0)
 		return 0;
@@ -114,7 +114,7 @@ gmp_size_t rb_extract(
 			cur_pos < buf->length && cnt < cap && cur_pos < buf->write_pos;
 			++cur_pos, ++cnt)
 		{
-			((gmp_data_t*)dst)[cnt] = buf->buffer[cur_pos];
+			((data_gt*)dst)[cnt] = buf->buffer[cur_pos];
 		}
 		
 		buf->read_pos = cur_pos;
@@ -125,14 +125,14 @@ gmp_size_t rb_extract(
 			cur_pos < buf->length && cnt < cap;
 			++cur_pos, ++cnt)
 		{
-			((gmp_data_t*)dst)[cnt] = buf->buffer[cur_pos];
+			((data_gt*)dst)[cnt] = buf->buffer[cur_pos];
 		}
 
 		for (cur_pos = 0;
 			cur_pos < buf->write_pos && cnt < cap;
 			++cur_pos, ++cnt)
 		{
-			((gmp_data_t*)dst)[cnt] = buf->buffer[cur_pos];
+			((data_gt*)dst)[cnt] = buf->buffer[cur_pos];
 		}
 
 		buf->read_pos = cur_pos;

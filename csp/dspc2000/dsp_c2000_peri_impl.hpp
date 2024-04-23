@@ -37,7 +37,7 @@ class gmp_gpio_dspc2000_impl_t
 	:public gmp_gpio_entity
 {
 public:
-	typedef gmp_data_t data_type;
+	typedef data_gt data_type;
 
 public:
 	// ctor & dtor
@@ -85,7 +85,7 @@ public:
 	}
 
 	// Write and Read function
-	gmp_size_t write(const data_type data) override
+	size_gt write(const data_type data) override
 	{
 	    EALLOW;
 		gpio_dat_handle[gpio_mux].toggle |= (uint32_t)1 << gpio_pin;
@@ -109,7 +109,7 @@ public:
 
 
 	// The following function is determined by chips, not implement
-	void set_mode(gmp_element_t mode)override
+	void set_mode(fast_gt mode)override
 	{
 		// This function is not implemented here
 		gmp_not_impl(__FILE__, __LINE__);
@@ -132,8 +132,8 @@ class gmp_uart_dspc2000_impl_t
 	:public gmp_uart_entity
 {
 public:
-	typedef gmp_addr_t addr_type;
-	typedef gmp_data_t data_type;
+	typedef addr_gt addr_type;
+	typedef data_gt data_type;
 
 public:
 	// ctor & dtor
@@ -181,19 +181,19 @@ public:
 		gmp_not_impl(__FILE__, __LINE__);
 	}
 
-	void set_stop_bit(gmp_element_t stopbit) override
+	void set_stop_bit(fast_gt stopbit) override
 	{
 		// This function is not implemented here
 		gmp_not_impl(__FILE__, __LINE__);
 	}
 
-	void set_data_bit(gmp_element_t databit) override
+	void set_data_bit(fast_gt databit) override
 	{
 		// This function is not implemented here
 		gmp_not_impl(__FILE__, __LINE__);
 	}
 
-	void set_parity(gmp_element_t parity_check) override
+	void set_parity(fast_gt parity_check) override
 	{
 		// This function is not implemented here
 		gmp_not_impl(__FILE__, __LINE__);
@@ -201,12 +201,12 @@ public:
 
 public:
 	// Basic IO functions is defined here.
-	gmp_size_t read(gmp_data_t* data, gmp_size_t length) override
+	size_gt read(data_gt* data, size_gt length) override
 	{
 		return 0;
 	}
 
-	gmp_size_t write(data_type* data, gmp_size_t length) override
+	size_gt write(data_type* data, size_gt length) override
 	{
 		for (int i= 0;i<length;++i)
 		{
@@ -215,7 +215,7 @@ public:
 		return length;
 	}
 
-	gmp_size_t write(const gmp_data_t* data, gmp_size_t length) override
+	size_gt write(const data_gt* data, size_gt length) override
 	{
 		for (int i = 0; i < length; ++i)
 		{
@@ -224,19 +224,19 @@ public:
 		return length;
 	}
 
-	gmp_data_t read() override
+	data_gt read() override
 	{
 		return 0;
 	}
 
-	gmp_size_t write(gmp_data_t data) override
+	size_gt write(data_gt data) override
 	{
 		transmit(data);
 		return 1;
 	}
 
 public:
-	inline gmp_stat_t transmit(gmp_data_t a)
+	inline gmp_stat_t transmit(data_gt a)
 	{
 		handle->SCITXBUF = a;
 

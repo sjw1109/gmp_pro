@@ -12,7 +12,7 @@ typedef struct _tag_protection_item_t
 
 typedef struct _tag_boundary_set_t
 {
-	gmp_size_t length;
+	size_gt length;
 	prot_item_t* items;
 }boundary_set_t;
 

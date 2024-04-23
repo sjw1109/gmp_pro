@@ -1,24 +1,30 @@
+
+
 #include <core/gmp_core.h>
 
-// This variable may save the last error (not fatal) code.
+
+//////////////////////////////////////////////////////////////////////////
+// Step I: implement the global variables
+// 
+
+// This variable may save the last error code (any return value will include).
 // These code may help developer locate faults rapidly.
-gmp_stat_t last_error;
+gmp_stat_t g_gmp_last_ret;
 
-// This variable may save the last fatal (not error) code.
+
+// This variable may save the last error (fatal and error) code.
 // These code may help developer locate faults rapidly.
-gmp_stat_t last_fatal;
+gmp_stat_t g_gmp_last_error;
 
 
-#if !defined SPECIFY_STUCK_WHEN_ERROR
-// error
-// -- error-info(auto generated)
-// just when error code is error or even fatal, the system will stuck here.
-gmp_stat_t gmp_error(gmp_stat_t error_code)
-{
-    if(error_code > GMP_STAT_FATAL_BEGIN)
-        gmp_system_stuck();
+// This variable may save the last fatal (only fatal) code.
+// These code may help developer locate faults rapidly.
+gmp_stat_t g_gmp_last_fatal;
 
-    return error_code;
-}
 
-#endif // SPECIFY_STUCK_WHEN_ERROR
+//////////////////////////////////////////////////////////////////////////
+// Step II: include the error code show function
+//
+
+#include <core/std/ec/erro_code.show.inl>
+

@@ -190,9 +190,9 @@ public:
 	int32_t p;
 
 public:
-	static constexpr gmp_addr_t device_addr = 0b1110111;
+	static constexpr addr_gt device_addr = 0b1110111;
 
-	static constexpr gmp_data_t device_id = 0x55;
+	static constexpr data_gt device_id = 0x55;
 };
 
 #endif

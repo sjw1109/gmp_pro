@@ -22,8 +22,9 @@
 
 //////////////////////////////////////////////////////////////////////////
 // initialize routine here
+GMP_NO_OPT_PREFIX
 void user_init(void)
-	GMP_NO_OPT
+GMP_NO_OPT_SUFFIX
 {
 //	dbg_uart.write("Hello World!\r\n",14);
 	gmp_dbg_prt("Hello World!\r\n");

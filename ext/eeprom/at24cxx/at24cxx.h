@@ -50,15 +50,15 @@ public:
 
 	virtual cell_type read(addr_type addr);
 
-	virtual gmp_size_t write(addr_type addr, cell_type data);
+	virtual size_gt write(addr_type addr, cell_type data);
 
-	virtual gmp_size_t read(addr_type addr, data_type* data, gmp_size_t length);
+	virtual size_gt read(addr_type addr, data_type* data, size_gt length);
 
-	virtual gmp_size_t write(addr_type addr, data_type* data, gmp_size_t length);
+	virtual size_gt write(addr_type addr, data_type* data, size_gt length);
 
 public:
 	// Higher address mask
-	gmp_addr_t higher_mask;
+	addr_gt higher_mask;
 
 public:
 	// constant

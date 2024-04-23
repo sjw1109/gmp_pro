@@ -5,11 +5,11 @@
 // ring buffer
 typedef struct _tag_gmp_ring_buffer_t
 {
-	gmp_data_t* buffer;		// ring of buffer
-	gmp_size_t length;		// buffer length
+	data_gt* buffer;		// ring of buffer
+	size_gt length;		// buffer length
 
-	gmp_size_t write_pos;   // write position
-	gmp_size_t read_pos;    // read position
+	size_gt write_pos;   // write position
+	size_gt read_pos;    // read position
 }gmp_ring_buffer_t;
 
 
@@ -22,7 +22,7 @@ extern "C"
 	// initialization
 	gmp_stat_t init_ring_buffer(
 	gmp_ring_buffer_t** buffer,
-	gmp_size_t length
+	size_gt length
 	);
 
 	// release the ring buffer
@@ -30,24 +30,24 @@ extern "C"
 		gmp_ring_buffer_t* buf
 	);
 
-	gmp_size_t rb_size(
+	size_gt rb_size(
 		gmp_ring_buffer_t* buf
 	);
 
-	gmp_size_t rb_capacity(
+	size_gt rb_capacity(
 		gmp_ring_buffer_t* buf
 	);
 
 	gmp_stat_t rb_push(
 		gmp_ring_buffer_t* buf,
-		gmp_data_t dat
+		data_gt dat
 	);
 
-	gmp_data_t rb_peek(
+	data_gt rb_peek(
 		gmp_ring_buffer_t* buf
 	);
 
-	gmp_data_t rb_pop(
+	data_gt rb_pop(
 		gmp_ring_buffer_t* buf
 	);
 
@@ -55,10 +55,10 @@ extern "C"
 		gmp_ring_buffer_t* buf
 	);
 
-	gmp_size_t rb_extract(
+	size_gt rb_extract(
 		gmp_ring_buffer_t* buf,
 		void* dst,
-		gmp_size_t cap
+		size_gt cap
 	);
 	
 

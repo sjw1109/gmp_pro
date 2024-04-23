@@ -12,16 +12,21 @@ extern "C"
 #endif
 
 	//////////////////////////////////////////////////////////////////////////
+	// Step I: User function prototypes
+	// 
 	// The following functions should be implemented by user
+	//
 
 	// Key this function must do implement, otherwise the time-based part may invalid.
 	// This function would return the system tick point right now.
-	gmp_time_t gmp_port_system_tick(
+	//
+	time_gt gmp_port_system_tick(
 		void
 	);
 
 	// This function should be implement by user, when fatal error occurred, the function would be called.
 	// So the function must own the ability of stop the program.
+	//
 	void gmp_port_system_stuck(
 		void
 	);
@@ -30,101 +35,189 @@ extern "C"
 	// This function should be implemented by user,
 	// Every Loop routine, this function would be called.
 	// And user should ensure that the function has only one thing is to feed the watchdog
+	//
 	void gmp_port_feed_dog(
 		void
 	);
 #endif // SPECIFY_ENABLE_FEED_WATCHDOG
 
+	typedef enum _tag_gmp_port_t
+	{
+		GMP_GPIO_INPUT = 0,
+		GMP_GPIO_OUTPUT = 1
+	}gmp_gpio_mode_t;
 
-	//////////////////////////////////////////////////////////////////////////
-	// These function have implemented by GMP
-	void gmp_entry(void);
-	void gmp_init_peripheral_tree(void);
-	void gmp_setup_peripheral(void);
-	void gmp_loop(void);
-	void gmp_init(void);
-	void gmp_setup_label(void);
+	// ....................................................................//
+	// GPIO action functions.
+	//
 
-	// This function would be called when system meets error.
-	void gmp_system_stuck(void);
+	gmp_stat_t gmp_gpio_set_mode(
+		hgpio_gt hgpio,		     // handle of GPIO port
+		gmp_gpio_mode_t mode     // input mode or output mode
+	);
 
+	void gmp_gpio_write(
+		hgpio_gt hgpio,	         // handle of GPIO port
+		fast_gt level            // output level 
+	);
+
+	void gmp_gpio_set(
+		hgpio_gt hgpio	    // handle of GPIO port
+	);
+
+	void gmp_gpio_clear(
+		hgpio_gt hgpio	    // handle of GPIO port
+	);
+
+	fast_gt gmp_gpio_read(
+		hgpio_gt hgpio		     // handle of GPIO port
+	);
+
+	// ....................................................................//
 	// User should implement this two functions 
+	//
+
+	// This function would execute only once.
+	// User should implement all the initialization code in this function. 
+	//
 	void user_init(void);
+
+	// This function would be the endless loop.
+	// User should implement all the loop tasks and round-robin tasks.
+	//
 	void user_loop(void);
 
-	// For test user should enable and implement the following function
-	void gmp_test_init(void);
-	void gmp_test_loop(void);
 
-	// The memory controller functions
-	void* gmp_malloc(gmp_size_t size);
-	void gmp_free(void* ptr);
+	//////////////////////////////////////////////////////////////////////////
+	// Step II: These function have implemented by GMP
+	//
+
+	// This function would be called by user in entry function.
+	// And this function would not return.
+	//
+	void gmp_entry(void);
+
+	// This function would be implemented by CSP (Chip support package).
+	// This function would be called firstly, by `gmp_init`.
+	//
+	void gmp_csp_startup(void);
+
+	// This function would create a peripheral tree.
+	// Which will determine which device is attached to which peripheral.
+	//
+	void gmp_init_peripheral_tree(void);
+
+	// This function should init all the peripherals.
+	//
+	void gmp_setup_peripheral(void);
+
+	// Show GMP setup label
+	// This function contain a label show of GMP.
+	// 
+	void gmp_setup_label(void);
+
+	// ....................................................................//
+	// Error Handle function
+	//
+
+	// This function would be called when system meets error.
+	// In order to referenced by error handling,
+	// the function prototype is redefined in `error_code.h`
+	// 
+	void gmp_system_stuck(void);
 
 	// When a function is unimplemented, the function would be invoke.
+	//
 	void gmp_not_impl(const char* file, uint32_t line);
+
+	// ....................................................................//
+	// GMP default initialization function and loop function 
+	//
+
+	// This function is the GMP loop function,
+	// `user_loop()` would be called in this function,
+	// and other GMP deposit would be invoked in this function.
+	//
+	void gmp_loop(void);
+
+	// This function is the GMP initialization function,
+	// `user_loop()` would be called in the function,
+	// and other GMP deposit would be invoked in this function.
+	//
+	void gmp_init(void);
+
+
+	//////////////////////////////////////////////////////////////////////////
+	// Step III: Lab functions
+	//
+
+	// For test, user should enable and implement the following function.
+
+	// This function would implement all the initialization test routines.
+	//
+	void gmp_test_init(void);
+
+	// This function would implement all the loop test routines.
+	//
+	void gmp_test_loop(void);
+
+
+	//////////////////////////////////////////////////////////////////////////
+	// Step IV: Default Memory Management functions
+	//
+
+	// The memory controller functions
+	//
+	void* gmp_malloc(size_gt size);
+	void gmp_free(void* ptr);
+
+	// Default heap memory set
+	//
+#if defined SPECIFY_GMP_BLOCK_MEMORY_ENABLE
+	GMP_MEM_ALIGN
+		extern data_gt default_heap[GMP_DEFAULT_HEAP_SIZE];
+#endif
+
 
 
 #ifdef SPECIFY_ENABLE_DEFUALT_DEBUG_PRINT_FUNC
 
-	// default ext buffer size for default debug print function
-#ifndef _GMP_CHAR_EXT
-#define _GMP_CHAR_EXT ((48))
-#endif // _GMP_CHAR_EXT
-
-// debug print function prototype
-	gmp_size_t gmp_dbg_prt_fn(const char* p_fmt, ...);
-
-	// debug output mode
-#ifndef gmp_dbg_prt
-#define gmp_dbg_prt gmp_dbg_prt_fn
-#endif // gmp_dbg_prt
+	// debug print function prototype
+	//
+	size_gt gmp_dbg_prt_fn(const char* p_fmt, ...);
 
 #endif // SPECIFY_ENABLE_DEFUALT_DEBUG_PRINT_FUNC
 
+	// debug print function alias
+	// user should invoke this function instead of any direct function name.
+	//
 #ifndef gmp_dbg_prt
 #define gmp_dbg_prt(x, ...)
 #endif// debug output mode disabled
 
 
 	//////////////////////////////////////////////////////////////////////////
-	// global variables
+	//Step V: global variables
 	// The following variables will be defined in <core/std/global.c>
+	//
 
-#ifndef TIMEOUT_CNT
-#define TIMEOUT_CNT 0X3FFF
-#endif // TIMEOUT_CNT
+	// ....................................................................//
+	// delay parameters
+	//
 
-#ifndef TIMEOUT_MS
-#define TIMEOUT_MS 0x000A
-#endif // TIMEOUT_MS
+	// Timeout counter
+	//
+	extern size_gt g_delay;
 
-	extern gmp_size_t g_delay;
-	extern gmp_size_t g_delay_ms;
+	// Timeout timer
+	//
+	extern size_gt g_delay_ms;
 
-	//////////////////////////////////////////////////////////////////////////
-	// Default heap memory set
-
-	// Default heap memory space
-#ifndef GMP_DEFAULT_HEAP_SIZE
-#define GMP_DEFAULT_HEAP_SIZE ((1536))
-#endif
-
-	// Default heap size, byte(s)
-#ifndef GMP_DEFAULT_BUFFER_SIZE
-#define GMP_DEFAULT_BUFFER_SIZE ((32))
-#endif
-
-	// default heap memory space
-#if defined SPECIFY_GMP_BLOCK_MEMORY_ENABLE
-	GMP_MEM_ALIGN
-		extern gmp_data_t default_heap[GMP_DEFAULT_HEAP_SIZE];
-#endif
 
 	//////////////////////////////////////////////////////////////////////////
-	// Error Handle function
-
-	//////////////////////////////////////////////////////////////////////////
-	// big-endian to little-endian
+	// Step VI: big-endian to little-endian
+	//
+	 
 // 	uint16_t gmp_l2b12(uint16_t data);
 	uint16_t gmp_l2b16(uint16_t data);
 	uint32_t gmp_l2b32(uint32_t data);
@@ -153,35 +246,98 @@ extern "C"
 #endif // L2B64
 #endif // SPECIFY_ENABLE_INTEGER64
 
+
+	// Specify the alias of Little endian and little endian data.
+	//
+#pragma region BIG_LITTLE_ENDIAN_ALIAS
+
+		// Specify the chip is Big-endian 
+	//
 #ifdef BIG_ENDIAN
+
+	// Specify the data is Big-endian 12-bit data
+	//
 #define BE12(x) ((x))
+
+	// Specify the data is Big-endian 16-bit data
+	//
 #define BE16(x) ((x))
+
+	// Specify the data is Big-endian 32-bit data
+	//
 #define BE32(x) ((x))
+
 #ifdef SPECIFY_ENABLE_INTEGER64
+	// Specify the data is Big-endian 64-bit data
+	//
 #define BE64(x) ((x))
 #endif // SPECIFY_ENABLE_INTEGER64
+
+	// Specify the data is Little-endian 12-bit data
+	//
 #define LE12 L2B12
+
+	// Specify the data is Little-endian 16-bit data
+	//
 #define LE16 L2B16
+
+	// Specify the data is Little-endian 32-bit data
+	//
 #define LE32 L2B32
+
 #ifdef SPECIFY_ENABLE_INTEGER64
+	// Specify the data is Little-endian 64-bit data
+	//
 #define LE64 L2B64
 #endif // SPECIFY_ENABLE_INTEGER64
+
 #endif // BIG_ENDIAN
 
+	// Specify the chip is Little-endian
+	//
 #ifdef LITTLE_ENDIAN
+
+	// Specify the data is Big-endian 12-bit data
+	//
 #define BE12 L2B12
+
+	// Specify the data is Big-endian 16-bit data
+	//
 #define BE16 L2B16
+
+	// Specify the data is Big-endian 32-bit data
+	//
 #define BE32 L2B32
+
 #ifdef SPECIFY_ENABLE_INTEGER64
+	// Specify the data is Big-endian 64-bit data
+	//
 #define BE64 L2B64
 #endif // SPECIFY_ENABLE_INTEGER64
+
+	// Specify the data is Little-endian 12-bit data
+	//
 #define LE12(x) ((x))
+
+	// Specify the data is Little-endian 16-bit data
+	//
 #define LE16(x) ((x))
+
+	// Specify the data is Little-endian 32-bit data
+	//
 #define LE32(x) ((x))
+
 #ifdef SPECIFY_ENABLE_INTEGER64
+	// Specify the data is Little-endian 64-bit data
+	//
 #define LE64(x) ((x))
 #endif // SPECIFY_ENABLE_INTEGER64
+
 #endif // LITTLE_ENDIAN
+
+#pragma endregion BIG_LITTLE_ENDIAN_ALIAS
+
+
 
 
 

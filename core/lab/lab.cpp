@@ -22,7 +22,7 @@
 
 //uint8_t result180[2] = { 0, 0 };
 //uint8_t pData[2] = { 0 };
-//gmp_size_t ret;
+//size_gt ret;
 
 //pwm_dev_t pwm;
 //sdspc_buck_ctrl_t sdspc;
@@ -62,14 +62,14 @@ GMP_NO_OPT
 
 //	release_ring_buffer(buf);
 
-//	gmp_data_t data[12] = { 'a','b','c','d','e','f','g' };
+//	data_gt data[12] = { 'a','b','c','d','e','f','g' };
 
 //	gmp_port_recv_int_response(
 //		&gmp_uart_dbg,
 //		data, 7,
 //		0
 //	);
-//	gmp_data_t recv_data[8] = { 0 };
+//	data_gt recv_data[8] = { 0 };
 //	gmp_dev_read_buf(
 //		&gmp_uart_dbg,
 //		recv_data, 7);
@@ -239,7 +239,7 @@ GMP_NO_OPT
 //	gmp_dbg_prt("Pressure Source data:%d\r\n", *(uint16_t*)result180);
 //	uint8_t a = 1;
 
-//	gmp_data_t recv_data[8] = { 0 };
+//	data_gt recv_data[8] = { 0 };
 
 //	if (gmp_dev_read_buf(
 //		&gmp_uart_dbg,
@@ -248,15 +248,15 @@ GMP_NO_OPT
 
 //	int command = 0x2e;
 
-//	iic1.write(0b1110111, 0xF4, (gmp_data_t*)&command, 1);
+//	iic1.write(0b1110111, 0xF4, (data_gt*)&command, 1);
 
 //	HAL_Delay(10);
 
 //	uint32_t result_msb;
-//	iic1.read(0b1110111, 0xF6, (gmp_data_t*)&result_msb, 1);
+//	iic1.read(0b1110111, 0xF6, (data_gt*)&result_msb, 1);
 
 //	uint32_t result_lsb;
-//	iic1.read(0b1110111, 0xF7, (gmp_data_t*)&result_lsb, 1);
+//	iic1.read(0b1110111, 0xF7, (data_gt*)&result_lsb, 1);
 
 //	uint32_t result = (result_lsb & 0xFF) | ((result_msb & 0xFF) << 8);
 
@@ -264,7 +264,7 @@ GMP_NO_OPT
 
 //	memset(result_str, 0, 20);
 //	sprintf(result_str, "Temperature:%d\r\n", result);
-//	gmp_size_t length = strlen(result_str);
+//	size_gt length = strlen(result_str);
 
 //	dbg_uart.write((unsigned char*)result_str, length);
 

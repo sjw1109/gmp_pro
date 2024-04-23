@@ -11,16 +11,16 @@
 
 
 //////////////////////////////////////////////////////////////////////////
-// Global variables
+// Step I: Global variables
 
 // global variables in GMP
-gmp_size_t g_delay;
-gmp_size_t g_delay_ms;
+size_gt g_delay;
+size_gt g_delay_ms;
 
 // block heap memory space
 #if defined SPECIFY_GMP_BLOCK_MEMORY_ENABLE
 // default heap
-GMP_MEM_ALIGN gmp_data_t default_heap[GMP_DEFAULT_HEAP_SIZE];
+GMP_MEM_ALIGN data_gt default_heap[GMP_DEFAULT_HEAP_SIZE];
 // handle of default heap
 gmp_mem_area_head* default_mem_heap;
 #endif // SPECIFY_GMP_BLOCK_MEMORY_ENABLE
@@ -78,6 +78,9 @@ void gmp_entry(void)
 // An the other things should be completed in your own main() process.
 void gmp_init()
 {
+	// CSP start up function
+	gmp_csp_startup();
+
 	// initialize peripheral
 	// This function was defined in <bsp/user/peripheral_mapping.c>
 	gmp_setup_peripheral();
@@ -93,9 +96,11 @@ void gmp_init()
 	default_mem_heap = gmp_mem_setup(default_heap, GMP_DEFAULT_HEAP_SIZE, GMP_MEM_BLOCK_SIZE);
 #endif
 
-	// set global delay 
+	// initialize global delay 
 	g_delay = TIMEOUT_CNT;
 	g_delay_ms = TIMEOUT_MS;
+
+	// initialize global error code
 
 
 }
@@ -145,7 +150,7 @@ void gmp_setup_label()
 // The following function would be called by libraries in the default case.
 
 // unit byte
-void* gmp_malloc(gmp_size_t size)
+void* gmp_malloc(size_gt size)
 {
 	// This function was specified by <user_config.h>
 	return GMP_BLOCK_ALLOC_FUNC(size);
@@ -171,7 +176,7 @@ void gmp_free(void* ptr)
 gmp_concept_write_direct* default_debug_dev = nullptr;
 
 // implement the gmp_debug_print routine.
-gmp_size_t gmp_dbg_prt_fn(const char* p_fmt, ...)
+size_gt gmp_dbg_prt_fn(const char* p_fmt, ...)
 {
 	// if no one was specified to output, just ignore the request.
 	if (default_debug_dev == nullptr)
@@ -179,7 +184,7 @@ gmp_size_t gmp_dbg_prt_fn(const char* p_fmt, ...)
 		return 0;
 	}
 
-	gmp_size_t size = strlen(p_fmt);
+	size_gt size = strlen(p_fmt);
 #if defined SPECIFY_DISABLE_DYNAMIC_ALLOC_OF_DBGPTR
 	char str[48 + _GMP_CHAR_EXT];
 	memset(str, 0, 48 + _GMP_CHAR_EXT);
@@ -193,9 +198,9 @@ gmp_size_t gmp_dbg_prt_fn(const char* p_fmt, ...)
 	vsprintf(str, (char const*)p_fmt, vArgs);
 	va_end(vArgs);
 
-	gmp_size_t len = strlen(str);
+	size_gt len = strlen(str);
 
-	gmp_size_t ret = default_debug_dev->write((gmp_data_t*)str, len);
+	size_gt ret = default_debug_dev->write((data_gt*)str, len);
 
 #if defined SPECIFY_DISABLE_DYNAMIC_ALLOC_OF_DBGPTR
 #else 

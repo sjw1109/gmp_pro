@@ -47,7 +47,7 @@
 
 // If user don't specify the workflow object id, the id will be an invalid value.
 // The invalid value is here.
-constexpr gmp_size_t gmp_wf_id_invalid = 0xFFFF;
+constexpr size_gt gmp_wf_id_invalid = 0xFFFF;
 
 // Antecedent
 class gmp_workflow_t;
@@ -65,7 +65,7 @@ typedef std::function<void(gmp_workflow_t*)> head_tail_routine_t;
 typedef std::function<uint8_t(gmp_wf_node_base_gt*, gmp_wf_node_base_gt*)> verify_fn_t;
 #endif // SPECIFY_WORKFLOW_CHECK_REACHABLE
 #ifdef SPECIFY_WORKFLOW_MULTITIMER_TICK
-typedef std::function<gmp_time_t(void)> timer_tick_fn_t;
+typedef std::function<time_gt(void)> timer_tick_fn_t;
 #endif // SPECIFY_WORKFLOW_MULTITIMER_TICK
 #else // SPECIFY_WORKFLOW_USE_FUNCTIONAL
 typedef gmp_wf_node_base_gt* (*routine_fn_t)(gmp_workflow_t*);
@@ -79,7 +79,7 @@ typedef void(*head_tail_routine_t)(gmp_workflow_t*);
 typedef uint8_t(*verify_fn_t)(gmp_wf_node_base_gt*, gmp_wf_node_base_gt*);
 #endif // SPECIFY_WORKFLOW_CHECK_REACHABLE
 #if defined SPECIFY_WORKFLOW_MULTITIMER_TICK
-typedef gmp_time_t(*timer_tick_fn_t)(void);
+typedef time_gt(*timer_tick_fn_t)(void);
 #endif // SPECIFY_WORKFLOW_MULTITIMER_TICK
 #endif // SPECIFY_WORKFLOW_USE_FUNCTIONAL
 
@@ -138,11 +138,11 @@ protected:
 	// This variables store the switch time of the current node.
 	// The counter will treat this value as original.
 	// Unit Tick from system.
-	gmp_time_t switch_time;
+	time_gt switch_time;
 
 	// This variables store the switch time of the last node.
 	// User may use the variable to calculate the time consumption.
-	gmp_time_t last_switch_time;
+	time_gt last_switch_time;
 
 #if defined SPECIFY_WORKFLOW_START_END_CALLBACK
 	// This function would be called before the `flag_enable` is set
@@ -171,7 +171,7 @@ protected:
 	timer_tick_fn_t get_timer_tick;
 
 	// This variable save the maximum number of tick.
-	gmp_time_t max_timer_tick;
+	time_gt max_timer_tick;
 #endif // SPECIFY_WORKFLOW_MULTITIMER_TICK
 
 public:
@@ -209,9 +209,9 @@ public:
 
 	// Because this two function is not inline function
 	// So if you are pursuing fast speed, you should leave these two function.
-	gmp_size_t get_curr_node_id();
+	size_gt get_curr_node_id();
 
-	gmp_size_t get_last_node_id();
+	size_gt get_last_node_id();
 
 	inline void* get_usr_param()
 	{
@@ -246,7 +246,7 @@ public:
 	// public user utilities
 
 	// return time consuming of the last node 
-	inline gmp_time_t get_last_duration()
+	inline time_gt get_last_duration()
 	{
 		if (switch_time >= last_switch_time)
 		{
@@ -257,47 +257,15 @@ public:
 #if defined SPECIFY_WORKFLOW_MULTITIMER_TICK
 			return max_timer_tick - last_switch_time + switch_time;
 #else
-			return GMP_MAX_TIME_ITEM - last_switch_time + switch_time;
+			return GMP_PORT_TIME_MAXIMUM - last_switch_time + switch_time;
 #endif // SPECIFY_WORKFLOW_MULTITIMER_TICK
 		}
-	}
-
-	inline gmp_time_t get_current_duration()
-	{
-		gmp_time_t now = get_current_tick();
-
-		if (now >= switch_time)
-		{
-			return now - switch_time;
-		}
-		else // overflow
-		{
-#if defined SPECIFY_WORKFLOW_MULTITIMER_TICK
-			return max_timer_tick - switch_time + now;
-#else
-			return GMP_MAX_TIME_ITEM - switch_time + now;
-#endif // SPECIFY_WORKFLOW_MULTITIMER_TICK
-		}
-	}
-
-	// This function return the current for the current workflow
-	inline gmp_time_t get_current_tick()
-	{
-#if defined SPECIFY_WORKFLOW_MULTITIMER_TICK
-		// keep the correct function call
-		assert(get_timer_tick);
-		gmp_time_t now = get_timer_tick();
-#else
-		gmp_time_t now = wf_get_tick();
-#endif // SPECIFY_WORKFLOW_MULTITIMER_TICK
-
-		return now;
 	}
 
 	// return the duration between the `switch_time` and now
-	inline gmp_time_t get_duration()
+	inline time_gt get_duration()
 	{
-		gmp_time_t now = get_current_tick();
+		time_gt now = get_current_tick();
 
 		if (now > switch_time)
 		{
@@ -308,10 +276,24 @@ public:
 #if defined SPECIFY_WORKFLOW_MULTITIMER_TICK
 			return max_timer_tick - switch_time + now;
 #else
-			return GMP_MAX_TIME_ITEM - switch_time + now;
+			return GMP_PORT_TIME_MAXIMUM - switch_time + now;
 #endif // SPECIFY_WORKFLOW_MULTITIMER_TICK
-		}
+	}
 		// Cannot reach here.
+	}
+
+	// This function return the current for the current workflow
+	inline time_gt get_current_tick()
+	{
+#if defined SPECIFY_WORKFLOW_MULTITIMER_TICK
+		// keep the correct function call
+		assert(get_timer_tick);
+		time_gt now = get_timer_tick();
+#else
+		time_gt now = wf_get_tick();
+#endif // SPECIFY_WORKFLOW_MULTITIMER_TICK
+
+		return now;
 	}
 
 	// This function will reset all the variables in the class.
@@ -394,7 +376,7 @@ public:
 	// Support for multi-clock
 #ifdef SPECIFY_WORKFLOW_MULTITIMER_TICK
 public:
-	inline void set_timer_tick_source(timer_tick_fn_t tick_fn, gmp_time_t maximum_tick)
+	inline void set_timer_tick_source(timer_tick_fn_t tick_fn, time_gt maximum_tick)
 	{
 		get_timer_tick = tick_fn;
 		max_timer_tick = maximum_tick;
@@ -430,14 +412,14 @@ protected:
 	}
 
 	// This will record the counter that the work miss the opportunities. 
-	gmp_size_t prior_cnt;
+	size_gt prior_cnt;
 
 #endif // SPECIFY_WORKFLOW_ENABLE_SCHEDULING
 
 	// const & static members
 public:
 	// This id is belongs to end.
-	static constexpr gmp_size_t gmp_wf_end_id = 0xFFFF;
+	static constexpr size_gt gmp_wf_end_id = 0xFFFF;
 }; // gmp_workflow_t
 
 //////////////////////////////////////////////////////////////////////////
@@ -456,7 +438,7 @@ public:
 		:id(0)
 	{}
 
-	gmp_wf_node_base_gt(gmp_size_t id)
+	gmp_wf_node_base_gt(size_gt id)
 		:id(id)
 	{}
 
@@ -493,17 +475,17 @@ public:
 
 	// meaningful ID for the node, in order to recognize the specified node easily.
 	// And the ID may not be a unique value, but we recommend you NOT to do so.
-	gmp_size_t id;
+	size_gt id;
 
 public:
 	// utilities
 
-	inline gmp_size_t get_id()
+	inline size_gt get_id()
 	{
 		return id;
 	}
 
-	inline void set_id(gmp_size_t id)
+	inline void set_id(size_gt id)
 	{
 		this->id = id;
 	}
@@ -528,7 +510,7 @@ public:
 	{}
 
 	// The following constructor is generally in use.
-	gmp_wf_node_gt(gmp_size_t id)
+	gmp_wf_node_gt(size_gt id)
 		:gmp_wf_node_base_gt(id),
 #if defined SPECIFY_WORKFLOW_NODE_OWN_LEAVE
 		leave(nullptr),
@@ -633,7 +615,7 @@ public:
 		:t0(0), default_node(wf_end_node)
 	{}
 
-	gmp_wf_delay_node_t(gmp_time_t delay, gmp_wf_node_base_gt* target)
+	gmp_wf_delay_node_t(time_gt delay, gmp_wf_node_base_gt* target)
 		:t0(delay), default_node(target)
 	{}
 
@@ -669,7 +651,7 @@ public:
 		if (wf == nullptr)
 			gmp_wf_node_base_gt::node_routine(wf);
 
-		gmp_time_t duration = wf->get_duration();
+		time_gt duration = wf->get_duration();
 
 		if (duration <= t0)
 			return nullptr;
@@ -680,7 +662,7 @@ public:
 
 public:
 	// This parameter is a delay for the class
-	gmp_time_t t0;
+	time_gt t0;
 
 	// when delay is reached, the workflow will switch to the target
 	gmp_wf_node_base_gt* default_node;
@@ -701,7 +683,7 @@ public:
 public:
 	gmp_wf_node_base_gt* node_routine(gmp_workflow_t* wf) override
 	{
-		gmp_time_t duration = wf->get_last_duration();
+		time_gt duration = wf->get_duration();
 
 		if (duration > t0)
 			return default_node;
@@ -717,7 +699,7 @@ public:
 	// members
 
 	// over time
-	gmp_time_t t0;
+	time_gt t0;
 
 	// default transfer target
 	gmp_wf_node_base_gt* default_node;
@@ -739,7 +721,7 @@ public:
 public:
 	virtual gmp_wf_node_base_gt* node_routine(gmp_workflow_t* wf) override
 	{
-		gmp_time_t duration = wf->get_last_duration();
+		time_gt duration = wf->get_duration();
 
 		if (duration > t1)
 		{
@@ -772,13 +754,13 @@ public:
 	// members
 
 	// first time.
-	gmp_time_t t1;
+	time_gt t1;
 
 	// asking time.
-	gmp_time_t t2;
+	time_gt t2;
 
 protected:
-	gmp_time_t last_exec_time;
+	time_gt last_exec_time;
 };
 
 // This class is a derive class for the workflow_node
@@ -797,7 +779,7 @@ public:
 public:
 	virtual gmp_wf_node_base_gt* node_routine(gmp_workflow_t* wf) override
 	{
-		gmp_time_t duration = wf->get_current_duration();
+		time_gt duration = wf->get_duration();
 
 		if (duration > t0)
 			return default_node;
@@ -835,7 +817,7 @@ public:
 	// members
 
 	// over time
-	gmp_time_t t0;
+	time_gt t0;
 
 	// default transfer target
 	gmp_wf_node_base_gt* default_node;
@@ -909,12 +891,12 @@ public:
 	{}
 
 	gmp_wf_section_t(
-		gmp_size_t id,
+		size_gt id,
 		transfer_fn_t transfer,
 		routine_fn_t routine,
-		gmp_time_t t0,
-		gmp_time_t t1,
-		gmp_time_t t2,
+		time_gt t0,
+		time_gt t1,
+		time_gt t2,
 		gmp_wf_section_t* default_next = GMP_WF_SEC_END
 	)
 		: id(id),
@@ -935,16 +917,16 @@ public:
 
 public:
 	// identifier
-	gmp_size_t id;
+	size_gt id;
 
 	// function pointers
 	transfer_fn_t transfer;
 	routine_fn_t routine;
 
 	// time
-	gmp_time_t t0; // overtime
-	gmp_time_t t1; // first time
-	gmp_time_t t2; // loop time
+	time_gt t0; // overtime
+	time_gt t1; // first time
+	time_gt t2; // loop time
 
 	// default next, this parameter is useful when overtime event occurred.
 	gmp_wf_section_t* default_next;
@@ -958,7 +940,7 @@ public:
 	// utility function
 
 	// Set state transfer timer period
-	void set_transfer_timer(gmp_time_t t0, gmp_time_t t1, gmp_time_t t2)
+	void set_transfer_timer(time_gt t0, time_gt t1, time_gt t2)
 	{
 		this->t0 = t0;
 		this->t1 = t1;
@@ -966,7 +948,7 @@ public:
 	}
 
 	// Set section ID
-	void set_section_id(gmp_size_t id)
+	void set_section_id(size_gt id)
 	{
 		this->id = id;
 	}
@@ -1072,8 +1054,8 @@ protected:
 	uint8_t runtime_state; // workflow runtime flag
 
 	// time
-	gmp_time_t last_tick;
-	gmp_time_t t0_start_tick;
+	time_gt last_tick;
+	time_gt t0_start_tick;
 
 public:
 	// workflow functions

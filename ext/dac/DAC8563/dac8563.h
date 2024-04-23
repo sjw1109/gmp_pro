@@ -31,14 +31,14 @@ public:
 		//		for (int i = 0; i < 10000; ++i);
 		sync->clear();
 
-		write(reg_addr_ch1_data, (gmp_data_t*)&ch1_data, 2);
+		write(reg_addr_ch1_data, (data_gt*)&ch1_data, 2);
 
 		load->clear();
 		for (int i = 0; i < 10000; ++i);
 		load->set();
 
 // 		uint16_t command = 0;
-// 		write(0x0F, (gmp_data_t*)&command, 2);
+// 		write(0x0F, (data_gt*)&command, 2);
 
 		sync->set();
 	}
@@ -53,14 +53,14 @@ public:
 		//		for (int i = 0; i < 10000; ++i);
 		sync->clear();
 
-		write(reg_addr_ch2_data, (gmp_data_t*)&ch2_data, 2);
+		write(reg_addr_ch2_data, (data_gt*)&ch2_data, 2);
 
 		load->clear();
 		for (int i = 0; i < 10000; ++i);
 		load->set();
 
 // 		uint16_t command = 0;
-// 		write(0x0F, (gmp_data_t*)&command, 2);
+// 		write(0x0F, (data_gt*)&command, 2);
 
 
 		sync->set();
@@ -77,15 +77,15 @@ public:
 		for (int i = 0; i < 10000; ++i);
 		sync->clear();
 
-		write(reg_addr_ch1_data, (gmp_data_t*)&ch1_data, 2);
-		write(reg_addr_ch2_data, (gmp_data_t*)&ch2_data, 2);
+		write(reg_addr_ch1_data, (data_gt*)&ch1_data, 2);
+		write(reg_addr_ch2_data, (data_gt*)&ch2_data, 2);
 
 		load->clear();
 		for (int i = 0; i < 10000; ++i);
 		load->set();
 
 // 		uint16_t command = 0;
-// 		write(0x0F, (gmp_data_t*)&command, 2);
+// 		write(0x0F, (data_gt*)&command, 2);
 
 		sync->set();
 	}
@@ -109,23 +109,23 @@ public:
 		sync->clear();
 
 		uint16_t command = 0x0100;
-		write(0x28, (gmp_data_t*)&command, 2);
+		write(0x28, (data_gt*)&command, 2);
 		command = 0x0300;
-		write(0x20, (gmp_data_t*)&command, 2);
+		write(0x20, (data_gt*)&command, 2);
 		command = 0x0000;
-		write(0x30, (gmp_data_t*)&command, 2); // Enable LD
+		write(0x30, (data_gt*)&command, 2); // Enable LD
 		command = 0x0100;
-		write(0x38, (gmp_data_t*)&command, 2);
+		write(0x38, (data_gt*)&command, 2);
 
 
 		// 		uint16_t command = 0x0100;
-		// 		write(0x28, (gmp_data_t*)&command, 2);
+		// 		write(0x28, (data_gt*)&command, 2);
 		// 		command = 0x0300;
-		// 		write(0x20, (gmp_data_t*)&command, 2);
+		// 		write(0x20, (data_gt*)&command, 2);
 		// 		command = 0x0300;
-		// 		write(0x30, (gmp_data_t*)&command, 2); // Enable LD
+		// 		write(0x30, (data_gt*)&command, 2); // Enable LD
 		// 		command = 0x0100;
-		// 		write(0x38, (gmp_data_t*)&command, 2);
+		// 		write(0x38, (data_gt*)&command, 2);
 
 		//		sync->set();
 
@@ -134,13 +134,13 @@ public:
 		// 
 		// 		ch1_data = 0xFFFF;
 		// 
-		// 		write(reg_addr_ch1_data, (gmp_data_t*)&ch1_data, 2);
+		// 		write(reg_addr_ch1_data, (data_gt*)&ch1_data, 2);
 		// 		
 		// 		for (int i = 0; i < 10000; ++i);
 		//		load->set();
 
 		// 		command = 0;
-		// 		write(0x0F, (gmp_data_t*)&command, 2);
+		// 		write(0x0F, (data_gt*)&command, 2);
 
 
 		sync->set();

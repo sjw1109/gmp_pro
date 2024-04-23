@@ -4,75 +4,79 @@
 #ifndef _FILE_COMPILER_SUP_H_
 #define _FILE_COMPILER_SUP_H_
 
+
+
+//////////////////////////////////////////////////////////////////////////
+// Global Switch: Judge Compiler Types
+// 
 // Check C++ compiler, and ensure it is fulfilling the requirement.
- #if defined __cplusplus
+// + Microsoft MSVC doesn't support `__cplusplus` macro 
+//
+// + old version of compiler only support C++03
+//
+// + newer version of compiler at least support C++11
+//
 
-// In this case some additional features must be ignored
-#if __cplusplus < 201103L
-#define constexpr const
-#define override
-#define final
+// ....................................................................//
+#if defined _MSC_VER // MSVC compiler
 
-#ifndef nullptr
-#define nullptr (0x00000000)
-#endif // nullptr definition
+#include <core/std/cc/cc.msvc.inl>
 
-#endif // __cplusplus <= 201103L
+// ....................................................................//
+// GCC compiler
+// Containing Keil AC6 Compiler
+//
+#elif defined __GNUC__ 
 
-// Wrong C++ version
- #if __cplusplus < 199711L
- #error This library needs at least a C++03 compliant compiler.
- #endif // __cplusplus <= 199711L
+#include <core/std/cc/cc.gnuc.inl>
 
- #endif // __cplusplus
+// ....................................................................//
+#elif defined ARMCC // ARM compiler
+
+#include <core/std/cc/cc.armcc.inl>
+
+// ....................................................................//
+#elif defined DSP_C2000_CC // TI DSP C2000 Compiler
+
+#include <core/std/cc/cc.c2000.inl>
+
+// ....................................................................//
+#else // compiler with no name
+
+#include <core/std/cc/cc.default.inl>
+
+#endif // end of compiler type
 
 
-// To mark a function that shouldn't be optimize by compiler
-#ifndef GMP_NO_OPT
-#if defined COMPILER_AC6
-#define GMP_NO_OPT_PREFIX
-#define GMP_NO_OPT_SUFFIX __attribute__((optnone))
-#elif defined COMPILER_CCS_C2000
-#define GMP_NO_OPT_PREFIX _Pragma("FUNCTION_OPTIONS(\"--opt_level=0\")")
-#define GMP_NO_OPT_SUFFIX
+//////////////////////////////////////////////////////////////////////////
+// Step II 
+
+
+// Mark static inline function 
+#ifndef DISABLE_STATIC_INLINE_FUNC
+#define GMP_STATIC_INLINE static inline
 #else
-#define GMP_NO_OPT
-#endif // GMP_NO_OPT
-#endif // GMP_NO_OPT
+#define GMP_STATIC_INLINE
+#endif // GMP_STATIC_INLINE 
 
-// To mark a variable that should aligned
-#ifndef GMP_MEM_ALIGN
-#if defined COMPILER_AC6
-#define GMP_MEM_ALIGN __attribute__((aligned (4)))
-#else
-#define GMP_MEM_ALIGN
-#endif // GMP_MEM_ALIGN
-#endif // GMP_MEM_ALIGN
-
-
-// To mark a function that should be a weak function
-#ifndef WEAK_FUNCTION
-#if defined GMP_WINDOWS
-#define WEAK_FUNCTION 
-#elif defined COMPILER_CCS
-#define WEAK_FUNCTION __attribute__((weak))
-#else
-#define WEAK_FUNCTION __weak
+// Mark inline function 
+#ifndef DISABLE_INLINE_FUNC
+#ifndef GMP_INLINE 
+#define GMP_INLINE inline
 #endif
-#endif // WEAK_FUNCTION
+#else
+#undef GMP_INLINE
+#define GMP_INLINE
+#endif // GMP_INLINE
 
-// To mark a function that should invoke as quick as possible 
+// Mark a function that should invoke as quick as possible 
 #ifndef FAST_FUNCTION
-#define FAST_FUNCTION 
+#define FAST_FUNCTION GMP_STATIC_INLINE
 #endif // FAST_FUNCTION
 
 //////////////////////////////////////////////////////////////////////////
 // MSVC Configure
 
-#if (_MSC_VER >= 1600)  
 
-// Disable the _s(safe) functions.
-#define _CRT_SECURE_NO_WARNINGS
-#endif // _MSC_VER
 
 #endif // _FILE_COMPILER_SUP_H_

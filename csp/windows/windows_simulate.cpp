@@ -34,7 +34,7 @@
 //    return len;
 //}
 
-gmp_time_t gmp_port_system_tick()
+time_gt gmp_port_system_tick()
 {
     SYSTEMTIME sys;
     GetLocalTime(&sys);
