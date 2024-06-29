@@ -36,25 +36,30 @@ void gmp_entry(void)
 	// user initialize section
 	gmp_init();
 
-	// Call user initialize
-	user_init();
-
-#ifndef SPECIFY_DISABLE_GMP_LOGO
-	// Debug information print
-	gmp_setup_label();
-#endif // SPECIFY_DISABLE_GMP_LOGO
-
 #if defined SPECIFY_ENABLE_TEST_ENVIRONMENT
 	// print warning informations
 	gmp_dbg_prt("[NOTE] GMP DEBUG MODE IS ENABLE! Program functionality may be affected.\r\n");
 
 	// GMP test bench trans_setup
 	gmp_test_init();
+#else
+	// Call user initialize
+	user_init();
 #endif // SPECIFY_ENABLE_TEST_ENVIRONMENT
+
+
+
+#ifndef SPECIFY_DISABLE_GMP_LOGO
+	// Debug information print
+	gmp_setup_label();
+#endif // SPECIFY_DISABLE_GMP_LOGO
+
+
 
 	// take over `main loop`
 #ifdef SPECIFY_PC_TEST_ENV
-	gmp_loop();
+	for (int test_loop_cnt = 0; test_loop_cnt < 1000; ++test_loop_cnt)
+		gmp_loop();
 #else
 	while (1)
 	{
@@ -64,7 +69,7 @@ void gmp_entry(void)
 
 		// Call user general loop routine
 		user_loop();
-	}
+}
 #endif
 	// Unreachable region
 	//return;
@@ -119,6 +124,8 @@ void gmp_loop()
 #if defined SPECIFY_ENABLE_FEED_WATCHDOG
 	gmp_port_feed_dog();
 #endif 
+
+
 }
 
 #ifndef SPECIFY_DISABLE_GMP_LOGO
@@ -265,19 +272,43 @@ uint16_t gmp_l2b16(uint16_t data)
 uint32_t gmp_l2b32(uint32_t data)
 {
 	return ((data & 0xFF000000) >> 24) | ((data & 0xFF0000) >> 8)
-			| ((data & 0xFF00) << 8) | ((data & 0xFF) << 24);
+		| ((data & 0xFF00) << 8) | ((data & 0xFF) << 24);
 }
 
 #ifdef SPECIFY_ENABLE_INTEGER64
 uint64_t gmp_l2b64(uint64_t data)
 {
-	return ((data & 0xFF00000000000000) >> 56) 
-			| ((data & 0xFF000000000000) >> 40)
-			| ((data & 0xFF0000000000) >> 24)
-			| ((data & 0xFF00000000) >> 8)
-			| ((data & 0xFF000000) << 8)
-			| ((data & 0xFF0000) << 24)
-			| ((data & 0xFF00) << 40)
-			| ((data & 0xFF) << 56);
+	return ((data & 0xFF00000000000000) >> 56)
+		| ((data & 0xFF000000000000) >> 40)
+		| ((data & 0xFF0000000000) >> 24)
+		| ((data & 0xFF00000000) >> 8)
+		| ((data & 0xFF000000) << 8)
+		| ((data & 0xFF0000) << 24)
+		| ((data & 0xFF00) << 40)
+		| ((data & 0xFF) << 56);
 }
 #endif // SPECIFY_ENABLE_INTEGER64
+
+//////////////////////////////////////////////////////////////////////////
+// weak functions
+
+GMP_WEAK_FUNC_PREFIX
+void gmp_setup_peripheral()
+GMP_WEAK_FUNC_SUFFIX
+{}
+
+GMP_WEAK_FUNC_PREFIX
+void gmp_init_peripheral_tree()
+GMP_WEAK_FUNC_SUFFIX
+{}
+
+GMP_WEAK_FUNC_PREFIX
+void user_init(void)
+GMP_WEAK_FUNC_SUFFIX
+{}
+
+GMP_WEAK_FUNC_PREFIX
+void user_loop(void)
+GMP_WEAK_FUNC_SUFFIX
+{}
+

@@ -19,6 +19,10 @@
 #endif // __cplusplus <= 201103L
 
 
+#ifndef __STATIC_INLINE
+#define __STATIC_INLINE static inline
+#endif //__STATIC_INLINE
+
 //////////////////////////////////////////////////////////////////////////
 // Step II system library
 

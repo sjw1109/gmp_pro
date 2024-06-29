@@ -1,21 +1,26 @@
-////#include <csp/stm32/stm32_general.h>
-//#include <core/gmp_core.hpp>
+//#include <csp/stm32/stm32_general.h>
+#include <core/gmp_core.hpp>
 //
-////////////////////////////////////////////////////////////////////////////
-//// TIMER function
-//
-//// get system default tick
+
+//void gmp_csp_startup()
+//{
+//	
+//}
+//////////////////////////////////////////////////////////////////////////
+// TIMER function
+
+// get system default tick
 //GMP_PORT_TIME_T gmp_port_system_tick(
 //	void
 //)
 //{
 //	return HAL_GetTick();
 //}
-//
-//// Prototype of Error handle
+
+// Prototype of Error handle
 //extern "C"
 //void Error_Handler(void);
-//
+
 //void gmp_port_system_stuck(
 //	void
 //)
@@ -23,22 +28,22 @@
 //	// invoke the Error handler
 //	Error_Handler();
 //}
-//
-//// IDWG handle
-//#if defined HAL_IWDG_MODULE_ENABLED
-//extern IWDG_HandleTypeDef hiwdg;
-//#endif // HAL_IWDG_MODULE_ENABLED, IWDG enabled
-//
-//// The following function is a feed a dog routine
-//// For STM32, the watchdog is IWDG.
+
+// IDWG handle
+#if defined HAL_IWDG_MODULE_ENABLED
+extern IWDG_HandleTypeDef hiwdg;
+#endif // HAL_IWDG_MODULE_ENABLED, IWDG enabled
+
+// The following function is a feed a dog routine
+// For STM32, the watchdog is IWDG.
 //void gmp_port_feed_dog()
 //{
 //#if defined HAL_IWDG_MODULE_ENABLED
 //	HAL_IWDG_Refresh(&hiwdg);
 //#endif // HAL_IWDG_MODULE_ENABLED, IWDG enabled
 //}
-//
-//// This function is implemented by CubeMX so this function is generally a null function.
+
+// This function is implemented by CubeMX so this function is generally a null function.
 //void gmp_setup_peripheral()
 //{}
 //

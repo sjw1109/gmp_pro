@@ -249,7 +249,9 @@ extern "C"
 
 	// Specify the alias of Little endian and little endian data.
 	//
+#ifdef _MSC_VER // This feature is supported by Visual Studio.
 #pragma region BIG_LITTLE_ENDIAN_ALIAS
+#endif // _MSC_VER
 
 		// Specify the chip is Big-endian 
 	//
@@ -335,7 +337,10 @@ extern "C"
 
 #endif // LITTLE_ENDIAN
 
+#ifdef _MSC_VER
 #pragma endregion BIG_LITTLE_ENDIAN_ALIAS
+#endif // _MSC_VER
+
 
 
 

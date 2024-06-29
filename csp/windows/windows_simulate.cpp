@@ -60,17 +60,10 @@ void gmp_port_feed_dog(
 }
 #endif // SPECIFY_ENABLE_FEED_WATCHDOG
 
+void gmp_setup_peripheral()
+{}
 
-// Simulate Entry
-
-int main(int argc, char* argv[])
+void gmp_csp_startup(void)
 {
-    // Deal with the command line parameters
 
-
-    // Prepare GMP startup process
-
-
-    // Invoke GMP entry
-    gmp_entry();
 }

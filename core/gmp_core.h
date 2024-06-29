@@ -17,6 +17,10 @@
 #include <stdarg.h>
 #include <assert.h>
 
+#ifdef USING_FIXED_LIBRARY
+#include <IQmathLib.h>
+#endif // USING_FIXED_LIBRARY
+
 //////////////////////////////////////////////////////////////////////////
 // Step III GMP basement
 // 

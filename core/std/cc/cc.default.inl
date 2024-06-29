@@ -1,10 +1,13 @@
 //////////////////////////////////////////////////////////////////////////
 // Step I language patch
 // 
+
+#ifdef __cplusplus
 // Wrong C++ version
 #if __cplusplus < 199711L
 #error This library needs at least a C++03 compliant compiler.
 #endif // __cplusplus <= 199711L
+#endif // def __cplusplus
 
 // Lower version compiler patch
 #if __cplusplus < 201103L
@@ -18,6 +21,9 @@
 
 #endif // __cplusplus <= 201103L
 
+#ifndef __STATIC_INLINE
+#define __STATIC_INLINE static inline
+#endif //__STATIC_INLINE
 
 //////////////////////////////////////////////////////////////////////////
 // Step II system library

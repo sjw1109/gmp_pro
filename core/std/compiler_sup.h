@@ -31,12 +31,12 @@
 #include <core/std/cc/cc.gnuc.inl>
 
 // ....................................................................//
-#elif defined ARMCC // ARM compiler
+#elif defined __CC_ARM // ARM compiler
 
 #include <core/std/cc/cc.armcc.inl>
 
 // ....................................................................//
-#elif defined DSP_C2000_CC // TI DSP C2000 Compiler
+#elif defined __TI_COMPILER_VERSION__ // TI DSP C2000 Compiler
 
 #include <core/std/cc/cc.c2000.inl>
 

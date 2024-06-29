@@ -8,8 +8,10 @@
 //
 #if defined STM32G030xx
 #include "stm32g0xx_hal.h"
-#elif defined STM32F411xx
-#include "stm32f4xx_hal.h"
+#elif defined STM32G071xx
+#include "stm32g0xx_hal.h"
+#elif defined STM32G474xx
+#include "stm32g4xx_hal.h"
 #elif defined STM32L151xx
 #include "stm32l1xx_hal.h"
 #elif defined STM32L151xB
@@ -18,6 +20,8 @@
 #include "stm32f1xx_hal.h"
 #elif defined STM32F103x6
 #include "stm32f1xx_hal.h"
+#elif defined STM32F411xx
+#include "stm32f4xx_hal.h"
 #endif
 
 

@@ -13,6 +13,11 @@ extern "C"
 
 	//////////////////////////////////////////////////////////////////////////
 	// Handle Type definition, copy from <main.c>
+	// 
+	// 
+	
+#ifndef SPECIFY_PC_TEST_ENV
+
 //extern	CAN_HandleTypeDef hcan;
 
 //extern	CRC_HandleTypeDef hcrc;
@@ -26,7 +31,34 @@ extern "C"
 
 //extern TIM_HandleTypeDef htim1;
 
+	extern ADC_HandleTypeDef hadc1;
+	extern DMA_HandleTypeDef hdma_adc1;
 
+	extern HRTIM_HandleTypeDef hhrtim1;
+
+	extern UART_HandleTypeDef hlpuart1;
+
+	extern TIM_HandleTypeDef htim16;
+
+
+#endif // SPECIFY_PC_TEST_ENV
+
+	// GPIO mapping
+#define B1_Pin GPIO_PIN_13
+#define B1_GPIO_Port GPIOC
+#define B1_EXTI_IRQn EXTI15_10_IRQn
+#define LPUART1_TX_Pin GPIO_PIN_2
+#define LPUART1_TX_GPIO_Port GPIOA
+#define LPUART1_RX_Pin GPIO_PIN_3
+#define LPUART1_RX_GPIO_Port GPIOA
+#define LD2_Pin GPIO_PIN_5
+#define LD2_GPIO_Port GPIOA
+#define T_SWDIO_Pin GPIO_PIN_13
+#define T_SWDIO_GPIO_Port GPIOA
+#define T_SWCLK_Pin GPIO_PIN_14
+#define T_SWCLK_GPIO_Port GPIOA
+#define T_SWO_Pin GPIO_PIN_3
+#define T_SWO_GPIO_Port GPIOB
 
 	//////////////////////////////////////////////////////////////////////////
 	// Peripheral Variables
@@ -34,6 +66,8 @@ extern "C"
 // This is the default debug device handle
 extern gmp_concept_write_direct* default_debug_dev;
 #endif // SPECIFY_ENABLE_DEFUALT_DEBUG_PRINT_FUNC
+
+	extern uint16_t adc_data[6];
 
 //extern gmp_iic_stm32_impl_t iic;
 //extern gmp_uart_stm32_impl_t dbg_uart;

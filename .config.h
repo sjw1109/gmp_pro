@@ -52,6 +52,9 @@
 // enable int64_t & uint64_t
 #define SPECIFY_ENABLE_INTEGER64
 
+// enable IQ math library
+#define USING_FIXED_LIBRARY
+
 // Compiler options
 // using CCS C2000 compiler
 //#define COMPILER_CCS_C2000
@@ -93,7 +96,9 @@
 #define gmp_dbg_prt printf
 
 // Specify the environment is PC test environment
+#ifndef SPECIFY_PC_TEST_ENV
 #define SPECIFY_PC_TEST_ENV
+#endif // SPECIFY_PC_TEST_ENV
 
 // Number of Test Cycles
 #define SPECIFY_PC_TEST_CYCLE_CNT 1000

@@ -11,6 +11,10 @@
 #define NULL ((0))
 #endif // NULL
 
+// patch for stdint definitions
+#ifndef UINT32_MAX 
+#define UINT32_MAX ((0xFFFFFFFF))
+#endif // UINT32_MAX
 
 //////////////////////////////////////////////////////////////////////////
 // Step II peripheral handle type
@@ -204,6 +208,54 @@ typedef GMP_PORT_DIFF_T diff_gt;
 
 typedef GMP_PORT_PARAM_T param_gt;
 
+
+// ....................................................................//
+// basic container of ADC results
+//
+#ifndef GMP_PORT_ADC_T
+#define GMP_PORT_ADC_T                  uint32_t
+#define GMP_PORT_ADC_SIZE_PER_BITS      (32)
+#define GMP_PORT_ADC_SIZE_PER_BYTES     (4)
+#endif // GMP_PORT_ADC_T
+
+typedef GMP_PORT_ADC_T adc_gt;
+
+
+// ....................................................................//
+// basic container of PWM results
+//
+#ifndef GMP_PORT_PWM_T
+#define GMP_PORT_PWM_T                  uint32_t
+#define GMP_PORT_PWM_SIZE_PER_BITS      (32)
+#define GMP_PORT_PWM_SIZE_PER_BYTES     (4)
+#endif // GMP_PORT_PWM_T
+
+typedef GMP_PORT_ADC_T pwm_gt;
+
+
+// ....................................................................//
+// basic type of Controller
+//
+#ifndef GMP_PORT_CTRL_T
+#define GMP_PORT_CTRL_T                  _iq
+#define GMP_PORT_CTRL_SIZE_PER_BITS      (32)
+#define GMP_PORT_CTRL_SIZE_PER_BYTES     (4)
+#define USING_FIXED_LIBRARY
+#define GLOBAL_Q 24
+#endif // GMP_PORT_CTRL_T
+
+typedef GMP_PORT_CTRL_T ctrl_gt;
+
+// ....................................................................//
+// basic type of Controller parameters
+//
+#ifndef GMP_PORT_PARAMETER_T
+#define GMP_PORT_PARAMETER_T                 float
+#define GMP_PORT_PARAMETER_SIZE_PER_BITS     (48)
+#define GMP_PORT_PARAMETER_SIZE_PER_BYTES    (6)
+#endif // GMP_PORT_PARAMETER_T
+
+typedef GMP_PORT_PARAMETER_T parameter_gt;
 
 
 // #ifndef GMP_PORT_SIZE_T
