@@ -37,7 +37,7 @@ void ctl_output_stage_routine(ctl_object_nano_t* pctl_obj)
 
 void ctl_request_stage_routine(ctl_object_nano_t* pctl_obj)
 {
-	// not implement
+	// Noting to do
 }
 
 

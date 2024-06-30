@@ -11,11 +11,13 @@
 #include <ctl/component/common/pwm_channel.h>
 
 #include <ctl/component/common/divider.h>
-#include <ctl/component/common/pid.h>
-#include <ctl/component/common/slope_lim.h>
 
 // Invoke necessary CTL libraries
 #include <ctl/component/core/ctl_nano.h>
+
+#include <ctl/component/common/pid.h>
+#include <ctl/component/common/slope_lim.h>
+#include <ctl/component/common/fusing.h>
 
 
 // register default controller objects

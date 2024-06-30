@@ -12,6 +12,9 @@
 // The functions provided in this file may be invoked in your controller Main ISR or Main loop.
 // User should follow the instruction of the function manual.
 
+// ....................................................................//
+// The following functions may running in Main ISR
+
 GMP_WEAK_FUNC_PREFIX
 void ctl_input_stage_routine(ctl_object_nano_t* pctl_obj)
 GMP_WEAK_FUNC_SUFFIX
@@ -41,26 +44,83 @@ GMP_WEAK_FUNC_SUFFIX
 	// not implement
 }
 
+// ....................................................................//
+// The following functions may running in Main Loop
+
+GMP_WEAK_FUNC_PREFIX
+void controller_monitor_routine(ctl_object_nano_t* pctl_obj)
+GMP_WEAK_FUNC_SUFFIX
+{
+	// not implement
+}
+
+GMP_WEAK_FUNC_PREFIX
+void controller_security_routine(ctl_object_nano_t* pctl_obj)
+GMP_WEAK_FUNC_SUFFIX
+{
+	// not implement
+}
+
+GMP_WEAK_FUNC_PREFIX
+void ctl_nano_sm_pending_routine(ctl_object_nano_t* pctl_obj)
+GMP_WEAK_FUNC_SUFFIX
+{
+	// not implement
+}
+
+GMP_WEAK_FUNC_PREFIX
+void ctl_nano_sm_calibrate_routine(ctl_object_nano_t* pctl_obj)
+GMP_WEAK_FUNC_SUFFIX
+{
+	// not implement
+}
+
+GMP_WEAK_FUNC_PREFIX
+void ctl_nano_sm_ready_routine(ctl_object_nano_t* pctl_obj)
+GMP_WEAK_FUNC_SUFFIX
+{
+	// not implement
+}
+
+GMP_WEAK_FUNC_PREFIX
+void ctl_nano_sm_runup_routine(ctl_object_nano_t* pctl_obj)
+GMP_WEAK_FUNC_SUFFIX
+{
+	// not implement
+}
+
+GMP_WEAK_FUNC_PREFIX
+void ctl_nano_sm_online_routine(ctl_object_nano_t* pctl_obj)
+GMP_WEAK_FUNC_SUFFIX
+{
+	// not implement
+}
+
+GMP_WEAK_FUNC_PREFIX
+void ctl_nano_sm_fault_routine(ctl_object_nano_t* pctl_obj)
+GMP_WEAK_FUNC_SUFFIX
+{
+	// not implement
+}
+
+// ....................................................................//
+// The following functions may called in Main ISR and Main Loop
+
 GMP_WEAK_FUNC_PREFIX
 void controller_output_enable(ctl_object_nano_t* pctl_obj)
 GMP_WEAK_FUNC_SUFFIX
 {
-
+	// not implement
 }
 
 GMP_WEAK_FUNC_PREFIX
 void controller_output_disable(ctl_object_nano_t* pctl_obj)
 GMP_WEAK_FUNC_SUFFIX
 {
-
+	// not implement
 }
 
-GMP_WEAK_FUNC_PREFIX
-void controller_monitor_routine(ctl_object_nano_t* pctl_obj)
-GMP_WEAK_FUNC_SUFFIX
-{
 
-}
 
 //////////////////////////////////////////////////////////////////////////
 // Kernal functions
@@ -122,29 +182,50 @@ void controller_state_dispatch(ctl_object_nano_t* pctl_obj)
 	pctl_obj->mainloop_tick = pctl_obj->mainloop_tick + 1;
 
 	// Security ensure
+//	controller_security_routine(pctl_obj);
+
+	// State machine
 	switch (pctl_obj->state_machine)
 	{
 		// Wait user to enable the controller.
 	case CTL_SM_PENDING:
+		// close output
 		controller_output_disable(pctl_obj);
+
+		// call pending State machine routine
+		ctl_nano_sm_pending_routine(pctl_obj);
 		break;
 
 		// The following 3 states, user should define a state machine 
 		// to determine the output is enable or disable 
 	case CTL_SM_CALIBRATE:
+		// call State machine routine
+		ctl_nano_sm_calibrate_routine(pctl_obj);
+		break;
 	case CTL_SM_READY:
+		// call State machine routine
+		ctl_nano_sm_ready_routine(pctl_obj);
+		break;
 	case CTL_SM_RUNUP:
+		// call State machine routine
+		ctl_nano_sm_runup_routine(pctl_obj);
 		break;
 
 		// The following state mast ensure output is enable,
 		// And every thing is ready.
 	case CTL_SM_ONLINE:
+		// call State machine routine
+		ctl_nano_sm_online_routine(pctl_obj);
+
 		controller_output_enable(pctl_obj);
 		break;
 
 		// Fault -> Close Output right now.
 	case CTL_SM_FAULT:
 		controller_output_disable(pctl_obj);
+
+		// call State machine routine
+		ctl_nano_sm_fault_routine(pctl_obj);
 		break;
 
 		// Error State Machine -> close PWM.

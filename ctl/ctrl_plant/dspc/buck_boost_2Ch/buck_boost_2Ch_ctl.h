@@ -32,11 +32,26 @@ extern "C"
 // Physical significance: Voltage(A) ->Voltage(p.u.)
 #define CONTROLLER_U_BASE (48.0f)
 
-// Absolute Maximum I, unit A
-#define CONTROLLER_I_ABSOLUTE_MAX (15.0f)
+// Controller Output Limit Maximum I, Limited by Slope limit module, unit A
+#define CONTROLLER_I_MAX (15.0f)
 
-// Absolute Maximum U, Unit V
-#define CONTROLLER_U_ABSOLUTE_MAX (60.0f)
+// Controller Output Limit Maximum U, Limited by Slope limit module, Unit V
+#define CONTROLLER_U_MAX (60.0f)
+
+// Controller Fusing Voltage, Unit V
+#define CONTROLLER_FUSING_U_IN (65.0f)
+
+// Controller Fusing Voltage, Unit V
+#define CONTROLLER_FUSING_U_OUT (65.0f)
+
+// Controller Fusing Current, Unit A
+#define CONTROLLER_FUSING_I_IN (17.0f)
+
+// Controller Fusing Current, Unit A
+#define CONTROLLER_FUSING_I_OUT (17.0f)
+
+// Controller Fusing Current, Unit A
+#define CONTROLLER_FUSING_I_L (15.0f)
 
 // Current Slope Limit, Unit A/ms
 #define CONTROLLER_I_SLOPE_MAX (1.0f)
@@ -162,14 +177,13 @@ extern "C"
 		parameter_gt I_pu2Current;
 		parameter_gt U_pu2Voltage;
 
-
-
 	}buck_boost_controller_t;
 
 
 	typedef struct _tag_buck_boost_monitor_t
 	{
 		// current and voltage parameters
+		// index is defined by `adc_results_enum`
 		float adc_result_real[6];
 
 		// current variables scale factor
@@ -186,8 +200,17 @@ extern "C"
 
 	}buck_boost_monitor_t;
 
+	typedef struct _tag_buck_boost_protect_t
+	{
+		// input & output, current & voltage, inductor current 
+		// index is defined by `adc_results_enum`
+		bipolar_fusing_t fusing[5];
+
+	}buck_boost_protect_t;
+
 	typedef struct _tag_buck_boost_2ch_ctl_object
 	{
+		// Controller Framework
 		ctl_object_nano_t base;
 
 		// input ADC channels
@@ -201,6 +224,9 @@ extern "C"
 
 		// Monitor Objects
 		buck_boost_monitor_t monitor;
+
+		// protect Objects
+		buck_boost_protect_t protect;
 
 	}buck_boost_2ch_ctl_object_t;
 

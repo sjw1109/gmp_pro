@@ -56,7 +56,7 @@ void init_buck_boost_2ch_ctl(buck_boost_2ch_ctl_object_t* ctl_obj)
 	max_slope = CTRL_T(CONTROLLER_I_SLOPE_MAX / CONTROLLER_I_BASE / ((float)ISR_FREQUENCY / (float)1e3));
 	ctl_setup_slope_limit(&ctl_obj->ctrl.traj_current,
 		-max_slope, max_slope,
-		0, CTRL_T(CONTROLLER_I_ABSOLUTE_MAX / CONTROLLER_I_BASE));
+		0, CTRL_T(CONTROLLER_I_MAX / CONTROLLER_I_BASE));
 
 	ctl_init_pid(&ctl_obj->ctrl.pid_current);
 
@@ -72,7 +72,7 @@ void init_buck_boost_2ch_ctl(buck_boost_2ch_ctl_object_t* ctl_obj)
 	max_slope = CTRL_T(CONTROLLER_U_SLOPE_MAX / CONTROLLER_U_BASE / ((float)ISR_FREQUENCY / (float)1e3));
 	ctl_setup_slope_limit(&ctl_obj->ctrl.traj_voltage,
 		-max_slope, max_slope,
-		0, CTRL_T(CONTROLLER_U_ABSOLUTE_MAX / CONTROLLER_U_BASE));
+		0, CTRL_T(CONTROLLER_U_MAX / CONTROLLER_U_BASE));
 
 	ctl_init_pid(&ctl_obj->ctrl.pid_voltage);
 
@@ -82,6 +82,30 @@ void init_buck_boost_2ch_ctl(buck_boost_2ch_ctl_object_t* ctl_obj)
 
 	// init monitor object
 	init_buck_boost_monitor(&ctl_obj->monitor);
+
+	// init protect module
+	//for (i = 0; i < 5; ++i)
+	//{
+	//	ctl_init_bipolar_fusing(&ctl_obj->protect.fusing[i]);
+
+	//	// define 0x01 is over current or over voltage protect
+	//	ctl_bipolar_fusing_bind(&ctl_obj->protect.fusing[i], &ctl_obj->adc_results[i].value,0x01);
+	//}
+
+	//ctl_set_bipolar_fusing_bound(&ctl_obj->protect.fusing[I_in], 
+	//	CTRL_T(-0.2f), CTRL_T(CONTROLLER_FUSING_I_IN / CONTROLLER_I_BASE));
+
+	//ctl_set_bipolar_fusing_bound(&ctl_obj->protect.fusing[I_out],
+	//	CTRL_T(-0.2f), CTRL_T(CONTROLLER_FUSING_I_OUT / CONTROLLER_I_BASE));
+
+	//ctl_set_bipolar_fusing_bound(&ctl_obj->protect.fusing[I_L],
+	//	CTRL_T(-0.2f), CTRL_T(CONTROLLER_FUSING_I_L / CONTROLLER_I_BASE));
+
+	//ctl_set_bipolar_fusing_bound(&ctl_obj->protect.fusing[U_in],
+	//	CTRL_T(-0.2f), CTRL_T(CONTROLLER_FUSING_U_IN / CONTROLLER_U_BASE));
+
+	//ctl_set_bipolar_fusing_bound(&ctl_obj->protect.fusing[U_out],
+	//	CTRL_T(-0.2f), CTRL_T(CONTROLLER_FUSING_U_OUT / CONTROLLER_U_BASE));
 
 	// init controller nona object
 	init_ctl_obj_nano_header((ctl_object_nano_t*)ctl_obj);
@@ -94,7 +118,7 @@ void init_buck_boost_2ch_ctl(buck_boost_2ch_ctl_object_t* ctl_obj)
 void init_buck_boost_monitor(buck_boost_monitor_t* obj)
 {
 	int i;
-	
+
 	for (i = 0; i < 6; ++i)
 		obj->adc_result_real[i] = 0.0f;
 
@@ -179,4 +203,17 @@ void controller_monitor_routine(ctl_object_nano_t* pctl_obj)
 	obj->monitor.buck_duty = obj->pwm[0].value;
 	obj->monitor.boost_duty = obj->pwm[1].value;
 
+	return;
 }
+
+void controller_security_routine(ctl_object_nano_t* pctl_obj)
+{
+	int i = 0;
+	buck_boost_2ch_ctl_object_t* obj = (buck_boost_2ch_ctl_object_t*)pctl_obj;
+
+	for (i = 0; i < 5; ++i)
+		ctl_check_fusing(pctl_obj, &obj->protect.fusing[i]);
+
+	return;
+}
+
