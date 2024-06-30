@@ -84,28 +84,7 @@ void init_buck_boost_2ch_ctl(buck_boost_2ch_ctl_object_t* ctl_obj)
 	init_buck_boost_monitor(&ctl_obj->monitor);
 
 	// init protect module
-	//for (i = 0; i < 5; ++i)
-	//{
-	//	ctl_init_bipolar_fusing(&ctl_obj->protect.fusing[i]);
-
-	//	// define 0x01 is over current or over voltage protect
-	//	ctl_bipolar_fusing_bind(&ctl_obj->protect.fusing[i], &ctl_obj->adc_results[i].value,0x01);
-	//}
-
-	//ctl_set_bipolar_fusing_bound(&ctl_obj->protect.fusing[I_in], 
-	//	CTRL_T(-0.2f), CTRL_T(CONTROLLER_FUSING_I_IN / CONTROLLER_I_BASE));
-
-	//ctl_set_bipolar_fusing_bound(&ctl_obj->protect.fusing[I_out],
-	//	CTRL_T(-0.2f), CTRL_T(CONTROLLER_FUSING_I_OUT / CONTROLLER_I_BASE));
-
-	//ctl_set_bipolar_fusing_bound(&ctl_obj->protect.fusing[I_L],
-	//	CTRL_T(-0.2f), CTRL_T(CONTROLLER_FUSING_I_L / CONTROLLER_I_BASE));
-
-	//ctl_set_bipolar_fusing_bound(&ctl_obj->protect.fusing[U_in],
-	//	CTRL_T(-0.2f), CTRL_T(CONTROLLER_FUSING_U_IN / CONTROLLER_U_BASE));
-
-	//ctl_set_bipolar_fusing_bound(&ctl_obj->protect.fusing[U_out],
-	//	CTRL_T(-0.2f), CTRL_T(CONTROLLER_FUSING_U_OUT / CONTROLLER_U_BASE));
+	init_fusing_module(ctl_obj);
 
 	// init controller nona object
 	init_ctl_obj_nano_header((ctl_object_nano_t*)ctl_obj);
@@ -128,6 +107,34 @@ void init_buck_boost_monitor(buck_boost_monitor_t* obj)
 	obj->buck_duty = 0.0f;
 	obj->boost_duty = 0.0f;
 
+}
+
+void init_fusing_module(buck_boost_2ch_ctl_object_t* obj)
+{
+	int i;
+
+	for (i = 0; i < 5; ++i)
+	{
+		ctl_init_bipolar_fusing(&obj->protect.fusing[i]);
+
+		// define 0x01 is over current or over voltage protect
+		ctl_bipolar_fusing_bind(&obj->protect.fusing[i], &obj->adc_results[i].value, 0x01);
+	}
+
+	ctl_set_bipolar_fusing_bound(&obj->protect.fusing[I_in],
+		CTRL_T(-0.2f), CTRL_T(CONTROLLER_FUSING_I_IN / CONTROLLER_I_BASE));
+
+	ctl_set_bipolar_fusing_bound(&obj->protect.fusing[I_out],
+		CTRL_T(-0.2f), CTRL_T(CONTROLLER_FUSING_I_OUT / CONTROLLER_I_BASE));
+
+	ctl_set_bipolar_fusing_bound(&obj->protect.fusing[I_L],
+		CTRL_T(-0.2f), CTRL_T(CONTROLLER_FUSING_I_L / CONTROLLER_I_BASE));
+
+	ctl_set_bipolar_fusing_bound(&obj->protect.fusing[U_in],
+		CTRL_T(-0.2f), CTRL_T(CONTROLLER_FUSING_U_IN / CONTROLLER_U_BASE));
+
+	ctl_set_bipolar_fusing_bound(&obj->protect.fusing[U_out],
+		CTRL_T(-0.2f), CTRL_T(CONTROLLER_FUSING_U_OUT / CONTROLLER_U_BASE));
 }
 
 void buck_modulator(buck_boost_2ch_ctl_object_t* obj)

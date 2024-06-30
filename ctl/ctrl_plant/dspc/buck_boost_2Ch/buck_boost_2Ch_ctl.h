@@ -236,6 +236,8 @@ extern "C"
 
 	void init_buck_boost_monitor(buck_boost_monitor_t* obj);
 
+	void init_fusing_module(buck_boost_2ch_ctl_object_t* obj);
+
 	void init_buck_boost_2ch_ctl(buck_boost_2ch_ctl_object_t* ctl_obj);
 
 

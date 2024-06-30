@@ -182,7 +182,8 @@ void controller_state_dispatch(ctl_object_nano_t* pctl_obj)
 	pctl_obj->mainloop_tick = pctl_obj->mainloop_tick + 1;
 
 	// Security ensure
-//	controller_security_routine(pctl_obj);
+	if (pctl_obj->state_machine >= CTL_SM_CALIBRATE)
+		controller_security_routine(pctl_obj);
 
 	// State machine
 	switch (pctl_obj->state_machine)
