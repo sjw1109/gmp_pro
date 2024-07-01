@@ -61,32 +61,43 @@ GMP_WEAK_FUNC_SUFFIX
 	// not implement
 }
 
+// return value:
+// 1 change to next progress
+// 0 keep the same state
 GMP_WEAK_FUNC_PREFIX
-void ctl_nano_sm_pending_routine(ctl_object_nano_t* pctl_obj)
+fast_gt ctl_nano_sm_pending_routine(ctl_object_nano_t* pctl_obj)
 GMP_WEAK_FUNC_SUFFIX
 {
 	// not implement
+	return 0;
+}
+
+// return value:
+// 1 change to next progress
+// 0 keep the same state
+GMP_WEAK_FUNC_PREFIX
+fast_gt ctl_nano_sm_calibrate_routine(ctl_object_nano_t* pctl_obj)
+GMP_WEAK_FUNC_SUFFIX
+{
+	// not implement
+	return 1;
 }
 
 GMP_WEAK_FUNC_PREFIX
-void ctl_nano_sm_calibrate_routine(ctl_object_nano_t* pctl_obj)
+fast_gt ctl_nano_sm_ready_routine(ctl_object_nano_t* pctl_obj)
 GMP_WEAK_FUNC_SUFFIX
 {
 	// not implement
+	return 0;
 }
 
+// Main relay close, power on the main circuit
 GMP_WEAK_FUNC_PREFIX
-void ctl_nano_sm_ready_routine(ctl_object_nano_t* pctl_obj)
+fast_gt ctl_nano_sm_runup_routine(ctl_object_nano_t* pctl_obj)
 GMP_WEAK_FUNC_SUFFIX
 {
 	// not implement
-}
-
-GMP_WEAK_FUNC_PREFIX
-void ctl_nano_sm_runup_routine(ctl_object_nano_t* pctl_obj)
-GMP_WEAK_FUNC_SUFFIX
-{
-	// not implement
+	return 1;
 }
 
 GMP_WEAK_FUNC_PREFIX
@@ -182,7 +193,8 @@ void controller_state_dispatch(ctl_object_nano_t* pctl_obj)
 	pctl_obj->mainloop_tick = pctl_obj->mainloop_tick + 1;
 
 	// Security ensure
-	if (pctl_obj->state_machine >= CTL_SM_CALIBRATE)
+	if (pctl_obj->switch_security_routine && 
+		pctl_obj->state_machine > CTL_SM_CALIBRATE)
 		controller_security_routine(pctl_obj);
 
 	// State machine
@@ -194,22 +206,39 @@ void controller_state_dispatch(ctl_object_nano_t* pctl_obj)
 		controller_output_disable(pctl_obj);
 
 		// call pending State machine routine
-		ctl_nano_sm_pending_routine(pctl_obj);
+		if (ctl_nano_sm_pending_routine(pctl_obj))
+		{
+			// need to change to the next state
+			pctl_obj->state_machine = CTL_SM_CALIBRATE;
+		}
 		break;
 
 		// The following 3 states, user should define a state machine 
 		// to determine the output is enable or disable 
 	case CTL_SM_CALIBRATE:
 		// call State machine routine
-		ctl_nano_sm_calibrate_routine(pctl_obj);
+		if (!pctl_obj->switch_calibrate_stage && // enable the calibrate stage
+			ctl_nano_sm_calibrate_routine(pctl_obj))
+		{
+			// need to change to the next state
+			pctl_obj->state_machine = CTL_SM_READY;
+		}
 		break;
 	case CTL_SM_READY:
 		// call State machine routine
-		ctl_nano_sm_ready_routine(pctl_obj);
+		if (ctl_nano_sm_ready_routine(pctl_obj))
+		{
+			pctl_obj->state_machine = CTL_SM_RUNUP;
+		}
+
 		break;
 	case CTL_SM_RUNUP:
 		// call State machine routine
-		ctl_nano_sm_runup_routine(pctl_obj);
+		if (ctl_nano_sm_runup_routine(pctl_obj))
+		{
+			pctl_obj->state_machine = CTL_SM_READY;
+		}
+
 		break;
 
 		// The following state mast ensure output is enable,
@@ -272,6 +301,7 @@ void init_ctl_obj_nano_header(ctl_object_nano_t* ctl_obj)
 	ctl_obj->state_machine = CTL_SM_READY;
 	ctl_obj->switch_calibrate_stage = 1;
 	ctl_obj->switch_runup_stage = 0;
+	ctl_obj->switch_security_routine = 1;
 
 	// finally set the endorsement
 	ctl_obj->security_endorse = GMP_CTL_ENDORSE;

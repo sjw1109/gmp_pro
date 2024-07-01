@@ -7,7 +7,7 @@ extern "C"
 {
 #endif // __cplusplus
 
-typedef struct _tag_adc_channel
+typedef struct _tag_adc_channel_t
 {
 	// INPUT raw data from adc
 	adc_gt raw;
@@ -40,6 +40,55 @@ void setup_adc_channel(adc_channel_t* adc_obj,
 
 // transfer raw data to final value
 void calc_adc_channel(adc_channel_t* adc_obj);
+
+//////////////////////////////////////////////////////////////////////////
+// ADC bias calibrator
+
+#include <ctl/component/common/filter.h>
+
+typedef struct _tag_adc_bias_calibrator_t
+{
+	// OUTPUT ADC bias data
+	ctrl_gt bias_output;
+
+	// output flag
+	fast_gt flag_output_valid;
+
+	// INPUT ADC RAW data
+	ctrl_gt raw;
+
+	// tools filter for RAW data.
+	filter_IIR2_t filter;
+
+	// total observation period
+	uint32_t total_period;
+
+	// current period
+	uint32_t current_period;
+
+	// start tick
+	// start period == 0 means need a brand new beginning.
+	uint32_t start_period;
+
+	// filter tick
+	uint32_t filter_tick;
+
+}adc_bias_calibrator_t;
+
+void init_adc_bias_calibrator(adc_bias_calibrator_t* obj);
+
+void setup_adc_bias_calibrator(adc_bias_calibrator_t* obj,
+	filter_IIR2_setup_t* filter_parameter);
+
+void restart_adc_bias_calibrator(adc_bias_calibrator_t* obj);
+
+// return value means if the calibration output is valid
+fast_gt run_adc_bias_calibrator(
+	adc_bias_calibrator_t* obj,
+	uint32_t main_isr_tick,
+	ctrl_gt adc_value);
+
+
 
 #ifdef __cplusplus
 }

@@ -54,6 +54,9 @@ extern "C"
 		obj->y[0] = obj->out;
 	}
 
+	// clear all the intermediate variables
+	void clear_filter(filter_IIR2_t* obj);
+
 	typedef enum _tag_filter_IIR2_type_t
 	{
 		FILTER_IIR2_TYPE_LOWPASS = 0,

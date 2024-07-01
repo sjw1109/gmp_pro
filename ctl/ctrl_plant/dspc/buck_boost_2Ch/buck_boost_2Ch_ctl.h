@@ -228,6 +228,11 @@ extern "C"
 		// protect Objects
 		buck_boost_protect_t protect;
 
+		// ADC Calibrate Object
+		adc_bias_calibrator_t calibrator;
+
+		uint32_t calibrae_progress;
+
 	}buck_boost_2ch_ctl_object_t;
 
 
@@ -237,6 +242,8 @@ extern "C"
 	void init_buck_boost_monitor(buck_boost_monitor_t* obj);
 
 	void init_fusing_module(buck_boost_2ch_ctl_object_t* obj);
+
+	void init_calibrate_module(adc_bias_calibrator_t* calibrator);
 
 	void init_buck_boost_2ch_ctl(buck_boost_2ch_ctl_object_t* ctl_obj);
 

@@ -91,6 +91,9 @@ extern "C"
 		// Default is Off
 		fast_gt switch_runup_stage;
 
+		// Switch of security module
+		fast_gt switch_security_routine;
+
 
 	}ctl_object_nano_t;
 

@@ -3,7 +3,8 @@
 #include <ctl/ctl_core.h>
 #include <ctl/ctrl_plant/dspc/buck_boost_2Ch/buck_boost_2Ch_ctl.h>
 
-
+//////////////////////////////////////////////////////////////////////////
+//  Init Setion
 // This function may initialize a buck_boost_2ch object
 void init_buck_boost_2ch_ctl(buck_boost_2ch_ctl_object_t* ctl_obj)
 {
@@ -86,6 +87,10 @@ void init_buck_boost_2ch_ctl(buck_boost_2ch_ctl_object_t* ctl_obj)
 	// init protect module
 	init_fusing_module(ctl_obj);
 
+	// init calibrate object
+	init_calibrate_module(&ctl_obj->calibrator);
+	ctl_obj->calibrae_progress = 0;
+
 	// init controller nona object
 	init_ctl_obj_nano_header((ctl_object_nano_t*)ctl_obj);
 
@@ -136,6 +141,23 @@ void init_fusing_module(buck_boost_2ch_ctl_object_t* obj)
 	ctl_set_bipolar_fusing_bound(&obj->protect.fusing[U_out],
 		CTRL_T(-0.2f), CTRL_T(CONTROLLER_FUSING_U_OUT / CONTROLLER_U_BASE));
 }
+
+void init_calibrate_module(adc_bias_calibrator_t *calibrator)
+{
+	filter_IIR2_setup_t filter_setup;
+
+	filter_setup.fc = 1;
+	filter_setup.filter_type = FILTER_IIR2_TYPE_LOWPASS;
+	filter_setup.fs = 500;
+	filter_setup.gain = 1.0f;
+	filter_setup.q = 1.0f;
+
+	init_adc_bias_calibrator(calibrator);
+
+	setup_adc_bias_calibrator(calibrator, &filter_setup);
+}
+//////////////////////////////////////////////////////////////////////////
+// Main ISR section
 
 void buck_modulator(buck_boost_2ch_ctl_object_t* obj)
 {
@@ -193,6 +215,8 @@ void ctl_core_stage_routine(ctl_object_nano_t* pctl_obj)
 	return;
 }
 
+//////////////////////////////////////////////////////////////////////////
+// State Machine Section
 
 void controller_monitor_routine(ctl_object_nano_t* pctl_obj)
 {
@@ -222,5 +246,41 @@ void controller_security_routine(ctl_object_nano_t* pctl_obj)
 		ctl_check_fusing(pctl_obj, &obj->protect.fusing[i]);
 
 	return;
+}
+
+
+// CTL_SM_CALIBRATE
+fast_gt ctl_nano_sm_calibrate_routine(ctl_object_nano_t* pctl_obj)
+{
+	buck_boost_2ch_ctl_object_t* obj = (buck_boost_2ch_ctl_object_t*)pctl_obj;
+	ctrl_gt adc_data;
+
+
+	if (obj->calibrae_progress < 6)
+	{
+		adc_data = obj->adc_results[obj->calibrae_progress].raw
+			<< (GLOBAL_Q - obj->adc_results[obj->calibrae_progress].iqn);
+		
+		if (run_adc_bias_calibrator(&obj->calibrator, obj->base.isr_tick, adc_data))
+		{
+			// register the calibrate progress
+			obj->adc_results[obj->calibrae_progress].bias = obj->calibrator.bias_output;
+
+			// call next calibrate channel
+			obj->calibrae_progress += 1;
+
+			// There're still items to be calibrated
+			if (obj->calibrae_progress < 6)
+				restart_adc_bias_calibrator(&obj->calibrator);
+		}
+
+		return 0;
+	}
+	// The whole calibrate has completed
+	else
+	{
+		return 1;
+	}
+	
 }
 
