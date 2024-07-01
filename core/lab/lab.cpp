@@ -18,10 +18,14 @@
 // include the platform
 #include <ctl/ctrl_plant/dspc/buck_boost_2Ch/buck_boost_2Ch_ctl.h>
 
+#include <ctl/component/common/filter.h>
+
 // include the simulate function 
 #include "Buck_constant_param.h"
 
 #include <fstream>
+
+#include <math.h>
 
 
 #if defined SPECIFY_ENABLE_TEST_ENVIRONMENT
@@ -55,6 +59,7 @@ uint16_t pin_stat = 0;
 buck_boost_2ch_ctl_object_t buck_boost;
 
 std::ofstream buck_out("buck_out.csv");
+std::ofstream filter_out("filter_out.csv");
 
 
 // This function would be called when test mode.
@@ -245,6 +250,37 @@ GMP_NO_OPT_SUFFIX
 
 	//	// wfr_ready to launch the SDSPC object
 
+uint32_t ticks = 100000;
+
+
+	_iq* data = new _iq[ticks];
+
+	for (int i = 0; i < ticks; ++i)
+		data[i] = _IQ(1.0f + sinf(2.0 * 3.1415926f / 100 * i) + sinf(2.0 * 3.1415926f / 100 * i * 10));
+
+	filter_IIR2_setup_t filter_setup;
+
+	filter_setup.fc = 1;
+	filter_setup.filter_type = FILTER_IIR2_TYPE_LOWPASS;
+	filter_setup.fs = 500;
+	filter_setup.gain = 1.0f;
+	filter_setup.q = 1.0f;
+
+	filter_IIR2_t filter;
+
+	ctl_init_filter_iir2(&filter);
+	
+	ctl_setup_filter_iir2(&filter, &filter_setup);
+
+	for (int i = 0; i < ticks; ++i)
+	{
+		ctl_filter_iir2_calc(&filter, data[i]);
+
+		filter_out << _IQ24toF(data[i]) << ", " << _IQ24toF(filter.out) << ", " << std::endl;
+	}
+
+	delete[] data;
+
 
 	init_buck_boost_2ch_ctl(&buck_boost);
 	buck_boost.base.state_machine = CTL_SM_ONLINE;
@@ -294,7 +330,7 @@ GMP_NO_OPT_SUFFIX
 		u_C = u_C_iter;
 
 		//buck_out << _IQ24toF(i_L) << ", " << _IQ24toF(u_C) << ", " << (uint32_t)sw << ", " << _IQ24toF(i_R) << ", " << _IQ24toF(u_R) << ", " << std::endl;
-		buck_out << i_L* I_base << ", " << u_C* E_base << ", " << (uint32_t)sw << ", " << i_R* I_base << ", " << u_R* E_base << ", " << std::endl;
+		buck_out << i_L * I_base << ", " << u_C * E_base << ", " << (uint32_t)sw << ", " << i_R * I_base << ", " << u_R * E_base << ", " << std::endl;
 	}
 
 	buck_boost.adc_results[U_out].raw = _IQ24toIQ12(buck_boost.adc_results[U_out].bias + _IQ(u_R));

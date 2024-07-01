@@ -186,6 +186,8 @@ void ctl_set_limit_limit_slope(
 //////////////////////////////////////////////////////////////////////////
 // Divider
 
+#include <ctl/component/common/divider.h>
+
 void ctl_init_divider(divider_t* obj)
 {
 	obj->counter = 0;
@@ -205,6 +207,7 @@ void ctl_set_divider(divider_t* obj, uint32_t counter_period)
 //////////////////////////////////////////////////////////////////////////
 // Fusing
 
+#include <ctl/component/common/fusing.h>
 
 void ctl_init_bipolar_fusing(bipolar_fusing_t* fusing)
 {
@@ -233,3 +236,71 @@ void ctl_set_bipolar_fusing_bound(bipolar_fusing_t* obj,
 	obj->upper_bound = upper_bound;
 }
 
+//////////////////////////////////////////////////////////////////////////
+// Filter IIR2
+
+#include <ctl/component/common/filter.h>
+#include <math.h> // support for sinf and cosf
+
+void ctl_init_filter_iir2(filter_IIR2_t* obj)
+{
+	int i;
+
+	obj->out = 0;
+
+	for (i = 0; i < 2; ++i)
+	{
+		obj->x[i] = 0;
+		obj->y[i] = 0;
+		obj->a[i] = 0;
+		obj->b[i] = 0;
+	}
+
+	obj->b[2] = 0;
+}
+
+void ctl_setup_filter_iir2(filter_IIR2_t* obj, filter_IIR2_setup_t* setup_obj)
+{
+	// center frequency
+	//tex: $$ f_0 = f_c * 2Q$$
+	parameter_gt f0 = setup_obj->fc * 2 * setup_obj->q;
+
+	//tex: $$ \theta = 2\pi \frac{f_c}{f_s}$$
+	parameter_gt theta = 2.0f * PI * f0 / setup_obj->fs;
+
+	parameter_gt sin_theta = sinf(theta);
+
+	parameter_gt cos_theta = cosf(theta);
+
+	//tex: $$\alpha = \frac{\sin(\theta)}{2Q} $$
+	parameter_gt alpha = sin_theta / 2 / setup_obj->q;
+
+	// a_0, a_1, a_2
+	parameter_gt a0 = (1.0f + alpha);
+	obj->a[0] = CTRL_T(-2.0f * cos_theta / a0);
+	obj->a[1] = CTRL_T((1.0f - alpha) / a0);
+
+	switch (setup_obj->filter_type)
+	{
+	case FILTER_IIR2_TYPE_HIGHPASS:
+		obj->b[0] = CTRL_T(setup_obj->gain * (1.0f + cos_theta) / (2 * a0));
+		obj->b[1] = CTRL_T(-setup_obj->gain * (1.0f + cos_theta) / a0);
+		obj->b[2] = CTRL_T(setup_obj->gain * (1.0f + cos_theta) / (2 * a0));
+		break;
+	case FILTER_IIR2_TYPE_LOWPASS:
+		obj->b[0] = CTRL_T(setup_obj->gain * (1.0f - cos_theta) / (2 * a0));
+		obj->b[1] = CTRL_T(setup_obj->gain * (1.0f - cos_theta) / a0);
+		obj->b[2] = CTRL_T(setup_obj->gain * (1.0f - cos_theta) / (2 * a0));
+		break;
+	case FILTER_IIR2_TYPE_BANDPASS:
+		obj->b[0] = CTRL_T(setup_obj->gain * sin_theta / (2 * a0));
+		obj->b[1] = 0;
+		obj->b[2] = CTRL_T(setup_obj->gain * sin_theta / (2 * a0));
+		break;
+	default:
+		// do nothing
+		break;
+	}
+
+	return;
+}

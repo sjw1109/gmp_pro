@@ -8,7 +8,7 @@ extern "C"
 
 typedef struct _tag_divider_t 
 {
-	// Counter for 
+	// Counter for divider
 	uint32_t counter;
 
 	// Counter target
