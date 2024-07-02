@@ -146,9 +146,9 @@ void init_calibrate_module(adc_bias_calibrator_t *calibrator)
 {
 	filter_IIR2_setup_t filter_setup;
 
-	filter_setup.fc = 1;
+	filter_setup.fc = 25;
 	filter_setup.filter_type = FILTER_IIR2_TYPE_LOWPASS;
-	filter_setup.fs = 500;
+	filter_setup.fs = ISR_FREQUENCY;
 	filter_setup.gain = 1.0f;
 	filter_setup.q = 1.0f;
 

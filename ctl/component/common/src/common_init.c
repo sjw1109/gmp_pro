@@ -63,11 +63,17 @@ void init_adc_bias_calibrator(adc_bias_calibrator_t* obj)
 void setup_adc_bias_calibrator(adc_bias_calibrator_t* obj,
 	filter_IIR2_setup_t* filter_parameter)
 {
+	uint32_t total_period = 10 * filter_parameter->fc;
+
 	// setup the filter
 	ctl_setup_filter_iir2(&obj->filter, filter_parameter);
 
 	// at least 1000 period
-	obj->total_period = max(10 * filter_parameter->fc, 1000);
+	if (total_period > 1000)
+		obj->total_period = total_period;
+	else
+		obj->total_period = 1000;
+	
 }
 
 void restart_adc_bias_calibrator(adc_bias_calibrator_t* obj)

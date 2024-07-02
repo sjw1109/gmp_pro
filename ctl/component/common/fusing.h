@@ -39,7 +39,7 @@ extern "C"
 
 		// If no items are assigned to the fusing object
 		// just ignore.
-		if (!fusing->target_object)
+			if (!fusing->target_object)
 			return;
 
 		// Check Bound
