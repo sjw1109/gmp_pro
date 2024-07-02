@@ -217,19 +217,19 @@ void controller_state_dispatch(ctl_object_nano_t* pctl_obj)
 		// to determine the output is enable or disable 
 	case CTL_SM_CALIBRATE:
 		// call State machine routine
-	if(pctl_obj->switch_calibrate_stage) // enable the calibrate stage
-	{
-		if (ctl_nano_sm_calibrate_routine(pctl_obj))
+		if (pctl_obj->switch_calibrate_stage) // enable the calibrate stage
+		{
+			if (ctl_nano_sm_calibrate_routine(pctl_obj))
+			{
+				// need to change to the next state
+				pctl_obj->state_machine = CTL_SM_READY;
+			}
+		}
+		else
 		{
 			// need to change to the next state
 			pctl_obj->state_machine = CTL_SM_READY;
 		}
-	}		
-	else
-	{
-					// need to change to the next state
-			pctl_obj->state_machine = CTL_SM_READY;
-	}
 
 		break;
 	case CTL_SM_READY:
@@ -244,7 +244,7 @@ void controller_state_dispatch(ctl_object_nano_t* pctl_obj)
 		// call State machine routine
 		if (ctl_nano_sm_runup_routine(pctl_obj))
 		{
-			pctl_obj->state_machine = CTL_SM_READY;
+			pctl_obj->state_machine = CTL_SM_ONLINE;
 		}
 
 		break;
@@ -306,7 +306,7 @@ void init_ctl_obj_nano_header(ctl_object_nano_t* ctl_obj)
 	ctl_obj->isr_tick = 0;
 
 	ctl_obj->state_machine = CTL_SM_PENDING;
-//	ctl_obj->state_machine = CTL_SM_READY;
+	//	ctl_obj->state_machine = CTL_SM_READY;
 	ctl_obj->switch_calibrate_stage = 1;
 	ctl_obj->switch_runup_stage = 0;
 	ctl_obj->switch_security_routine = 1;

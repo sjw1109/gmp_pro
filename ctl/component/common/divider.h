@@ -53,6 +53,11 @@ void ctl_init_divider(divider_t* obj);
 
 void ctl_set_divider(divider_t* obj, uint32_t counter_period);
 
+static inline void ctl_clear_divider(divider_t* obj)
+{
+	obj->counter = 0;
+}
+
 
 #ifdef __cplusplus
 }

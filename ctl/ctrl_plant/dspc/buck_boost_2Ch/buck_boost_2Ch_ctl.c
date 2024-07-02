@@ -49,6 +49,10 @@ void init_buck_boost_2ch_ctl(buck_boost_2ch_ctl_object_t* ctl_obj)
 
 	// Initilize Controller
 
+	// Default: current regular and voltage regular is switched on
+	ctl_obj->ctrl.enable_current_controller = 1;
+	ctl_obj->ctrl.enable_voltage_controller = 1;
+
 	// current inner controller
 	ctl_init_divider(&ctl_obj->ctrl.div_current);
 
@@ -68,6 +72,9 @@ void init_buck_boost_2ch_ctl(buck_boost_2ch_ctl_object_t* ctl_obj)
 	// voltage outer controller
 	ctl_init_divider(&ctl_obj->ctrl.div_voltage);
 
+	// f_voltage = f_current / 2
+	ctl_obj->ctrl.div_voltage.target = 2;
+
 	ctl_init_slope_limit(&ctl_obj->ctrl.traj_voltage);
 
 	max_slope = CTRL_T(CONTROLLER_U_SLOPE_MAX / CONTROLLER_U_BASE / ((float)ISR_FREQUENCY / (float)1e3));
@@ -80,6 +87,12 @@ void init_buck_boost_2ch_ctl(buck_boost_2ch_ctl_object_t* ctl_obj)
 	ctl_setup_pid(&ctl_obj->ctrl.pid_voltage,
 		CTRL_T(4.5f), CTRL_T(0.15f), 0, // PID default parameters
 		0, CTRL_T(1.0f));
+
+	// disable the current and voltage controller 
+	// user may use M_taget to control the output
+	// stop the controller by divider bypass
+	ctl_obj->ctrl.div_voltage.flag_bypass = 1;
+	ctl_obj->ctrl.div_current.flag_bypass = 1;
 
 	// init monitor object
 	init_buck_boost_monitor(&ctl_obj->monitor);
@@ -109,8 +122,13 @@ void init_buck_boost_monitor(buck_boost_monitor_t* obj)
 	obj->voltage_sf = CONTROLLER_V_SCALEFACTOR;
 	obj->current_sf = CONTROLLER_I_SCALEFACTOR;
 
+
 	obj->buck_duty = 0.0f;
 	obj->boost_duty = 0.0f;
+
+
+	obj->target_voltage = 0.0f;
+	obj->target_current = 0.0f;
 
 }
 
@@ -156,6 +174,34 @@ void init_calibrate_module(adc_bias_calibrator_t *calibrator)
 
 	setup_adc_bias_calibrator(calibrator, &filter_setup);
 }
+
+void clear_controller(buck_boost_2ch_ctl_object_t* obj)
+{
+	// stop the controller by bypass
+	obj->ctrl.div_voltage.flag_bypass = 1;
+	obj->ctrl.div_current.flag_bypass = 1;
+	
+	// clear current controller
+	ctl_clear_divider(&obj->ctrl.div_current);
+	ctl_clear_limit_slope(&obj->ctrl.traj_current);
+	ctl_clear_pid(&obj->ctrl.pid_current);
+
+	// clear voltage controller
+	ctl_clear_divider(&obj->ctrl.div_voltage);
+	ctl_clear_limit_slope(&obj->ctrl.traj_voltage);
+	ctl_clear_pid(&obj->ctrl.pid_voltage);
+
+	// clear output
+	obj->ctrl.M_target = 0;
+
+	// restart the controller
+	obj->ctrl.div_voltage.flag_bypass = !obj->ctrl.enable_current_controller;
+	obj->ctrl.div_current.flag_bypass = !obj->ctrl.enable_voltage_controller;
+
+	return;
+}
+
+
 //////////////////////////////////////////////////////////////////////////
 // Main ISR section
 
@@ -231,8 +277,11 @@ void controller_monitor_routine(ctl_object_nano_t* pctl_obj)
 			obj->monitor.adc_result_real[i] = obj->monitor.voltage_sf * ctrl2float(obj->adc_results[i].value);
 	}
 
-	obj->monitor.buck_duty = obj->pwm[0].value;
-	obj->monitor.boost_duty = obj->pwm[1].value;
+	obj->monitor.buck_duty  = (float)obj->pwm[0].value / obj->pwm[0].full_scale;
+	obj->monitor.boost_duty = (float)obj->pwm[1].value / obj->pwm[1].full_scale;
+
+	obj->monitor.target_voltage = obj->monitor.voltage_sf * ctrl2float(obj->ctrl.V_target);
+	obj->monitor.target_current = obj->monitor.current_sf * ctrl2float(obj->ctrl.I_target);
 
 	return;
 }
@@ -283,4 +332,26 @@ fast_gt ctl_nano_sm_calibrate_routine(ctl_object_nano_t* pctl_obj)
 	}
 	
 }
+
+
+fast_gt ctl_nano_sm_runup_routine(ctl_object_nano_t* pctl_obj)
+{
+	// clear controller
+	clear_controller((buck_boost_2ch_ctl_object_t*)pctl_obj);
+
+	// enable output
+	return 1;
+}
+
+void ctl_nano_sm_online_routine(ctl_object_nano_t* pctl_obj)
+{
+	buck_boost_2ch_ctl_object_t* obj = (buck_boost_2ch_ctl_object_t*)pctl_obj;
+	
+	obj->ctrl.div_voltage.flag_bypass = !obj->ctrl.enable_current_controller;
+	obj->ctrl.div_current.flag_bypass = !obj->ctrl.enable_voltage_controller;
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+// Service function 
 

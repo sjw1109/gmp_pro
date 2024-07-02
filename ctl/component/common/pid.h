@@ -81,6 +81,13 @@ extern "C"
 		ctrl_gt out_min, ctrl_gt out_max
 	);
 
+	static inline void ctl_clear_pid(
+		pid_regular_t* hpid
+	)
+	{
+		hpid->dn = 0;
+		hpid->sn = 0;
+	}
 
 	// PID discrete structure
 

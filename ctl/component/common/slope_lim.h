@@ -52,6 +52,13 @@ extern "C"
 		ctrl_gt out_min, ctrl_gt out_max
 	);
 
+	static inline void ctl_clear_limit_slope(
+		slope_lim_t* obj
+	)
+	{
+		obj->out = 0;
+	}
+
 #ifdef __cplusplus
 }
 #endif //__cplusplus

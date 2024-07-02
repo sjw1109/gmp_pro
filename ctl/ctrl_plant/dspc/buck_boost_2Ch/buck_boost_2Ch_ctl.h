@@ -158,6 +158,10 @@ extern "C"
 
 	typedef struct _tag_buck_boost_controller
 	{
+		// controller switch
+		fast_gt enable_current_controller;
+		fast_gt enable_voltage_controller;
+
 		// current controller 
 		divider_t div_current;
 		slope_lim_t traj_current;
@@ -191,6 +195,14 @@ extern "C"
 
 		// voltage variables scale factor
 		float voltage_sf;
+
+		// target objects
+	
+		// voltage
+		float target_voltage;
+
+		// current
+		float target_current;
 
 		// buck duty
 		float buck_duty;
@@ -246,6 +258,8 @@ extern "C"
 	void init_calibrate_module(adc_bias_calibrator_t* calibrator);
 
 	void init_buck_boost_2ch_ctl(buck_boost_2ch_ctl_object_t* ctl_obj);
+
+	void clear_controller(buck_boost_2ch_ctl_object_t* obj);
 
 
 #ifdef __cplusplus
