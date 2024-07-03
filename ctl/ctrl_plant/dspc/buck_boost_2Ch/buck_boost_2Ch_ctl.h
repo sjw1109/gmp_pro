@@ -26,17 +26,17 @@ extern "C"
 
 // Controller I base value, Unit A
 // Physical significance: Current(A) -> Current(p.u.)
-#define CONTROLLER_I_BASE (10.0f)
+#define CONTROLLER_I_BASE (15.0f)
 
 // Controller U base value, Unit V
-// Physical significance: Voltage(A) ->Voltage(p.u.)
-#define CONTROLLER_U_BASE (48.0f)
+// Physical significance: Voltage(V) ->Voltage(p.u.)
+#define CONTROLLER_U_BASE (60.0f)
 
 // Controller Output Limit Maximum I, Limited by Slope limit module, unit A
 #define CONTROLLER_I_MAX (15.0f)
 
 // Controller Output Limit Maximum U, Limited by Slope limit module, Unit V
-#define CONTROLLER_U_MAX (60.0f)
+#define CONTROLLER_U_MAX (65.0f)
 
 // Controller Fusing Voltage, Unit V
 #define CONTROLLER_FUSING_U_IN (65.0f)
@@ -73,11 +73,11 @@ extern "C"
 
 // Controller parameter: Current Sensor ratio, unit A/V, 
 // Physical significance: ADC value(V) -> real Current(A)
-#define CONTROLLER_CS_RATIO (1.0f)
+#define CONTROLLER_CS_RATIO (16.0f)
 
 // Controller parameter: Current Bias, unit V
 // Physical significance: I = 0 => ADC pin Voltage(V)
-#define CONTROLLER_CS_BIAS_VOLTAGE (1.25f)
+#define CONTROLLER_CS_BIAS_VOLTAGE (1.20f)
 
 // Controller I full scale value, Unit A
 // Physical significance: Total Current(A) range of the ADC
@@ -91,7 +91,7 @@ extern "C"
 // ADC GAIN: from ADC result to p.u.
 // Physical significance: ADC sample result -> Current(p.u.)
 // This variable will be used to initialize the ADC object.
-#define CONTROLLER_I_ADC_GAIN (CONTROLLER_CS_RATIO / CONTROLLER_I_BASE)
+#define CONTROLLER_I_ADC_GAIN (CONTROLLER_I_FULLSCALE / CONTROLLER_I_BASE)
 
 // Attention: Controller I ADC bias, unit: ADC ticks, p.u.
 // Here are two type of definition:
@@ -102,18 +102,21 @@ extern "C"
 // Attention: Monitor I result scale factor
 // Physical significance: Current(p.u.) -> real Current(A)
 // This variable will be used to initialize the ADC object.
-#define CONTROLLER_I_SCALEFACTOR (CONTROLLER_CS_RATIO * CONTROLLER_ADC_REF_VOLTAGE)
+//#define CONTROLLER_I_SCALEFACTOR (CONTROLLER_CS_RATIO * CONTROLLER_ADC_REF_VOLTAGE)
+#define CONTROLLER_I_SCALEFACTOR (CONTROLLER_I_BASE)
 
 //////////////////////////////////////////////////////////////////////////
 // Controller Voltage Sensor Default Configuration
 
 // Controller parameter: Voltage Sensor ratio, unit V(real)/V(adc)
 // Physical significance: ADC value(V) -> real Voltage(V)
-#define CONTROLLER_VS_RATIO (1.0f)
+#define CONTROLLER_VS_RATIO (40.3226f)
+//#define CONTROLLER_VS_RATIO (27.618f)
+//#define CONTROLLER_VS_RATIO (58.87f/1.6f)
 
 // Controller parameter: Voltage Bias, Unit V
 // Physical significance: V = 0 => ADC pin Voltage(V)
-#define CONTROLLER_VS_BIAS_VOLTAGE (1.2f)
+#define CONTROLLER_VS_BIAS_VOLTAGE (1.20f)
 
 // Controller U full scale value, Unit V
 // Physical significance: Total Voltage(V) range of the ADC
@@ -127,7 +130,7 @@ extern "C"
 // ADC GAIN: from ADC result to p.u.
 // Physical significance: ADC sample result -> Voltage(p.u.)
 // This variable will be used to initialize the ADC object.
-#define CONTROLLER_V_ADC_GAIN (CONTROLLER_VS_RATIO / CONTROLLER_U_BASE)
+#define CONTROLLER_V_ADC_GAIN (CONTROLLER_U_FULLSCALE / CONTROLLER_U_BASE)
 
 // Attention: Controller V ADC bias
 // Here are two type of definition:
@@ -138,7 +141,8 @@ extern "C"
 // Attention: Monitor V result scale factor
 // Physical significance: Voltage(p.u.) -> real Voltage(V)
 // This variable will be used to initialize the ADC object.
-#define CONTROLLER_V_SCALEFACTOR (CONTROLLER_VS_RATIO * CONTROLLER_ADC_REF_VOLTAGE)
+//#define CONTROLLER_V_SCALEFACTOR (CONTROLLER_VS_RATIO * CONTROLLER_ADC_REF_VOLTAGE)
+#define CONTROLLER_V_SCALEFACTOR (CONTROLLER_U_BASE)
 
 	enum adc_results_enum
 	{
@@ -197,7 +201,7 @@ extern "C"
 		float voltage_sf;
 
 		// target objects
-	
+
 		// voltage
 		float target_voltage;
 

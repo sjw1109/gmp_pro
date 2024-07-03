@@ -25,7 +25,7 @@ void setup_adc_channel(adc_channel_t* adc_obj,
 )
 {
 	adc_obj->bias = bias;
-	adc_obj->bias = gain;
+	adc_obj->gain = gain;
 	adc_obj->iqn = iqn;
 	adc_obj->resolution = resolution;
 }

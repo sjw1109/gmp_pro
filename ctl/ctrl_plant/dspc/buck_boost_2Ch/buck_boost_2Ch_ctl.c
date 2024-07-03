@@ -13,9 +13,10 @@ void init_buck_boost_2ch_ctl(buck_boost_2ch_ctl_object_t* ctl_obj)
 
 	// init input & output parameters
 	for (i = 0; i < 6; ++i)
-	{
 		init_adc_channel(&ctl_obj->adc_results[i]);
 
+	for (i = 0; i < 6; ++i)
+	{
 		if (i < 3) // for current sensor
 			setup_adc_channel(&ctl_obj->adc_results[i],
 				CTRL_T(CONTROLLER_I_ADC_GAIN), // ADC GAIN: from ADC result to p.u.
@@ -26,7 +27,7 @@ void init_buck_boost_2ch_ctl(buck_boost_2ch_ctl_object_t* ctl_obj)
 		else // for voltage sensor
 			setup_adc_channel(&ctl_obj->adc_results[i],
 				CTRL_T(CONTROLLER_V_ADC_GAIN), // ADC GAIN: from ADC result to p.u.
-				CTRL_T(CONTROLLER_V_ADC_BIAS), // ADC BIAS: from A to ADC result
+				CTRL_T(CONTROLLER_V_ADC_BIAS), // ADC BIAS: from V to ADC result
 				ADC_RESOLUTION,
 				ADC_IQN
 			);
@@ -38,10 +39,10 @@ void init_buck_boost_2ch_ctl(buck_boost_2ch_ctl_object_t* ctl_obj)
 	}
 
 	// Buck Phase
-	setup_pwm_channel(&ctl_obj->pwm[0], 0, PWM_FULL_SCALE);
+	setup_pwm_channel(&ctl_obj->pwm[0], 0, PWM_FULL_SCALE - 1);
 
 	// Boost Phase
-	setup_pwm_channel(&ctl_obj->pwm[1], 0, PWM_FULL_SCALE);
+	setup_pwm_channel(&ctl_obj->pwm[1], 0, PWM_FULL_SCALE - 1);
 
 	// per unit parameters
 	ctl_obj->ctrl.I_pu2Current = CONTROLLER_I_SCALEFACTOR;
@@ -50,8 +51,11 @@ void init_buck_boost_2ch_ctl(buck_boost_2ch_ctl_object_t* ctl_obj)
 	// Initilize Controller
 
 	// Default: current regular and voltage regular is switched on
-	ctl_obj->ctrl.enable_current_controller = 1;
-	ctl_obj->ctrl.enable_voltage_controller = 1;
+	ctl_obj->ctrl.enable_current_controller = 0;
+	ctl_obj->ctrl.enable_voltage_controller = 0;
+
+	//ctl_obj->ctrl.enable_current_controller = 1;
+	//ctl_obj->ctrl.enable_voltage_controller = 1;
 
 	// current inner controller
 	ctl_init_divider(&ctl_obj->ctrl.div_current);
@@ -160,7 +164,7 @@ void init_fusing_module(buck_boost_2ch_ctl_object_t* obj)
 		CTRL_T(-0.2f), CTRL_T(CONTROLLER_FUSING_U_OUT / CONTROLLER_U_BASE));
 }
 
-void init_calibrate_module(adc_bias_calibrator_t *calibrator)
+void init_calibrate_module(adc_bias_calibrator_t* calibrator)
 {
 	filter_IIR2_setup_t filter_setup;
 
@@ -180,7 +184,7 @@ void clear_controller(buck_boost_2ch_ctl_object_t* obj)
 	// stop the controller by bypass
 	obj->ctrl.div_voltage.flag_bypass = 1;
 	obj->ctrl.div_current.flag_bypass = 1;
-	
+
 	// clear current controller
 	ctl_clear_divider(&obj->ctrl.div_current);
 	ctl_clear_limit_slope(&obj->ctrl.traj_current);
@@ -209,7 +213,7 @@ void buck_modulator(buck_boost_2ch_ctl_object_t* obj)
 {
 	// For Buck Controller D = M
 	obj->pwm[buck_phase].raw = obj->ctrl.M_target;
-	obj->pwm[boost_phase].raw = CTRL_T(1.0f);
+	obj->pwm[boost_phase].raw = CTRL_T(0.99f);
 
 	return;
 }
@@ -277,7 +281,7 @@ void controller_monitor_routine(ctl_object_nano_t* pctl_obj)
 			obj->monitor.adc_result_real[i] = obj->monitor.voltage_sf * ctrl2float(obj->adc_results[i].value);
 	}
 
-	obj->monitor.buck_duty  = (float)obj->pwm[0].value / obj->pwm[0].full_scale;
+	obj->monitor.buck_duty = (float)obj->pwm[0].value / obj->pwm[0].full_scale;
 	obj->monitor.boost_duty = (float)obj->pwm[1].value / obj->pwm[1].full_scale;
 
 	obj->monitor.target_voltage = obj->monitor.voltage_sf * ctrl2float(obj->ctrl.V_target);
@@ -309,7 +313,7 @@ fast_gt ctl_nano_sm_calibrate_routine(ctl_object_nano_t* pctl_obj)
 	{
 		adc_data = obj->adc_results[obj->calibrae_progress].raw
 			<< (GLOBAL_Q - obj->adc_results[obj->calibrae_progress].iqn);
-		
+
 		if (run_adc_bias_calibrator(&obj->calibrator, obj->base.isr_tick, adc_data))
 		{
 			// register the calibrate progress
@@ -330,7 +334,7 @@ fast_gt ctl_nano_sm_calibrate_routine(ctl_object_nano_t* pctl_obj)
 	{
 		return 1;
 	}
-	
+
 }
 
 
@@ -346,7 +350,7 @@ fast_gt ctl_nano_sm_runup_routine(ctl_object_nano_t* pctl_obj)
 void ctl_nano_sm_online_routine(ctl_object_nano_t* pctl_obj)
 {
 	buck_boost_2ch_ctl_object_t* obj = (buck_boost_2ch_ctl_object_t*)pctl_obj;
-	
+
 	obj->ctrl.div_voltage.flag_bypass = !obj->ctrl.enable_current_controller;
 	obj->ctrl.div_current.flag_bypass = !obj->ctrl.enable_voltage_controller;
 }
