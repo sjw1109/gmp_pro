@@ -203,10 +203,10 @@ size_gt gmp_dbg_prt_fn(const char* p_fmt, ...)
 
 	size_gt size = strlen(p_fmt);
 #if defined SPECIFY_DISABLE_DYNAMIC_ALLOC_OF_DBGPTR
-	unsigned char str[48 + _GMP_CHAR_EXT];
+	static data_gt str[48 + _GMP_CHAR_EXT];
 	memset(str, 0, 48 + _GMP_CHAR_EXT);
 #else
-	char* str = (char*)gmp_malloc(size + _GMP_CHAR_EXT);
+	data_gt* str = (data_gt*)gmp_malloc(size + _GMP_CHAR_EXT);
 	memset(str, 0, size + _GMP_CHAR_EXT);
 #endif // SPECIFY_DISABLE_DYNAMIC_ALLOC_OF_DBGPTR
 

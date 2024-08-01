@@ -1,164 +1,302 @@
 // This file is for DAC8563 DAC chip
 
-#include <core/dev/device_prototype.hpp>
+#ifndef _FILE_GMP_EXT_DAC8563_H_
+#define _FILE_GMP_EXT_DAC8563_H_
 
-#ifndef _FILE_DAC8563_H_
-#define _FILE_DAC8563_H_
-
-// Please disable the NSS port of the 
-class dac8563
-	:spi_register_device_t
+#ifdef __cplusplus
+extern "C"
 {
-public:
-	// ctor & dtor
-	dac8563(gmp_spi_entity* spi,
-		gmp_gpio_entity* clr,
-		gmp_gpio_entity* load,
-		gmp_gpio_entity* sync)
-		:spi_register_device_t(spi),
-		clr(clr), sync(sync), load(load)
-	{}
+#endif
+
+#ifndef DAC8563_SPI_INTERFACE
+#define DAC8563_SPI_INTERFACE
+#define DAC8563_INTERFACE_TYPE spi_handle_t
+#define DAC8563_INTERFACE_TX_FUNC spi_tx_direct
+
+#endif // DAC8563_SPI_INTERFACE
+
+// suitable for the following chips
+//  + DAC7562, DAC7563 - 12 bits
+//  + DAC8162, DAC8163 - 14 bits
+//  + DAC8562, DAC8563 - 16 bits
 
 
-public:
-	void write_channel_1(uint16_t data)
-	{
-		//		sync->set();
-				// 		ch1_data = data;
-		ch1_data = ((data & 0xFF) << 8) | ((data & 0xFF00) >> 8);
+// command mapping
+#define DAC8563_WRITE_REG                ((0x00 << (3+16)))
+#define DAC8563_SW_LOAD					 ((0x01 << (3+16)))
+#define DAC8563_WRITE_REG_AND_UPDATE_ALL ((0x02 << (3+16)))
+#define DAC8563_WRITE_REG_AND_UPDATE     ((0x03 << (3+16)))
+#define DAC8563_SET_DAC_POWER            ((0x04 << (3+16)))
+#define DAC8563_SW_RESET				 ((0x05 << (3+16)))
+#define DAC8563_SET_LDAC				 ((0x06 << (3+16)))
+#define DAC8563_ENABLE_INNER_REF		 ((0x07 << (3+16)))
+
+// channel mapping
+#define DAC8563_CHANNEL_A				 ((0x00 << 16))
+#define DAC8563_CHANNEL_B				 ((0x01 << 16))
+#define DAC8563_CHANNEL_A_AND_B			 ((0x07 << 16))
 
 
-		//		for (int i = 0; i < 10000; ++i);
-		sync->clear();
 
-		write(reg_addr_ch1_data, (data_gt*)&ch1_data, 2);
+// DAC8563 State machine
+typedef enum _tag_dac8563_sm
+{
+	DAC8563_POWERDOWN = 0,
+	DAC8563_CONFIG = 1,
+	DAC8563_POWERON = 2
+}dac8563_sm_t;
 
-		load->clear();
-		for (int i = 0; i < 10000; ++i);
-		load->set();
+typedef struct _tag_dac8563
+{
+	dac8563_sm_t state;
+	
+	// interface, spi port
+	DAC8563_INTERFACE_TYPE *_if;
 
-// 		uint16_t command = 0;
-// 		write(0x0F, (data_gt*)&command, 2);
+	// Optional, active low, clear all inputs
+	// This sets the DAC output voltages accordingly. 
+	// The device exits clear code mode on the 24th falling edge of the next write to the device.
+	hgpio_gt clear;
 
-		sync->set();
-	}
+	// Optional, active low, load DAC data
+	// In synchronous mode, keep low. The DAC data may update after 24th sclk cycle.
+	// In asynchronous mode, used as a negative edge-triggered timing signal for simultaneous DAC updates.
+	//   two channel of DAC may synchronous active.
+	hgpio_gt ldac;
 
-	void write_channel_2(uint16_t data)
-	{
-		//		sync->set();
-		// 		ch2_data = data;
-		ch2_data = ((data & 0xFF) << 8) | ((data & 0xFF00) >> 8);
+	// Sync port is chip select port which was set in `_if`
 
-
-		//		for (int i = 0; i < 10000; ++i);
-		sync->clear();
-
-		write(reg_addr_ch2_data, (data_gt*)&ch2_data, 2);
-
-		load->clear();
-		for (int i = 0; i < 10000; ++i);
-		load->set();
-
-// 		uint16_t command = 0;
-// 		write(0x0F, (data_gt*)&command, 2);
+	// A output buffer of SPI data buffer.
+	uint32_t spi_data_buf;
 
 
-		sync->set();
-	}
+}dac8563_t;
 
-	void write_dual_channel(uint16_t data1, uint16_t data2)
-	{
-		//		ch1_data = data1;
-		ch1_data = ((data1 & 0xFF) << 8) | ((data1 & 0xFF00) >> 8);
-		// 		ch2_data = data2;
-		ch2_data = ((data2 & 0xFF) << 8) | ((data2 & 0xFF00) >> 8);
+/////////////////////////////////////////////
+// set channel 
 
+// Set channel data
+void dac8563_set_channel_data(dac8563_t* handle, uint32_t target_channel, uint16_t data);
 
-		for (int i = 0; i < 10000; ++i);
-		sync->clear();
+// Set channal data & update all
+void dac8563_set_channel_data_update_all(dac8563_t* handle, uint32_t target_channel, uint16_t data);
 
-		write(reg_addr_ch1_data, (data_gt*)&ch1_data, 2);
-		write(reg_addr_ch2_data, (data_gt*)&ch2_data, 2);
-
-		load->clear();
-		for (int i = 0; i < 10000; ++i);
-		load->set();
-
-// 		uint16_t command = 0;
-// 		write(0x0F, (data_gt*)&command, 2);
-
-		sync->set();
-	}
-
-	void clear()
-	{
-		clr->clear();
-		for (int i = 0; i < 10000; ++i);
-		clr->set();
-		for (int i = 0; i < 10000; ++i);
-		clr->clear();
-
-		sync->set();
-
-	}
-
-	void setup()
-	{
-		load->set();
-
-		sync->clear();
-
-		uint16_t command = 0x0100;
-		write(0x28, (data_gt*)&command, 2);
-		command = 0x0300;
-		write(0x20, (data_gt*)&command, 2);
-		command = 0x0000;
-		write(0x30, (data_gt*)&command, 2); // Enable LD
-		command = 0x0100;
-		write(0x38, (data_gt*)&command, 2);
+// Set channal data & update
+void dac8563_set_channel_data_update(dac8563_t* handle, uint32_t target_channel, uint16_t data);
 
 
-		// 		uint16_t command = 0x0100;
-		// 		write(0x28, (data_gt*)&command, 2);
-		// 		command = 0x0300;
-		// 		write(0x20, (data_gt*)&command, 2);
-		// 		command = 0x0300;
-		// 		write(0x30, (data_gt*)&command, 2); // Enable LD
-		// 		command = 0x0100;
-		// 		write(0x38, (data_gt*)&command, 2);
-
-		//		sync->set();
-
-		// 		load->clear();
-		// 
-		// 
-		// 		ch1_data = 0xFFFF;
-		// 
-		// 		write(reg_addr_ch1_data, (data_gt*)&ch1_data, 2);
-		// 		
-		// 		for (int i = 0; i < 10000; ++i);
-		//		load->set();
-
-		// 		command = 0;
-		// 		write(0x0F, (data_gt*)&command, 2);
+// default setup function
+void dac8563_default_setup(dac8563_t* handle);
 
 
-		sync->set();
+// Reset options
+// only reset DAC registers & Input registers
+#define DAC8563_DATA_ONLY               ((0x00))
+// reet all DAC registers.
+#define DAC8563_RESET_ALL               ((0x01))
 
-	}
+// This function will reset the DAC chip
+void dac8563_reset(dac8563_t* handle);
 
-protected:
-	gmp_gpio_entity* clr;
-	gmp_gpio_entity* load;
-	gmp_gpio_entity* sync;  // Chip Select
 
-public:
-	uint32_t ch1_data;
-	uint32_t ch2_data;
 
-public:
-	static constexpr addr_type reg_addr_ch1_data = 0x18;
-	static constexpr addr_type reg_addr_ch2_data = 0x19;
-};
+// LDAC control
+#define DAC8563_LDAC_DISABLE              ((0x00))
+#define DAC8563_LDAC_ACTIVE_B             ((0x01))
+#define DAC8563_LDAC_ACTIVE_A			  ((0x02))
+#define DAC8563_LDAC_ACTIVE_A_B  		  ((0x03))
+// LDAC Pin configuratioin
+void dac8563_cfg_ldac(dac8563_t* handle, uint16_t ldac_command);
+
+// internal reference
+#define DAC8563_ENABLE_INTERNAL_REF       ((0x01)) // enable internal reference & gain = 2
+#define DAC8563_DISABLE_INTERNAL_REF      ((0x00)) // disable internal reference & gain = 1
+// set internal reference if enable
+void dac8563_cfg_internal_ref(dac8563_t* handle, uint16_t internal_ref);
+
+
+// Gain configuratioin address
+#define DAC8563_GAIN					 ((0x02 << 16)) // do not refresh
+// gain configuration
+#define DAC8563_GAIN_B2_A2                ((0x00))
+#define DAC8563_GAIN_B2_A1                ((0x01))
+#define DAC8563_GAIN_B1_A2                ((0x02))
+#define DAC8563_GAIN_B1_A1                ((0x03))
+// set DAC gain 
+void dac8563_cfg_gain(dac8563_t* handle, uint16_t gain_cfg);
+
+// Power Control
+#define DAC8563_POWER_NORMAL             ((0x00 << 3))
+#define DAC8563_POWER_DOWN_PULLDOWN_1K   ((0x01 << 3))
+#define DAC8563_POWER_DOWN_PULLDOWN_100K ((0x02 << 3))
+#define DAC8563_POWER_DOWN_PULLDOWN_HiZ  ((0x03 << 3))
+
+// This function will send a power control command
+// you should select one of power control macros
+void dac8563_cfg_power(dac8563_t* handle, uint32_t power_command, uint32_t target_channel);
+
+
+//
+//
+//// Please disable the NSS port of the 
+//class dac8563
+//	:spi_register_device_t
+//{
+//public:
+//	// ctor & dtor
+//	dac8563(gmp_spi_entity* spi,
+//		gmp_gpio_entity* clr,
+//		gmp_gpio_entity* load,
+//		gmp_gpio_entity* sync)
+//		:spi_register_device_t(spi),
+//		clr(clr), sync(sync), load(load)
+//	{}
+//
+//
+//public:
+//	void write_channel_1(uint16_t data)
+//	{
+//		//		sync->set();
+//				// 		ch1_data = data;
+//		ch1_data = ((data & 0xFF) << 8) | ((data & 0xFF00) >> 8);
+//
+//
+//		//		for (int i = 0; i < 10000; ++i);
+//		sync->clear();
+//
+//		write(reg_addr_ch1_data, (data_gt*)&ch1_data, 2);
+//
+//		load->clear();
+//		for (int i = 0; i < 10000; ++i);
+//		load->set();
+//
+//// 		uint16_t command = 0;
+//// 		write(0x0F, (data_gt*)&command, 2);
+//
+//		sync->set();
+//	}
+//
+//	void write_channel_2(uint16_t data)
+//	{
+//		//		sync->set();
+//		// 		ch2_data = data;
+//		ch2_data = ((data & 0xFF) << 8) | ((data & 0xFF00) >> 8);
+//
+//
+//		//		for (int i = 0; i < 10000; ++i);
+//		sync->clear();
+//
+//		write(reg_addr_ch2_data, (data_gt*)&ch2_data, 2);
+//
+//		load->clear();
+//		for (int i = 0; i < 10000; ++i);
+//		load->set();
+//
+//// 		uint16_t command = 0;
+//// 		write(0x0F, (data_gt*)&command, 2);
+//
+//
+//		sync->set();
+//	}
+//
+//	void write_dual_channel(uint16_t data1, uint16_t data2)
+//	{
+//		//		ch1_data = data1;
+//		ch1_data = ((data1 & 0xFF) << 8) | ((data1 & 0xFF00) >> 8);
+//		// 		ch2_data = data2;
+//		ch2_data = ((data2 & 0xFF) << 8) | ((data2 & 0xFF00) >> 8);
+//
+//
+//		for (int i = 0; i < 10000; ++i);
+//		sync->clear();
+//
+//		write(reg_addr_ch1_data, (data_gt*)&ch1_data, 2);
+//		write(reg_addr_ch2_data, (data_gt*)&ch2_data, 2);
+//
+//		load->clear();
+//		for (int i = 0; i < 10000; ++i);
+//		load->set();
+//
+//// 		uint16_t command = 0;
+//// 		write(0x0F, (data_gt*)&command, 2);
+//
+//		sync->set();
+//	}
+//
+//	void clear()
+//	{
+//		clr->clear();
+//		for (int i = 0; i < 10000; ++i);
+//		clr->set();
+//		for (int i = 0; i < 10000; ++i);
+//		clr->clear();
+//
+//		sync->set();
+//
+//	}
+//
+//	void setup()
+//	{
+//		load->set();
+//
+//		sync->clear();
+//
+//		uint16_t command = 0x0100;
+//		write(0x28, (data_gt*)&command, 2);
+//		command = 0x0300;
+//		write(0x20, (data_gt*)&command, 2);
+//		command = 0x0000;
+//		write(0x30, (data_gt*)&command, 2); // Enable LD
+//		command = 0x0100;
+//		write(0x38, (data_gt*)&command, 2);
+//
+//
+//		// 		uint16_t command = 0x0100;
+//		// 		write(0x28, (data_gt*)&command, 2);
+//		// 		command = 0x0300;
+//		// 		write(0x20, (data_gt*)&command, 2);
+//		// 		command = 0x0300;
+//		// 		write(0x30, (data_gt*)&command, 2); // Enable LD
+//		// 		command = 0x0100;
+//		// 		write(0x38, (data_gt*)&command, 2);
+//
+//		//		sync->set();
+//
+//		// 		load->clear();
+//		// 
+//		// 
+//		// 		ch1_data = 0xFFFF;
+//		// 
+//		// 		write(reg_addr_ch1_data, (data_gt*)&ch1_data, 2);
+//		// 		
+//		// 		for (int i = 0; i < 10000; ++i);
+//		//		load->set();
+//
+//		// 		command = 0;
+//		// 		write(0x0F, (data_gt*)&command, 2);
+//
+//
+//		sync->set();
+//
+//	}
+//
+//protected:
+//	gmp_gpio_entity* clr;
+//	gmp_gpio_entity* load;
+//	gmp_gpio_entity* sync;  // Chip Select
+//
+//public:
+//	uint32_t ch1_data;
+//	uint32_t ch2_data;
+//
+//public:
+//	static constexpr addr_type reg_addr_ch1_data = 0x18;
+//	static constexpr addr_type reg_addr_ch2_data = 0x19;
+//};
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // _FILE_DAC8563_H_
+

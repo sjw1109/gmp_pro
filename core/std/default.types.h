@@ -201,65 +201,6 @@ typedef GMP_PORT_CTRL_T ctrl_gt;
 typedef GMP_PORT_PARAMETER_T parameter_gt;
 
 
-// #ifndef GMP_PORT_SIZE_T
-// #define GMP_PORT_SIZE_T				uint32_t
-// #endif // GMP_PORT_SIZE_T
-// 
-// #ifndef GMP_PORT_ADDR_T
-// #define GMP_PORT_ADDR_T				uint32_t
-// #endif // GMP_PORT_ADDR_T
-// 
-// #ifndef GMP_PORT_TIME_T
-// #define GMP_PORT_TIME_T				uint32_t
-// #endif // GMP_PORT_TIME_T
-// 
-// #ifndef GMP_MAX_TIME_ITEM
-// #define GMP_MAX_TIME_ITEM			(((uint32_t)-1))
-// #endif // GMP_MAX_TIME_ITEM
-// 
-// #ifndef GMP_PORT_WPARAM_T
-// #define GMP_PORT_WPARAM_T			uint32_t
-// #endif // GMP_PORT_WPARAM_T
-// 
-// #ifndef GMP_PORT_TIMER_T
-// #define GMP_PORT_TIMER_T			uint32_t
-// #endif // GMP_PORT_TIMER_T
-// 
-// #ifndef GMP_PORT_ELEMENT_T
-// #define GMP_PORT_ELEMENT_T          uint8_t
-// #endif // GMP_PORT_ELEMENT_T
-
 #endif // _FILE_CHIP_DEFAULT_TYPE_H_
 
-
-//////////////////////////////////////////////////////////////////////////
-// Translate default type to standard type name
-
-// #ifndef _DEFAULT_TYPEDEF_
-// #define _DEFAULT_TYPEDEF_
-// 
-// // translate macro into type name by standard name rule
-// typedef GMP_PHY_HANDLE_T gmp_phy_handle_t;
-// typedef GMP_PORT_DATA_T data_gt;
-// typedef GMP_PORT_SIZE_T size_gt;
-// typedef GMP_PORT_ADDR_T addr_gt;
-// typedef GMP_PORT_TIME_T time_gt;
-// typedef GMP_PORT_WPARAM_T gmp_param_t;
-// typedef GMP_PORT_TIMER_T time_gt;
-// typedef GMP_PORT_ELEMENT_T fast_gt;
-// //typedef GMP_PORT_CMD_T gmp_cmd_t;
-// 
-// 
-// // peripheral type 
-// #ifdef GMP_PORT_IIC_HANDLE_T
-// typedef GMP_PORT_IIC_HANDLE_T gmp_hiic_t;
-// #endif // GMP_PORT_IIC_HANDLE_T
-// 
-// #ifdef GMP_PORT_UART_HANDLE_T
-// typedef GMP_PORT_UART_HADNLE_T gmp_huart_t;
-// #endif // GMP_PORT_UART_HANDLE_T
-// 
-// 
-// #endif // _DEFAULT_TYPEDEF_
-// 
 
