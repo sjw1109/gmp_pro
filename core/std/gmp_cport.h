@@ -2,7 +2,6 @@
 // User may include this file and access the GMP library.
 
 
-
 #ifndef _FILE_GLOBAL_H
 #define _FILE_GLOBAL_H
 
@@ -31,7 +30,7 @@ extern "C"
 		void
 	);
 
-#if defined SPECIFY_ENABLE_FEED_WATCHDOG
+//#if defined SPECIFY_ENABLE_FEED_WATCHDOG
 	// This function should be implemented by user,
 	// Every Loop routine, this function would be called.
 	// And user should ensure that the function has only one thing is to feed the watchdog
@@ -39,39 +38,34 @@ extern "C"
 	void gmp_port_feed_dog(
 		void
 	);
-#endif // SPECIFY_ENABLE_FEED_WATCHDOG
-
-	typedef enum _tag_gmp_port_t
-	{
-		GMP_GPIO_INPUT = 0,
-		GMP_GPIO_OUTPUT = 1
-	}gmp_gpio_mode_t;
-
+//#endif // SPECIFY_ENABLE_FEED_WATCHDOG
+	
 	// ....................................................................//
 	// GPIO action functions.
 	//
 
 	gmp_stat_t gmp_gpio_set_mode(
-		hgpio_gt hgpio,		     // handle of GPIO port
+		hgpio_gt *hgpio,		     // handle of GPIO port
 		gmp_gpio_mode_t mode     // input mode or output mode
 	);
 
 	void gmp_gpio_write(
-		hgpio_gt hgpio,	         // handle of GPIO port
+		hgpio_gt *hgpio,	         // handle of GPIO port
 		fast_gt level            // output level 
 	);
 
 	void gmp_gpio_set(
-		hgpio_gt hgpio	    // handle of GPIO port
+		hgpio_gt *hgpio	    // handle of GPIO port
 	);
 
 	void gmp_gpio_clear(
-		hgpio_gt hgpio	    // handle of GPIO port
+		hgpio_gt *hgpio	    // handle of GPIO port
 	);
 
 	fast_gt gmp_gpio_read(
-		hgpio_gt hgpio		     // handle of GPIO port
+		hgpio_gt *hgpio		     // handle of GPIO port
 	);
+
 
 	// ....................................................................//
 	// User should implement this two functions 

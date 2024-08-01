@@ -12,7 +12,7 @@ extern "C"
 #endif // PI
 
 
-	// 2rd order IIR Filter
+	// 2rd order IIR Filter: reference https://www.jianshu.com/p/e818028764f7
 
 	// Z transfer function:
 	//tex:

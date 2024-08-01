@@ -51,7 +51,7 @@ extern "C"
 #define CONTROLLER_FUSING_I_OUT (17.0f)
 
 // Controller Fusing Current, Unit A
-#define CONTROLLER_FUSING_I_L (15.0f)
+#define CONTROLLER_FUSING_I_L (30.0f)
 
 // Current Slope Limit, Unit A/ms
 #define CONTROLLER_I_SLOPE_MAX (1.0f)
@@ -73,11 +73,11 @@ extern "C"
 
 // Controller parameter: Current Sensor ratio, unit A/V, 
 // Physical significance: ADC value(V) -> real Current(A)
-#define CONTROLLER_CS_RATIO (16.0f)
+#define CONTROLLER_CS_RATIO (20.0f/1.25f)
 
 // Controller parameter: Current Bias, unit V
 // Physical significance: I = 0 => ADC pin Voltage(V)
-#define CONTROLLER_CS_BIAS_VOLTAGE (1.20f)
+#define CONTROLLER_CS_BIAS_VOLTAGE (1.25f)
 
 // Controller I full scale value, Unit A
 // Physical significance: Total Current(A) range of the ADC

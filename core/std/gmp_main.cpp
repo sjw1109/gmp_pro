@@ -180,20 +180,30 @@ void gmp_free(void* ptr)
 // default debug device handle
 // This pointer should be redirect by <user/peripheral_mapping.c>
 #if defined SPECIFY_ENABLE_DEFUALT_DEBUG_PRINT_FUNC
-gmp_concept_write_direct* default_debug_dev = nullptr;
+
+
+
+dbgptr_gt default_debug_dev = nullptr;
+
+
 
 // implement the gmp_debug_print routine.
 size_gt gmp_dbg_prt_fn(const char* p_fmt, ...)
 {
+	uart_content_t content;
+	size_gt ret = 0;
+
 	// if no one was specified to output, just ignore the request.
 	if (default_debug_dev == nullptr)
 	{
-		return 0;
+		return ret;
 	}
+
+#ifndef GMP_PORT_DBG_PRINT_NOT_IMPLEMENTED
 
 	size_gt size = strlen(p_fmt);
 #if defined SPECIFY_DISABLE_DYNAMIC_ALLOC_OF_DBGPTR
-	char str[48 + _GMP_CHAR_EXT];
+	unsigned char str[48 + _GMP_CHAR_EXT];
 	memset(str, 0, 48 + _GMP_CHAR_EXT);
 #else
 	char* str = (char*)gmp_malloc(size + _GMP_CHAR_EXT);
@@ -202,17 +212,21 @@ size_gt gmp_dbg_prt_fn(const char* p_fmt, ...)
 
 	va_list vArgs;
 	va_start(vArgs, p_fmt);
-	vsprintf(str, (char const*)p_fmt, vArgs);
+	vsprintf((char*)str, (char const*)p_fmt, vArgs);
 	va_end(vArgs);
 
-	size_gt len = strlen(str);
+	content.text = str;
+	content.length = strlen((char*)str);
 
-	size_gt ret = default_debug_dev->write((data_gt*)str, len);
+
+	ret = GMP_PORT_DBG_PRINT_FUNC(default_debug_dev, &content);
 
 #if defined SPECIFY_DISABLE_DYNAMIC_ALLOC_OF_DBGPTR
 #else 
 	gmp_free(str);
 #endif //SPECIFY_DISABLE_DYNAMIC_ALLOC_OF_DBGPTR
+
+#endif // GMP_PORT_DBG_PRINT_NOT_IMPLEMENTED
 
 	return ret;
 }

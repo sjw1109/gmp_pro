@@ -38,8 +38,9 @@
 #define GMP_AUTO_WINDOWS 3
 #define GMP_AUTO_LINUX   4
 
+// This macro shold be defined in <user.config.h>
 // GMP support chip select
-#define MASTERCHIP GMP_AUTO_STM32
+//#define MASTERCHIP GMP_AUTO_STM32
 
 // GMP Master chip set select
 #define MASTER_CHIP_SET NULL
@@ -80,7 +81,7 @@
 
 // specify GMP should feed watch dog
 // The program will invoke feed watch dog
-#define SPECIFY_ENABLE_FEED_WATCHDOG
+//#define SPECIFY_ENABLE_FEED_WATCHDOG
 
 // Disable the GMP LOGO output
 // The code size will greatly lessen

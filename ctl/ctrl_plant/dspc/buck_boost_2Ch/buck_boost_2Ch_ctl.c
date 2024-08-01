@@ -50,12 +50,14 @@ void init_buck_boost_2ch_ctl(buck_boost_2ch_ctl_object_t* ctl_obj)
 
 	// Initilize Controller
 
-	// Default: current regular and voltage regular is switched on
-	ctl_obj->ctrl.enable_current_controller = 0;
-	ctl_obj->ctrl.enable_voltage_controller = 0;
+	ctl_obj->ctrl.enable_current_controller = 1;
+	ctl_obj->ctrl.enable_voltage_controller = 1;
 
-	//ctl_obj->ctrl.enable_current_controller = 1;
-	//ctl_obj->ctrl.enable_voltage_controller = 1;
+	// Default: current regular and voltage regular is switched on
+	//ctl_obj->ctrl.enable_current_controller = 0;
+	//ctl_obj->ctrl.enable_voltage_controller = 0;
+
+
 
 	// current inner controller
 	ctl_init_divider(&ctl_obj->ctrl.div_current);
@@ -70,8 +72,8 @@ void init_buck_boost_2ch_ctl(buck_boost_2ch_ctl_object_t* ctl_obj)
 	ctl_init_pid(&ctl_obj->ctrl.pid_current);
 
 	ctl_setup_pid(&ctl_obj->ctrl.pid_current,
-		CTRL_T(25.0f), CTRL_T(0.1f), 0, // PID default parameters
-		0, CTRL_T(1.5f));
+		CTRL_T(25.0f / 100), CTRL_T(0.1f/100), 0, // PID default parameters
+		0, CTRL_T(0.90f));
 
 	// voltage outer controller
 	ctl_init_divider(&ctl_obj->ctrl.div_voltage);
@@ -84,13 +86,13 @@ void init_buck_boost_2ch_ctl(buck_boost_2ch_ctl_object_t* ctl_obj)
 	max_slope = CTRL_T(CONTROLLER_U_SLOPE_MAX / CONTROLLER_U_BASE / ((float)ISR_FREQUENCY / (float)1e3));
 	ctl_setup_slope_limit(&ctl_obj->ctrl.traj_voltage,
 		-max_slope, max_slope,
-		0, CTRL_T(CONTROLLER_U_MAX / CONTROLLER_U_BASE));
+		-CTRL_T(0.5f * CONTROLLER_I_MAX / CONTROLLER_I_BASE), CTRL_T(CONTROLLER_U_MAX / CONTROLLER_U_BASE));
 
 	ctl_init_pid(&ctl_obj->ctrl.pid_voltage);
 
 	ctl_setup_pid(&ctl_obj->ctrl.pid_voltage,
-		CTRL_T(4.5f), CTRL_T(0.15f), 0, // PID default parameters
-		0, CTRL_T(1.0f));
+		CTRL_T(4.5f/100), CTRL_T(0.15f/10), 0, // PID default parameters
+		-CTRL_T(0.5f), CTRL_T(1.0f));
 
 	// disable the current and voltage controller 
 	// user may use M_taget to control the output
@@ -113,6 +115,9 @@ void init_buck_boost_2ch_ctl(buck_boost_2ch_ctl_object_t* ctl_obj)
 
 	// Setup controller nano object
 	setup_ctl_obj_nano_header((ctl_object_nano_t*)ctl_obj, ISR_FREQUENCY);
+
+
+	ctl_obj->base.switch_security_routine = 0;
 
 }
 
@@ -145,7 +150,7 @@ void init_fusing_module(buck_boost_2ch_ctl_object_t* obj)
 		ctl_init_bipolar_fusing(&obj->protect.fusing[i]);
 
 		// define 0x01 is over current or over voltage protect
-		ctl_bipolar_fusing_bind(&obj->protect.fusing[i], &obj->adc_results[i].value, 0x01);
+		ctl_bipolar_fusing_bind(&obj->protect.fusing[i], &obj->adc_results[i].value, i+1);
 	}
 
 	ctl_set_bipolar_fusing_bound(&obj->protect.fusing[I_in],
@@ -250,7 +255,7 @@ void ctl_core_stage_routine(ctl_object_nano_t* pctl_obj)
 		ctl_slope_limit(&obj->ctrl.traj_current, obj->ctrl.I_target);
 
 		ctl_pid_par(&obj->ctrl.pid_current,
-			obj->ctrl.traj_current.out - obj->adc_results[I_out].value);
+			obj->ctrl.traj_current.out + obj->adc_results[I_out].value);
 
 		obj->ctrl.M_target = obj->ctrl.pid_current.out;
 	}
@@ -259,8 +264,8 @@ void ctl_core_stage_routine(ctl_object_nano_t* pctl_obj)
 	buck_modulator(obj);
 
 	// output prepare
-	calc_pwm_channel(&obj->pwm[0]);
-	calc_inv_pwm_channel(&obj->pwm[1]);
+	calc_pwm_channel(&obj->pwm[buck_phase]);
+	calc_inv_pwm_channel(&obj->pwm[boost_phase]);
 
 	return;
 }
@@ -353,6 +358,23 @@ void ctl_nano_sm_online_routine(ctl_object_nano_t* pctl_obj)
 
 	obj->ctrl.div_voltage.flag_bypass = !obj->ctrl.enable_current_controller;
 	obj->ctrl.div_current.flag_bypass = !obj->ctrl.enable_voltage_controller;
+
+	// current controller is disabled
+	if (!obj->ctrl.enable_current_controller)
+	{
+		// clear current controller
+		ctl_clear_divider(&obj->ctrl.div_current);
+		ctl_clear_limit_slope(&obj->ctrl.traj_current);
+		ctl_clear_pid(&obj->ctrl.pid_current);
+	}
+
+	if (!obj->ctrl.enable_voltage_controller)
+	{
+		// clear voltage controller
+		ctl_clear_divider(&obj->ctrl.div_voltage);
+		ctl_clear_limit_slope(&obj->ctrl.traj_voltage);
+		ctl_clear_pid(&obj->ctrl.pid_voltage);
+	}
 }
 
 

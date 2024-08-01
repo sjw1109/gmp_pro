@@ -18,28 +18,20 @@ extern "C"
 	
 #ifndef SPECIFY_PC_TEST_ENV
 
-//extern	CAN_HandleTypeDef hcan;
+extern ADC_HandleTypeDef hadc1;
 
-//extern	CRC_HandleTypeDef hcrc;
+extern I2C_HandleTypeDef hi2c2;
 
-//extern	I2C_HandleTypeDef hi2c1;
+extern SPI_HandleTypeDef hspi1;
+extern SPI_HandleTypeDef hspi2;
 
-//extern	SPI_HandleTypeDef hspi1;
-
-//extern	UART_HandleTypeDef huart1;
-//extern	UART_HandleTypeDef huart2;
-
-//extern TIM_HandleTypeDef htim1;
-
-	extern ADC_HandleTypeDef hadc1;
-	extern DMA_HandleTypeDef hdma_adc1;
-
-	extern HRTIM_HandleTypeDef hhrtim1;
-
-	extern UART_HandleTypeDef hlpuart1;
-
-	extern TIM_HandleTypeDef htim16;
-
+extern UART_HandleTypeDef huart1;
+extern UART_HandleTypeDef huart2;
+extern DMA_HandleTypeDef hdma_usart1_rx;
+extern DMA_HandleTypeDef hdma_usart1_tx;
+	
+	
+#include "main.h"
 
 #endif // SPECIFY_PC_TEST_ENV
 
@@ -66,7 +58,7 @@ extern "C"
 	// Peripheral Variables
 #if defined SPECIFY_ENABLE_DEFUALT_DEBUG_PRINT_FUNC
 // This is the default debug device handle
-extern gmp_concept_write_direct* default_debug_dev;
+extern dbgptr_gt default_debug_dev;
 #endif // SPECIFY_ENABLE_DEFUALT_DEBUG_PRINT_FUNC
 
 	extern uint16_t adc_data[6];

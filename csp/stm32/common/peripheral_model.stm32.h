@@ -34,6 +34,21 @@
 // 发送提供池模式，接收提供缓冲模式
 
 
+typedef struct _tag_uart_handle
+{
+	UART_HandleTypeDef* uart_handle;
+	DMA_HandleTypeDef* uart_tx_dma_handle;
+	DMA_HandleTypeDef* uart_rx_dma_handle;
+}uart_handle_t;
+
+
+size_gt uart_tx_dma(uart_handle_t* huart, uart_content_t* content);
+
+size_gt uart_tx_direct(UART_HandleTypeDef* huart, uart_content_t* content);
+
+#define GMP_PORT_HUART_T UART_HandleTypeDef
+#define GMP_PORT_DBG_PRINT_HANDLE_T uart_handle_t*
+#define GMP_PORT_DBG_PRINT_FUNC uart_tx_dma
 
 
 #endif // HAL_UART_MODULE_ENABLED
@@ -49,6 +64,21 @@
 // + Set SPI Mode
 // 
 #ifdef HAL_SPI_MODULE_ENABLED
+
+typedef struct _tag_spi_handle
+{
+	// chip select
+	gpio_model_stm32_t nchip_select;
+
+	// SPI handle 
+	SPI_HandleTypeDef* hspi;
+}spi_handle_t;
+
+// length < 16
+size_gt spi_tx_direct(spi_handle_t* hspi, data_gt* data, size_gt length);
+
+#define GMP_PORT_HSPI_T SPI_HandleTypeDef
+
 
 #endif // HAL_SPI_MODULE_ENABLED
 

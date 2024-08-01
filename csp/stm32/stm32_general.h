@@ -25,6 +25,20 @@
 #endif
 
 
+
+// default Type config
+// Change some default type here.
+#define GMP_PORT_DATA_T				    unsigned char
+#define GMP_PORT_DATA_SIZE_PER_BITS		(8)
+#define GMP_PORT_DATA_SIZE_PER_BYTES    (1)
+
+// Invoke default type
+#include <core/std/default.types.h>
+
+#include <core/std/gmp_peripheral_definition.h>
+
+// Invoke peripheral headers
+
 //////////////////////////////////////////////////////////////////////////
 // Step II: Invoke all the STM32 general headers.
 //
@@ -38,34 +52,10 @@
 // STM32 GPIO support 
 #include <csp/stm32/common/gpio_model.stm32.h>
 
+// STM32 general peripheral
+#include <csp/stm32/common/peripheral_model.stm32.h>
 
-
-//////////////////////////////////////////////////////////////////////////
-// Step III Default types
-//
-
-// GMP default types
-#include <core/std/default.types.h>
-
-// #ifndef _FILE_STM32_GENERAL_H_
-// #define _FILE_STM32_GENERAL_H_
-// 
-// 
-// 
-// #define GMP_PORT_DATA_T			char     // not for sure signed or unsigned
-// #define GMP_PORT_SIZE_T			uint32_t
-// 
-// // Basic handle definition
-// 
-// #define GMP_PORT_HIIC_T		I2C_HandleTypeDef*
-// #define GMP_PORT_HUART_T	UART_HandleTypeDef*
-// #define GMP_PORT_HSPI_T		SPI_HandleTypeDef*
-// #define GMP_PORT_HCAN_T     CAN_HandleTypeDef*
-// #define GMP_PORT_HIIS_T
-// #define GMP_PORT_HUSART_T
-// 
-// 
-// #endif // _FILE_STM32_GENERAL_H_
-
+// Invoke default peripheral definition here
+#include <core/std/default_peripheral.config.h>
 
 

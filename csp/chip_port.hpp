@@ -22,7 +22,6 @@
 // All the definitions has been done by MASTERCHIP MACRO
 
 #if (MASTERCHIP == GMP_AUTO_STM32)
-#include <csp/stm32/stm32_general.hpp>
 
 #elif (MASTERCHIP == GMP_AUTO_TIC2000)
 #include <csp/dspc2000/dsp_c2000_general.hpp>

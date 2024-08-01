@@ -14,6 +14,7 @@
 //
 #ifdef HAL_RCC_MODULE_ENABLED
 
+
 #endif
 
 // + Power Management
@@ -33,6 +34,8 @@
 #if defined HAL_IWDG_MODULE_ENABLED
 extern IWDG_HandleTypeDef hiwdg;
 #endif // HAL_IWDG_MODULE_ENABLED, IWDG enabled
+
+
 
 #endif // HAL_IWDG_MODULE_ENABLED
 
