@@ -11,21 +11,40 @@
 // 
 // https://www.ti.com/tool/C2000WARE?keyMatch=c2000ware
 // 
-// You may find the following headers in the following path:
+// You may find the following three headers path:
 // 
+// + 1
+// C2000Ware_<version>/device_support/<chip_select>
+//
+// + 2
+// C2000Ware_<version>/device_support/<chip_select>/headers/include.
+//
+// + 3
 // C2000Ware_<version>/device_support/<chip_select>/common/include.
-// 
-// And you should add the path to the include scanning path.
+//
+// For instance, for TMS320F28069, with default installed C2000Ware_4_00_00_00 Software,
+// you should add the following include scanning path:
+// + C:\ti\c2000\C2000Ware_4_00_00_00\device_support\f2806x
+// + C:\ti\c2000\C2000Ware_4_00_00_00\device_support\f2806x\headers\include
+// + C:\ti\c2000\C2000Ware_4_00_00_00\device_support\f2806x\common\include
+//
 //
 
 // Device Header file and Examples Include File
-#include <DSP28x_Project.h>
+#include <common/include/DSP28x_Project.h>
 
-//#include <common/include/DSP28x_Project.h>
+// invoke gpio model
+#include <csp/dspc2000/common/gpio_model.c2000.h>
 
 
 #ifndef _FILE_DSP_C2000_GENERAL_H_
 #define _FILE_DSP_C2000_GENERAL_H_
+
+
+// System parameters
+#define SYSTEM_MAIN_CLK_MHz (90) // MHz
+
+
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -65,6 +84,18 @@
 #define GMP_PORT_FAST_SIZE_PER_BYTES   (2)
 #endif // GMP_PORT_FAST_T
 
+// ....................................................................//
+// basic container of PWM results
+//
+#ifndef GMP_PORT_PWM_T
+#define GMP_PORT_PWM_T                  uint16_t
+#define GMP_PORT_PWM_SIZE_PER_BITS      (16)
+#define GMP_PORT_PWM_SIZE_PER_BYTES     (2)
+#endif // GMP_PORT_PWM_T
+
+
+
+//typedef GMP_PORT_ADC_T pwm_gt;
 
 
 // Basic handle definition
@@ -80,8 +111,19 @@
 // Step IV implement of GPIO entity.
 
 
+// Invoke default type
+#include <core/std/default.types.h>
+
+#include <core/std/gmp_peripheral_definition.h>
+
+// Invoke peripheral headers
+
+////////////////////////////////////////////////////////////////////////
+// global variables
+
+// CPU tick
+extern time_gt g_cpu_hal_tick;
 
 #endif // _FILE_DSP_C2000_GENERAL_H_
 
-#include <core/std/default_types.h>
 

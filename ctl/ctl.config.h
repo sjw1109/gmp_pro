@@ -35,6 +35,9 @@
 #define pwm_mpy(A, B) _IQmpy(A, B)
 #define pwm_sat(A, Pos, Neg) _IQsat(A, Pos, Neg) 
 
+#define ctrl_div2(A) _IQdiv2(A)
+
+
 
 #else
 // FPU controller configuration 

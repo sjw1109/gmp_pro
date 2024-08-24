@@ -22,9 +22,6 @@
 #include <stdarg.h>
 #include <assert.h>
 
-#ifdef USING_FIXED_LIBRARY
-#include <IQmathLib.h>
-#endif // USING_FIXED_LIBRARY
 
 //////////////////////////////////////////////////////////////////////////
 // Step III GMP basement
@@ -56,6 +53,15 @@
 //////////////////////////////////////////////////////////////////////////
 // Step IV other C core modules
 //
+
+// TI fixed library
+#ifdef USING_FIXED_LIBRARY
+#ifndef __IQMATHLIB_H_INCLUDED__
+//#include <third_party\iqmath\IQmathLib.h>
+#include "sw/modules/iqmath/src/32b/IQmathLib.h"
+#endif
+#endif // USING_FIXED_LIBRARY
+
 
 // (MM) Memory Management module
 #if defined SPECIFY_GMP_BLOCK_MEMORY_ENABLE

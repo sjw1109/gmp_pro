@@ -123,7 +123,7 @@ protected:
 	// When user intervene the normal workflow, the flag may set to 1,
 	// and `next_node_usr` will take count.
 	// If the class is not in Fault situation the user decision may prevail.
-	uint8_t flag_usr_modify;
+	fast_gt flag_usr_modify;
 
 	// When this flag is enable, the gmp_workflow will start running.
 	// (Default) When a whole process is complete, and workflow meets the end,
@@ -133,7 +133,7 @@ protected:
 	// the work flow would be stuck. This is dangerous.
 	// User may choose resumption from the stuck by function `play()`, 
 	// or choose to forget the step and start anew by function `reset()`.
-	uint8_t flag_enable;
+	fast_gt flag_enable;
 
 	// This variables store the switch time of the current node.
 	// The counter will treat this value as original.

@@ -11,6 +11,10 @@ extern "C"
 #define PI ((3.1415926f))
 #endif // PI
 
+#ifndef EXP
+#define EXP ((2.718281828f))
+#endif // EXP
+
 
 	// 2rd order IIR Filter: reference https://www.jianshu.com/p/e818028764f7
 

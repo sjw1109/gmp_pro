@@ -83,6 +83,7 @@ void gmp_entry(void)
 // An the other things should be completed in your own main() process.
 void gmp_init()
 {
+#ifndef DISABLE_GMP_INITIALIZATION_FUNCTION_INVOKE
 	// CSP start up function
 	gmp_csp_startup();
 
@@ -93,6 +94,7 @@ void gmp_init()
 	// initialize peripheral tree
 	// This function was defined in <bsp/user/peripheral_mapping.c>
 	gmp_init_peripheral_tree();
+#endif
 
 	// Setup GMP library
 
@@ -306,10 +308,17 @@ uint64_t gmp_l2b64(uint64_t data)
 //////////////////////////////////////////////////////////////////////////
 // weak functions
 
-GMP_WEAK_FUNC_PREFIX
+#if 0
+
+//GMP_WEAK_FUNC_PREFIX
+#pragma WEAK (gmp_setup_peripheral)
 void gmp_setup_peripheral()
 GMP_WEAK_FUNC_SUFFIX
 {}
+
+GMP_WEAK_FUNC_PREFIX
+void gmp_init_peripheral_tree()
+GMP_WEAK_FUNC_SUFFIX;
 
 GMP_WEAK_FUNC_PREFIX
 void gmp_init_peripheral_tree()
@@ -318,11 +327,21 @@ GMP_WEAK_FUNC_SUFFIX
 
 GMP_WEAK_FUNC_PREFIX
 void user_init(void)
+GMP_WEAK_FUNC_SUFFIX;
+
+GMP_WEAK_FUNC_PREFIX
+void user_init(void)
 GMP_WEAK_FUNC_SUFFIX
 {}
 
 GMP_WEAK_FUNC_PREFIX
 void user_loop(void)
+GMP_WEAK_FUNC_SUFFIX;
+
+GMP_WEAK_FUNC_PREFIX
+void user_loop(void)
 GMP_WEAK_FUNC_SUFFIX
 {}
+
+#endif // disable weak symbols
 

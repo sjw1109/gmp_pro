@@ -112,6 +112,11 @@
 
 #endif // GMP_AUTO
 
+// This macro disable the chip initial functions invoke, including
+// gmp_csp_startup, gmp_setup_peripheral, gmp_init_peripheral_tree
+// These three functions may be complete by an automation toools.
+//#define DISABLE_GMP_INITIALIZATION_FUNCTION_INVOKE
+
 
 //////////////////////////////////////////////////////////////////////////
 // MEMORY CONTROLLER SETTINGS
