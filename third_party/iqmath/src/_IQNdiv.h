@@ -123,19 +123,19 @@ __STATIC_INLINE int_fast32_t __IQNdiv(int_fast32_t iqNInput1, int_fast32_t iqNIn
 
     /* 1st iteration */
     ui32Temp = __mpyf_ul(uiq30Guess, uiqNInput2);
-    ui32Temp = -((uint_fast32_t)ui32Temp - 0x80000000);
+    ui32Temp = (uint_fast32_t)-((int_fast32_t)((uint_fast32_t)ui32Temp - 0x80000000));
     ui32Temp = ui32Temp << 1;
     uiq30Guess = __mpyf_ul_reuse_arg1(uiq30Guess, ui32Temp);
 
     /* 2nd iteration */
     ui32Temp = __mpyf_ul(uiq30Guess, uiqNInput2);
-    ui32Temp = -((uint_fast32_t)ui32Temp - 0x80000000);
+    ui32Temp = (uint_fast32_t)-((int_fast32_t)((uint_fast32_t)ui32Temp - 0x80000000));
     ui32Temp = ui32Temp << 1;
     uiq30Guess = __mpyf_ul_reuse_arg1(uiq30Guess, ui32Temp);
 
     /* 3rd iteration */
     ui32Temp = __mpyf_ul(uiq30Guess, uiqNInput2);
-    ui32Temp = -((uint_fast32_t)ui32Temp - 0x80000000);
+    ui32Temp = (uint_fast32_t)-((int_fast32_t)((uint_fast32_t)ui32Temp - 0x80000000));
     ui32Temp = ui32Temp << 1;
     uiq30Guess = __mpyf_ul_reuse_arg1(uiq30Guess, ui32Temp);
 

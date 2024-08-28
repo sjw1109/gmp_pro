@@ -76,10 +76,24 @@ extern "C"
 	//
 	void user_init(void);
 
+	// This function would execute only once.
+	// User should implement all the controller related initialization code in this function.
+	// That means user init process may isolate with the controller init process. 
+	void ctl_init(void);
+
 	// This function would be the endless loop.
 	// User should implement all the loop tasks and round-robin tasks.
 	//
 	void user_loop(void);
+
+	// This function will be called by gmp_ctl_dispatch.
+	void ctl_dispatch(void);
+
+	// This function would be called by main ISR function.
+	// User should call this function, in your ctl_main.cpp or just ignore it.
+	// When you need to simulate your controller, this function would be invoked.
+	// return 0 is normal, and any non-zero value means error.
+	int gmp_ctl_dispatch(void);
 
 
 	//////////////////////////////////////////////////////////////////////////
@@ -109,6 +123,17 @@ extern "C"
 	// This function contain a label show of GMP.
 	// 
 	void gmp_setup_label(void);
+
+	// This function is the last function before mainloop.
+	// This function is implemented by CSP
+	void csp_post_process(void);
+
+	// GMP Exit routine
+	// This function should be implemented by CSP submodule.
+	// And generally, this function is a null function.
+	// 
+	void gmp_exit_routine(void);
+
 
 	// ....................................................................//
 	// Error Handle function

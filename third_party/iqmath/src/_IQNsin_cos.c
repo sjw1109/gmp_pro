@@ -320,7 +320,7 @@ __STATIC_INLINE int_fast32_t __IQNsin_cos(int_fast32_t iqNInput, const int8_t q_
 	
 	/* set sign */
 	if (ui8Sign) {
-		uiq31Result = -uiq31Result;
+		uiq31Result = (uint_fast32_t)( - (int_fast32_t)uiq31Result);
 	}
 	
 	return uiq31Result;

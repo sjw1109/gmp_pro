@@ -34,9 +34,9 @@ public:
 
 protected:
 	// members
-	dynamic_prior
+	//dynamic_prior
 
-		static_prior
+	//	static_prior
 };
 
 

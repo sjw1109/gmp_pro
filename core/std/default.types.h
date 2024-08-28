@@ -175,10 +175,11 @@ typedef GMP_PORT_DAC_T dac_gt;
 
 typedef GMP_PORT_ADC_T pwm_gt;
 
-
 // ....................................................................//
 // basic type of Controller
 //
+#ifdef ENABLE_TI_IQMATH
+
 #ifndef GMP_PORT_CTRL_T
 #define GMP_PORT_CTRL_T                  _iq
 #define GMP_PORT_CTRL_SIZE_PER_BITS      (32)
@@ -186,6 +187,13 @@ typedef GMP_PORT_ADC_T pwm_gt;
 #define USING_FIXED_LIBRARY
 #define GLOBAL_Q 24
 #endif // GMP_PORT_CTRL_T
+#else
+#ifndef GMP_PORT_CTRL_T
+#define GMP_PORT_CTRL_T                  float
+#define GMP_PORT_CTRL_SIZE_PER_BITS      (48)
+#define GMP_PORT_CTRL_SIZE_PER_BYTES     (6)
+#endif // GMP_PORT_CTRL_T
+#endif // ENABLE_TI_IQMATH
 
 typedef GMP_PORT_CTRL_T ctrl_gt;
 

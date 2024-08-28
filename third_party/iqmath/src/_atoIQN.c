@@ -132,7 +132,7 @@ __STATIC_INLINE int_fast32_t __atoIQN(const char *string, int_fast32_t q_value)
     /* Construct the iqN result. */
     iqNResult = uiq0Integer + uiq31Fractional;
     if (sgn) {
-        iqNResult = -iqNResult;
+        iqNResult = (uint_fast32_t)( -(int_fast32_t)iqNResult);
     }
     
     /* Finished, return the result */

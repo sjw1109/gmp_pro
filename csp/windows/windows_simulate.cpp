@@ -3,36 +3,25 @@
 
 #include <core/gmp_core.hpp>
 
-// iic port
-//GMP_LENGTH_T gmp_iic_transmit(
-//    GMP_PORT_IIC_HANDLE_T hi2c,
-//    GMP_LENGTH_T iic_dev_addr,
-//    GMP_DATA_ELEMENT_T* data,
-//    GMP_LENGTH_T len)
-//{
-//
-//    return 0;
-//}
-//
-//void gmp_iic_request_read_mem
-//(
-//    GMP_PORT_IIC_HANDLE_T hi2c,
-//    GMP_CMD_T cmd,
-//    GMP_LENGTH_T length
-//)
-//{
-//    return;
-//
-//}
-//
-//GMP_LENGTH_T gmp_iic_receive(
-//    GMP_PORT_IIC_HANDLE_T hi2c,
-//    GMP_LENGTH_T iic_dev_addr,
-//    GMP_CMD_T cmd, GMP_LENGTH_T cmd_len,
-//    GMP_DATA_ELEMENT_T* data, GMP_LENGTH_T len)
-//{
-//    return len;
-//}
+
+
+
+
+using std::cout;
+
+std::thread ctl_thread;
+
+
+
+// Global variables
+
+#ifdef USING_SIMULINK_UDP_SIMULATE
+// UDP server object
+upd_svr_obj_t udp_svr_obj;
+
+
+#endif // USING_SIMULINK_UDP_SIMULATE
+
 
 time_gt gmp_port_system_tick()
 {
@@ -61,9 +50,77 @@ void gmp_port_feed_dog(
 #endif // SPECIFY_ENABLE_FEED_WATCHDOG
 
 void gmp_setup_peripheral()
-{}
+{
+
+}
 
 void gmp_csp_startup(void)
 {
+    if (init_udp_server() == 1)
+    {
+        printf("Error, Cannot Establish UDP connection. Please check your configurations, or restart later.\n");
+        exit(1);
+    }
 
+    // create a new thread for controller
+
+    
+}
+
+// in order to correct control flow direction
+// This function may send one package first
+// This value is the initial value from user.
+// 
+void csp_post_process(void)
+{
+#ifdef USING_SIMULINK_UDP_SIMULATE
+    if (periodic_transmit_routine(&udp_svr_obj) == 1)
+    {
+        exit(1);
+    }
+#endif // USING_SIMULINK_UDP_SIMULATE
+}
+
+int gmp_ctl_dispatch(void)
+{
+#ifdef USING_SIMULINK_UDP_SIMULATE
+    if (periodic_recv_routine(&udp_svr_obj) == 1)
+    {
+        return 1;
+    }
+#endif // USING_SIMULINK_UDP_SIMULATE
+
+    // User logic will be called here
+    ctl_dispatch();
+
+#ifdef USING_SIMULINK_UDP_SIMULATE
+    if (periodic_transmit_routine(&udp_svr_obj) == 1)
+    {
+        return 1;
+    }
+#endif // USING_SIMULINK_UDP_SIMULATE
+
+    return 0;
+
+}
+
+// Resources need to release
+void gmp_exit_routine(void)
+{
+    release_udp_server();
+
+    cout << "[INFO] All process has done. " << udp_svr_obj.recv_bytes << " bytes are received, " << udp_svr_obj.send_bytes << " bytes are sent." << std::endl;
+    cout << "[INFO] User-friendly view: receive: " << (double)udp_svr_obj.recv_bytes / 1024 << " kB, transmit: " << (double)udp_svr_obj.send_bytes / 1024 << " kB." << std::endl;
+    cout << "[INFO] Receive Package(s): " << udp_svr_obj.recv_cnt << ", Send Packages(s): " << udp_svr_obj.send_cnt << std::endl;
+
+}
+
+
+// Windows Actual Entry here
+int main(int argc, char* argv[])
+{
+    printf("GMP Simulator says: Hello World~\r\n");
+    printf("GMP will launch...\r\n\n\n");
+
+    gmp_entry();
 }

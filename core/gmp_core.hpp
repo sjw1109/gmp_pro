@@ -53,7 +53,7 @@ extern "C"
 // Step V import peripheral mapping
 //
 
-#include <user/peripheral_mapping.hpp>
+#include <user/user_main.hpp>
 
 //////////////////////////////////////////////////////////////////////////
 // Step VI import other necessary modules

@@ -205,7 +205,7 @@ __STATIC_INLINE int_fast32_t __IQNsqrt(int_fast32_t iqNInputX, int_fast32_t iqNI
         uiq30Result = __mpyf_ul(uiq31Result, uiq30Guess);
         
         /* 3 - x*g*g */
-        uiq30Result = -(uiq30Result - 0xC0000000);
+        uiq30Result = (uint_fast32_t) -((int_fast32_t)(uiq30Result - 0xC0000000));
         
         /* 
          * g/2*(3 - x*g*g) 

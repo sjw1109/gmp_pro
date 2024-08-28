@@ -48,18 +48,47 @@ void gmp_entry(void)
 #endif // SPECIFY_ENABLE_TEST_ENVIRONMENT
 
 
+	// Call CTL(Controller Template Library) initialization function.
+	ctl_init();
 
 #ifndef SPECIFY_DISABLE_GMP_LOGO
 	// Debug information print
 	gmp_setup_label();
 #endif // SPECIFY_DISABLE_GMP_LOGO
 
+	// latest function before mainloop
+	csp_post_process();
 
+	size_t test_loop_cnt;
 
 	// take over `main loop`
 #ifdef SPECIFY_PC_TEST_ENV
-	for (int test_loop_cnt = 0; test_loop_cnt < 1000; ++test_loop_cnt)
+	for (test_loop_cnt = 0; test_loop_cnt < MAX_ITERATION_LOOPS; ++test_loop_cnt)
+	{
 		gmp_loop();
+
+		// Call user general loop routine
+		user_loop();
+
+#if defined CTL_DISABLE_MULTITHREAD
+
+		static size_t ctl_invoked_counter = 0;
+
+		ctl_invoked_counter += 1;
+
+		if (ctl_invoked_counter % CTL_MAIN_LOOP_RUNNING_RATIO == 0)
+		{
+			if (gmp_ctl_dispatch())
+			{
+				// meet fatal error.
+				break;
+			}
+		}
+
+		
+#endif // CTL_PC_TEST_ENABLE
+
+	}
 #else
 	while (1)
 	{
@@ -69,9 +98,12 @@ void gmp_entry(void)
 
 		// Call user general loop routine
 		user_loop();
-}
+	}
 #endif
 	// Unreachable region
+	
+	// This function call may only happen when PC simulation.
+	gmp_exit_routine();
 	//return;
 }
 
@@ -127,8 +159,11 @@ void gmp_loop()
 	gmp_port_feed_dog();
 #endif 
 
+	
 
 }
+
+
 
 #ifndef SPECIFY_DISABLE_GMP_LOGO
 // This function would print a GMP label

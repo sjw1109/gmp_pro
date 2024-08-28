@@ -160,3 +160,7 @@ void gmp_port_system_stuck(
 	void
 )
 {}
+
+// This function is unreachable.
+void gmp_exit_routine(void)
+{}

@@ -37,6 +37,7 @@
 #define GMP_AUTO_TIC2000 2
 #define GMP_AUTO_WINDOWS 3
 #define GMP_AUTO_LINUX   4
+#define GMP_AUTO_WINDOWS_MATLAB 5
 
 // This macro shold be defined in <user.config.h>
 // GMP support chip select
@@ -101,8 +102,17 @@
 #define SPECIFY_PC_TEST_ENV
 #endif // SPECIFY_PC_TEST_ENV
 
-// Number of Test Cycles
-#define SPECIFY_PC_TEST_CYCLE_CNT 1000
+// Simulation settings maximum iterations
+#ifndef MAX_ITERATION_LOOPS
+#define MAX_ITERATION_LOOPS (1000000)
+#endif // MAX_ITERATION_LOOPS
+
+// In this mode, CTL and Main loop will not run in two different threads
+#define CTL_DISABLE_MULTITHREAD
+
+// When main loop has invoked `CTL_MAIN_LOOP_RUNNING_RATIO` times,
+// the ct_main function will be called once.
+#define CTL_MAIN_LOOP_RUNNING_RATIO 2
 
 // Enable GMP LOGO
 #undef SPECIFY_DISABLE_GMP_LOGO
@@ -187,6 +197,8 @@
 
 // Enable GMP CTL module
 #define SPECIFY_ENABLE_GMP_CTL
+#define ENABLE_TI_IQMATH
+#define ENABLE_IQMATH_HEADER_DIREDCT
 
 // The rest of GMP CTL config please complete in <ctrl_config.h>
 

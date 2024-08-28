@@ -23,6 +23,16 @@
 #include <assert.h>
 
 
+// TI fixed library
+#ifdef ENABLE_IQMATH_HEADER_DIREDCT
+#ifndef __IQMATHLIB_H_INCLUDED__
+
+#include <third_party\iqmath\IQmathLib.h>
+//#include "sw/modules/iqmath/src/32b/IQmathLib.h"
+#endif
+#endif // USING_FIXED_LIBRARY
+
+
 //////////////////////////////////////////////////////////////////////////
 // Step III GMP basement
 // 
@@ -54,13 +64,6 @@
 // Step IV other C core modules
 //
 
-// TI fixed library
-#ifdef USING_FIXED_LIBRARY
-#ifndef __IQMATHLIB_H_INCLUDED__
-//#include <third_party\iqmath\IQmathLib.h>
-#include "sw/modules/iqmath/src/32b/IQmathLib.h"
-#endif
-#endif // USING_FIXED_LIBRARY
 
 
 // (MM) Memory Management module

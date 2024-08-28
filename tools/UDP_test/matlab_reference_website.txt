@@ -10,3 +10,8 @@ https://ww2.mathworks.cn/help/rtw/ug/external-mode-simulation-with-xcp-communica
 DymeCeoe·JavnSon·Li 8/26/2024 6:28:13 PM
 https://www.cnblogs.com/xiaohai123/p/16492802.html
 
+
+https://ww2.mathworks.cn/help/rtw/ug/external-mode-simulation-with-xcp-communication.html#mw_332927e2-b0cc-4127-ba7b-b75b153c2e6b
+
+https://ww2.mathworks.cn/help/rtw/ug/creating-a-tcp-ip-transport-layer-for-external-communication.html
+

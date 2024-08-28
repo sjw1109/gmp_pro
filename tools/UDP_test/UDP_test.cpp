@@ -288,9 +288,10 @@ int main()
     //	Sleep(1);
     //}
 
-        // shutdown the connection
+    // shutdown the connection
     shutdown(recv_socket, SD_SEND);
     shutdown(send_socket, SD_SEND);
+    shutdown(cmd_socket, SD_SEND);
     cout << "[INFO] Connection has shutdown." << std::endl;
 
 
