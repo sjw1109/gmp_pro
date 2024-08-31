@@ -3,8 +3,10 @@
 #ifndef _FILE_SVPWM_H_
 #define _FILE_SVPWM_H_
 
-#ifndef SQRT_3_OVER_2 
-#define SQRT_3_OVER_2 CTRL_T(0.8660254038f)
+#ifdef __cplusplus
+extern "C"
+{
+#endif // __cplusplus
 
 typedef struct _tag_svpwm_channel_t
 {
@@ -24,14 +26,26 @@ typedef struct _tag_svpwm_channel_t
 }svpwm_channel_t;
 
 
+void init_svpwm(svpwm_channel_t* svpwm);
+
+void setup_svpwm(svpwm_channel_t* svpwm, pwm_gt pwm_period);
+
+GMP_STATIC_INLINE
+void attach_svpwm_ab(svpwm_channel_t* svpwm, ctl_vector3_t* ab)
+{
+	svpwm->Ualpha = ab->dat[0];
+	svpwm->Ubeta = ab->dat[1];
+}
+
 // SVPWM calculation stage I
-inline void svpwm_gen(svpwm_channel_t *svpwm)
+GMP_STATIC_INLINE
+void svpwm_gen_calc_time(svpwm_channel_t* svpwm)
 {
 	ctrl_gt Ua, Ub, Uc; // Uabc three phase parameters
 	ctrl_gt Umax, Umin, Ucom;
 
-	ctrl_gt Ualpha_tmp = - ctrl_div2(svpwm->Ualpha);
-	ctrl_gt Ubeta_tmp = ctrl_mpy(svpwn->Ubeta, SQRT_3_OVER_2);
+	ctrl_gt Ualpha_tmp = -ctrl_div2(svpwm->Ualpha);
+	ctrl_gt Ubeta_tmp = ctrl_mpy(svpwm->Ubeta, CTRL_T(GMP_CONST_SQRT_3_OVER_2));
 
 	//tex: $$
 	//U_a = U_\alpha, \\
@@ -39,7 +53,7 @@ inline void svpwm_gen(svpwm_channel_t *svpwm)
 	//U_c = -U_\alpha /2 - \sqrt{3}/2\cdot U_\beta,
 	//$$
 
-	Ua = svpwm->Ualpha; 
+	Ua = svpwm->Ualpha;
 	Ub = Ualpha_tmp + Ubeta_tmp;
 	Uc = Ualpha_tmp - Ubeta_tmp;
 
@@ -70,17 +84,19 @@ inline void svpwm_gen(svpwm_channel_t *svpwm)
 }
 
 // SVPWM generation Stage II
-inline void svpwm_gen(svpwm_channel_t* svpwm)
+GMP_STATIC_INLINE
+void svpwm_gen_calc_cmp(svpwm_channel_t* svpwm)
 {
 	int i = 0;
 
 	ctrl_gt pwm_data; // -pwm
 	pwm_gt pwm_output;
-	
+
 
 	for (i = 0; i < 3; ++i)
 	{
-		pwm_data = ctrl_mpy(svpwm->T[i], CTRL_T(-1.0)) + CTRL_T(0,5f);
+		//pwm_data = ctrl_mpy(svpwm->T[i], CTRL_T(-1.0)) + CTRL_T(0.5f);
+		pwm_data = svpwm->T[i] + CTRL_T(0.5f);
 		pwm_data = pwm_data < 0 ? 0 : pwm_data; // prevent data error
 		pwm_output = (pwm_gt)ctrl_mpy(pwm_data, svpwm->pwm_period);
 		svpwm->pwm_cmp[i] = pwm_output > svpwm->pwm_period ? svpwm->pwm_period : pwm_output;
@@ -88,4 +104,125 @@ inline void svpwm_gen(svpwm_channel_t* svpwm)
 }
 
 
+GMP_STATIC_INLINE
+void svpwm_gen_calc2(svpwm_channel_t* svpwm)
+{
+
+	// u2s: Ualpha ,Ubeta
+	ctrl_gt X, Y, Z, T1, T2, Ta, Tb, Tc;
+	uint16_t N;
+	ctrl_gt Uabc[3] = { 0 };
+
+	Uabc[0] = svpwm->Ubeta;
+	Uabc[1] = ctrl_mpy(CTRL_T(GMP_CONST_SQRT_3_OVER_2),svpwm->Ualpha) - ctrl_div2(svpwm->Ubeta);
+	Uabc[2] = -ctrl_mpy(CTRL_T(GMP_CONST_SQRT_3_OVER_2), svpwm->Ualpha) - ctrl_div2(svpwm->Ubeta);
+
+	N = ((Uabc[0] > 0)) + ((Uabc[1] > 0) << 1) + ((Uabc[2] > 0) << 2);
+	X = ctrl_mpy(CTRL_T(GMP_CONST_SQRT_3), svpwm->Ubeta);
+	Y = ctrl_mpy(CTRL_T(GMP_CONST_3_OVER_2), svpwm->Ualpha) + ctrl_mpy(CTRL_T(GMP_CONST_SQRT_3_OVER_2), svpwm->Ubeta);
+	Z = -ctrl_mpy(CTRL_T(GMP_CONST_3_OVER_2), svpwm->Ualpha) + ctrl_mpy(CTRL_T(GMP_CONST_SQRT_3_OVER_2), svpwm->Ubeta);
+
+	switch (N)
+	{
+	case 1:
+		T1 = Z;
+		T2 = Y;
+		break;
+	case 2:
+		T1 = Y;
+
+		T2 = -X;
+		break;
+	case 3:
+		T1 = -Z;
+		T2 = X;
+		break;
+	case 4:
+		T1 = -X;
+		T2 = Z;
+		break;
+	case 5:
+		T1 = X;
+		T2 = -Y;
+		break;
+	case 6:
+		T1 = -Y;
+		T2 = -Z;
+		break;
+	default:
+		break;
+	}
+	if ((T1 + T2) > CTRL_T(GMP_CONST_1))
+	{
+		T1 = ctrl_div(T1 , (T1 + T2));
+		T2 = CTRL_T(GMP_CONST_1) - T1;
+	}
+	Ta = ctrl_div4(CTRL_T(GMP_CONST_1) - T1 - T2);
+	Tb = Ta + ctrl_div2(T1);
+	Tc = Tb + ctrl_div2(T2);
+
+	Ta *= 2;
+	Tb *= 2;
+	Tc *= 2;
+
+	Ta = -Ta;
+	Tb = -Tb;
+	Tc = -Tc;
+
+	Ta += CTRL_T(0.5);
+	Tb += CTRL_T(0.5);
+	Tc += CTRL_T(0.5);
+
+	switch (N)
+	{
+	case 0:
+		svpwm->T[0] = 0;
+		svpwm->T[1] = 0;
+		svpwm->T[2] = 0;
+		break;
+	case 1:
+		svpwm->T[0] = Tb;
+		svpwm->T[1] = Ta;
+		svpwm->T[2] = Tc;
+		break;
+	case 2:
+		svpwm->T[0] = Ta;
+		svpwm->T[1] = Tc;
+		svpwm->T[2] = Tb;
+		break;
+	case 3:
+		svpwm->T[0] = Ta;
+		svpwm->T[1] = Tb;
+		svpwm->T[2] = Tc;
+		break;
+	case 4:
+		svpwm->T[0] = Tc;
+		svpwm->T[1] = Tb;
+		svpwm->T[2] = Ta;
+		break;
+	case 5:
+		svpwm->T[0] = Tc;
+		svpwm->T[1] = Ta;
+		svpwm->T[2] = Tb;
+		break;
+	case 6:
+		svpwm->T[0] = Tb;
+		svpwm->T[1] = Tc;
+		svpwm->T[2] = Ta;
+		break;
+	default:
+		svpwm->T[0] = 0;
+		svpwm->T[1] = 0;
+		svpwm->T[2] = 0;
+		break;
+	}
+
+	return;
+}
+
+#ifdef __cplusplus
+}
 #endif
+
+
+#endif // _FILE_SVPWM_H_

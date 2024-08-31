@@ -24,7 +24,7 @@
     <ProjectGuid>{23b3efa1-6619-43cc-b1ac-e1f644494613}</ProjectGuid>
     <RootNamespace>gmpwindowsdebugplat</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>gmp_windows_debug_Simulink_Demo_PMSM</ProjectName>
+    <ProjectName>gmp_windows_debug_Simulink_Demo_Null</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -190,8 +190,6 @@
     <ClCompile Include="..\..\..\core\util\ds\list.c" />
     <ClCompile Include="..\..\..\core\util\udp_svr\udp_svr.cpp" />
     <ClCompile Include="..\..\..\csp\windows\windows_simulate.cpp" />
-    <ClCompile Include="..\..\..\ctl\component\common\src\ctl_common_init.c" />
-    <ClCompile Include="..\..\..\ctl\component\motor\src\ctl_motor_init.c" />
     <ClCompile Include="..\..\..\third_party\iqmath\src\_atoIQN.c" />
     <ClCompile Include="..\..\..\third_party\iqmath\src\_IQNasin_acos.c" />
     <ClCompile Include="..\..\..\third_party\iqmath\src\_IQNatan2.c" />

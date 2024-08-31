@@ -412,3 +412,52 @@ void ctl_setup_filter_iir2(filter_IIR2_t* obj, filter_IIR2_setup_t* setup_obj)
 
 	return;
 }
+
+//////////////////////////////////////////////////////////////////////////
+// Signal Generator
+
+#include <ctl/component/common/signal_generator.h>
+
+void init_sincos_gen(ctl_src_sg_t* sg)
+{
+	sg->ph_sin = CTRL_T(0);
+	sg->ph_cos = CTRL_T(1.0f);
+
+	sg->ph_sin_delta = CTRL_T(0);
+	sg->ph_cos_delta = CTRL_T(1.0f);
+}
+
+void setup_sincos_gen(ctl_src_sg_t* sg,
+	ctrl_gt init_angle, // rad
+	ctrl_gt step_angle) // rad
+{
+	sg->ph_cos = ctrl_cos(init_angle);
+	sg->ph_sin = ctrl_sin(init_angle);
+
+	sg->ph_sin_delta = ctrl_sin(step_angle);
+	sg->ph_cos_delta = ctrl_cos(step_angle);
+}
+
+void init_ramp_gen(ctl_src_rg_t* rg)
+{
+	rg->current = CTRL_T(0);
+	rg->maximum = CTRL_T(1.0f);
+	rg->minimum = CTRL_T(0);
+
+	rg->slope = CTRL_T(0);
+}
+
+void setup_ramp_gen(ctl_src_rg_t* rg, ctrl_gt slope)
+{
+	rg->slope = slope;
+}
+
+void setup_ramp_gen_with_amp_freq(ctl_src_rg_t* rg,
+	parameter_gt isr_freq, parameter_gt target_freq,
+	parameter_gt amp_pos, parameter_gt amp_neg)
+{
+	rg->maximum = CTRL_T(amp_pos);
+	rg->minimum = CTRL_T(amp_neg);
+
+	rg->slope = CTRL_T((amp_pos-amp_neg)/(isr_freq/ target_freq));
+}
