@@ -42,7 +42,7 @@ void gmp_port_feed_dog()
 #define EPWM1_MIN_CMPB       50
 #define EPWM1_DEADBAND       16
 
-void init_epwm_updown(struct EPWM_REGS* epwm,
+void init_epwm_updown(struct EPWM_REGS* handle_epwm,
  uint16_t timer_period,
  uint16_t cmp_a_init,
  uint16_t cmp_b_init,
@@ -51,7 +51,7 @@ void init_epwm_updown(struct EPWM_REGS* epwm,
 )
 {
     // handle of EPWM module
-    volatile struct EPWM_REGS* epwm = epwm_handle;
+    volatile struct EPWM_REGS* epwm = handle_epwm;
 
     // Sets the pulse width modulation (PWM) one shot trip
     EALLOW;
@@ -260,7 +260,7 @@ void gmp_setup_peripheral()
 // GPIO Control handle
 // 
 // This is the only entry point of GPIO Data Register pointer.
-gpio_dat_t* gpio_dat_handle = (gpio_dat_t*)&GpioDataRegs;
+//gpio_dat_t* gpio_dat_handle = (gpio_dat_t*)&GpioDataRegs;
 
 //////////////////////////////////////////////////////////////////////////
 // IO peripheral function implement

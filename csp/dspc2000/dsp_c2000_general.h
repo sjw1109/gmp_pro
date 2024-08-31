@@ -11,7 +11,7 @@
 // 
 // https://www.ti.com/tool/C2000WARE?keyMatch=c2000ware
 // 
-// You may find the following three headers path:
+// Step I: You may add the following three headers path:
 // 
 // + 1
 // C2000Ware_<version>/device_support/<chip_select>
@@ -28,6 +28,14 @@
 // + C:\ti\c2000\C2000Ware_4_00_00_00\device_support\f2806x\headers\include
 // + C:\ti\c2000\C2000Ware_4_00_00_00\device_support\f2806x\common\include
 //
+// Step II: You may add correct source files
+//  
+// + 1 
+// C2000Ware_<version>\device_support\f2806x\headers\source\F2806x_GlobalVariableDefs.c
+//
+// + 2 
+// C2000Ware_<version>\device_support\f2806x\common\source\*
+// except, F2806x_SWPrioritizedDefaultIsr.c, F2806x_SWPrioritizedPieVect.c, 
 //
 
 // Device Header file and Examples Include File
@@ -123,6 +131,10 @@
 
 // CPU tick
 extern time_gt g_cpu_hal_tick;
+
+// CPU tick ISR
+void cpu_tick_routine(void);
+
 
 #endif // _FILE_DSP_C2000_GENERAL_H_
 
