@@ -43,8 +43,8 @@ extern "C"
 	typedef struct _tag_pmsm_ctl_entity
 	{
 		// input ADC channels
-		adc_channel_t Uabc[3];
-		adc_channel_t Iabc[3];
+		adc_tri_channel_t Uabc;
+		adc_tri_channel_t Iabc;
 		adc_channel_t Udcbus;
 		adc_channel_t Idcbus;
 
@@ -99,13 +99,11 @@ extern "C"
 	{
 		int i = 0;
 
-		for (i = 0; i < 3; ++i) {
-			init_adc_channel(&entity->Uabc[i]);
-			init_adc_channel(&entity->Iabc[i]);
-		}
+		ctl_init_adc_tri_channel(&entity->Uabc);
+		ctl_init_adc_tri_channel(&entity->Iabc);
 
-		init_adc_channel(&entity->Udcbus);
-		init_adc_channel(&entity->Idcbus);
+		ctl_init_adc_channel(&entity->Udcbus);
+		ctl_init_adc_channel(&entity->Idcbus);
 
 		ctl_init_pos_encoder(&entity->pos_encoder);
 		ctl_init_spd_encoder(&entity->spd_encoder);

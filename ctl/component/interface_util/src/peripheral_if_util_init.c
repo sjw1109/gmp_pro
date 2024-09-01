@@ -5,7 +5,7 @@
 //////////////////////////////////////////////////////////////////////////
 // ADC channel
 
-#include <ctl/component/common/adc_channel.h>
+#include <ctl/component/interface_util/adc_channel.h>
 
 void ctl_init_adc_channel(adc_channel_t* adc_obj)
 {
@@ -28,6 +28,77 @@ void ctl_setup_adc_channel(adc_channel_t* adc_obj,
 	adc_obj->gain = gain;
 	adc_obj->iqn = iqn;
 	adc_obj->resolution = resolution;
+}
+
+void ctl_init_adc_dual_channel(adc_dual_channel_t* adc)
+{
+	int i = 0;
+
+	for (i = 0; i < 2; ++i)
+	{
+		adc->raw[i] = 0;
+		adc->bias[i] = 0;
+		adc->gain[i] = CTRL_T(1.0);
+		adc->value[i] = 0;
+	}
+
+	adc->resolution = 16;
+	adc->iqn = 16;
+
+}
+
+void ctl_setup_adc_dual_channel(adc_dual_channel_t* adc,
+	ctrl_gt gain,
+	ctrl_gt bias,
+	fast_gt resolution,
+	fast_gt iqn
+)
+{
+	int i = 0;
+
+	for (i = 0; i < 2; ++i)
+	{
+		adc->bias[i] = bias;
+		adc->gain[i] = gain;
+	}
+
+	adc->resolution = resolution;
+	adc->iqn = iqn;
+}
+
+void ctl_init_adc_tri_channel(adc_tri_channel_t* adc)
+{
+	int i = 0;
+
+	for (i = 0; i < 3; ++i)
+	{
+		adc->raw[i] = 0;
+		adc->bias[i] = 0;
+		adc->gain[i] = CTRL_T(1.0);
+		adc->value[i] = 0;
+	}
+
+	adc->resolution = 16;
+	adc->iqn = 16;
+}
+
+void ctl_setup_adc_tri_channel(adc_tri_channel_t* adc,
+	ctrl_gt gain,
+	ctrl_gt bias,
+	fast_gt resolution,
+	fast_gt iqn
+)
+{
+	int i = 0;
+
+	for (i = 0; i < 3; ++i)
+	{
+		adc->bias[i] = bias;
+		adc->gain[i] = gain;
+	}
+
+	adc->resolution = resolution;
+	adc->iqn = iqn;
 }
 
 // ADC calibrator
@@ -130,7 +201,7 @@ fast_gt ctl_step_adc_bias_calibrator(
 //////////////////////////////////////////////////////////////////////////
 // PWM channel
 
-#include <ctl/component/common/pwm_channel.h>
+#include <ctl/component/interface_util/pwm_channel.h>
 
 void ctl_init_pwm_channel(pwm_channel_t* pwm_obj)
 {

@@ -241,7 +241,7 @@ void ctl_setup_filter_iir2(filter_IIR2_t* obj, filter_IIR2_setup_t* setup_obj)
 //////////////////////////////////////////////////////////////////////////
 // Signal Generator
 
-#include <ctl/component/common/signal_generator.h>
+#include <ctl/component/common/stimulate.h>
 
 void ctl_init_sincos_gen(ctl_src_sg_t* sg)
 {
