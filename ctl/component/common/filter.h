@@ -45,7 +45,7 @@ extern "C"
 		ctrl_gt out;
 	}filter_IIR2_t;
 
-	static inline void ctl_filter_iir2_calc(filter_IIR2_t* obj, ctrl_gt input)
+	static inline void ctl_step_filter_iir2(filter_IIR2_t* obj, ctrl_gt input)
 	{
 		obj->out = ctrl_mpy(obj->b[0], input) 
 			+ ctrl_mpy(obj->b[1], obj->x[0]) + ctrl_mpy(obj->b[2], obj->x[1])
@@ -59,7 +59,7 @@ extern "C"
 	}
 
 	// clear all the intermediate variables
-	void clear_filter(filter_IIR2_t* obj);
+	void ctl_clear_filter(filter_IIR2_t* obj);
 
 	typedef enum _tag_filter_IIR2_type_t
 	{

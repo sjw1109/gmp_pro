@@ -29,9 +29,9 @@ typedef struct _tag_adc_channel_t
 
 
 // init object function 
-void init_adc_channel(adc_channel_t* adc_obj);
+void ctl_init_adc_channel(adc_channel_t* adc_obj);
 
-void setup_adc_channel(adc_channel_t* adc_obj,
+void ctl_setup_adc_channel(adc_channel_t* adc_obj,
 	ctrl_gt gain,
 	ctrl_gt bias,
 	fast_gt resolution,
@@ -39,7 +39,27 @@ void setup_adc_channel(adc_channel_t* adc_obj,
 );
 
 // transfer raw data to final value
-void calc_adc_channel(adc_channel_t* adc_obj);
+GMP_STATIC_INLINE
+void ctl_step_adc_channel(adc_channel_t* adc_obj)
+{
+	// transfer ADC data to _IQ24
+	ctrl_gt raw_data = adc_obj->raw << (GLOBAL_Q - adc_obj->iqn);
+
+	// remove bias
+	ctrl_gt raw_without_bias = raw_data - adc_obj->bias;
+
+	// Gain
+	adc_obj->value = ctrl_mpy(raw_without_bias, adc_obj->gain);
+
+	return;
+}
+
+// input process
+GMP_STATIC_INLINE
+void ctl_input_adc_source_data(adc_channel_t* adc_obj, adc_gt raw)
+{
+	adc_obj->raw = raw;
+}
 
 //////////////////////////////////////////////////////////////////////////
 // ADC bias calibrator
@@ -75,15 +95,15 @@ typedef struct _tag_adc_bias_calibrator_t
 
 }adc_bias_calibrator_t;
 
-void init_adc_bias_calibrator(adc_bias_calibrator_t* obj);
+void ctl_init_adc_bias_calibrator(adc_bias_calibrator_t* obj);
 
-void setup_adc_bias_calibrator(adc_bias_calibrator_t* obj,
+void ctl_setup_adc_bias_calibrator(adc_bias_calibrator_t* obj,
 	filter_IIR2_setup_t* filter_parameter);
 
-void restart_adc_bias_calibrator(adc_bias_calibrator_t* obj);
+void ctl_restart_adc_bias_calibrator(adc_bias_calibrator_t* obj);
 
 // return value means if the calibration output is valid
-fast_gt run_adc_bias_calibrator(
+fast_gt ctl_step_adc_bias_calibrator(
 	adc_bias_calibrator_t* obj,
 	uint32_t main_isr_tick,
 	ctrl_gt adc_value);

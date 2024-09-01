@@ -26,20 +26,21 @@ typedef struct _tag_svpwm_channel_t
 }svpwm_channel_t;
 
 
-void init_svpwm(svpwm_channel_t* svpwm);
+void ctl_init_svpwm(svpwm_channel_t* svpwm);
 
-void setup_svpwm(svpwm_channel_t* svpwm, pwm_gt pwm_period);
+void ctl_setup_svpwm(svpwm_channel_t* svpwm, pwm_gt pwm_period);
 
 GMP_STATIC_INLINE
-void attach_svpwm_ab(svpwm_channel_t* svpwm, ctl_vector3_t* ab)
+void ctl_set_svpwm_via_ab(svpwm_channel_t* svpwm, ctl_vector3_t* ab)
 {
 	svpwm->Ualpha = ab->dat[0];
 	svpwm->Ubeta = ab->dat[1];
 }
 
 // SVPWM calculation stage I
+// alpha-beta -> Tabc
 GMP_STATIC_INLINE
-void svpwm_gen_calc_time(svpwm_channel_t* svpwm)
+void ctl_svpwm_calc(svpwm_channel_t* svpwm)
 {
 	ctrl_gt Ua, Ub, Uc; // Uabc three phase parameters
 	ctrl_gt Umax, Umin, Ucom;
@@ -83,29 +84,12 @@ void svpwm_gen_calc_time(svpwm_channel_t* svpwm)
 	svpwm->T[2] = Uc - Ucom;
 }
 
-// SVPWM generation Stage II
+
+// SVPWM calculation stage I
+// another formal algorithm
+// alpha-beta -> Tabc
 GMP_STATIC_INLINE
-void svpwm_gen_calc_cmp(svpwm_channel_t* svpwm)
-{
-	int i = 0;
-
-	ctrl_gt pwm_data; // -pwm
-	pwm_gt pwm_output;
-
-
-	for (i = 0; i < 3; ++i)
-	{
-		//pwm_data = ctrl_mpy(svpwm->T[i], CTRL_T(-1.0)) + CTRL_T(0.5f);
-		pwm_data = svpwm->T[i] + CTRL_T(0.5f);
-		pwm_data = pwm_data < 0 ? 0 : pwm_data; // prevent data error
-		pwm_output = (pwm_gt)ctrl_mpy(pwm_data, svpwm->pwm_period);
-		svpwm->pwm_cmp[i] = pwm_output > svpwm->pwm_period ? svpwm->pwm_period : pwm_output;
-	}
-}
-
-
-GMP_STATIC_INLINE
-void svpwm_gen_calc2(svpwm_channel_t* svpwm)
+void ctl_svpwm_calc2(svpwm_channel_t* svpwm)
 {
 
 	// u2s: Ualpha ,Ubeta
@@ -219,6 +203,53 @@ void svpwm_gen_calc2(svpwm_channel_t* svpwm)
 
 	return;
 }
+
+// SVPWM generation Stage II
+// Tabc -> cmp vlaue
+GMP_STATIC_INLINE
+void ctl_svpwm_modulation(svpwm_channel_t* svpwm)
+{
+	int i = 0;
+
+	ctrl_gt pwm_data; // -pwm
+	pwm_gt pwm_output;
+
+
+	for (i = 0; i < 3; ++i)
+	{
+		//pwm_data = ctrl_mpy(svpwm->T[i], CTRL_T(-1.0)) + CTRL_T(0.5f);
+		pwm_data = svpwm->T[i] + CTRL_T(0.5f);
+		pwm_data = pwm_data < 0 ? 0 : pwm_data; // prevent data error
+		pwm_output = (pwm_gt)ctrl_mpy(pwm_data, svpwm->pwm_period);
+		svpwm->pwm_cmp[i] = pwm_output > svpwm->pwm_period ? svpwm->pwm_period : pwm_output;
+	}
+}
+
+// SVPWM generation Stage II
+// with inverse modulation output
+// Tabc -> cmp vlaue
+GMP_STATIC_INLINE
+void ctl_svpwm_modulation(svpwm_channel_t* svpwm)
+{
+	int i = 0;
+
+	ctrl_gt pwm_data; // -pwm
+	pwm_gt pwm_output;
+
+
+	for (i = 0; i < 3; ++i)
+	{
+		// change modulation direction
+		pwm_data = ctrl_mpy(svpwm->T[i], CTRL_T(-1.0)) + CTRL_T(0.5f);
+
+		// common modulation routine
+		pwm_data = svpwm->T[i] + CTRL_T(0.5f);
+		pwm_data = pwm_data < 0 ? 0 : pwm_data; // prevent data error
+		pwm_output = (pwm_gt)ctrl_mpy(pwm_data, svpwm->pwm_period);
+		svpwm->pwm_cmp[i] = pwm_output > svpwm->pwm_period ? svpwm->pwm_period : pwm_output;
+	}
+}
+
 
 #ifdef __cplusplus
 }

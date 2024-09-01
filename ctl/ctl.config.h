@@ -1,3 +1,21 @@
+
+// function naming rules
+// ctl_ : as prefix
+// <action>_ : such as step(calculate one step), get, init, setup, and so on. 
+// <target object> : such as ramp, sincos, track_pid, and so on.
+// _via_<data_source> : [optional] to specify the data source
+//                      such as angle, pos_encoder, and so on.
+// _<configurations> : [optional] to specify the key point of this function.
+//                     such as 2(another implementation), par(parallel topology), and so on.
+// Some examples show as follow
+// + ctl_init_pid, ctl_setup_pid, ctl_set_pid_parameter, ctl_set_pid_limit
+//   from <pid.h> 
+// + ctl_init_ramp_gen, ctl_setup_ramp_gen, ctl_setup_ramp_gen_via_amp_freq, ctl_step_ramp_gen
+//   from <signal_generator.h>
+//
+
+
+
 #ifndef _FILE_CTRL_CONFIG_H_
 #define _FILE_CTRL_CONFIG_H_
 
@@ -51,35 +69,7 @@
 #endif
 
 
-//////////////////////////////////////////////////////////////////////////
-// Extension Types
-
-typedef struct _tag_ctl_vector3_t
-{
-	ctrl_gt dat[3];
-}ctl_vector3_t;
-
-typedef struct _tag_ctl_vector2_t
-{
-	ctrl_gt dat[2];
-}ctl_vector2_t;
 
 
-//////////////////////////////////////////////////////////////////////////
-// Math Constant Stack
-
-// Here're some constants for coordinate transform.
-#define GMP_CONST_ABC2AB_ALPHA ((0.666666666666667)) // 2/3
-#define GMP_CONST_ABC2AB_BETA  ((0.577350269189626)) // 1/sqrt(3)
-#define GMP_CONST_ABC2AB_GAMMA ((0.333333333333334)) // 1/3
-
-#define GMP_CONST_AB02AB_ALPHA ((1.154700538379252)) // 2/sqrt(3)
-
-// Here're some constants for SVPWM
-#define GMP_CONST_SQRT_3_OVER_2 ((0.8660254038f))
-#define GMP_CONST_3_OVER_2 ((1.5f))
-#define GMP_CONST_SQRT_3   ((1.73205080756888f))
-#define GMP_CONST_1 ((1.0f))
-#define GMP_CONST_1_OVER_2 ((0.5f))
 
 #endif // _FILE_CTRL_CONFIG_H_

@@ -7,7 +7,9 @@ extern "C"
 #endif // __cplusplus
 
 	// if two fusing event happened 
+#ifndef CTL_FUSING_ISR_LIMIT
 #define CTL_FUSING_ISR_LIMIT ((10))
+#endif // CTL_FUSING_ISR_LIMIT
 
 	typedef struct _tag_bipolar_fusing_t
 	{
@@ -29,8 +31,8 @@ extern "C"
 
 	}bipolar_fusing_t;
 
-	static inline 
-		void ctl_check_fusing(
+	GMP_STATIC_INLINE
+		void ctl_step_fusing(
 		ctl_object_nano_t* pctl_obj,
 		bipolar_fusing_t* fusing
 	)
@@ -71,7 +73,7 @@ extern "C"
 
 	void ctl_init_bipolar_fusing(bipolar_fusing_t* fusing);
 
-	void ctl_bipolar_fusing_bind(bipolar_fusing_t* obj,
+	void ctl_bind_bipolar_fusing(bipolar_fusing_t* obj,
 		ctrl_gt* target, gmp_stat_t error_code);
 
 	void ctl_set_bipolar_fusing_bound(bipolar_fusing_t* obj,

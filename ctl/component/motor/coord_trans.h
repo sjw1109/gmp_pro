@@ -33,16 +33,17 @@
 
 // angle to 2-d phasor
 GMP_STATIC_INLINE
-void angle2phasor(ctrl_gt angle, GMP_CTL_OUTPUT_TAG ctl_vector2_t* phasor)
+void ctl_set_phasor_via_angle(ctrl_gt angle, GMP_CTL_OUTPUT_TAG ctl_vector2_t* phasor)
 {
 	phasor->dat[0] = ctrl_sin(angle);
 	phasor->dat[1] = ctrl_cos(angle);
 }
 
+// clark coordinate axes transform
 // ABC to alpha-beta
 // Constant amplitude transformation
 GMP_STATIC_INLINE
-void adc2ab(ctl_vector3_t* abc, GMP_CTL_OUTPUT_TAG ctl_vector3_t* ab)
+void ctl_ct_clark(ctl_vector3_t* abc, GMP_CTL_OUTPUT_TAG ctl_vector3_t* ab)
 {
 	ctrl_gt k_alpha = CTRL_T(GMP_CONST_ABC2AB_ALPHA); // 2/3
 	ctrl_gt k_beta = CTRL_T(GMP_CONST_ABC2AB_BETA);   // 1/sqrt(3)
@@ -59,9 +60,10 @@ void adc2ab(ctl_vector3_t* abc, GMP_CTL_OUTPUT_TAG ctl_vector3_t* ab)
 	ab->dat[2] = ctrl_mpy(k_gamma, abc->dat[0] + abc->dat[1] + abc->dat[2]);
 }
 
+// clark coordinate axes transform
 // AB0(0 means C doesn't measure)
 GMP_STATIC_INLINE
-void ad02ab(ctl_vector3_t* ab0, GMP_CTL_OUTPUT_TAG ctl_vector3_t* ab)
+void ctl_ct_clark_2ph(ctl_vector3_t* ab0, GMP_CTL_OUTPUT_TAG ctl_vector3_t* ab)
 {
 	ctrl_gt k_alpha = CTRL_T(GMP_CONST_AB02AB_ALPHA);
 
@@ -78,9 +80,10 @@ void ad02ab(ctl_vector3_t* ab0, GMP_CTL_OUTPUT_TAG ctl_vector3_t* ab)
 
 }
 
+// park coordinate axes transform
 // alpha-beta to dq0
 GMP_STATIC_INLINE
-void ab2dq(ctl_vector3_t* ab, ctl_vector2_t* phasor, GMP_CTL_OUTPUT_TAG ctl_vector3_t* dq0)
+void ctl_ct_park(ctl_vector3_t* ab, ctl_vector2_t* phasor, GMP_CTL_OUTPUT_TAG ctl_vector3_t* dq0)
 {
 	//tex:
 	// $$i_d = i_\alpha \times cos\;(\theta) + i_\beta \times sin\;(\theta) $$
@@ -94,10 +97,10 @@ void ab2dq(ctl_vector3_t* ab, ctl_vector2_t* phasor, GMP_CTL_OUTPUT_TAG ctl_vect
 }
 
 
-
+// ipark coordinate axes transform
 // DQ to alpha_beta
 GMP_STATIC_INLINE
-void dq2ab(ctl_vector3_t* dq0, ctl_vector2_t* phasor, GMP_CTL_OUTPUT_TAG ctl_vector3_t* ab)
+void ctl_ct_ipark(ctl_vector3_t* dq0, ctl_vector2_t* phasor, GMP_CTL_OUTPUT_TAG ctl_vector3_t* ab)
 {
 	//tex:
 	//$$i_\alpha = i_d \times \cos\;(\theta) - i_q \times \sin\;(\theta) $$

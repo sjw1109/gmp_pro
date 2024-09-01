@@ -30,24 +30,25 @@ extern "C"
 typedef struct _tag_ctrl_1p1z_t
 {
 	// u(n)
-	gmp_math_t output;
+	ctrl_gt output;
 
 	// coef_a->a_1
-	gmp_math_t coef_a;
+	ctrl_gt coef_a;
 	// coef_b[0]->b_0, coef_b[1]->b_1
-	gmp_math_t coef_b[2];
+	ctrl_gt coef_b[2];
 	// resp->u(n-1)
-	gmp_math_t resp;      // response buffer
+	ctrl_gt resp;      // response buffer
 	// input->e(n), exct->e(n-1)
-	gmp_math_t exct;      // excitation buffer
+	ctrl_gt exct;      // excitation buffer
 
-	gmp_math_t out_max;
-	gmp_math_t out_sto_min;  // generally is -0.9
-	gmp_math_t out_min;
+	ctrl_gt out_max;
+	ctrl_gt out_sto_min;  // generally is -0.9
+	ctrl_gt out_min;
 
 }ctrl_1p1z_t;
 
-inline void gmp_1p1z(ctrl_1p1z_t* c, gmp_math_t input)
+GMP_STATIC_INLINE 
+void ctl_step_1p1z(ctrl_1p1z_t* c, ctrl_gt input)
 {
 	c->output = c->coef_a * resp + coef_b[1] * exct + coef[0] * input;
 
@@ -78,24 +79,25 @@ inline void gmp_1p1z(ctrl_1p1z_t* c, gmp_math_t input)
 typedef struct _tag_ctrl_2p2z_t
 {
 	// u(n)
-	gmp_math_t output;
+	ctrl_gt output;
 
 	// coef_a[0]->a_1, coef_a[0]->a_2
-	gmp_math_t coef_a[2];
+	ctrl_gt coef_a[2];
 	// coef_b[0]->b_0, coef_b[1]->b_1, coef_b[2]->b_2
-	gmp_math_t coef_b[3];
+	ctrl_gt coef_b[3];
 	// resp[0]->u(n-1), resp[1]->u(n-2)
-	gmp_math_t resp[2];      // response buffer
+	ctrl_gt resp[2];      // response buffer
 	// input->e(n), exct[0]->e(n-1), exct[1]->e(n-2)
-	gmp_math_t exct[2];      // excitation buffer
+	ctrl_gt exct[2];      // excitation buffer
 
-	gmp_math_t out_max;
-	gmp_math_t out_sto_min;  // generally is -0.9
-	gmp_math_t out_min;
+	ctrl_gt out_max;
+	ctrl_gt out_sto_min;  // generally is -0.9
+	ctrl_gt out_min;
 
 }ctrl_2p2z_t;
 
-inline void gmp_2p2z(ctrl_2p2z_t* c, gmp_math_t input)
+GMP_STATIC_INLINE
+void ctl_step_2p2z(ctrl_2p2z_t* c, ctrl_gt input)
 {
 	c->output = c->coef_a[0] * c->resp[0] + c->coef_a[1] * c->resp[1];
 	c->output += c->coef_b[1] * c->exct[0] + c->coef_b[2] * c->exct[1];
@@ -130,24 +132,25 @@ inline void gmp_2p2z(ctrl_2p2z_t* c, gmp_math_t input)
 typedef struct _tag_ctrl_3p3z_t
 {
 	// u(n)
-	gmp_math_t output;
+	ctrl_gt output;
 
 	// coef_a->a_1
-	gmp_math_t coef_a[3];
+	ctrl_gt coef_a[3];
 	// coef_b[0]->b_0, coef_b[1]->b_1
-	gmp_math_t coef_b[4];
+	ctrl_gt coef_b[4];
 	// resp->u(n-1)
-	gmp_math_t resp[3];		// response buffer
+	ctrl_gt resp[3];		// response buffer
 	// input->e(n), exct->e(n-1)
-	gmp_math_t exct[3];		// excitation buffer
+	ctrl_gt exct[3];		// excitation buffer
 
-	gmp_math_t out_max;
-	gmp_math_t out_sto_min;  // generally is -0.9
-	gmp_math_t out_min;
+	ctrl_gt out_max;
+	ctrl_gt out_sto_min;  // generally is -0.9
+	ctrl_gt out_min;
 
 }ctrl_3p3z_t;
 
-inline void gmp_3p3z(ctrl_3p3z_t* c, gmp_math_t input)
+GMP_STATIC_INLINE
+void ctl_step_3p3z(ctrl_3p3z_t* c, ctrl_gt input)
 {
 
 	c->output = c->coef_a[0] * c->resp[0] + c->coef_a[1] * c->resp[1]

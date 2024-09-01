@@ -25,15 +25,15 @@ typedef struct _tag_pwm_channel
 
 
 // init object function 
-void init_pwm_channel(pwm_channel_t* pwm_obj);
+void ctl_init_pwm_channel(pwm_channel_t* pwm_obj);
 
 // setup the pwm object
-void setup_pwm_channel(pwm_channel_t* pwm_obj, pwm_gt phase, pwm_gt full_scale);
+void ctl_setup_pwm_channel(pwm_channel_t* pwm_obj, pwm_gt phase, pwm_gt full_scale);
 
 // calculate function 
-void calc_pwm_channel(pwm_channel_t* pwm_obj);
-void calc_pwm_channel_warp(pwm_channel_t* pwm_obj);
-void calc_inv_pwm_channel(pwm_channel_t* pwm_obj);
+void ctl_calc_pwm_channel(pwm_channel_t* pwm_obj);
+void ctl_calc_pwm_channel_warp(pwm_channel_t* pwm_obj);
+void ctl_calc_inv_pwm_channel(pwm_channel_t* pwm_obj);
 
 
 #ifdef __cplusplus

@@ -6,6 +6,9 @@
 // Invoke CTL configurations 
 #include <ctl/ctl.config.h>
 
+// Invoke Necessary math supports
+#include <ctl/component/common/gmp_math.h>
+
 // necessary components
 #include <ctl/component/common/adc_channel.h>
 #include <ctl/component/common/pwm_channel.h>

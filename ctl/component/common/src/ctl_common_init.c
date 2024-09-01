@@ -2,181 +2,6 @@
 #include <core/gmp_core.h>
 #include <ctl/ctl_core.h>
 
-//////////////////////////////////////////////////////////////////////////
-// ADC channel
-
-#include <ctl/component/common/adc_channel.h>
-
-void init_adc_channel(adc_channel_t* adc_obj)
-{
-	adc_obj->raw = 0;
-	adc_obj->resolution = 0;
-	adc_obj->iqn = 0;
-	adc_obj->bias = 0;
-	adc_obj->gain = CTRL_T(1.0f);
-	adc_obj->value = 0;
-}
-
-void setup_adc_channel(adc_channel_t* adc_obj,
-	ctrl_gt gain,
-	ctrl_gt bias,
-	fast_gt resolution,
-	fast_gt iqn
-)
-{
-	adc_obj->bias = bias;
-	adc_obj->gain = gain;
-	adc_obj->iqn = iqn;
-	adc_obj->resolution = resolution;
-}
-
-void calc_adc_channel(adc_channel_t* adc_obj)
-{
-	// transfer ADC data to _IQ24
-	ctrl_gt raw_data = adc_obj->raw << (GLOBAL_Q - adc_obj->iqn);
-
-	// remove bias
-	ctrl_gt raw_without_bias = raw_data - adc_obj->bias;
-
-	// Gain
-	adc_obj->value = ctrl_mpy(raw_without_bias, adc_obj->gain);
-
-	return;
-}
-
-// ADC calibrator
-void init_adc_bias_calibrator(adc_bias_calibrator_t* obj)
-{
-	obj->bias_output = 0;
-	obj->flag_output_valid = 0;
-	obj->raw = 0;
-
-	obj->total_period = 0;
-	obj->current_period = 0;
-	obj->start_period = 0;
-	obj->filter_tick = 0;
-
-	ctl_init_filter_iir2(&obj->filter);
-
-}
-
-void setup_adc_bias_calibrator(adc_bias_calibrator_t* obj,
-	filter_IIR2_setup_t* filter_parameter)
-{
-	uint32_t total_period = 10 * filter_parameter->fc;
-
-	// setup the filter
-	ctl_setup_filter_iir2(&obj->filter, filter_parameter);
-
-	// at least 1000 period
-	if (total_period > 1000)
-		obj->total_period = total_period;
-	else
-		obj->total_period = 1000;
-	
-}
-
-void restart_adc_bias_calibrator(adc_bias_calibrator_t* obj)
-{
-	obj->start_period = 0;
-	obj->filter_tick = 0;
-	obj->flag_output_valid = 0;
-
-	clear_filter(&obj->filter);
-}
-
-// return value means if the calibration output is valid
-fast_gt run_adc_bias_calibrator(
-	adc_bias_calibrator_t* obj,
-	uint32_t main_isr_tick,
-	ctrl_gt adc_value)
-{
-	if (obj->start_period == 0)
-	{
-		// need a brand new start
-		obj->start_period = main_isr_tick;
-		obj->flag_output_valid = 0;
-	}
-
-	// if calibration has not complete
-	if (!obj->flag_output_valid)
-	{
-		// need to call the filter once.
-		if (obj->current_period != main_isr_tick)
-		{
-			ctl_filter_iir2_calc(&obj->filter, adc_value);
-			obj->filter_tick += 1;
-		}
-		// break the whole process if current_period == main_isr_tick
-		else
-		{
-			return 0;
-		}
-
-		obj->current_period = main_isr_tick;
-
-		// Calculate delta tick
-		uint32_t delta_tick;
-
-		if (obj->current_period >= obj->start_period)
-		{
-			delta_tick = obj->current_period - obj->start_period;
-		}
-		else
-		{
-			delta_tick = UINT32_MAX - obj->start_period + obj->current_period;
-		}
-
-		// complete the calibrate
-		if (delta_tick > obj->total_period)
-		{
-			obj->bias_output = obj->filter.out;
-			obj->flag_output_valid = 1;
-			return 1;
-		}
-		return 0;
-	}
-	return 1;
-
-}
-
-//////////////////////////////////////////////////////////////////////////
-// PWM channel
-
-#include <ctl/component/common/pwm_channel.h>
-
-void init_pwm_channel(pwm_channel_t* pwm_obj)
-{
-	pwm_obj->raw = 0;
-	pwm_obj->value = 0;
-}
-
-void setup_pwm_channel(pwm_channel_t* pwm_obj, pwm_gt phase, pwm_gt full_scale)
-{
-	pwm_obj->full_scale = full_scale;
-	pwm_obj->phase = phase;
-}
-
-
-void calc_pwm_channel(pwm_channel_t* pwm_obj)
-{
-	pwm_obj->value = pwm_mpy(pwm_obj->raw, pwm_obj->full_scale) + pwm_obj->phase;
-	pwm_obj->value = pwm_sat(pwm_obj->value, pwm_obj->full_scale, 0);
-}
-
-void calc_pwm_channel_warp(pwm_channel_t* pwm_obj)
-{
-	pwm_obj->value = pwm_mpy(pwm_obj->raw, pwm_obj->full_scale) + pwm_obj->phase;
-	pwm_obj->value = pwm_obj->value % pwm_obj->full_scale;
-}
-
-void calc_inv_pwm_channel(pwm_channel_t* pwm_obj)
-{
-	pwm_obj->value = pwm_obj->full_scale - pwm_mpy(pwm_obj->raw, pwm_obj->full_scale);
-	pwm_obj->value = pwm_sat(pwm_obj->value, pwm_obj->full_scale, 0);
-}
-
-
 
 //////////////////////////////////////////////////////////////////////////
 // PID regular 
@@ -212,7 +37,7 @@ void ctl_setup_pid(pid_regular_t* hpid,
 }
 
 
-void ctl_pid_set_parameter(
+void ctl_set_pid_parameter(
 	pid_regular_t* hpid,
 	ctrl_gt kp, ctrl_gt ki, ctrl_gt kd
 )
@@ -222,7 +47,7 @@ void ctl_pid_set_parameter(
 	hpid->kd = kd;
 }
 
-void ctl_pid_set_limit(
+void ctl_set_pid_limit(
 	pid_regular_t* hpid,
 	ctrl_gt out_min, ctrl_gt out_max
 )
@@ -259,7 +84,7 @@ void ctl_setup_slope_limit(
 	obj->out_max = out_max;
 }
 
-void ctl_set_slope_limit_slope(
+void ctl_set_sl_slope(
 	slope_lim_t* obj,
 	ctrl_gt slope_min, ctrl_gt slope_max
 )
@@ -268,7 +93,7 @@ void ctl_set_slope_limit_slope(
 	obj->slope_max = slope_max;
 }
 
-void ctl_set_limit_limit_slope(
+void ctl_set_sl_limit(
 	slope_lim_t* obj,
 	ctrl_gt out_min, ctrl_gt out_max
 )
@@ -317,7 +142,7 @@ void ctl_init_bipolar_fusing(bipolar_fusing_t* fusing)
 
 }
 
-void ctl_bipolar_fusing_bind(bipolar_fusing_t* obj,
+void ctl_bind_bipolar_fusing(bipolar_fusing_t* obj,
 	ctrl_gt* target, gmp_stat_t error_code)
 {
 	obj->target_object = target;
@@ -337,7 +162,7 @@ void ctl_set_bipolar_fusing_bound(bipolar_fusing_t* obj,
 #include <ctl/component/common/filter.h>
 #include <math.h> // support for sinf and cosf
 
-void clear_filter(filter_IIR2_t* obj)
+void ctl_clear_filter(filter_IIR2_t* obj)
 {
 	int i = 0;
 	obj->out = 0;
@@ -418,7 +243,7 @@ void ctl_setup_filter_iir2(filter_IIR2_t* obj, filter_IIR2_setup_t* setup_obj)
 
 #include <ctl/component/common/signal_generator.h>
 
-void init_sincos_gen(ctl_src_sg_t* sg)
+void ctl_init_sincos_gen(ctl_src_sg_t* sg)
 {
 	sg->ph_sin = CTRL_T(0);
 	sg->ph_cos = CTRL_T(1.0f);
@@ -427,7 +252,7 @@ void init_sincos_gen(ctl_src_sg_t* sg)
 	sg->ph_cos_delta = CTRL_T(1.0f);
 }
 
-void setup_sincos_gen(ctl_src_sg_t* sg,
+void ctl_setup_sincos_gen(ctl_src_sg_t* sg,
 	ctrl_gt init_angle, // rad
 	ctrl_gt step_angle) // rad
 {
@@ -438,7 +263,7 @@ void setup_sincos_gen(ctl_src_sg_t* sg,
 	sg->ph_cos_delta = ctrl_cos(step_angle);
 }
 
-void init_ramp_gen(ctl_src_rg_t* rg)
+void ctl_init_ramp_gen(ctl_src_rg_t* rg)
 {
 	rg->current = CTRL_T(0);
 	rg->maximum = CTRL_T(1.0f);
@@ -447,12 +272,12 @@ void init_ramp_gen(ctl_src_rg_t* rg)
 	rg->slope = CTRL_T(0);
 }
 
-void setup_ramp_gen(ctl_src_rg_t* rg, ctrl_gt slope)
+void ctl_setup_ramp_gen(ctl_src_rg_t* rg, ctrl_gt slope)
 {
 	rg->slope = slope;
 }
 
-void setup_ramp_gen_with_amp_freq(ctl_src_rg_t* rg,
+void ctl_setup_ramp_gen_via_amp_freq(ctl_src_rg_t* rg,
 	parameter_gt isr_freq, parameter_gt target_freq,
 	parameter_gt amp_pos, parameter_gt amp_neg)
 {
@@ -460,4 +285,30 @@ void setup_ramp_gen_with_amp_freq(ctl_src_rg_t* rg,
 	rg->minimum = CTRL_T(amp_neg);
 
 	rg->slope = CTRL_T((amp_pos-amp_neg)/(isr_freq/ target_freq));
+}
+
+//////////////////////////////////////////////////////////////////////////
+// Track_PID.h
+// 
+
+#include <ctl/component/common/track_pid.h>
+
+void ctl_init_track_pid(track_pid_t* tp)
+{
+	ctl_init_divider(&tp->div);
+	ctl_init_slope_limit(&tp->traj);
+	ctl_init_pid(&tp->pid);
+	tp->out = 0;
+}
+
+void setup_init_track_pid(track_pid_t* tp,
+	ctrl_gt kp, ctrl_gt ki, ctrl_gt kd, // pid parameters
+	ctrl_gt sat_min, ctrl_gt sat_min, // saturation limit
+	ctrl_gt slope_min, ctrl_gt slope_max, // slope limit
+	uint32_t division //division factor
+)
+{
+	ctl_setup_slope_limit(&tp->traj, slope_min, slope_max, sat_min, sat_max);
+	ctl_set_divider(&tp->div, division);
+	ctl_setup_pid(&tp->pid, kp, ki, kd, sat_min, sat_max);
 }

@@ -25,7 +25,7 @@ typedef struct _tag_divider_t
 
 }divider_t;
 
-static inline fast_gt ctl_divider_run(divider_t* obj)
+static inline fast_gt ctl_step_divider(divider_t* obj)
 {
 	// flag_bypass == 1, skip the branch
 	if (obj->flag_bypass)

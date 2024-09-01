@@ -1,7 +1,0 @@
-
-#ifndef _FILE_DP_VOLTAGE_CTRL_H_
-#define _FILE_DP_VOLTAGE_CTRL_H_
-
-
-
-#endif // _FILE_DP_VOLTAGE_CTRL_H_

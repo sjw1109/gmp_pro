@@ -24,10 +24,11 @@ extern "C"
 		// intermediate variables
 		ctrl_gt sn; // sum-up of N
 		ctrl_gt dn; // difference of N
-	}pid_regular_t;
+	}pid_regular_t, ctl_pid_t;
 
 	// paralleling PID model
-	static inline void ctl_pid_par(pid_regular_t* hpid, ctrl_gt input)
+	GMP_STATIC_INLINE
+	void ctl_step_pid_par(pid_regular_t* hpid, ctrl_gt input)
 	{
 		// I sum up
 		hpid->sn += ctrl_sat(ctrl_mpy(input, (hpid->ki)), hpid->out_max, hpid->out_min);
@@ -45,7 +46,8 @@ extern "C"
 	}
 
 	// Series PID model
-	static inline void ctl_pid_ser(pid_regular_t* hpid, ctrl_gt input)
+	GMP_STATIC_INLINE
+	void ctl_step_pid_ser(pid_regular_t* hpid, ctrl_gt input)
 	{
 		// Kp gain firstly, out = P item
 		hpid->out = input * hpid->kp;
@@ -71,17 +73,18 @@ extern "C"
 		ctrl_gt kp, ctrl_gt ki, ctrl_gt kd,
 		ctrl_gt out_min, ctrl_gt out_max);
 
-	void ctl_pid_set_parameter(
+	void ctl_set_pid_parameter(
 		pid_regular_t* hpid,
 		ctrl_gt kp, ctrl_gt ki, ctrl_gt kd
 	);
 
-	void ctl_pid_set_limit(
+	void ctl_set_pid_limit(
 		pid_regular_t* hpid,
 		ctrl_gt out_min, ctrl_gt out_max
 	);
-
-	static inline void ctl_clear_pid(
+	
+	GMP_STATIC_INLINE
+	void ctl_clear_pid(
 		pid_regular_t* hpid
 	)
 	{

@@ -25,7 +25,8 @@ extern "C"
 
 	}slope_lim_t;
 
-	static inline void ctl_slope_limit(slope_lim_t* obj, ctrl_gt input)
+	GMP_STATIC_INLINE 
+	void ctl_step_slope_limit(slope_lim_t* obj, ctrl_gt input)
 	{
 		// Calculate slope delta
 		ctrl_gt delta = ctrl_sat(input - obj->out, obj->slope_max, obj->slope_min);
@@ -42,12 +43,12 @@ extern "C"
 		ctrl_gt out_min, ctrl_gt out_max
 	);
 
-	void ctl_set_slope_limit_slope(
+	void ctl_set_sl_slope(
 		slope_lim_t* obj,
 		ctrl_gt slope_min, ctrl_gt slope_max
 	);
 
-	void ctl_set_limit_limit_slope(
+	void ctl_set_sl_limit(
 		slope_lim_t* obj,
 		ctrl_gt out_min, ctrl_gt out_max
 	);
