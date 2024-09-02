@@ -23,6 +23,7 @@
 
 // + weak function Modifier
 #define GMP_WEAK_FUNC_PREFIX __attribute__((weak))
+//#define GMP_WEAK_FUNC_PREFIX __weak
 #define GMP_WEAK_FUNC_SUFFIX 
 
 // + disable optimization

@@ -13,13 +13,15 @@
 // extensions
 
 // Controller Template Library
+#include <ctl/ctl_core.h>
 
+#include <ctl/suite/pmsm/pmsm_speed_closeloop/pmsm_speed_closeloop.h>
 
 
 //////////////////////////////////////////////////////////////////////////
 // global variables here
 
-
+extern pmsm_ctl_object_t pmsm;
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -37,4 +39,5 @@ GMP_NO_OPT_SUFFIX
 void user_loop(void)
 {
 	//Sleep(1);
+	controller_state_dispatch((ctl_object_nano_t*)&pmsm);
 }

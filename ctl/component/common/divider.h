@@ -23,9 +23,9 @@ typedef struct _tag_divider_t
 	// 0: enable the block
 	fast_gt flag_bypass;
 
-}divider_t;
+}ctl_divider_t;
 
-static inline fast_gt ctl_step_divider(divider_t* obj)
+static inline fast_gt ctl_step_divider(ctl_divider_t* obj)
 {
 	// flag_bypass == 1, skip the branch
 	if (obj->flag_bypass)
@@ -49,11 +49,11 @@ static inline fast_gt ctl_step_divider(divider_t* obj)
 	}
 }
 
-void ctl_init_divider(divider_t* obj);
+void ctl_init_divider(ctl_divider_t* obj);
 
-void ctl_set_divider(divider_t* obj, uint32_t counter_period);
+void ctl_set_divider(ctl_divider_t* obj, uint32_t counter_period);
 
-static inline void ctl_clear_divider(divider_t* obj)
+static inline void ctl_clear_divider(ctl_divider_t* obj)
 {
 	obj->counter = 0;
 }

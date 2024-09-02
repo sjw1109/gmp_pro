@@ -6,6 +6,19 @@
 
 #define GMP_CTL_OUTPUT_TAG
 
+enum ABC_ASIX_ENUM
+{
+	phase_U = 0,
+	phase_V = 1,
+	phase_W = 2
+};
+
+enum DQ_ASIC_ENUM
+{
+	phase_D = 0,
+	phase_Q = 1
+};
+
 
 // phasor
 // dat[0]: sin

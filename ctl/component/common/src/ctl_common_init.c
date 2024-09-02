@@ -62,7 +62,7 @@ void ctl_set_pid_limit(
 
 #include <ctl/component/common/slope_lim.h>
 
-void ctl_init_slope_limit(slope_lim_t* obj)
+void ctl_init_slope_limit(ctl_slope_lim_t* obj)
 {
 	obj->slope_min = CTRL_T(-1.0f);
 	obj->slope_max = CTRL_T(1.0f);
@@ -72,7 +72,7 @@ void ctl_init_slope_limit(slope_lim_t* obj)
 }
 
 void ctl_setup_slope_limit(
-	slope_lim_t* obj,
+	ctl_slope_lim_t* obj,
 	ctrl_gt slope_min, ctrl_gt slope_max,
 	ctrl_gt out_min, ctrl_gt out_max
 )
@@ -85,7 +85,7 @@ void ctl_setup_slope_limit(
 }
 
 void ctl_set_sl_slope(
-	slope_lim_t* obj,
+	ctl_slope_lim_t* obj,
 	ctrl_gt slope_min, ctrl_gt slope_max
 )
 {
@@ -94,7 +94,7 @@ void ctl_set_sl_slope(
 }
 
 void ctl_set_sl_limit(
-	slope_lim_t* obj,
+	ctl_slope_lim_t* obj,
 	ctrl_gt out_min, ctrl_gt out_max
 )
 {
@@ -108,7 +108,7 @@ void ctl_set_sl_limit(
 
 #include <ctl/component/common/divider.h>
 
-void ctl_init_divider(divider_t* obj)
+void ctl_init_divider(ctl_divider_t* obj)
 {
 	obj->counter = 0;
 
@@ -119,7 +119,7 @@ void ctl_init_divider(divider_t* obj)
 	obj->flag_bypass = 0;
 }
 
-void ctl_set_divider(divider_t* obj, uint32_t counter_period)
+void ctl_set_divider(ctl_divider_t* obj, uint32_t counter_period)
 {
 	obj->target = counter_period;
 }
@@ -162,7 +162,19 @@ void ctl_set_bipolar_fusing_bound(bipolar_fusing_t* obj,
 #include <ctl/component/common/filter.h>
 #include <math.h> // support for sinf and cosf
 
-void ctl_clear_filter(filter_IIR2_t* obj)
+
+void ctl_init_lp_filter(ctl_low_pass_filter_t* lpf)
+{
+	lpf->a = CTRL_T(1.0);
+	lpf->out = 0;
+}
+
+void ctl_setup_lp_filter(ctl_low_pass_filter_t* lpf, parameter_gt fs, parameter_gt fc)
+{
+	lpf->a = CTRL_T(fc * 2 * PI / fs);
+}
+
+void ctl_clear_filter(ctl_filter_IIR2_t* obj)
 {
 	int i = 0;
 	obj->out = 0;
@@ -175,7 +187,7 @@ void ctl_clear_filter(filter_IIR2_t* obj)
 }
 
 
-void ctl_init_filter_iir2(filter_IIR2_t* obj)
+void ctl_init_filter_iir2(ctl_filter_IIR2_t* obj)
 {
 	int i;
 
@@ -192,7 +204,7 @@ void ctl_init_filter_iir2(filter_IIR2_t* obj)
 	obj->b[2] = 0;
 }
 
-void ctl_setup_filter_iir2(filter_IIR2_t* obj, filter_IIR2_setup_t* setup_obj)
+void ctl_setup_filter_iir2(ctl_filter_IIR2_t* obj, ctl_filter_IIR2_setup_t* setup_obj)
 {
 	// center frequency
 	//tex: $$ f_0 = f_c * 2Q$$
@@ -301,9 +313,9 @@ void ctl_init_track_pid(track_pid_t* tp)
 	tp->out = 0;
 }
 
-void setup_init_track_pid(track_pid_t* tp,
+void ctl_setup_track_pid(track_pid_t* tp,
 	ctrl_gt kp, ctrl_gt ki, ctrl_gt kd, // pid parameters
-	ctrl_gt sat_min, ctrl_gt sat_min, // saturation limit
+	ctrl_gt sat_min, ctrl_gt sat_max, // saturation limit
 	ctrl_gt slope_min, ctrl_gt slope_max, // slope limit
 	uint32_t division //division factor
 )

@@ -229,7 +229,7 @@ void ctl_svpwm_modulation(svpwm_channel_t* svpwm)
 // with inverse modulation output
 // Tabc -> cmp vlaue
 GMP_STATIC_INLINE
-void ctl_svpwm_modulation(svpwm_channel_t* svpwm)
+void ctl_svpwm_inv_modulation(svpwm_channel_t* svpwm)
 {
 	int i = 0;
 

@@ -178,7 +178,7 @@ typedef GMP_PORT_ADC_T pwm_gt;
 // ....................................................................//
 // basic type of Controller
 //
-<<<<<<< Updated upstream
+
 #ifdef ENABLE_TI_IQMATH
 
 #ifndef GMP_PORT_CTRL_T
@@ -197,7 +197,7 @@ typedef GMP_PORT_ADC_T pwm_gt;
 #endif // ENABLE_TI_IQMATH
 
 typedef GMP_PORT_CTRL_T ctrl_gt;
-=======
+
 //#ifndef GMP_PORT_CTRL_T
 //#define GMP_PORT_CTRL_T                  _iq
 //#define GMP_PORT_CTRL_SIZE_PER_BITS      (32)
@@ -207,7 +207,7 @@ typedef GMP_PORT_CTRL_T ctrl_gt;
 //#endif // GMP_PORT_CTRL_T
 //
 //typedef GMP_PORT_CTRL_T ctrl_gt;
->>>>>>> Stashed changes
+
 
 // ....................................................................//
 // basic type of Controller parameters

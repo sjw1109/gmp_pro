@@ -2,7 +2,7 @@
 #include <core/gmp_core.h>
 #include <ctl/ctl_core.h>
 
-#include <ctl/component/core/ctl_nano.h>
+#include <ctl/framework/ctl_nano.h>
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -276,7 +276,7 @@ void controller_state_dispatch(ctl_object_nano_t* pctl_obj)
 	}
 
 	// Monitor module caller
-	if (ctl_divider_run(&pctl_obj->div_monitor))
+	if (ctl_step_divider(&pctl_obj->div_monitor))
 	{
 		controller_monitor_routine(pctl_obj);
 	}

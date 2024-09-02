@@ -118,7 +118,7 @@ void ctl_init_adc_bias_calibrator(adc_bias_calibrator_t* obj)
 }
 
 void ctl_setup_adc_bias_calibrator(adc_bias_calibrator_t* obj,
-	filter_IIR2_setup_t* filter_parameter)
+	ctl_filter_IIR2_setup_t* filter_parameter)
 {
 	uint32_t total_period = 10 * filter_parameter->fc;
 
@@ -139,7 +139,7 @@ void ctl_restart_adc_bias_calibrator(adc_bias_calibrator_t* obj)
 	obj->filter_tick = 0;
 	obj->flag_output_valid = 0;
 
-	clear_filter(&obj->filter);
+	ctl_clear_filter(&obj->filter);
 }
 
 // return value means if the calibration output is valid
@@ -161,7 +161,7 @@ fast_gt ctl_step_adc_bias_calibrator(
 		// need to call the filter once.
 		if (obj->current_period != main_isr_tick)
 		{
-			ctl_filter_iir2_calc(&obj->filter, adc_value);
+			ctl_step_filter_iir2(&obj->filter, adc_value);
 			obj->filter_tick += 1;
 		}
 		// break the whole process if current_period == main_isr_tick

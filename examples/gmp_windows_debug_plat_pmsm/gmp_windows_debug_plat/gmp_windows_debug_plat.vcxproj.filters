@@ -31,6 +31,9 @@
     <Filter Include="gmp_core\pm">
       <UniqueIdentifier>{e538bb55-2387-4530-9459-6af9c0a8df22}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ctl">
+      <UniqueIdentifier>{bfdbd758-6b75-4a84-a1e9-55144965e4ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\user.config.h">
@@ -205,6 +208,24 @@
     </ClCompile>
     <ClCompile Include="..\..\..\csp\windows\windows_simulate.cpp">
       <Filter>gmp_windows_simulate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ctl\component\common\src\ctl_common_init.c">
+      <Filter>ctl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ctl\component\interface_util\src\peripheral_if_util_init.c">
+      <Filter>ctl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ctl\component\motor\src\ctl_motor_init.c">
+      <Filter>ctl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ctl\framework\src\ctl_nano.c">
+      <Filter>ctl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ctl\suite\pmsm\src\pmsm.ctl.c">
+      <Filter>ctl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ctl\suite\pmsm\pmsm_speed_closeloop\pmsm_speed_closeloop.c">
+      <Filter>ctl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

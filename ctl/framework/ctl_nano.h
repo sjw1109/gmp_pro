@@ -81,7 +81,7 @@ extern "C"
 		uint32_t ctrl_freq;
 
 		// Controller Monitor divider
-		divider_t div_monitor;
+		ctl_divider_t div_monitor;
 
 		// Switch of calibrate stage
 		// Default is On

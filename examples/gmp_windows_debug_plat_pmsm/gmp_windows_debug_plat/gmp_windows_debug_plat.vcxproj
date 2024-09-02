@@ -30,26 +30,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>ClangCL</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>ClangCL</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>ClangCL</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>ClangCL</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -190,6 +190,12 @@
     <ClCompile Include="..\..\..\core\util\ds\list.c" />
     <ClCompile Include="..\..\..\core\util\udp_svr\udp_svr.cpp" />
     <ClCompile Include="..\..\..\csp\windows\windows_simulate.cpp" />
+    <ClCompile Include="..\..\..\ctl\component\common\src\ctl_common_init.c" />
+    <ClCompile Include="..\..\..\ctl\component\interface_util\src\peripheral_if_util_init.c" />
+    <ClCompile Include="..\..\..\ctl\component\motor\src\ctl_motor_init.c" />
+    <ClCompile Include="..\..\..\ctl\framework\src\ctl_nano.c" />
+    <ClCompile Include="..\..\..\ctl\suite\pmsm\pmsm_speed_closeloop\pmsm_speed_closeloop.c" />
+    <ClCompile Include="..\..\..\ctl\suite\pmsm\src\pmsm.ctl.c" />
     <ClCompile Include="..\..\..\third_party\iqmath\src\_atoIQN.c" />
     <ClCompile Include="..\..\..\third_party\iqmath\src\_IQNasin_acos.c" />
     <ClCompile Include="..\..\..\third_party\iqmath\src\_IQNatan2.c" />

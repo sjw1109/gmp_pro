@@ -116,17 +116,17 @@ extern "C"
 		ctrl_gt raw_data;
 		ctrl_gt raw_without_bias;
 		int i = 0;
-		
+
 		for (i = 0; i < 2; ++i)
 		{
 			// transfer ADC data to _IQ24
 			raw_data = adc->raw[i] << (GLOBAL_Q - adc->iqn);
 
 			// remove bias
-			raw_without_bias = raw_data - adc->bias;
+			raw_without_bias = raw_data - adc->bias[i];
 
 			// Gain
-			adc_obj->value[i] = ctrl_mpy(raw_without_bias, adc->gain);
+			adc->value[i] = ctrl_mpy(raw_without_bias, adc->gain[i]);
 		}
 		return;
 
@@ -134,7 +134,7 @@ extern "C"
 
 	GMP_STATIC_INLINE
 		void ctl_get_adc_dual_channel(adc_dual_channel_t* adc,
-			ctrl_gt* dat1, ctrl_gt dat2)
+			ctrl_gt* dat1, ctrl_gt* dat2)
 	{
 		*dat1 = adc->value[0];
 		*dat2 = adc->value[1];
@@ -167,7 +167,7 @@ extern "C"
 
 	GMP_STATIC_INLINE
 		void ctl_get_adc_dual_channel_via_vector2(adc_dual_channel_t* adc,
-			ctl_vector2_t *vector)
+			ctl_vector2_t* vector)
 	{
 		vector->dat[0] = adc->value[0];
 		vector->dat[1] = adc->value[1];
@@ -229,10 +229,10 @@ extern "C"
 			raw_data = adc->raw[i] << (GLOBAL_Q - adc->iqn);
 
 			// remove bias
-			raw_without_bias = raw_data - adc->bias;
+			raw_without_bias = raw_data - adc->bias[i];
 
 			// Gain
-			adc_obj->value[i] = ctrl_mpy(raw_without_bias, adc->gain);
+			adc->value[i] = ctrl_mpy(raw_without_bias, adc->gain[i]);
 		}
 		return;
 
@@ -265,7 +265,7 @@ extern "C"
 		ctrl_gt raw;
 
 		// tools filter for RAW data.
-		filter_IIR2_t filter;
+		ctl_filter_IIR2_t filter;
 
 		// total observation period
 		uint32_t total_period;
@@ -285,7 +285,7 @@ extern "C"
 	void ctl_init_adc_bias_calibrator(adc_bias_calibrator_t* obj);
 
 	void ctl_setup_adc_bias_calibrator(adc_bias_calibrator_t* obj,
-		filter_IIR2_setup_t* filter_parameter);
+		ctl_filter_IIR2_setup_t* filter_parameter);
 
 	void ctl_restart_adc_bias_calibrator(adc_bias_calibrator_t* obj);
 

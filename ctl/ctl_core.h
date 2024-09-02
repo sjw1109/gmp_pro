@@ -10,13 +10,13 @@
 #include <ctl/component/common/gmp_math.h>
 
 // necessary components
-#include <ctl/component/common/adc_channel.h>
-#include <ctl/component/common/pwm_channel.h>
+#include <ctl/component/interface_util/adc_channel.h>
+#include <ctl/component/interface_util/pwm_channel.h>
 
 #include <ctl/component/common/divider.h>
 
 // Invoke necessary CTL libraries
-#include <ctl/component/core/ctl_nano.h>
+#include <ctl/framework/ctl_nano.h>
 
 #include <ctl/component/common/pid.h>
 #include <ctl/component/common/slope_lim.h>
