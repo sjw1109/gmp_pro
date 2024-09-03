@@ -1,5 +1,7 @@
 // This file provide the coordinate transformations
 
+#include <ctl/component/common/gmp_math.h>
+
 #ifndef _FILE_COORD_TRANS_H_
 #define _FILE_COORD_TRANS_H_
 
@@ -58,9 +60,9 @@ void ctl_set_phasor_via_angle(ctrl_gt angle, GMP_CTL_OUTPUT_TAG ctl_vector2_t* p
 GMP_STATIC_INLINE
 void ctl_ct_clark(ctl_vector3_t* abc, GMP_CTL_OUTPUT_TAG ctl_vector3_t* ab)
 {
-	ctrl_gt k_alpha = CTRL_T(GMP_CONST_ABC2AB_ALPHA); // 2/3
-	ctrl_gt k_beta = CTRL_T(GMP_CONST_ABC2AB_BETA);   // 1/sqrt(3)
-	ctrl_gt k_gamma = CTRL_T(GMP_CONST_ABC2AB_GAMMA); // 1/3
+	ctrl_gt k_alpha = GMP_CONST_ABC2AB_ALPHA; // 2/3
+	ctrl_gt k_beta = GMP_CONST_ABC2AB_BETA;   // 1/sqrt(3)
+	ctrl_gt k_gamma = GMP_CONST_ABC2AB_GAMMA; // 1/3
 
 	//tex:
 	// $$i_\alpha = 2/3\times i_a - 1/3 \times i_b - 1/3 \times i_c $$
@@ -78,7 +80,7 @@ void ctl_ct_clark(ctl_vector3_t* abc, GMP_CTL_OUTPUT_TAG ctl_vector3_t* ab)
 GMP_STATIC_INLINE
 void ctl_ct_clark_2ph(ctl_vector3_t* ab0, GMP_CTL_OUTPUT_TAG ctl_vector3_t* ab)
 {
-	ctrl_gt k_alpha = CTRL_T(GMP_CONST_AB02AB_ALPHA);
+	ctrl_gt k_alpha = GMP_CONST_AB02AB_ALPHA;
 
 	//tex:
 	// $$i_\alpha = i_a $$

@@ -20,7 +20,7 @@ void ctl_init_pmsm_ctl_entity(pmsm_ctl_entity_t* entity)
 	ctl_init_pos_encoder(&entity->pos_encoder);
 	ctl_init_spd_calculator(&entity->spd_calc);
 
-//	ctl_init_ramp_gen(&entity->rg);
+	//	ctl_init_ramp_gen(&entity->rg);
 
 	entity->enable_output = 0;
 	entity->enable_current_controller = 0;
@@ -39,14 +39,40 @@ void ctl_init_pmsm_ctl_entity(pmsm_ctl_entity_t* entity)
 	//ctl_init_pid(&entity->pid_speed);
 
 	for (i = 0; i < 2; ++i) {
-		entity->Vdq_set[i] = 0;
+		
 		entity->Idq_set[i] = 0;
+
+		entity->Idq_set_user[i] = 0;
+		entity->Vdq_set_user[i] = 0;
 	}
 	entity->spd_set = 0;
 
 	ctl_set_phasor_via_angle(0, &entity->phasor);
 
 	ctl_init_svpwm(&entity->svpwm);
+
+	// init other ctrl_gt variables
+	entity->angle_fbk_user = 0;
+	entity->enable_current_controller = 1;
+	entity->enable_speed_controller = 1;
+	entity->enable_outer_angle = 0;
+	entity->enable_outer_speed = 0;
+
+	entity->spd_set = 0;
+	entity->spd_set_user = 0;
+
+	for (i = 0; i < 3; ++i)
+	{
+		entity->Iab.dat[i] = 0;
+		entity->Vab.dat[i] = 0;
+		entity->Vab.dat[i] = 0;
+
+		entity->Idq0.dat[i] = 0;
+		entity->Vdq0.dat[i] = 0;
+
+		entity->Vab_set.dat[i] = 0;
+		entity->Vdq_set.dat[i] = 0;
+	}
 
 }
 
@@ -58,7 +84,7 @@ void ctl_setup_pmsm_ctl_entity(pmsm_ctl_entity_t* entity,
 
 	// setup ADC input stage
 	ctl_setup_adc_tri_channel(&entity->Vabc,
-		CTRL_T(np->rated_voltage/drv->adc_voltage_full_scale),
+		CTRL_T(np->rated_voltage / drv->adc_voltage_full_scale),
 		CTRL_T(drv->adc_voltage_bias),
 		drv->adc_resolution_bit, drv->adc_resolution_bit);
 
@@ -89,7 +115,7 @@ void ctl_setup_pmsm_ctl_entity(pmsm_ctl_entity_t* entity,
 	for (i = 0; i < 2; ++i)
 		ctl_setup_track_pid(&entity->Idq_ctl[i],
 			CTRL_T(1.0), CTRL_T(0.01), CTRL_T(0.0),
-			-CTRL_T(1.0), CTRL_T(1.0),
+			-CTRL_T(0.15), CTRL_T(0.15),
 			-CTRL_T(1.0), CTRL_T(1.0),
 			0  // disable divider
 		);
@@ -117,19 +143,23 @@ void ctl_tuning_pmsm_pid_via_consultant(pmsm_ctl_entity_t* entity,
 	// use it to calculate controller parameters
 	ctl_pmsm_dsn_consultant_t* dsn,
 	// use it to calculate controller parameters
-	ctl_motor_driver_consultant_t* drv
+	ctl_motor_driver_consultant_t* drv,
+	// use it to per unit controller
+	ctl_pmsm_nameplate_consultant_t* np
 )
 {
 	ctrl_gt kp, ki;
 
 	// PID tuning
-	
-	kp = CTRL_T(dsn->Ld / (1.0 / (2.0 * PI * drv->current_closeloop_bw) + 1.0 / (2.0 * PI * drv->control_law_freq)));
+
+	kp = CTRL_T(np->rated_current / np->rated_voltage
+		* dsn->Ld / (1.0 / (2.0 * PI * drv->current_closeloop_bw) + 1.0 / (2.0 * PI * drv->control_law_freq)));
 	ki = CTRL_T(dsn->Rs / dsn->Ld);
 	ctl_set_pid_parameter(&entity->Idq_ctl[phase_D].pid,
-		kp, ki, CTRL_T(0.0) );
+		kp, ki, CTRL_T(0.0));
 
-	kp = CTRL_T(dsn->Lq / (1.0 / (2.0 * PI * drv->current_closeloop_bw) + 1.0 / (2.0 * PI * drv->control_law_freq)));
+	kp = CTRL_T(np->rated_current / np->rated_voltage
+		* dsn->Lq / (1.0 / (2.0 * PI * drv->current_closeloop_bw) + 1.0 / (2.0 * PI * drv->control_law_freq)));
 	ki = CTRL_T(dsn->Rs / dsn->Lq);
 	ctl_set_pid_parameter(&entity->Idq_ctl[phase_Q].pid,
 		kp, ki, CTRL_T(0.0));
@@ -172,7 +202,7 @@ void ctl_step_pmsm_ctl_entity(pmsm_ctl_entity_t* entity)
 {
 	ctrl_gt angle; // rotor angle
 	ctrl_gt speed; // rator speed feedback
-	ctl_vector2_t phasor; // angle phasor
+	//	ctl_vector2_t phasor; // angle phasor
 	ctl_vector3_t abc_vector; // Uabc and Iabc
 
 	// Sync Track controller state
@@ -227,21 +257,21 @@ void ctl_step_pmsm_ctl_entity(pmsm_ctl_entity_t* entity)
 		ctl_step_spd_calc(&entity->spd_calc, angle);
 		speed = entity->spd_calc.speed;
 	}
-	
+
 	// get phasor
-	ctl_set_phasor_via_angle(angle, &phasor);
+	ctl_set_phasor_via_angle(angle, &entity->phasor);
 
 	// Current Clark Transform
 	ctl_get_adc_tri_channel_via_vector3(&entity->Iabc, &abc_vector);
 	ctl_ct_clark(&abc_vector, &entity->Iab);
 	// Current Park Transform
-	ctl_ct_park(&entity->Iab, &phasor, &entity->Idq0);
+	ctl_ct_park(&entity->Iab, &entity->phasor, &entity->Idq0);
 
 	// Voltage Clark Transform
 	ctl_get_adc_tri_channel_via_vector3(&entity->Vabc, &abc_vector);
 	ctl_ct_clark(&abc_vector, &entity->Vab);
 	// Voltage Park Transform
-	ctl_ct_park(&entity->Vab, &phasor, &entity->Vdq0);
+	ctl_ct_park(&entity->Vab, &entity->phasor, &entity->Vdq0);
 
 	// Sync User Target
 	entity->spd_set = entity->spd_set_user;
@@ -267,24 +297,55 @@ void ctl_step_pmsm_ctl_entity(pmsm_ctl_entity_t* entity)
 
 	if (entity->enable_current_controller)
 	{
-		entity->Vdq0.dat[phase_D] = ctl_get_track_pid_output(&entity->Idq_ctl[phase_D]);
-		entity->Vdq0.dat[phase_Q] = ctl_get_track_pid_output(&entity->Idq_ctl[phase_Q]);
-
+		entity->Vdq_set.dat[phase_D] = ctl_get_track_pid_output(&entity->Idq_ctl[phase_D]);
+		entity->Vdq_set.dat[phase_Q] = ctl_get_track_pid_output(&entity->Idq_ctl[phase_Q]);
+		entity->Vdq_set.dat[2] = 0;
 	}
 	else
 	{
-		entity->Vdq0.dat[phase_D] = entity->Vdq_set_user[phase_D];
-		entity->Vdq0.dat[phase_Q] = entity->Vdq_set_user[phase_Q];
+		entity->Vdq_set.dat[phase_D] = entity->Vdq_set_user[phase_D];
+		entity->Vdq_set.dat[phase_Q] = entity->Vdq_set_user[phase_Q];
+		entity->Vdq_set.dat[2] = 0;
 	}
 
 	// ipark
-	ctl_ct_ipark(&entity->Vdq0, &phasor, &entity->Vab);
+	ctl_ct_ipark(&entity->Vdq_set, &entity->phasor, &entity->Vab_set);
 
 	// svpwm generator
-	ctl_set_svpwm_via_ab(&entity->svpwm, &entity->Vab);
+	ctl_set_svpwm_via_ab(&entity->svpwm, &entity->Vab_set);
 	ctl_svpwm_calc(&entity->svpwm);
 	ctl_svpwm_modulation(&entity->svpwm);
 
 }
 
+void ctl_set_pmsm_ctl_entity_as_openloop(pmsm_ctl_entity_t* entity)
+{
+	entity->enable_outer_angle = 1;
+	entity->enable_outer_speed = 0;
+	entity->enable_output = 1;
+	entity->enable_current_controller = 0;
+	entity->enable_speed_controller = 0;
+}
 
+void ctl_set_pmsm_ctl_entity_as_currentloop(pmsm_ctl_entity_t* entity)
+{
+	entity->enable_outer_angle = 0;
+	entity->enable_outer_speed = 0;
+	entity->enable_output = 1;
+	entity->enable_current_controller = 1;
+	entity->enable_speed_controller = 0;
+}
+
+void ctl_set_pmsm_ctl_Vdq(pmsm_ctl_entity_t* entity,
+	ctrl_gt Vd, ctrl_gt Vq)
+{
+	entity->Vdq_set_user[phase_D] = Vd;
+	entity->Vdq_set_user[phase_Q] = Vq;
+}
+
+void ctl_set_pmsm_ctl_Idq(pmsm_ctl_entity_t* entity,
+	ctrl_gt Id, ctrl_gt Iq)
+{
+	entity->Idq_set_user[phase_D] = Id;
+	entity->Idq_set_user[phase_Q] = Iq;
+}

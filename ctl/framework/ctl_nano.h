@@ -138,13 +138,22 @@ extern "C"
 	// Function Prototypes
 
 	// You should call this function to initialize the object
-	void init_ctl_obj_nano_header(ctl_object_nano_t* ctl_obj);
+	void ctl_init_nano_header(ctl_object_nano_t* ctl_obj);
 
 	// Then you may call this function to set the details of the objects
-	void setup_ctl_obj_nano_header(ctl_object_nano_t* ctl_obj,
+	void ctl_setup_nano_header(ctl_object_nano_t* ctl_obj,
 		uint32_t ctrl_freq    // the frequency of the control law, unit Hz
 	);
 
+	//////////////////////////////////////////////////////////////////////////
+	// Utilities
+
+	// DANGEROUS:
+	// This function may damage your controller.
+	// Call it iff you is an expert.
+	// 
+	void ctl_force_nona_header_online(ctl_object_nano_t* ctl_obj);
+	
 #ifdef __cplusplus
 }
 #endif // __cplusplus

@@ -301,7 +301,7 @@ uint32_t controller_inspection(ctl_object_nano_t* pctl_obj)
 // init controller object
 // User should call this function in init process 
 // BEFORE all the other control object is inited. 
-void init_ctl_obj_nano_header(ctl_object_nano_t* ctl_obj)
+void ctl_init_nano_header(ctl_object_nano_t* ctl_obj)
 {
 	ctl_obj->isr_tick = 0;
 
@@ -319,12 +319,12 @@ void init_ctl_obj_nano_header(ctl_object_nano_t* ctl_obj)
 
 	// Monitor divider
 	ctl_init_divider(&ctl_obj->div_monitor);
-	ctl_set_divider(&ctl_obj->div_monitor, 20);
+	ctl_setup_divider(&ctl_obj->div_monitor, 20);
 
 	return;
 }
 
-void setup_ctl_obj_nano_header(ctl_object_nano_t* ctl_obj,
+void ctl_setup_nano_header(ctl_object_nano_t* ctl_obj,
 	uint32_t ctrl_freq    // the frequency of the control law, unit Hz
 )
 {
@@ -340,4 +340,7 @@ void ctl_sm_nano_trnasfer(ctl_object_nano_t* ctl_obj,
 
 }
 
-
+void ctl_force_nona_header_online(ctl_object_nano_t* ctl_obj)
+{
+	ctl_obj->state_machine = CTL_SM_ONLINE;
+}

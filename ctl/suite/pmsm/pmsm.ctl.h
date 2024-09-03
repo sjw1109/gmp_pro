@@ -98,9 +98,11 @@ typedef struct _tag_pmsm_ctl_entity
 	// .............................................. // 
 	// Controller targets
 	// User should not modify these variables
-	ctrl_gt Vdq_set[2];
+	ctl_vector3_t Vab_set;
+	ctl_vector3_t Vdq_set;
 	ctrl_gt Idq_set[2];
 	ctrl_gt spd_set;
+	
 
 	// .............................................. // 
 	// Controller feedback
@@ -129,9 +131,14 @@ void ctl_setup_pmsm_ctl_entity(pmsm_ctl_entity_t* entity,
 
 // Tuning PMSM controller based on Motro Design parameters
 void ctl_tuning_pmsm_pid_via_consultant(pmsm_ctl_entity_t* entity,
+	// use it to calculate controller parameters
 	ctl_pmsm_dsn_consultant_t* dsn,
-	ctl_motor_driver_consultant_t* drv
+	// use it to calculate controller parameters
+	ctl_motor_driver_consultant_t* drv,
+	// use it to per unit controller
+	ctl_pmsm_nameplate_consultant_t* np
 );
+
 
 // This function should be invoked in Input Stage
 void ctl_input_pmsm_ctl(pmsm_ctl_entity_t* entity,
@@ -161,6 +168,24 @@ void ctl_get_pmsm_ctl_output_pwm_cmp_all(pmsm_ctl_entity_t* entity,
 	*phase_w = entity->svpwm.pwm_cmp[2];
 }
 
+GMP_STATIC_INLINE
+void ctl_set_pmsm_force_angle(pmsm_ctl_entity_t* entity,
+	ctrl_gt angle)
+{
+	entity->angle_fbk_user = angle;
+}
+
+GMP_STATIC_INLINE
+void ctl_set_pmsm_force_angle_pu(pmsm_ctl_entity_t* entity,
+	ctrl_gt angle_pu)
+{
+	entity->angle_fbk_user = ctrl_mpy(GMP_CONST_2_PI, angle_pu);
+}
+
+void ctl_set_pmsm_ctl_entity_as_openloop(pmsm_ctl_entity_t* entity);
+
+void ctl_set_pmsm_ctl_entity_as_currentloop(pmsm_ctl_entity_t* entity);
+
 // output routine for PWM
 // This function should be invoked in Output Stage
 GMP_STATIC_INLINE
@@ -174,6 +199,14 @@ pwm_gt ctl_pmsm_ctl_get_outout_cmp(pmsm_ctl_entity_t* entity,
 // Step Stage
 // This function should be invoked in Step Stage
 void ctl_step_pmsm_ctl_entity(pmsm_ctl_entity_t* entity);
+
+// User Config set Vdq
+void ctl_set_pmsm_ctl_Vdq(pmsm_ctl_entity_t* entity,
+	ctrl_gt Vd, ctrl_gt Vq);
+
+// User Config set Idq
+void ctl_set_pmsm_ctl_Idq(pmsm_ctl_entity_t* entity,
+	ctrl_gt Id, ctrl_gt Iq);
 
 #ifdef __cplusplus
 }

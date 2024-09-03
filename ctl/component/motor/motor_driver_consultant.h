@@ -57,13 +57,13 @@ extern "C"
 	// Current controller loop bandwidth
 	// unit, Hz
 #ifndef MOTOR_DRIVER_CURRENT_BW
-#define MOTOR_DRIVER_CURRENT_BW ((500))
+#define MOTOR_DRIVER_CURRENT_BW ((200))
 #endif // MOTOR_DRIVER_CURRENT_BW
 
 	// Speed Controller loop bandwidth
 	// unit, Hz
 #ifndef MOTOR_DRIVER_SPEED_BW
-#define MOTOR_DRIVER_SPEED_BW ((100))
+#define MOTOR_DRIVER_SPEED_BW ((50))
 #endif // MOTOR_DRIVER_SPEED_BW
 
 	// Speed controller division
@@ -125,7 +125,7 @@ extern "C"
 
 	// Encoder Base
 #ifndef MOTOR_DRIVER_ENCODER_BASE
-#define MOTOR_DRIVER_ENCODER_BASE              ((2000*4))
+#define MOTOR_DRIVER_ENCODER_BASE              ((2^17))
 #endif // MOTOR_DRIVER_ENCODER_BASE
 
 	// Fast init wrapper

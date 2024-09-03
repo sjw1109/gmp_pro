@@ -56,6 +56,7 @@ extern "C"
 	void ctl_init_ramp_gen(ctl_src_rg_t* rg);
 
 	void ctl_setup_ramp_gen(ctl_src_rg_t* rg, ctrl_gt slope);
+
 	void ctl_setup_ramp_gen_via_amp_freq(ctl_src_rg_t* rg,
 		parameter_gt isr_freq, parameter_gt target_freq,
 		parameter_gt amp_pos, parameter_gt amp_neg);
@@ -69,6 +70,11 @@ extern "C"
 			rg->current = rg->minimum;
 	}
 
+	GMP_STATIC_INLINE
+		ctrl_gt ctl_get_ramp_gen_output(ctl_src_rg_t* rg)
+	{
+		return rg->current;
+	}
 
 
 

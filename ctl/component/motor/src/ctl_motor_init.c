@@ -95,6 +95,8 @@ void ctl_setup_spd_calculator(ctl_spd_calculator_t* sc,
 
 	sc->scale_factor = CTRL_T(60.0 / 2 / PI * control_law_freq / maximum_div / pole_pairs / rated_speed_rpm);
 	ctl_setup_lp_filter(&sc->spd_filter, control_law_freq / maximum_div, speed_filter_fc);
+	ctl_setup_divider(&sc->div, maximum_div);
+	ctl_enable_spd_calc(sc);
 }
 
 

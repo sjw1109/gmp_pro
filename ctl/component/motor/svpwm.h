@@ -46,7 +46,7 @@ void ctl_svpwm_calc(svpwm_channel_t* svpwm)
 	ctrl_gt Umax, Umin, Ucom;
 
 	ctrl_gt Ualpha_tmp = -ctrl_div2(svpwm->Ualpha);
-	ctrl_gt Ubeta_tmp = ctrl_mpy(svpwm->Ubeta, CTRL_T(GMP_CONST_SQRT_3_OVER_2));
+	ctrl_gt Ubeta_tmp = ctrl_mpy(svpwm->Ubeta, GMP_CONST_SQRT_3_OVER_2);
 
 	//tex: $$
 	//U_a = U_\alpha, \\
@@ -98,13 +98,13 @@ void ctl_svpwm_calc2(svpwm_channel_t* svpwm)
 	ctrl_gt Uabc[3] = { 0 };
 
 	Uabc[0] = svpwm->Ubeta;
-	Uabc[1] = ctrl_mpy(CTRL_T(GMP_CONST_SQRT_3_OVER_2),svpwm->Ualpha) - ctrl_div2(svpwm->Ubeta);
-	Uabc[2] = -ctrl_mpy(CTRL_T(GMP_CONST_SQRT_3_OVER_2), svpwm->Ualpha) - ctrl_div2(svpwm->Ubeta);
+	Uabc[1] = ctrl_mpy(GMP_CONST_SQRT_3_OVER_2,svpwm->Ualpha) - ctrl_div2(svpwm->Ubeta);
+	Uabc[2] = -ctrl_mpy(GMP_CONST_SQRT_3_OVER_2, svpwm->Ualpha) - ctrl_div2(svpwm->Ubeta);
 
 	N = ((Uabc[0] > 0)) + ((Uabc[1] > 0) << 1) + ((Uabc[2] > 0) << 2);
-	X = ctrl_mpy(CTRL_T(GMP_CONST_SQRT_3), svpwm->Ubeta);
-	Y = ctrl_mpy(CTRL_T(GMP_CONST_3_OVER_2), svpwm->Ualpha) + ctrl_mpy(CTRL_T(GMP_CONST_SQRT_3_OVER_2), svpwm->Ubeta);
-	Z = -ctrl_mpy(CTRL_T(GMP_CONST_3_OVER_2), svpwm->Ualpha) + ctrl_mpy(CTRL_T(GMP_CONST_SQRT_3_OVER_2), svpwm->Ubeta);
+	X = ctrl_mpy(GMP_CONST_SQRT_3, svpwm->Ubeta);
+	Y = ctrl_mpy(GMP_CONST_3_OVER_2, svpwm->Ualpha) + ctrl_mpy(GMP_CONST_SQRT_3_OVER_2, svpwm->Ubeta);
+	Z = -ctrl_mpy(GMP_CONST_3_OVER_2, svpwm->Ualpha) + ctrl_mpy(GMP_CONST_SQRT_3_OVER_2, svpwm->Ubeta);
 
 	switch (N)
 	{
@@ -136,12 +136,12 @@ void ctl_svpwm_calc2(svpwm_channel_t* svpwm)
 	default:
 		break;
 	}
-	if ((T1 + T2) > CTRL_T(GMP_CONST_1))
+	if ((T1 + T2) > GMP_CONST_1)
 	{
 		T1 = ctrl_div(T1 , (T1 + T2));
-		T2 = CTRL_T(GMP_CONST_1) - T1;
+		T2 = GMP_CONST_1 - T1;
 	}
-	Ta = ctrl_div4(CTRL_T(GMP_CONST_1) - T1 - T2);
+	Ta = ctrl_div4(GMP_CONST_1 - T1 - T2);
 	Tb = Ta + ctrl_div2(T1);
 	Tc = Tb + ctrl_div2(T2);
 
@@ -153,9 +153,9 @@ void ctl_svpwm_calc2(svpwm_channel_t* svpwm)
 	Tb = -Tb;
 	Tc = -Tc;
 
-	Ta += CTRL_T(0.5);
-	Tb += CTRL_T(0.5);
-	Tc += CTRL_T(0.5);
+	Ta += GMP_CONST_1_OVER_2;
+	Tb += GMP_CONST_1_OVER_2;
+	Tc += GMP_CONST_1_OVER_2;
 
 	switch (N)
 	{

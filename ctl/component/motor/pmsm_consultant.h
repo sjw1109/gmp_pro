@@ -42,7 +42,7 @@ extern "C"
 	// Motor rated parameters
 	// unit, 1
 #ifndef MOTOR_RATED_POLE_PAIRS
-#define MOTOR_RATED_POLE_PAIRS ((4))
+#define MOTOR_RATED_POLE_PAIRS ((1))
 #endif // MOTOR_RATED_POLE_PAIRS
 
 
@@ -73,7 +73,7 @@ extern "C"
 	// Motor rated parameters
 	// unit, SI, Hz
 #ifndef MOTOR_RATED_FREQUENCY
-#define MOTOR_RATED_FREQUENCY ((200.0))
+#define MOTOR_RATED_FREQUENCY ((50.0))
 #endif // MOTOR_RATED_FREQUENCY
 
 	// Motor rated parameters
@@ -168,37 +168,37 @@ extern "C"
 	// Motor Design parameters, stator parameters
 	// unit, SI Ohm
 #ifndef MOTOR_DSN_STATOR_RES
-#define MOTOR_DSN_STATOR_RES  ((0.18))
+#define MOTOR_DSN_STATOR_RES  ((2.875))
 #endif // MOTOR_DSN_STATOR_RES
 
 	// Motor Design parameters, Armature inductance Ld
 	// unit, SI H
 #ifndef MOTOR_DSN_LD
-#define MOTOR_DSN_LD          ((0.835e-3))
+#define MOTOR_DSN_LD          ((0.00835))
 #endif // MOTOR_DSN_LD
 
 	// Motor Design parameters, Armature inductance Lq
 	// unit, SI H
 #ifndef MOTOR_DSN_LQ
-#define MOTOR_DSN_LQ          ((0.835e-3))
+#define MOTOR_DSN_LQ          ((0.00835))
 #endif // MOTOR_DSN_LQ
 
 	// Motor Design parameters, flux linkage
 	// unit, Wb, SI V.s
 #ifndef MOTOR_DSN_FLUX_WB
-#define MOTOR_DSN_FLUX_WB      ((0.0714394))
+#define MOTOR_DSN_FLUX_WB      ((0.22))
 #endif // MOTOR_DSN_FLUX_WB
 
 	// Motor Design parameters, inertia
 	// unit, kg.m/s2
 #ifndef MOTOR_DSN_INERTIA
-#define MOTOR_DSN_INERTIA      ((0.621417e-3))
+#define MOTOR_DSN_INERTIA      ((0.05))
 #endif // MOTOR_DSN_INERTIA
 
 	// Motor Design parameters, damping
 	// unit, N.m.s
 #ifndef MOTOR_DSN_DAMP
-#define MOTOR_DSN_DAMP			((5e-6))
+#define MOTOR_DSN_DAMP			((0.001))
 #endif // MOTOR_DSN_DAMP
 
 

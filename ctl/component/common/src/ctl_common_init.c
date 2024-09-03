@@ -119,7 +119,7 @@ void ctl_init_divider(ctl_divider_t* obj)
 	obj->flag_bypass = 0;
 }
 
-void ctl_set_divider(ctl_divider_t* obj, uint32_t counter_period)
+void ctl_setup_divider(ctl_divider_t* obj, uint32_t counter_period)
 {
 	obj->target = counter_period;
 }
@@ -321,6 +321,28 @@ void ctl_setup_track_pid(track_pid_t* tp,
 )
 {
 	ctl_setup_slope_limit(&tp->traj, slope_min, slope_max, sat_min, sat_max);
-	ctl_set_divider(&tp->div, division);
+	ctl_setup_divider(&tp->div, division);
 	ctl_setup_pid(&tp->pid, kp, ki, kd, sat_min, sat_max);
+}
+
+//////////////////////////////////////////////////////////////////////////
+// hcc
+
+#include <ctl/component/common/hcc.h>
+
+void ctl_init_hcc(ctl_hcc_t* hcc)
+{
+	hcc->target = 0;
+	hcc->half_width = CTRL_T(0.5);
+	hcc->current = 0;
+	hcc->switch_out = 0;
+	flag_polarity = 1;
+}
+
+void ctl_setup_hcc(ctl_hcc_t* hcc,
+	fast_gt flag_polarity,
+	ctrl_gt half_width)
+{
+	hcc->flag_polarity = flag_polarity;
+	hcc->half_width = half_width;
 }

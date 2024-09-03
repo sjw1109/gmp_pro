@@ -158,6 +158,9 @@ void ctl_setup_spd_calculator(ctl_spd_calculator_t* sc,
 GMP_STATIC_INLINE
 void ctl_step_spd_calc(ctl_spd_calculator_t* sc, ctrl_gt position)
 {
+	sc->old_position = sc->position;
+	sc->position = position;
+
 	ctrl_gt delta = sc->position - sc->old_position;
 
 	ctrl_gt CTRL_PI = CTRL_T(PI);

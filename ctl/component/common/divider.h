@@ -51,7 +51,7 @@ static inline fast_gt ctl_step_divider(ctl_divider_t* obj)
 
 void ctl_init_divider(ctl_divider_t* obj);
 
-void ctl_set_divider(ctl_divider_t* obj, uint32_t counter_period);
+void ctl_setup_divider(ctl_divider_t* obj, uint32_t counter_period);
 
 static inline void ctl_clear_divider(ctl_divider_t* obj)
 {

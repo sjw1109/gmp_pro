@@ -54,6 +54,8 @@ ctl_pmsm_dsn_consultant_t dsn = MOTOR_PMSM_DESIGN_CONSULTANT_WRAPPER;
 // open loop angle source
 ctl_src_rg_t rg;
 
+#define BUILD_LEVEL 1
+
 
 // CTL initialize routine
 void ctl_init()
@@ -67,16 +69,50 @@ void ctl_init()
 	udp_svr_obj.send_buf_len = sizeof(tx_pak);
 #endif // USING_SIMULINK_UDP_SIMULATE
 
+
+	std::cout << "ctl_motor_driver_consultant_t: " << sizeof(ctl_motor_driver_consultant_t) << std::endl
+		<< "ctl_pmsm_nameplate_consultant_t:" << sizeof(ctl_pmsm_nameplate_consultant_t) << std::endl
+		<< "ctl_pmsm_dsn_consultant_t: " << sizeof(ctl_pmsm_dsn_consultant_t) << std::endl
+		<< "ctl_src_rg_t:" << sizeof(ctl_src_rg_t) << std::endl
+		<< "pmsm_ctl_object_t:" << sizeof(pmsm_ctl_object_t) << std::endl
+		<< "pmsm_ctl_entity_t:" << sizeof(pmsm_ctl_entity_t) << std::endl
+		<< "ctl_object_nano_t" << sizeof(ctl_object_nano_t) << std::endl;
+
+
 	for (int i = 0; i < 4; ++i)
 		tx_pak.scope[i] = 0;
 
 	ctl_init_pmsm_ctl_entity(&pmsm.ctrl);
 	ctl_setup_pmsm_ctl_entity(&pmsm.ctrl, &drv, &np);
-	ctl_tuning_pmsm_pid_via_consultant(&pmsm.ctrl, &dsn, &drv);
+	ctl_tuning_pmsm_pid_via_consultant(&pmsm.ctrl, &dsn, &drv, &np);
+
+	// Init ctrl nano framework
+	ctl_init_nano_header(&pmsm.base);
+	ctl_setup_nano_header(&pmsm.base, (uint32_t)drv.control_law_freq);
+
+	ctl_force_nona_header_online(&pmsm.base);
 
 	// Open loop voltage & angle generator
 	ctl_init_ramp_gen(&rg);
-	ctl_setup_ramp_gen_via_amp_freq(&rg, 10e3, 20, 2 * PI, 0);
+	ctl_setup_ramp_gen_via_amp_freq(&rg, 10e3, 5, 2 * PI, 0);
+
+#if BUILD_LEVEL == 1
+	// OPEN LOOP
+	ctl_set_pmsm_ctl_entity_as_openloop(&pmsm.ctrl);
+
+	// sync Vdq
+	ctl_set_pmsm_ctl_Vdq(&pmsm.ctrl, CTRL_T(0.03), CTRL_T(0.3));
+#elif BUILD_LEVEL == 2
+	// Current Open Loop
+
+	// OPEN LOOP
+	ctl_set_pmsm_ctl_entity_as_currentloop(&pmsm.ctrl);
+
+	// sync Idq
+	ctl_set_pmsm_ctl_Idq(&pmsm.ctrl, CTRL_T(0.03), CTRL_T(0.08));
+
+
+#endif
 }
 
 // CTL loop routine
@@ -86,9 +122,15 @@ void ctl_dispatch(void)
 
 	// User Controller logic here.
 
+#if (BUILD_LEVEL == 1) || (BUILD_LEVEL == 2)
+	// force angle
+	ctl_set_pmsm_force_angle(&pmsm.ctrl, ctl_get_ramp_gen_output(&rg));
+
+	ctl_step_ramp_gen(&rg);
+#endif
+
 	// Call CTL nano framework
-	controller_dispatch((ctl_object_nano_t*) & pmsm);
-	
+	controller_dispatch((ctl_object_nano_t*)&pmsm);
 
 
 
@@ -99,9 +141,9 @@ void ctl_input_stage_routine(ctl_object_nano_t* pctl_obj)
 	pmsm_ctl_object_t* obj = (pmsm_ctl_object_t*)pctl_obj;
 
 	// input motor controller
-	ctl_input_pmsm_ctl(&obj->ctrl, 
-		rx_pak.adc_current, rx_pak.adc_voltage, 
-		rx_pak.adc_dc_current, rx_pak.adc_dc_voltage, 
+	ctl_input_pmsm_ctl(&obj->ctrl,
+		rx_pak.adc_current, rx_pak.adc_voltage,
+		rx_pak.adc_dc_current, rx_pak.adc_dc_voltage,
 		rx_pak.motor_encoder);
 }
 
@@ -128,7 +170,29 @@ void ctl_output_stage_routine(ctl_object_nano_t* pctl_obj)
 	tx_pak.duty[2] = ctl_pmsm_ctl_get_outout_cmp(&obj->ctrl, phase_W);
 
 	// scope signal
+	tx_pak.scope[0] = obj->ctrl.Vab_set.dat[0];
 
+
+	//tx_pak.scope[1] = ctl_pmsm_ctl_get_outout_cmp(&obj->ctrl, phase_U);
+	//tx_pak.scope[2] = ctl_pmsm_ctl_get_outout_cmp(&obj->ctrl, phase_V);
+	//tx_pak.scope[3] = ctl_pmsm_ctl_get_outout_cmp(&obj->ctrl, phase_W);
+
+	//
+	tx_pak.scope[1] = obj->ctrl.Iabc.value[0];
+	tx_pak.scope[2] = obj->ctrl.Iabc.value[1];
+	tx_pak.scope[3] = obj->ctrl.Iabc.value[2];
+
+	//tx_pak.scope[1] = obj->ctrl.Idq0.dat[0];
+	//tx_pak.scope[2] = obj->ctrl.Idq0.dat[1];
+	//tx_pak.scope[3] = obj->ctrl.Idq0.dat[2];
+
+	//tx_pak.scope[1] = obj->ctrl.Vabc.value[0];
+	//tx_pak.scope[2] = obj->ctrl.Vabc.value[1];
+	//tx_pak.scope[3] = obj->ctrl.Vabc.value[2];
+
+	//tx_pak.scope[1] = obj->ctrl.Vdq0.dat[0];
+	//tx_pak.scope[2] = obj->ctrl.Vdq0.dat[1];
+	//tx_pak.scope[3] = obj->ctrl.Vdq0.dat[2];
 }
 
 
