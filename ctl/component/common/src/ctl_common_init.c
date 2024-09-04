@@ -336,7 +336,7 @@ void ctl_init_hcc(ctl_hcc_t* hcc)
 	hcc->half_width = CTRL_T(0.5);
 	hcc->current = 0;
 	hcc->switch_out = 0;
-	flag_polarity = 1;
+	hcc->flag_polarity = 1;
 }
 
 void ctl_setup_hcc(ctl_hcc_t* hcc,
