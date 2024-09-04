@@ -101,7 +101,7 @@ void ctl_init()
 	ctl_set_pmsm_ctl_entity_as_openloop(&pmsm.ctrl);
 
 	// sync Vdq
-	ctl_set_pmsm_ctl_Vdq(&pmsm.ctrl, CTRL_T(0.03), CTRL_T(0.3));
+	ctl_set_pmsm_ctl_Vdq(&pmsm.ctrl, CTRL_T(0.03), CTRL_T(0.12));
 #elif BUILD_LEVEL == 2
 	// Current Open Loop
 
