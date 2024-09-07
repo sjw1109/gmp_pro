@@ -50,7 +50,7 @@ extern "C"
 	void ctl_step_pid_ser(pid_regular_t* hpid, ctrl_gt input)
 	{
 		// Kp gain firstly, out = P item
-		hpid->out = input * hpid->kp;
+		hpid->out = ctrl_mpy(input, hpid->kp);
 
 		// I sum up
 		hpid->sn += ctrl_sat(ctrl_mpy(hpid->out, hpid->ki),

@@ -12,6 +12,21 @@ using std::cout;
 std::thread ctl_thread;
 
 
+// Model Interface: receive package
+// Controller Interface: transmit package
+#pragma pack(1)
+typedef struct _tag_receive_package_t
+{
+
+    double time;
+
+    // other informations are ignored here.
+    // ... 
+
+}receive_package_t;
+
+extern receive_package_t rx_pak;
+
 
 // Global variables
 
@@ -29,6 +44,13 @@ time_gt gmp_port_system_tick()
     GetLocalTime(&sys);
     return sys.wMinute * 60 + sys.wSecond;
 }
+
+
+time_gt gmp_base_get_system_tick()
+{
+    return (time_gt)(rx_pak.time * 1000);
+}
+
 
 void gmp_port_system_stuck(
     void

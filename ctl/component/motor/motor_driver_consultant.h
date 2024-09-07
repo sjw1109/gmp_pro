@@ -21,7 +21,7 @@ extern "C"
 	// Motor Driver parameters, Current pu base
 	// unit, SI A
 #ifndef MOTOR_DRIVER_RATED_DC_CURRNET
-#define MOTOR_DRIVER_RATED_DC_CURRNET ((20.0))
+#define MOTOR_DRIVER_RATED_DC_CURRNET ((100.0))
 #endif // MOTOR_DRIVER_RATED_DC_CURRNET
 
 
@@ -69,13 +69,13 @@ extern "C"
 	// Speed controller division
 	// unit, 1 (times)
 #ifndef MOTOR_DRIVER_SPEED_DIV
-#define MOTOR_DRIVER_SPEED_DIV ((5))
+#define MOTOR_DRIVER_SPEED_DIV ((10))
 #endif // MOTOR_DRIVER_SPEED_DIV
 
 	// Speed calculator division
 	// unit 1 (times)
 #ifndef MOTOR_DRIVER_SPEED_CALC_DIV
-#define MOTOR_DRIVER_SPEED_CALC_DIV ((2))
+#define MOTOR_DRIVER_SPEED_CALC_DIV ((10))
 #endif
 
 	// ADC performance resolution
@@ -95,7 +95,7 @@ extern "C"
 
 	// ADC Current Full scale Range
 #ifndef MOTOR_DRIVER_ADC_CURRENT_FULL_SCALE
-#define MOTOR_DRIVER_ADC_CURRENT_FULL_SCALE ((50.0))
+#define MOTOR_DRIVER_ADC_CURRENT_FULL_SCALE ((300.0))
 #endif // MOTOR_DRIVER_ADC_CURRENT_FULL_SCALE
 
 	// ADC Current Bias p.u.
@@ -125,8 +125,18 @@ extern "C"
 
 	// Encoder Base
 #ifndef MOTOR_DRIVER_ENCODER_BASE
-#define MOTOR_DRIVER_ENCODER_BASE              ((2^17))
+#define MOTOR_DRIVER_ENCODER_BASE              ((1<<17))
 #endif // MOTOR_DRIVER_ENCODER_BASE
+
+	// rotor acceleration limit, unit rpm/s
+#ifndef MOTOR_DRIVER_ACCLERATION
+#define MOTOR_DRIVER_ACCLERATION               ((3000))
+#endif // MOTOR_DRIVER_ACCLERATION
+
+	// jerk limit, p.u./ms
+#ifndef MOTOR_DRIVER_JERK
+#define MOTOR_DRIVER_JERK                      ((0.02))
+#endif // MOTOR_DRIVER_JERK
 
 	// Fast init wrapper
 // With this, it's no need to use init and setup function 
@@ -151,7 +161,9 @@ extern "C"
 	MOTOR_DIRVER_ADC_VOLTAGE_DC_BIAS_PU,\
 	MOTOR_DRIVER_ADC_CURRENT_DC_FULL_SCALE,\
 	MOTOR_DIRVER_ADC_CURRENT_DC_BIAS_PU, \
-	MOTOR_DRIVER_ENCODER_BASE \
+	MOTOR_DRIVER_ENCODER_BASE, \
+	MOTOR_DRIVER_ACCLERATION, \
+	MOTOR_DRIVER_JERK \
 }
 
 
@@ -198,7 +210,7 @@ typedef struct _tag_motor_driver_consultant_t
 	// unit, Current Times
 	uint32_t speed_div_times;
 
-	// Motor Speed calcualtor division
+	// Motor Speed calculator division
 	// unit, current times
 	uint32_t speed_calc_div_times;
 
@@ -235,6 +247,12 @@ typedef struct _tag_motor_driver_consultant_t
 
 	// Position Encoder Base
 	uint32_t position_enc_base;
+
+	// acceleration, unit rpm / s
+	parameter_gt acceleration;
+
+	// jerk, unit p.u./ms
+	parameter_gt jerk;
 
 
 }ctl_motor_driver_consultant_t;

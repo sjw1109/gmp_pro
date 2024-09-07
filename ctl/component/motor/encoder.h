@@ -52,12 +52,18 @@ void ctl_input_pos_encoder_shift(ctl_pos_encoder_t* pos_encoder,
 	pos_encoder->position = raw << shift;
 }
 
+
+// GET ANGLE, unit rad
 GMP_STATIC_INLINE
 ctrl_gt ctl_get_elec_angle_via_pos_encoder(ctl_pos_encoder_t* pos_encoder)
 {
 	ctrl_gt elec_pos = pos_encoder->poles * (pos_encoder->position + pos_encoder->offset);
 
-	return elec_pos;
+	ctrl_mod_1(elec_pos);
+
+	ctrl_gt angle = ctrl_mpy(elec_pos, GMP_CONST_2_PI);
+
+	return angle;
 }
 
 
@@ -156,18 +162,18 @@ void ctl_setup_spd_calculator(ctl_spd_calculator_t* sc,
 
 
 GMP_STATIC_INLINE
-void ctl_step_spd_calc(ctl_spd_calculator_t* sc, ctrl_gt position)
+void ctl_step_spd_calc(ctl_spd_calculator_t* sc, ctrl_gt position_rad)
 {
-	sc->old_position = sc->position;
-	sc->position = position;
-
-	ctrl_gt delta = sc->position - sc->old_position;
-
-	ctrl_gt CTRL_PI = CTRL_T(PI);
-	ctrl_gt CTRL_2PI = CTRL_T(PI * 2);
+	ctrl_gt CTRL_PI = GMP_CONST_PI;
+	ctrl_gt CTRL_2PI = GMP_CONST_2_PI;
 
 	if (ctl_step_divider(&sc->div))
 	{
+
+		sc->old_position = sc->position;
+		sc->position = position_rad;
+
+		ctrl_gt delta = sc->position - sc->old_position;
 		// direction correction
 		if (delta < -CTRL_PI)
 		{

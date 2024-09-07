@@ -67,7 +67,7 @@ extern "C"
 	// Motor rated parameters
 	// unit, SI, A rms (Line current)
 #ifndef MOTOR_RATED_CURRENT
-#define MOTOR_RATED_CURRENT   ((44.1))
+#define MOTOR_RATED_CURRENT   ((100.0))
 #endif // MOTOR_RATED_CURRENT
 
 	// Motor rated parameters

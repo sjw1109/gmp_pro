@@ -40,4 +40,17 @@ void user_loop(void)
 {
 	//Sleep(1);
 	controller_state_dispatch((ctl_object_nano_t*)&pmsm);
+
+	time_gt time = gmp_base_get_system_tick();
+
+
+	for (int i = 0; i < 11; i++)
+	{
+		if (time > 200 * (i + 1))
+		{
+			ctl_set_pmsm_ctl_spd(&pmsm.ctrl, ctrl_mpy(CTRL_T(i), CTRL_T(0.1)));
+		}
+	}
+
+
 }

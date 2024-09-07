@@ -60,6 +60,8 @@
 #define ctrl_sin(A) _IQsin(A)
 #define ctrl_cos(A) _IQcos(A)
 
+#define ctrl_mod_1(A) ((A & (1<<GLOBAL_Q)))
+
 
 #else
 // FPU controller configuration 

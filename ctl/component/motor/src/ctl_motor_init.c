@@ -85,7 +85,7 @@ void ctl_setup_spd_calculator(ctl_spd_calculator_t* sc,
 	parameter_gt rated_speed_rpm,  // Speed per unit base value, unit rpm
 	uint16_t pole_pairs,		   // pole pairs, if you pass a elec angle,
 	// just set this value to 1.
-	parameter_gt speed_filter_fc)  // generally, speed_filter_fc approx to speed_calc freq divided by 5 
+	parameter_gt speed_filter_fc)  // generally, speed_filter_fc approx to speed_calc freq divided by 10
 {
 	uint16_t maximum_div = rated_speed_rpm / 30;
 	if (speed_calc_div < maximum_div)

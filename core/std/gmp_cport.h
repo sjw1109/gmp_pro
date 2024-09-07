@@ -23,6 +23,9 @@ extern "C"
 		void
 	);
 
+	// This function may altinative the port function
+	time_gt gmp_base_get_system_tick();
+
 	// This function should be implement by user, when fatal error occurred, the function would be called.
 	// So the function must own the ability of stop the program.
 	//

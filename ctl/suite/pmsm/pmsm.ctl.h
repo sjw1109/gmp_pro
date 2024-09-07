@@ -149,6 +149,15 @@ void ctl_input_pmsm_ctl(pmsm_ctl_entity_t* entity,
 	uint32_t motor_encoder
 );
 
+// This function should be an alternative, for bridge resistance current sample case.
+void ctl_input_with_inv_current_pmsm_ctl(pmsm_ctl_entity_t* entity,
+	uint32_t adc_current[3],
+	uint32_t adc_voltage[3],
+	uint32_t adc_dc_current,
+	uint32_t adc_dc_voltage,
+	uint32_t motor_encoder
+);
+
 // output routine for enable port
 // This function should be invoked in Output Stage
 GMP_STATIC_INLINE
@@ -186,6 +195,8 @@ void ctl_set_pmsm_ctl_entity_as_openloop(pmsm_ctl_entity_t* entity);
 
 void ctl_set_pmsm_ctl_entity_as_currentloop(pmsm_ctl_entity_t* entity);
 
+void ctl_set_pmsm_ctl_entity_as_speedloop(pmsm_ctl_entity_t* entity);
+
 // output routine for PWM
 // This function should be invoked in Output Stage
 GMP_STATIC_INLINE
@@ -207,6 +218,13 @@ void ctl_set_pmsm_ctl_Vdq(pmsm_ctl_entity_t* entity,
 // User Config set Idq
 void ctl_set_pmsm_ctl_Idq(pmsm_ctl_entity_t* entity,
 	ctrl_gt Id, ctrl_gt Iq);
+
+
+ctrl_gt ctl_get_pmsm_ctl_spd(pmsm_ctl_entity_t* entity);
+
+void ctl_set_pmsm_ctl_spd(pmsm_ctl_entity_t* entity,
+	ctrl_gt spd_pu);
+
 
 #ifdef __cplusplus
 }

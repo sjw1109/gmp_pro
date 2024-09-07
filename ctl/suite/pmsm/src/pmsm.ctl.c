@@ -39,7 +39,7 @@ void ctl_init_pmsm_ctl_entity(pmsm_ctl_entity_t* entity)
 	//ctl_init_pid(&entity->pid_speed);
 
 	for (i = 0; i < 2; ++i) {
-		
+
 		entity->Idq_set[i] = 0;
 
 		entity->Idq_set_user[i] = 0;
@@ -84,21 +84,21 @@ void ctl_setup_pmsm_ctl_entity(pmsm_ctl_entity_t* entity,
 
 	// setup ADC input stage
 	ctl_setup_adc_tri_channel(&entity->Vabc,
-		CTRL_T(np->rated_voltage / drv->adc_voltage_full_scale),
+		CTRL_T(drv->adc_voltage_full_scale / np->rated_voltage),
 		CTRL_T(drv->adc_voltage_bias),
 		drv->adc_resolution_bit, drv->adc_resolution_bit);
 
 	ctl_setup_adc_tri_channel(&entity->Iabc,
-		CTRL_T(np->rated_current / drv->adc_current_full_scale),
+		CTRL_T(drv->adc_current_full_scale / np->rated_current),
 		CTRL_T(drv->adc_current_bias),
 		drv->adc_resolution_bit, drv->adc_resolution_bit);
 
 	ctl_setup_adc_channel(&entity->Vdcbus,
-		CTRL_T(np->rated_voltage / drv->adc_dc_voltage_full_scale),
+		CTRL_T(drv->adc_dc_voltage_full_scale / np->rated_voltage),
 		CTRL_T(drv->adc_dc_voltage_bias),
 		drv->adc_resolution_bit, drv->adc_resolution_bit);
 	ctl_setup_adc_channel(&entity->Idcbus,
-		CTRL_T(np->rated_current / drv->adc_dc_current_full_scale),
+		CTRL_T(drv->adc_dc_current_full_scale / np->rated_current),
 		CTRL_T(drv->adc_dc_current_bias),
 		drv->adc_resolution_bit, drv->adc_resolution_bit);
 
@@ -109,14 +109,16 @@ void ctl_setup_pmsm_ctl_entity(pmsm_ctl_entity_t* entity,
 	ctl_setup_spd_calculator(&entity->spd_calc,
 		drv->control_law_freq, drv->speed_calc_div_times,
 		np->rated_speed_rpm, np->pole_pairs,
-		drv->control_law_freq / drv->speed_calc_div_times / 3);
+		drv->control_law_freq / drv->speed_calc_div_times / 10);
+
+	parameter_gt current_slope = drv->jerk / (drv->control_law_freq / 1000);
 
 	// setup controller without tuning
 	for (i = 0; i < 2; ++i)
 		ctl_setup_track_pid(&entity->Idq_ctl[i],
 			CTRL_T(1.0), CTRL_T(0.01), CTRL_T(0.0),
-			-CTRL_T(0.15), CTRL_T(0.15),
 			-CTRL_T(1.0), CTRL_T(1.0),
+			-CTRL_T(current_slope), CTRL_T(current_slope),
 			0  // disable divider
 		);
 
@@ -127,10 +129,13 @@ void ctl_setup_pmsm_ctl_entity(pmsm_ctl_entity_t* entity,
 	//	uint32_t division //division factor
 	//)
 
+	parameter_gt speed_slope = drv->acceleration / np->rated_speed_rpm
+		/ (drv->control_law_freq / drv->speed_calc_div_times);
+
 	ctl_setup_track_pid(&entity->spd_ctl,
 		CTRL_T(1.0), CTRL_T(0.01), CTRL_T(0.0),
 		-CTRL_T(1.0), CTRL_T(1.0),
-		-CTRL_T(1.0), CTRL_T(1.0),
+		-CTRL_T(speed_slope), CTRL_T(speed_slope),
 		drv->speed_div_times // divider factor
 	);
 
@@ -148,26 +153,38 @@ void ctl_tuning_pmsm_pid_via_consultant(pmsm_ctl_entity_t* entity,
 	ctl_pmsm_nameplate_consultant_t* np
 )
 {
-	ctrl_gt kp, ki;
+	float kp, ki;
 
 	// PID tuning
 
-	kp = CTRL_T(np->rated_current / np->rated_voltage
-		* dsn->Ld / (1.0 / (2.0 * PI * drv->current_closeloop_bw) + 1.0 / (2.0 * PI * drv->control_law_freq)));
-	ki = CTRL_T(dsn->Rs / dsn->Ld);
+	kp = np->rated_current / np->rated_voltage
+		* dsn->Ld / (1.0 / (2.0 * PI * drv->current_closeloop_bw) + 1.0 / (2.0 * PI * drv->control_law_freq));
+	ki = dsn->Rs / dsn->Ld;
+	if (ki >= 5.0f)
+		ki = 5.0f;
+	if (kp >= 10.0f)
+		kp = 10.0f;
 	ctl_set_pid_parameter(&entity->Idq_ctl[phase_D].pid,
-		kp, ki, CTRL_T(0.0));
+		CTRL_T(kp), CTRL_T(ki), CTRL_T(0.0));
 
-	kp = CTRL_T(np->rated_current / np->rated_voltage
-		* dsn->Lq / (1.0 / (2.0 * PI * drv->current_closeloop_bw) + 1.0 / (2.0 * PI * drv->control_law_freq)));
-	ki = CTRL_T(dsn->Rs / dsn->Lq);
+	kp = np->rated_current / np->rated_voltage
+		* dsn->Lq / (1.0 / (2.0 * PI * drv->current_closeloop_bw) + 1.0 / (2.0 * PI * drv->control_law_freq));
+	ki = dsn->Rs / dsn->Lq;
+	if (ki >= 5.0f)
+		ki = 5.0f;
+	if (kp >= 10.0f)
+		kp = 10.0f;
 	ctl_set_pid_parameter(&entity->Idq_ctl[phase_Q].pid,
-		kp, ki, CTRL_T(0.0));
+		CTRL_T(kp), CTRL_T(ki), CTRL_T(0.0));
 
-	kp = CTRL_T(dsn->inertia / ctl_consult_pmsm_Kt(dsn) * (2.0 * PI * drv->speed_closeloop_bw));
-	ki = CTRL_T(1 / (2.0 * PI * drv->speed_closeloop_bw));
+	kp = dsn->inertia / ctl_consult_pmsm_Kt(dsn) * (2.0 * PI * drv->speed_closeloop_bw);
+	ki = 1 / (2.0 * PI * drv->speed_closeloop_bw);
+	if (ki >= 5.0f)
+		ki = 5.0f;
+	if (kp >= 10.0f)
+		kp = 10.0f;
 	ctl_set_pid_parameter(&entity->spd_ctl.pid,
-		kp, ki, CTRL_T(0.0));
+		CTRL_T(kp), CTRL_T(ki), CTRL_T(0.0));
 }
 
 void ctl_input_pmsm_ctl(pmsm_ctl_entity_t* entity,
@@ -196,6 +213,38 @@ void ctl_input_pmsm_ctl(pmsm_ctl_entity_t* entity,
 	ctl_input_pos_encoder(&entity->pos_encoder,
 		motor_encoder);
 }
+
+void ctl_input_with_inv_current_pmsm_ctl(pmsm_ctl_entity_t* entity,
+	uint32_t adc_current[3],
+	uint32_t adc_voltage[3],
+	uint32_t adc_dc_current,
+	uint32_t adc_dc_voltage,
+	uint32_t motor_encoder
+)
+{
+	// Input Phase data
+	ctl_input_adc_tri_channel_raw_data(&entity->Iabc,
+		(2 << (entity->Iabc.resolution - 1)) - adc_current[0],
+		(2 << (entity->Iabc.resolution - 1)) - adc_current[1],
+		(2 << (entity->Iabc.resolution - 1)) - adc_current[2]
+	);
+
+	ctl_input_adc_tri_channel_raw_data(&entity->Vabc,
+		adc_voltage[0], adc_voltage[1], adc_voltage[2]);
+
+	// Input DC bus data
+	ctl_input_adc_source_data(&entity->Idcbus,
+		adc_dc_current);
+
+	ctl_input_adc_source_data(&entity->Vdcbus,
+		adc_dc_voltage);
+
+	// Input Encoder data
+	ctl_input_pos_encoder(&entity->pos_encoder,
+		motor_encoder);
+}
+
+
 
 
 void ctl_step_pmsm_ctl_entity(pmsm_ctl_entity_t* entity)
@@ -248,15 +297,11 @@ void ctl_step_pmsm_ctl_entity(pmsm_ctl_entity_t* entity)
 	}
 
 	// Get speed feedback
-	if (entity->enable_outer_speed)
-	{
-		speed = entity->speed_fbk_user;
-	}
-	else
+	if (!entity->enable_outer_speed)
 	{
 		ctl_step_spd_calc(&entity->spd_calc, angle);
-		speed = entity->spd_calc.speed;
 	}
+	speed = ctl_get_pmsm_ctl_spd(entity);
 
 	// get phasor
 	ctl_set_phasor_via_angle(angle, &entity->phasor);
@@ -336,6 +381,15 @@ void ctl_set_pmsm_ctl_entity_as_currentloop(pmsm_ctl_entity_t* entity)
 	entity->enable_speed_controller = 0;
 }
 
+void ctl_set_pmsm_ctl_entity_as_speedloop(pmsm_ctl_entity_t* entity)
+{
+	entity->enable_outer_angle = 0;
+	entity->enable_outer_speed = 0;
+	entity->enable_output = 1;
+	entity->enable_current_controller = 1;
+	entity->enable_speed_controller = 1;
+}
+
 void ctl_set_pmsm_ctl_Vdq(pmsm_ctl_entity_t* entity,
 	ctrl_gt Vd, ctrl_gt Vq)
 {
@@ -348,4 +402,26 @@ void ctl_set_pmsm_ctl_Idq(pmsm_ctl_entity_t* entity,
 {
 	entity->Idq_set_user[phase_D] = Id;
 	entity->Idq_set_user[phase_Q] = Iq;
+}
+
+void ctl_set_pmsm_ctl_spd(pmsm_ctl_entity_t* entity,
+	ctrl_gt spd_pu)
+{
+	entity->spd_set_user = spd_pu;
+}
+
+ctrl_gt ctl_get_pmsm_ctl_spd(pmsm_ctl_entity_t* entity)
+{
+	ctrl_gt speed;
+
+	if (entity->enable_outer_speed)
+	{
+		speed = entity->speed_fbk_user;
+	}
+	else
+	{
+		speed = entity->spd_calc.speed;
+	}
+
+	return speed;
 }
