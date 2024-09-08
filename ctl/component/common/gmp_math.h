@@ -36,7 +36,7 @@ typedef struct _tag_ctl_vector2_t
 #define GMP_CONST_AB02AB_ALPHA (CTRL_T(1.154700538379252)) // 2/sqrt(3)
 
 // Here're some constants for SVPWM
-#define GMP_CONST_SQRT_3_OVER_2 (CTRL_T(0.8660254038f))
+#define GMP_CONST_SQRT_3_OVER_2 (CTRL_T(0.8660254038f))  // SQRT(3)/2
 #define GMP_CONST_3_OVER_2		(CTRL_T(1.5f))
 #define GMP_CONST_SQRT_3		(CTRL_T(1.73205080756888f))
 #define GMP_CONST_1				(CTRL_T(1.0f))
