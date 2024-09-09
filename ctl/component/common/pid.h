@@ -31,7 +31,9 @@ extern "C"
 	void ctl_step_pid_par(pid_regular_t* hpid, ctrl_gt input)
 	{
 		// I sum up
-		hpid->sn += ctrl_sat(ctrl_mpy(input, (hpid->ki)), hpid->out_max, hpid->out_min);
+		// Bug fix: hpid->sn may overflow
+		hpid->sn = ctrl_sat(hpid->sn + ctrl_mpy(input, (hpid->ki)),
+			hpid->out_max, hpid->out_min);
 
 		// output = P item + I item  + D item
 		hpid->out = ctrl_mpy(input, hpid->kp)
@@ -53,7 +55,8 @@ extern "C"
 		hpid->out = ctrl_mpy(input, hpid->kp);
 
 		// I sum up
-		hpid->sn += ctrl_sat(ctrl_mpy(hpid->out, hpid->ki),
+		// Bug fix: hpid->sn may overflow
+		hpid->sn = ctrl_sat(hpid->sn + ctrl_mpy(hpid->out, hpid->ki),
 			hpid->out_max,hpid->out_min);
 
 		// output += I item + D item
