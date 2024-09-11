@@ -10,7 +10,7 @@
 
 #include "../support.h"
 #include "_IQNtables.h"
-#include "IQmathLib.h"
+#include "/third_party/iqmath/IQmathLib.h"
 #include "_IQNmpy.h"
 #include "_IQNdiv.h"
 

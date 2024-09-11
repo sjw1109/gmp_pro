@@ -50,7 +50,7 @@ void ctl_svpwm_calc(svpwm_channel_t* svpwm)
 
 	//tex: $$
 	//U_a = U_\alpha, \\
-	//U_b = -U_\alpha /2 + \sqrt{3}/2\cdot U_\beta, \\ 
+	//U_b = -U_\alpha /2 + \sqrt{3}/2\cdot U_\beta, \\
 	//U_c = -U_\alpha /2 - \sqrt{3}/2\cdot U_\beta,
 	//$$
 

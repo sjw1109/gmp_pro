@@ -103,7 +103,7 @@ extern "C"
 	MOTOR_RATED_FREQUENCY,\
 	MOTOR_RATED_SPEED_RPM, \
 	MOTOR_RATED_TORQUE,\
-	MOTOR_RATED_EFFICIENCY \ 
+	MOTOR_RATED_EFFICIENCY \
 	}
 
 	typedef struct _tag_pmsm_nameplate_consultant_t
@@ -210,7 +210,7 @@ extern "C"
 	MOTOR_DSN_LQ,\
 	MOTOR_DSN_FLUX_WB, \
 	MOTOR_DSN_INERTIA,\
-	MOTOR_DSN_DAMP \ 
+	MOTOR_DSN_DAMP \
 	}
 
 

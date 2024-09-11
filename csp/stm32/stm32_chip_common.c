@@ -95,7 +95,7 @@ size_gt uart_tx_direct(UART_HandleTypeDef* huart, uart_content_t* content)
 
 size_gt uart_rx_direct(UART_HandleTypeDef* huart, uart_content_t* content)
 {
-
+return 0;
 }
 
 #endif // HAL_UART_MODULE_ENABLED
@@ -151,9 +151,7 @@ void gmp_port_feed_dog(
 void gmp_csp_startup(
 
 )
-{
-
-}
+{}
 
 
 void gmp_port_system_stuck(
@@ -161,6 +159,10 @@ void gmp_port_system_stuck(
 )
 {}
 
+void csp_post_process(void)
+{}
+	
+	
 // This function is unreachable.
 void gmp_exit_routine(void)
 {}

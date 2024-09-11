@@ -193,7 +193,7 @@ void ctl_step_spd_calc(ctl_spd_calculator_t* sc, ctrl_gt position_rad)
 }
 
 GMP_STATIC_INLINE
-void ctl_get_spd_via_pos_encoder(ctl_spd_calculator_t* sc)
+ctrl_gt ctl_get_spd_via_pos_encoder(ctl_spd_calculator_t* sc)
 {
 	return sc->speed;
 }

@@ -28,13 +28,6 @@ extern "C"
 //////////////////////////////////////////////////////////////////////////
 // Here's the PMSM controller template
 
-	// PMSM input struct
-	typedef struct _tag_pmsm_ctl_input_shadow
-	{
-
-	}ctl_pmsm_ctl_input_shadow;
-
-
 // PMSM controller entity
 typedef struct _tag_pmsm_ctl_entity
 {

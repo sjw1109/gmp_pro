@@ -12,6 +12,8 @@
 #include "stm32g0xx_hal.h"
 #elif defined STM32G474xx
 #include "stm32g4xx_hal.h"
+#elif defined STM32G431xx
+#include "stm32g4xx_hal.h"
 #elif defined STM32L151xx
 #include "stm32l1xx_hal.h"
 #elif defined STM32L151xB
@@ -22,6 +24,7 @@
 #include "stm32f1xx_hal.h"
 #elif defined STM32F411xx
 #include "stm32f4xx_hal.h"
+
 #endif
 
 

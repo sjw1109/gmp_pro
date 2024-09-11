@@ -30,11 +30,49 @@ extern "C"
 extern dbgptr_gt default_debug_dev;
 #endif // SPECIFY_ENABLE_DEFUALT_DEBUG_PRINT_FUNC
 
-	extern uint16_t adc_data[6];
 
-//extern gmp_iic_stm32_impl_t iic;
-//extern gmp_uart_stm32_impl_t dbg_uart;
-//extern gmp_pwm1ch_stm32_impl_t pwm_ch1;
+
+#define B1_EXTI_Pin GPIO_PIN_13
+#define B1_EXTI_GPIO_Port GPIOC
+#define B1_EXTI_EXTI_IRQn EXTI15_10_IRQn
+#define IC_FBK_Pin GPIO_PIN_0
+#define IC_FBK_GPIO_Port GPIOC
+#define IB_FBK_Pin GPIO_PIN_1
+#define IB_FBK_GPIO_Port GPIOC
+#define Temp_Pin GPIO_PIN_2
+#define Temp_GPIO_Port GPIOC
+#define VSP_Pin GPIO_PIN_3
+#define VSP_GPIO_Port GPIOC
+#define IA_FBK_Pin GPIO_PIN_0
+#define IA_FBK_GPIO_Port GPIOA
+#define VBUS_FBK_Pin GPIO_PIN_1
+#define VBUS_FBK_GPIO_Port GPIOA
+#define LD2_Pin GPIO_PIN_5
+#define LD2_GPIO_Port GPIOA
+#define PWM_U_N_Pin GPIO_PIN_7
+#define PWM_U_N_GPIO_Port GPIOA
+#define PWM_V_N_Pin GPIO_PIN_0
+#define PWM_V_N_GPIO_Port GPIOB
+#define PWM_W_N_Pin GPIO_PIN_1
+#define PWM_W_N_GPIO_Port GPIOB
+#define QEP_Z_Pin GPIO_PIN_10
+#define QEP_Z_GPIO_Port GPIOB
+#define PWM_IN_U_Pin GPIO_PIN_8
+#define PWM_IN_U_GPIO_Port GPIOA
+#define PWM_IN_V_Pin GPIO_PIN_9
+#define PWM_IN_V_GPIO_Port GPIOA
+#define PWM_IN_W_Pin GPIO_PIN_10
+#define PWM_IN_W_GPIO_Port GPIOA
+#define T_SWDIO_Pin GPIO_PIN_13
+#define T_SWDIO_GPIO_Port GPIOA
+#define T_SWCLK_Pin GPIO_PIN_14
+#define T_SWCLK_GPIO_Port GPIOA
+#define QEP_A_Pin GPIO_PIN_15
+#define QEP_A_GPIO_Port GPIOA
+#define QEP_B_Pin GPIO_PIN_3
+#define QEP_B_GPIO_Port GPIOB
+#define DRIVER_ENABLE_Pin GPIO_PIN_7
+#define DRIVER_ENABLE_GPIO_Port GPIOB
 
 	//////////////////////////////////////////////////////////////////////////
 	// Devices on the peripheral

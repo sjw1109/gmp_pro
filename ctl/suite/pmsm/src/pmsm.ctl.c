@@ -374,7 +374,7 @@ void ctl_set_pmsm_ctl_entity_as_openloop(pmsm_ctl_entity_t* entity)
 
 void ctl_set_pmsm_ctl_entity_as_currentloop(pmsm_ctl_entity_t* entity)
 {
-	entity->enable_outer_angle = 0;
+	entity->enable_outer_angle = 1;
 	entity->enable_outer_speed = 0;
 	entity->enable_output = 1;
 	entity->enable_current_controller = 1;
