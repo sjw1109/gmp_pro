@@ -282,6 +282,8 @@ void ctl_step_pmsm_ctl_entity(pmsm_ctl_entity_t* entity)
 	ctl_step_adc_channel(&entity->Idcbus);
 	ctl_step_adc_channel(&entity->Vdcbus);
 
+	ctl_get_elec_angle_via_pos_encoder(&entity->pos_encoder);
+
 	// get angle information
 	// Select Angle source
 	if (entity->enable_outer_angle)
@@ -293,13 +295,14 @@ void ctl_step_pmsm_ctl_entity(pmsm_ctl_entity_t* entity)
 	}
 	else
 	{
-		angle = ctl_get_elec_angle_via_pos_encoder(&entity->pos_encoder);
+		angle = entity->pos_encoder.elec_angle;
 	}
 
 	// Get speed feedback
 	if (!entity->enable_outer_speed)
 	{
-		ctl_step_spd_calc(&entity->spd_calc, angle);
+		//ctl_step_spd_calc(&entity->spd_calc, angle);
+		ctl_step_spd_calc(&entity->spd_calc, entity->pos_encoder.elec_angle);
 	}
 	speed = ctl_get_pmsm_ctl_spd(entity);
 

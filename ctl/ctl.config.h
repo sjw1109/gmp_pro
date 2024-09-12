@@ -60,7 +60,7 @@
 #define ctrl_sin(A) _IQsin(A)
 #define ctrl_cos(A) _IQcos(A)
 
-#define ctrl_mod_1(A) ((A & (1<<GLOBAL_Q)))
+#define ctrl_mod_1(A) ((A & ((1<<GLOBAL_Q)-1)))
 
 
 #else

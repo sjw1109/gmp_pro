@@ -174,6 +174,14 @@ void ctl_setup_lp_filter(ctl_low_pass_filter_t* lpf, parameter_gt fs, parameter_
 	lpf->a = CTRL_T(fc * 2 * PI / fs);
 }
 
+ctrl_gt ctl_helper_lp_filter(
+	parameter_gt fs,  // Sample rate
+	parameter_gt fc // cut frequency
+)
+{
+	return CTRL_T(fc * 2 * PI / fs);
+}
+
 void ctl_clear_filter(ctl_filter_IIR2_t* obj)
 {
 	int i = 0;
@@ -346,3 +354,36 @@ void ctl_setup_hcc(ctl_hcc_t* hcc,
 	hcc->flag_polarity = flag_polarity;
 	hcc->half_width = half_width;
 }
+
+//////////////////////////////////////////////////////////////////////////
+// PLL module
+
+#include <ctl/component/common/pll.h>
+
+void ctl_init_pll(ctl_pll_t *pll)
+{
+	ctl_init_pid(&pll->pid);
+	ctl_init_lp_filter(&pll->filter);
+	pll->input.dat[0] = 0;
+	pll->input.dat[1] = 0;
+	pll->output_theta = 0;
+	pll->output_freq = 0;
+	pll->freq_sf = CTRL_T(1.0);
+}
+
+void ctl_setup_pll(ctl_pll_t *pll,
+	ctrl_gt kp, ctrl_gt ki, ctrl_gt kd, // PID parameter
+	ctrl_gt out_min, ctrl_gt out_max,	// PID output limit
+	parameter_gt fs,  // Sample frequency
+	parameter_gt fc   // cutoff frequency
+)
+{
+	ctl_setup_pid(&pll->pid,
+		kp, ki, kd, out_min, out_max);
+
+	ctl_setup_lp_filter(&pll->filter, fs, fc);
+	
+
+
+}
+

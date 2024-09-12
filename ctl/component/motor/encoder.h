@@ -30,6 +30,9 @@ typedef struct _tag_ctl_pos_encoder_t
 	// uint32_t p.u. base value
 	uint32_t position_base;
 
+	// angle position, rad 0-2*pi
+	ctrl_gt elec_angle;
+
 }ctl_pos_encoder_t;
 
 
@@ -57,11 +60,13 @@ void ctl_input_pos_encoder_shift(ctl_pos_encoder_t* pos_encoder,
 GMP_STATIC_INLINE
 ctrl_gt ctl_get_elec_angle_via_pos_encoder(ctl_pos_encoder_t* pos_encoder)
 {
-	ctrl_gt elec_pos = pos_encoder->poles * (pos_encoder->position + pos_encoder->offset);
+	ctrl_gt elec_pos = pos_encoder->poles * (pos_encoder->position + GMP_CONST_1 - pos_encoder->offset);
 
-	ctrl_mod_1(elec_pos);
+	elec_pos = ctrl_mod_1(elec_pos);
 
 	ctrl_gt angle = ctrl_mpy(elec_pos, GMP_CONST_2_PI);
+
+	pos_encoder->elec_angle = angle;
 
 	return angle;
 }
@@ -186,7 +191,7 @@ void ctl_step_spd_calc(ctl_spd_calculator_t* sc, ctrl_gt position_rad)
 
 		ctrl_gt new_spd = ctrl_mpy((delta), sc->scale_factor);
 				
-		sc->speed = ctl_step_lopass_filter(&sc->spd_filter, new_spd);
+		sc->speed = ctl_step_lowpass_filter(&sc->spd_filter, new_spd);
 		// sc->speed = sc->spd_filter.out;
 		
 	}

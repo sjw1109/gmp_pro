@@ -5,6 +5,8 @@
 #ifndef _FILE_UDP_SERVER_HPP_
 #define _FILE_UDP_SERVER_HPP_
 
+//////////////////////////////////////////////////////////////////////////
+// 以下这部分内容编码到XML中，解析得到，可以在编译之后修改。
 
 // Simulation settings
 #ifndef MAX_ITERATION_LOOPS

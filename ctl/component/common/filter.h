@@ -40,9 +40,14 @@ extern "C"
 		parameter_gt fs,  // Sample rate
 		parameter_gt fc); // cut frequency
 
+	// get filter coefficient via parameter
+	ctrl_gt ctl_helper_lp_filter(
+		parameter_gt fs,  // Sample rate
+		parameter_gt fc // cut frequency
+	);
 
 	GMP_STATIC_INLINE
-		ctrl_gt ctl_step_lopass_filter(ctl_low_pass_filter_t* lpf, ctrl_gt input)
+		ctrl_gt ctl_step_lowpass_filter(ctl_low_pass_filter_t* lpf, ctrl_gt input)
 	{
 		ctrl_gt new_out;
 

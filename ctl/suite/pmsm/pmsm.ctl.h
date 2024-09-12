@@ -122,7 +122,7 @@ void ctl_setup_pmsm_ctl_entity(pmsm_ctl_entity_t* entity,
 	ctl_motor_driver_consultant_t* drv,
 	ctl_pmsm_nameplate_consultant_t* np);
 
-// Tuning PMSM controller based on Motro Design parameters
+// Tuning PMSM controller based on Motor Design parameters
 void ctl_tuning_pmsm_pid_via_consultant(pmsm_ctl_entity_t* entity,
 	// use it to calculate controller parameters
 	ctl_pmsm_dsn_consultant_t* dsn,
