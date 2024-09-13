@@ -15,7 +15,7 @@ void ctl_init_svpwm(svpwm_channel_t* svpwm)
 
 	svpwm->pwm_period = 0;
 
-	for (int i = 0; i < 3;++i)
+	for (int i = 0; i < 3; ++i)
 	{
 		svpwm->T[i] = 0;
 		svpwm->pwm_cmp[i] = 0;
@@ -49,7 +49,7 @@ void ctl_init_pos_encoder(ctl_pos_encoder_t* pos_encoder)
 	pos_encoder->poles = 0;
 }
 
-void ctl_setup_pos_encoder(ctl_pos_encoder_t* enc, 
+void ctl_setup_pos_encoder(ctl_pos_encoder_t* enc,
 	uint16_t poles, uint32_t position_base)
 {
 	enc->poles = poles;
@@ -340,7 +340,7 @@ void ctl_setup_pmsm_smo_via_consultant(ctl_pmsm_smo_observer_t* smo,
 {
 	ctl_setup_pmsm_smo(smo,
 		dsn->Rs, dsn->Ld, dsn->Lq, drv->control_law_freq,
-		drv->current_closeloop_bw * 2.0f, drv->speed_closeloop_bw * 2.0f,
+		drv->speed_closeloop_bw * 6.28, drv->speed_closeloop_bw * 6.28,
 		pid_kp, pid_ki, pid_kd,
 		CTRL_T(1.2), -CTRL_T(1.2), // unit p.u.
 		k_slide, np->rated_speed_rpm, dsn->pole_pair);

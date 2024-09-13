@@ -34,27 +34,10 @@ extern "C"
 
 	}ctl_pos_loop_p_ctrl_t;
 
-	void ctl_init_pos_loop_p_ctrl(ctl_pos_loop_p_ctrl_t* pos_ctrl)
-	{
-		ctl_init_divider(&pos_ctrl->div);
-
-		pos_ctrl->target_pos = 0;
-		pos_ctrl->target_ang = 0;
-
-		pos_ctrl->actual_pos = 0;
-		pos_ctrl->actual_ang = 0;
-
-		pos_ctrl->kp = CTRL_T(10.0);
-		pos_ctrl->speed_limit = GMP_CONST_1;
-	}
+	void ctl_init_pos_loop_p_ctrl(ctl_pos_loop_p_ctrl_t* pos_ctrl);
 
 	void ctl_setup_pos_loop_p_ctrl(ctl_pos_loop_p_ctrl_t* pos_ctrl,
-		ctrl_gt kp, ctrl_gt speed_limit, uint32_t division)
-	{
-		pos_ctrl->kp = kp;
-		pos_ctrl->speed_limit = speed_limit;
-		ctl_setup_divider(&pos_ctrl->div, division);
-	}
+		ctrl_gt kp, ctrl_gt speed_limit, uint32_t division);
 
 	GMP_STATIC_INLINE
 		void ctl_set_target_position_for_pos_loop_p_ctrl(
@@ -121,6 +104,12 @@ extern "C"
 		{
 			pos_ctrl->actual_pos -= 1;
 		}
+	}
+
+	GMP_STATIC_INLINE
+	ctrl_gt ctl_get_pos_loop_p_ctrl_target_spd(ctl_pos_loop_p_ctrl_t* pos_ctrl)
+	{
+		return pos_ctrl->speed_ref;
 	}
 
 #ifdef __cplusplus

@@ -138,7 +138,7 @@
 #define MOTOR_DRIVER_ADC_CURRENT_FULL_SCALE ((33.0))
 
 	// ADC Current Bias p.u.
-#define MOTOR_DIRVER_ADC_CURRENT_BIAS_PU    (0.5)
+#define MOTOR_DIRVER_ADC_CURRENT_BIAS_PU    (0.48)
 
 	// ADC Voltage Full scale Range
 #define MOTOR_DRIVER_ADC_VOLTAGE_DC_FULL_SCALE ((80.0))

@@ -7,6 +7,9 @@
 #include <ctl/component/motor/motor_driver_consultant.h>
 #include <ctl/component/motor/pmsm_consultant.h>
 
+
+//#include <arm_math.h>
+
 #ifndef _FILE_PMSM_SMO_H_
 #define _FILE_PMSM_SMO_H_
 
@@ -79,7 +82,7 @@ extern"C"
 	}ctl_pmsm_smo_observer_t;
 
 	void ctl_init_pmsm_smo(ctl_pmsm_smo_observer_t* smo);
-	
+
 	void ctl_setup_pmsm_smo(ctl_pmsm_smo_observer_t* smo,
 		parameter_gt Rs, parameter_gt Ld, parameter_gt Lq, parameter_gt f_ctrl,
 		parameter_gt fc_e, parameter_gt fc_omega,
@@ -95,7 +98,7 @@ extern"C"
 		ctl_motor_driver_consultant_t* drv,
 		// use it to per unit controller
 		ctl_pmsm_nameplate_consultant_t* np,
-		ctrl_gt pid_kp, ctrl_gt pid_ki, ctrl_gt pid_kd, 
+		ctrl_gt pid_kp, ctrl_gt pid_ki, ctrl_gt pid_kd,
 		ctrl_gt k_slide);
 
 	GMP_STATIC_INLINE
@@ -109,7 +112,7 @@ extern"C"
 	}
 
 	GMP_STATIC_INLINE
-	ctrl_gt ctl_step_pmsm_smo(ctl_pmsm_smo_observer_t* smo)
+		ctrl_gt ctl_step_pmsm_smo(ctl_pmsm_smo_observer_t* smo)
 	{
 		// Model
 		ctrl_gt delta_i_alpha = ctrl_mpy(smo->k1, smo->u_alpha - smo->e_alpha_est - smo->z_alpha)
@@ -125,9 +128,9 @@ extern"C"
 		smo->i_beta_est += delta_i_beta;
 
 		// Slide model
-		smo->z_alpha = ctrl_mpy(ctrl_sat(smo->i_alpha_est - smo->i_alpha, CTRL_T(0.01), -CTRL_T(0.01)),
+		smo->z_alpha = ctrl_mpy(ctrl_sat(smo->i_alpha_est - smo->i_alpha, CTRL_T(0.1), -CTRL_T(0.1)),
 			smo->k_slide);
-		smo->z_beta = ctrl_mpy(ctrl_sat(smo->i_beta_est - smo->i_beta, CTRL_T(0.01), -CTRL_T(0.01)),
+		smo->z_beta = ctrl_mpy(ctrl_sat(smo->i_beta_est - smo->i_beta, CTRL_T(0.1), -CTRL_T(0.1)),
 			smo->k_slide);
 
 		// Filter and get e est
@@ -140,28 +143,36 @@ extern"C"
 		// 0. generate phasor
 		ctl_set_phasor_via_angle(smo->theta_est, &smo->phasor);
 
+		//smo->phasor.dat[0] = (arm_sin_q31(smo->theta_est << (31 - 24))) >> (31 - 24);
+		//smo->phasor.dat[1] = (arm_cos_q31(smo->theta_est << (31 - 24))) >> (31 - 24);
+
 		// 1. error signal generate
 		ctrl_gt e_error = -ctrl_mpy(smo->e_alpha_est, smo->phasor.dat[1])
 			- ctrl_mpy(smo->e_beta_est, smo->phasor.dat[0]);
-		
+
 		// 2. PLL speed lock routine
 		ctl_step_pid_ser(&smo->pid_pll, e_error);
 
 		// 3. filter speed, unit rad/tick
 		smo->wr = ctrl_mpy(smo->pid_pll.out, smo->k_filter_omega)
 			+ ctrl_mpy(smo->wr, CTRL_T(1.0) - smo->k_filter_omega);
-		
+
 		// 4. update theta
 		smo->theta_est += smo->wr;
-		
-		if(smo->theta_est > GMP_CONST_2_PI)
+
+		if (smo->theta_est > GMP_CONST_2_PI)
 			smo->theta_est -= GMP_CONST_2_PI;
-		else if(smo->theta_est < 0)
+		else if (smo->theta_est < 0)
 			smo->theta_est += GMP_CONST_2_PI;
-		
+
 
 		// 5. update speed
 		smo->spd_est_pu = ctrl_mpy(smo->wr, smo->spd_sf);
+
+
+		// 6. output phase 
+		//float out = theta + 180 * atan(speed / wc) / Pi;
+		// UPDATE HERE
 
 		return smo->theta_est;
 	}

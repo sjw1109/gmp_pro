@@ -44,7 +44,7 @@ enum DQ_ASIC_ENUM
 
 // 
 
-
+extern CORDIC_HandleTypeDef hcordic;
 
 // angle to 2-d phasor
 GMP_STATIC_INLINE
@@ -52,6 +52,14 @@ void ctl_set_phasor_via_angle(ctrl_gt angle, GMP_CTL_OUTPUT_TAG ctl_vector2_t* p
 {
 	phasor->dat[0] = ctrl_sin(angle);
 	phasor->dat[1] = ctrl_cos(angle);
+
+
+	//ctrl_gt theta = ctrl_mpy(theta, GMP_CONST_1_OVER_2PI);
+
+	//hcordic.Instance->WDATA = theta << (31 - 24);
+	//phasor->dat[0] = (int32_t)(hcordic.Instance->RDATA) >> (31 - 24);
+	//phasor->dat[1] = (int32_t)(hcordic.Instance->RDATA) >> (31 - 24);
+
 }
 
 // clark coordinate axes transform

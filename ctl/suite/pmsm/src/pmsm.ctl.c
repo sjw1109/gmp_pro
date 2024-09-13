@@ -316,10 +316,10 @@ void ctl_step_pmsm_ctl_entity(pmsm_ctl_entity_t* entity)
 	ctl_ct_park(&entity->Iab, &entity->phasor, &entity->Idq0);
 
 	// Voltage Clark Transform
-	ctl_get_adc_tri_channel_via_vector3(&entity->Vabc, &abc_vector);
-	ctl_ct_clark(&abc_vector, &entity->Vab);
+//	ctl_get_adc_tri_channel_via_vector3(&entity->Vabc, &abc_vector);
+//	ctl_ct_clark(&abc_vector, &entity->Vab);
 	// Voltage Park Transform
-	ctl_ct_park(&entity->Vab, &entity->phasor, &entity->Vdq0);
+//	ctl_ct_park(&entity->Vab, &entity->phasor, &entity->Vdq0);
 
 	// Sync User Target
 	entity->spd_set = entity->spd_set_user;

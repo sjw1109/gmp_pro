@@ -9,6 +9,7 @@
 #include <ctl/component/motor/pmsm.smo.h>
 
 #include <ctl/component/motion/basic_pos_loop_p.h>
+#include <ctl/component/motion/knob_pos_loop.h>
 
 #include <math.h>
 
@@ -54,8 +55,14 @@ transmit_package_t tx_pak;
 receive_package_t rx_pak;
 
 
+// 1. OpenLoop
+// 2. Current Loop
+// 3. Speed Loop
+// 4. Position Loop
+// 5. Knob Application
+// 6. SMO Speed Loop
 
-#define BUILD_LEVEL 4
+#define BUILD_LEVEL 5
 
 // extern variables
 extern uint16_t adc_data[7];
@@ -68,16 +75,26 @@ ctl_motor_driver_consultant_t drv = MOTOR_DRIVER_CONSULTANT_WRAPPER;
 ctl_pmsm_nameplate_consultant_t np = MOTOR_PMSM_NAMEPLATE_CONSULTANT_WRAPPER;
 ctl_pmsm_dsn_consultant_t dsn = MOTOR_PMSM_DESIGN_CONSULTANT_WRAPPER;
 
-ctl_pmsm_smo_observer_t pmsm_smo;
-ctl_pos_loop_p_ctrl_t pos_ctrl;
 
 // open loop angle source
 ctl_src_rg_t rg;
 
+// BUILD_LEVEL 4 Position Loop
+ctl_pos_loop_p_ctrl_t pos_ctrl;
+
+// Build Level 5 Knob Position Loop
+ctl_pmsm_knob_pos_loop knob;
+
+// Build Level 6 PMSM_SMO for speed loop
+ctl_pmsm_smo_observer_t pmsm_smo;
+// SMO encoder
+ctrl_gt encoder_smo;
+// Switch for SMO
+uint32_t spd_smo_sw = 0;
 
 // Encoder buffer
 uint32_t encoder_src;
-ctrl_gt encoder_smo;
+
 
 // Initialize function for GMP-CTL
 // CTL initialize routine
@@ -128,13 +145,17 @@ void ctl_init()
 	ctl_init_pmsm_smo(&pmsm_smo);
 	ctl_setup_pmsm_smo_via_consultant(&pmsm_smo,
 		&dsn, &drv, &np,
-		CTRL_T(1.0), CTRL_T(0.5),CTRL_T(0), 
-		CTRL_T(1.0)
+		CTRL_T(1.0/10), CTRL_T(0.5/10),CTRL_T(0), 
+		CTRL_T(0.5)
 		);
 		
-	//  pos loop
+	//  pos loop for Level 4
 	ctl_init_pos_loop_p_ctrl(&pos_ctrl);
 	ctl_setup_pos_loop_p_ctrl(&pos_ctrl, CTRL_T(0.25), CTRL_T(0.2), 10);
+
+	// pos loop for Level 5 knob
+	ctl_init_knob_pos_loop(&knob);
+	ctl_setup_knob_pos_loop(&knob, CTRL_T(2.0), CTRL_T(0.05), 4, 10);
 
 #if BUILD_LEVEL == 1
 	// OPEN LOOP
@@ -156,8 +177,8 @@ void ctl_init()
 
 	pmsm.ctrl.pos_encoder.offset = 2099199;
 
-	//ctl_set_pid_limit(&pmsm.ctrl.Idq_ctl[phase_D].pid, CTRL_T(-0.25), CTRL_T(0.25));
-	//ctl_set_pid_limit(&pmsm.ctrl.Idq_ctl[phase_Q].pid, CTRL_T(-0.25), CTRL_T(0.25));
+	ctl_set_pid_limit(&pmsm.ctrl.Idq_ctl[phase_D].pid, CTRL_T(-0.25), CTRL_T(0.25));
+	ctl_set_pid_limit(&pmsm.ctrl.Idq_ctl[phase_Q].pid, CTRL_T(-0.25), CTRL_T(0.25));
 
 	// OPEN LOOP
 	ctl_set_pmsm_ctl_entity_as_currentloop(&pmsm.ctrl);
@@ -167,7 +188,7 @@ void ctl_init()
 
 #endif
 
-#if BUILD_LEVEL >= 3
+#if (BUILD_LEVEL == 3) || (BUILD_LEVEL == 4)
 	// Speed Loop
 
 	// Config Speed PID
@@ -185,10 +206,29 @@ void ctl_init()
 	ctl_set_pmsm_ctl_spd(&pmsm.ctrl, CTRL_T(0.2));
 	
 
+	spd_smo_sw = 0;
+
 #endif
 
-#if BUILD_LEVEL >= 4
-	// position loop
+#if (BUILD_LEVEL == 5)
+	// position loop knob limit
+	ctl_set_pid_limit(&pmsm.ctrl.spd_ctl.pid, -CTRL_T(0.125), CTRL_T(0.125));
+		
+	ctl_set_pid_parameter(&pmsm.ctrl.spd_ctl.pid, 
+		CTRL_T(0.125), CTRL_T(0.000), CTRL_T(0.0));
+	
+	ctl_set_pid_parameter(&pmsm.ctrl.Idq_ctl[phase_D].pid,
+		CTRL_T(1), CTRL_T(0.000), CTRL_T(0.0)
+	);
+
+	ctl_set_pid_parameter(&pmsm.ctrl.Idq_ctl[phase_Q].pid,
+		CTRL_T(1), CTRL_T(0.001), CTRL_T(0.0)
+	);
+	
+	ctl_set_pid_limit(&pmsm.ctrl.Idq_ctl[phase_D].pid, CTRL_T(-0.18), CTRL_T(0.18));
+	ctl_set_pid_limit(&pmsm.ctrl.Idq_ctl[phase_Q].pid, CTRL_T(-0.18), CTRL_T(0.18));
+
+	ctl_set_pmsm_ctl_entity_as_speedloop(&pmsm.ctrl);
 	
 #endif 
 
@@ -269,20 +309,70 @@ void ctl_core_stage_routine(ctl_object_nano_t* pctl_obj)
 
 #endif 
 
+#if(BUILD_LEVEL == 4)
 	ctl_input_pos_loop_p_ctrl_via_only_ang(&pos_ctrl, obj->ctrl.pos_encoder.position);
+	
 	ctl_step_pos_loop_p_ctrl(&pos_ctrl);
 	
-#if(BUILD_LEVEL == 4)
-	obj->ctrl.spd_set_user = pos_ctrl.speed_ref;
+	obj->ctrl.spd_set_user = ctl_get_pos_loop_p_ctrl_target_spd(&pos_ctrl);
 #endif 
+
+#if (BUILD_LEVEL == 5)
+	ctl_input_knob_pos_via_only_ang(&knob, obj->ctrl.pos_encoder.position);
+	
+	ctl_step_knob_pos_loop(&knob);
+	
+	ctl_set_pmsm_ctl_spd(&obj->ctrl, ctl_get_knob_target_speed(&knob));
+	
+//	obj->ctrl.spd_set_user = ctl_get_knob_target_spd(&knob);
+	
+	
+//	obj->ctrl.enable_outer_angle = 1;
+//	ctl_set_pmsm_force_angle(&pmsm.ctrl, ctl_get_knob_target_angle(&knob));
+	
+//	pmsm.ctrl.Idq_set_user[1] = 0;
+//	pmsm.ctrl.Idq_set_user[0] = ctl_get_knob_target_current(&knob);
+//	
+//	pmsm.ctrl.Vdq_set_user[1] = 0;
+//	pmsm.ctrl.Vdq_set_user[0] = ctl_get_knob_target_current(&knob);
+#endif //BUILD_LEVEL
+	
+
+#if BUILD_LEVEL == 6
+	
+	if(spd_smo_sw)
+	{
+//		ctrl_gt delta = pmsm.ctrl.pos_encoder.elec_angle - encoder_smo;
+//		
+//		ctrl_gt delta_abs = delta < 0 ? -delta : delta;
+//		
+//		if(delta_abs < 100)
+//		{
+//			
+//		}
+//		
+		obj->ctrl.enable_outer_angle = 1;
+		ctl_set_pmsm_force_angle(&pmsm.ctrl, encoder_smo);
+	}
+	else
+	{
+		obj->ctrl.enable_outer_angle = 0;
+	}
+#endif
+	
+
+
 	
 	ctl_step_pmsm_ctl_entity(&obj->ctrl);
 	
-//	ctl_input_pmsm_smo(&pmsm_smo,
-//		obj->ctrl.Vab_set.dat[0],obj->ctrl.Vab_set.dat[1],
-//		obj->ctrl.Iab.dat[0],obj->ctrl.Iab.dat[1]);
+#if BUILD_LEVEL == 6
+	ctl_input_pmsm_smo(&pmsm_smo,
+		obj->ctrl.Vab_set.dat[0],obj->ctrl.Vab_set.dat[1],
+		obj->ctrl.Iab.dat[0],obj->ctrl.Iab.dat[1]);
 
-//	encoder_smo = ctl_step_pmsm_smo(&pmsm_smo);
+	encoder_smo = ctl_step_pmsm_smo(&pmsm_smo);
+#endif
+
 }
 
 void ctl_output_stage_routine(ctl_object_nano_t* pctl_obj)
@@ -349,7 +439,6 @@ void ctl_request_stage_routine(ctl_object_nano_t* pctl_obj)
 	HAL_SPI_Transmit(&hspi3, (uint8_t*)&req_cmd, 1, 1);
 	for (int i=0;i<20;++i) asm("nop");
 	
-	req_cmd = 0xFFFF;
 	HAL_SPI_Receive(&hspi3, (uint8_t*)&rec_cmd, 1, 1);
 	
 	HAL_GPIO_WritePin(SPI3_CS_GPIO_Port, SPI3_CS_Pin, GPIO_PIN_SET);

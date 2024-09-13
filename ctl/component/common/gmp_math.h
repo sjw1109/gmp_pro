@@ -45,6 +45,7 @@ typedef struct _tag_ctl_vector2_t
 // Here're some constants for encoder and filter
 #define GMP_CONST_PI			(CTRL_T(3.1415926535897932))
 #define GMP_CONST_2_PI			(CTRL_T(6.2831853071795865))
+#define GMP_CONST_1_OVER_2PI    (CTRL_T(1/6.2831853071795865))
 
 
 #endif // _FILE_GMP_CTL_MATH_H_
