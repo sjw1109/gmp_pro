@@ -107,7 +107,7 @@ typedef GMP_PORT_TIME_T time_gt;
 
 
 // ....................................................................//
-// basic element of timing containing
+// basic element of size containing
 //
 #ifndef GMP_PORT_SIZE_T
 #define GMP_PORT_SIZE_T                uint32_t
