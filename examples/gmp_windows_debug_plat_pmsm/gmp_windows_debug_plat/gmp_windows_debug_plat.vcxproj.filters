@@ -140,9 +140,6 @@
     <ClCompile Include="user_main.cpp">
       <Filter>user/lab</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\core\pm\workflow\workflow.cpp">
-      <Filter>gmp_core\pm</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\core\util\ds\data_ring_buffer.c">
       <Filter>gmp_core\util</Filter>
     </ClCompile>
@@ -237,6 +234,9 @@
       <Filter>gmp_core\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\core\src\gmp_main.cpp">
+      <Filter>gmp_core\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\core\src\pm\workflow.cpp">
       <Filter>gmp_core\src</Filter>
     </ClCompile>
   </ItemGroup>

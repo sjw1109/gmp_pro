@@ -53,7 +53,7 @@ In `core` folder, all the GMP framework and basic function is declared and defin
 | fpga<br />(optional)           | FPGA support relate       | This folder provides a set of FPGA peripherals. These peripheral may be add to your heterogeneous designs. |
 | util<br />(optional)           | utilities provided by GMP | Some data structure and algorithm and some other utilities including in this folder. |
 
-Generally, and at least you have to add two files in your project, which is `error_code.c` and `gmp_main.cpp` which are stored in `<gmp root>/core/std`. If memory management is necessary you should add the `block_mem.c` in `core/mm` folder.
+Generally, and at least you have to add two files in your project, which is `error_code.c` and `gmp_main.cpp` which are stored in `<gmp root>/core/std`. If memory management is necessary you should add the `block_mem.c` in `core/mm` folder. These files are stored in `\core\src` folder.
 
 The  folder `<gmp root>/core/std`, provides all the necessary supports which is need by GMP, including four parts, that is, compiler standardization in `compiler_sup.h`, type name standardization in `default.types.h`, error code standardization in `error_code.h`, GMP basic port functions in `gmp_cport.h`.  
 

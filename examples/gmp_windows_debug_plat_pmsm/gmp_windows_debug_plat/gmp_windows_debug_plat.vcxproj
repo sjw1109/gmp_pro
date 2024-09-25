@@ -184,10 +184,10 @@
     <ClInclude Include="..\user.config.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\core\pm\workflow\workflow.cpp" />
     <ClCompile Include="..\..\..\core\src\block_mem.c" />
     <ClCompile Include="..\..\..\core\src\error_code.c" />
     <ClCompile Include="..\..\..\core\src\gmp_main.cpp" />
+    <ClCompile Include="..\..\..\core\src\pm\workflow.cpp" />
     <ClCompile Include="..\..\..\core\util\ds\data_ring_buffer.c" />
     <ClCompile Include="..\..\..\core\util\ds\list.c" />
     <ClCompile Include="..\..\..\core\util\udp_svr\udp_svr.cpp" />
