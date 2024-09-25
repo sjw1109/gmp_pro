@@ -41,6 +41,8 @@
 #include <core/std/gmp_peripheral_definition.h>
 
 // Invoke peripheral headers
+#include <core/dev/devif.h>
+
 
 //////////////////////////////////////////////////////////////////////////
 // Step II: Invoke all the STM32 general headers.

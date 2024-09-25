@@ -117,6 +117,17 @@ typedef GMP_PORT_SIZE_T size_gt;
 
 typedef GMP_PORT_ADDR_T addr_gt;
 
+// ....................................................................//
+// basic element of address containing with at least 32-bit size
+//
+#ifndef GMP_PORT_ADDR32_T
+#define GMP_PORT_ADDR32_T                uint32_t
+#define GMP_PORT_ADDR32_SIZE_PER_BITS    (32)
+#define GMP_PORT_ADDR32_SIZE_PER_BYTES   (4)
+#endif // GMP_PORT_ADDR_T
+
+typedef GMP_PORT_ADDR32_T addr32_gt;
+
 
 // ....................................................................//
 // basic element of address offset containing
