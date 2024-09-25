@@ -8,11 +8,13 @@ extern "C"
 {
 #endif // __cplusplus
 
-// This file provide a set of stucture type which owns a suffix ift (interface type).
+// This file provide a set of structure type which owns a suffix ift (interface type).
 
 // This file is independent of the other modules.
 
-// half Depulex communication
+
+// ....................................................................//
+// half Duplex communication
 // such as half duplex SPI, half duplex UART (RS485)
 typedef struct _tag_half_duplex_channel_t
 {
@@ -27,7 +29,8 @@ typedef struct _tag_half_duplex_channel_t
 
 }half_duplex_ift;
 
-// Delpulex communication
+// ....................................................................//
+// Duplex communication
 // Such as SPI, UART, USART
 typedef struct _tag_duplex_channel_t
 {
@@ -37,14 +40,15 @@ typedef struct _tag_duplex_channel_t
     // receive buffer
     data_gt* rx_buf;
 
-    // lenght of the buffer (tx and rx buf)
+    // length of the buffer (tx and rx buffer have the same length)
     size_gt length;
 
-    // capacity of the buffer (tx and rx buf)
+    // capacity of the buffer (tx and rx buf have the same capacity)
     size_gt capacity;
     
 }duplex_ift;
 
+// ....................................................................//
 // half duplex with Address
 // such as IIC
 typedef struct _tag_half_duplex_with_addr_channel_t
@@ -60,8 +64,10 @@ typedef struct _tag_half_duplex_with_addr_channel_t
 
 }half_duplex_with_addr_ift;
 
+
+// ....................................................................//
 // half duplex with dual address for IIC memeory mode
-typedef struct _tag_iic_channel_t
+typedef struct _tag_iic_memory_channel_t
 {
     // device address 
     addr32_gt dev_addr;
@@ -75,8 +81,9 @@ typedef struct _tag_iic_channel_t
     // length of buffer
     size_gt length;
 
-}iic_ift;
+}iic_memory_ift;
 
+// ....................................................................//
 // CAN interface
 typedef struct _tag_can_channel_t
 {
@@ -97,6 +104,31 @@ typedef struct _tag_can_channel_t
     data_gt data[8];
 
 }can_ift;
+
+// ....................................................................//
+// Slot interface
+// This struct contains a fixed length buffer
+typedef struct _tag_slot_interface_t
+{
+    // slot size
+    addr_gt length;
+
+    // slot buffer pointer
+    data_gt* buffer;
+}interface_slot_ift;
+
+// ....................................................................//
+// Strip for slot interface
+// This struct contains a list of slots.
+typedef struct _tag_strip_interface_t
+{
+    // strip size
+    // how many slots the slot has.
+    uint32_t size;
+
+    // pointer list of slot interface
+    interface_slot_ift** slot_it;
+}interface_strip_ift;
 
 #ifdef __cplusplus
 }

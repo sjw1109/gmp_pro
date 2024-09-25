@@ -16,6 +16,18 @@ extern "C"
 	// Windows Standard headers
 #include <Windows.h>
 
+	// System tick
+	typedef struct simulink_timer
+	{
+		// time from Simulink
+		double simulink_time;
+
+		// time from Windows
+		SYSTEMTIME system_time;
+
+
+	};
+
 #ifdef __cplusplus
 }
 #endif // __cplusplus

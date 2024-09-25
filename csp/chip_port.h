@@ -1,5 +1,7 @@
 
 
+#include <csp.general.h>
+
 //////////////////////////////////////////////////////////////////////////
 // Section I import all chip library files
 // 
@@ -10,7 +12,7 @@
 //#if defined STM32G030xx
 //#include <csp/stm32/stm32g0/stm32g0_general.h>
 //#elif defined STM32G071xx
-//#include <csp/stm32/stm32g0/stm32g0_general.h>
+//#include <csp/stm32/stm32g0/stm32g0_general.h>	
 //#elif defined STM32F411xx
 //#include <csp/stm32/stm32f4/stm32f4_general.h>
 //#elif defined STM32L151xx
@@ -34,19 +36,19 @@
 //
 // Select master chip config
 
-#if (MASTERCHIP == GMP_AUTO_STM32)
-// STMicroelectronics
-#include <csp/stm32/stm32_general.h>
-
-#elif (MASTERCHIP == GMP_AUTO_TIC2000)
-// Texas Instrument
-#include <csp/dspc2000/dsp_c2000_general.h>
-
-#elif (MASTERCHIP == GMP_AUTO_WINDOWS)
-// Windows
-#include <csp/windows/win_include.h>
-
-#endif//MASTERCHIP
+//#if (MASTERCHIP == GMP_AUTO_STM32)
+//// STMicroelectronics
+//#include <csp/stm32/stm32_general.h>
+//
+//#elif (MASTERCHIP == GMP_AUTO_TIC2000)
+//// Texas Instrument
+//#include <csp/dspc2000/dsp_c2000_general.h>
+//
+//#elif (MASTERCHIP == GMP_AUTO_WINDOWS)
+//// Windows
+//#include <csp/windows/win_include.h>
+//
+//#endif//MASTERCHIP
 
 
 //////////////////////////////////////////////////////////////////////////

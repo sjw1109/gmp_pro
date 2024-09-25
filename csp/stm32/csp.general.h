@@ -29,19 +29,10 @@
 
 
 
-// default Type config
-// Change some default type here.
-#define GMP_PORT_DATA_T				    unsigned char
-#define GMP_PORT_DATA_SIZE_PER_BITS		(8)
-#define GMP_PORT_DATA_SIZE_PER_BYTES    (1)
+// Invoke default GMP CSP headers
+#include <core/std/gmp.std.h>
 
-// Invoke default type
-#include <core/std/default.types.h>
 
-#include <core/std/gmp_peripheral_definition.h>
-
-// Invoke peripheral headers
-#include <core/dev/devif.h>
 
 
 //////////////////////////////////////////////////////////////////////////

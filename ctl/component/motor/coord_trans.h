@@ -44,7 +44,7 @@ enum DQ_ASIC_ENUM
 
 // 
 
-extern CORDIC_HandleTypeDef hcordic;
+//extern CORDIC_HandleTypeDef hcordic;
 
 // angle to 2-d phasor
 GMP_STATIC_INLINE

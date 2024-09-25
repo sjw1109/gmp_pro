@@ -1,4 +1,4 @@
-#include <csp/windows/win_include.h>
+#include <csp.general.h>
 
 #ifndef _FILE_WIN_INCLUDE_HPP_
 #define _FILE_WIN_INCLUDE_HPP_

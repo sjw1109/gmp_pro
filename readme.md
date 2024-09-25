@@ -103,9 +103,13 @@ For instance, if  I've install GMP in my `E:\lib\gmp` folder. Then I create a pr
 
 `E:\lib\gmp`
 
++ Select correct GMP CSP (Chip Support Package) 
+
+`E:\lib\gmp\csp\stm32`
+
 ### Customize your own GMP via user.config.h
 
-Generally, you may add only one line to `user.config.h` all the config may automatically added. 
+Generally, you may add only one line to `user.config.h` all the configure may automatically added. 
 
 `#define MASTERCHIP GMP_AUTO_STM32`
 

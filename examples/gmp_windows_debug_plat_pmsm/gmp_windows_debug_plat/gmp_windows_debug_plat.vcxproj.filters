@@ -34,6 +34,9 @@
     <Filter Include="ctl">
       <UniqueIdentifier>{bfdbd758-6b75-4a84-a1e9-55144965e4ef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="gmp_core\src">
+      <UniqueIdentifier>{681fa3a3-7af5-45ed-9a06-c9982ab513d9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\user.config.h">
@@ -114,10 +117,16 @@
     <ClInclude Include="..\..\..\third_party\iqmath\src\_IQNtables.h">
       <Filter>IQMATH</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\csp\windows\win_include.h">
+    <ClInclude Include="..\..\..\csp\windows\csp.config.h">
       <Filter>gmp_windows_simulate</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\csp\windows\win_include.hpp">
+    <ClInclude Include="..\..\..\csp\windows\csp.general.h">
+      <Filter>gmp_windows_simulate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\csp\windows\csp.general.hpp">
+      <Filter>gmp_windows_simulate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\csp\windows\csp.typedef.h">
       <Filter>gmp_windows_simulate</Filter>
     </ClInclude>
   </ItemGroup>
@@ -131,17 +140,8 @@
     <ClCompile Include="user_main.cpp">
       <Filter>user/lab</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\core\mm\block_mem.c">
-      <Filter>gmp_core\mm</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\core\pm\workflow\workflow.cpp">
       <Filter>gmp_core\pm</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\core\std\error_code.c">
-      <Filter>gmp_core\std</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\core\std\gmp_main.cpp">
-      <Filter>gmp_core\std</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\core\util\ds\data_ring_buffer.c">
       <Filter>gmp_core\util</Filter>
@@ -209,15 +209,6 @@
     <ClCompile Include="..\..\..\csp\windows\windows_simulate.cpp">
       <Filter>gmp_windows_simulate</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\ctl\component\common\src\ctl_common_init.c">
-      <Filter>ctl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\ctl\component\interface_util\src\peripheral_if_util_init.c">
-      <Filter>ctl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\ctl\component\motor\src\ctl_motor_init.c">
-      <Filter>ctl</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\ctl\framework\src\ctl_nano.c">
       <Filter>ctl</Filter>
     </ClCompile>
@@ -226,6 +217,27 @@
     </ClCompile>
     <ClCompile Include="..\..\..\ctl\suite\pmsm\pmsm_speed_closeloop\pmsm_speed_closeloop.c">
       <Filter>ctl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ctl\component\src\ctl_common_init.c">
+      <Filter>ctl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ctl\component\src\ctl_motor_init.c">
+      <Filter>ctl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ctl\component\src\motion_init.c">
+      <Filter>ctl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ctl\component\src\peripheral_if_util_init.c">
+      <Filter>ctl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\core\src\block_mem.c">
+      <Filter>gmp_core\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\core\src\error_code.c">
+      <Filter>gmp_core\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\core\src\gmp_main.cpp">
+      <Filter>gmp_core\src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

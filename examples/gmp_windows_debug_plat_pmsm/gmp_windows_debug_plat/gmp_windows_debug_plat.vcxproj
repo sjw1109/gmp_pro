@@ -73,20 +73,20 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>E:\lib\gmp_pro;E:\lib\gmp_pro;$(IncludePath)</IncludePath>
-    <ExternalIncludePath>.;E:\lib\gmp_pro\;E:\lib\gmp_pro\third_party\iqmath\;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>.;E:\lib\gmp_pro\csp\windows;E:\lib\gmp_pro\;E:\lib\gmp_pro\third_party\iqmath\;$(ExternalIncludePath)</ExternalIncludePath>
     <PublicIncludeDirectories>E:\lib\gmp_pro\;E:\lib\gmp_pro\third_party\iqmath\;</PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>E:\lib\gmp_pro;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <ExternalIncludePath>.;E:\lib\gmp_pro\;E:\lib\gmp_pro\third_party\iqmath\;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>.;E:\lib\gmp_pro\csp\windows;E:\lib\gmp_pro\;E:\lib\gmp_pro\third_party\iqmath\;$(ExternalIncludePath)</ExternalIncludePath>
     <PublicIncludeDirectories>E:\lib\gmp_pro\;E:\lib\gmp_pro\third_party\iqmath\;</PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ExternalIncludePath>.;E:\lib\gmp_pro\;E:\lib\gmp_pro\third_party\iqmath\;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>.;E:\lib\gmp_pro\csp\windows;E:\lib\gmp_pro\;E:\lib\gmp_pro\third_party\iqmath\;$(ExternalIncludePath)</ExternalIncludePath>
     <PublicIncludeDirectories>E:\lib\gmp_pro\;E:\lib\gmp_pro\third_party\iqmath\;</PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ExternalIncludePath>.;E:\lib\gmp_pro\;E:\lib\gmp_pro\third_party\iqmath\;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>.;E:\lib\gmp_pro\csp\windows;E:\lib\gmp_pro\;E:\lib\gmp_pro\third_party\iqmath\;$(ExternalIncludePath)</ExternalIncludePath>
     <PublicIncludeDirectories>E:\lib\gmp_pro\;E:\lib\gmp_pro\third_party\iqmath\;</PublicIncludeDirectories>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -174,25 +174,28 @@
     <ClInclude Include="..\..\..\core\util\ds\data_ring_buffer.h" />
     <ClInclude Include="..\..\..\core\util\ds\list.h" />
     <ClInclude Include="..\..\..\core\util\udp_svr\udp_svr.hpp" />
-    <ClInclude Include="..\..\..\csp\windows\win_include.h" />
-    <ClInclude Include="..\..\..\csp\windows\win_include.hpp" />
+    <ClInclude Include="..\..\..\csp\windows\csp.config.h" />
+    <ClInclude Include="..\..\..\csp\windows\csp.general.h" />
+    <ClInclude Include="..\..\..\csp\windows\csp.general.hpp" />
+    <ClInclude Include="..\..\..\csp\windows\csp.typedef.h" />
     <ClInclude Include="..\..\..\third_party\iqmath\src\_IQNdiv.h" />
     <ClInclude Include="..\..\..\third_party\iqmath\src\_IQNmpy.h" />
     <ClInclude Include="..\..\..\third_party\iqmath\src\_IQNtables.h" />
     <ClInclude Include="..\user.config.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\core\mm\block_mem.c" />
     <ClCompile Include="..\..\..\core\pm\workflow\workflow.cpp" />
-    <ClCompile Include="..\..\..\core\std\error_code.c" />
-    <ClCompile Include="..\..\..\core\std\gmp_main.cpp" />
+    <ClCompile Include="..\..\..\core\src\block_mem.c" />
+    <ClCompile Include="..\..\..\core\src\error_code.c" />
+    <ClCompile Include="..\..\..\core\src\gmp_main.cpp" />
     <ClCompile Include="..\..\..\core\util\ds\data_ring_buffer.c" />
     <ClCompile Include="..\..\..\core\util\ds\list.c" />
     <ClCompile Include="..\..\..\core\util\udp_svr\udp_svr.cpp" />
     <ClCompile Include="..\..\..\csp\windows\windows_simulate.cpp" />
-    <ClCompile Include="..\..\..\ctl\component\common\src\ctl_common_init.c" />
-    <ClCompile Include="..\..\..\ctl\component\interface_util\src\peripheral_if_util_init.c" />
-    <ClCompile Include="..\..\..\ctl\component\motor\src\ctl_motor_init.c" />
+    <ClCompile Include="..\..\..\ctl\component\src\ctl_common_init.c" />
+    <ClCompile Include="..\..\..\ctl\component\src\ctl_motor_init.c" />
+    <ClCompile Include="..\..\..\ctl\component\src\motion_init.c" />
+    <ClCompile Include="..\..\..\ctl\component\src\peripheral_if_util_init.c" />
     <ClCompile Include="..\..\..\ctl\framework\src\ctl_nano.c" />
     <ClCompile Include="..\..\..\ctl\suite\pmsm\pmsm_speed_closeloop\pmsm_speed_closeloop.c" />
     <ClCompile Include="..\..\..\ctl\suite\pmsm\src\pmsm.ctl.c" />

@@ -1,6 +1,7 @@
 
 // This file contains all the C++ interface of chips
 
+#include <csp.general.hpp>
 
 //////////////////////////////////////////////////////////////////////////
 // Step I import all C ports
@@ -21,14 +22,14 @@
 //
 // All the definitions has been done by MASTERCHIP MACRO
 
-#if (MASTERCHIP == GMP_AUTO_STM32)
+//#if (MASTERCHIP == GMP_AUTO_STM32)
+//
+//#elif (MASTERCHIP == GMP_AUTO_TIC2000)
+//#include <csp/dspc2000/dsp_c2000_general.h>
+//
+//#elif (MASTERCHIP == GMP_AUTO_WINDOWS)
+//#include <csp/windows/win_include.hpp>
 
-#elif (MASTERCHIP == GMP_AUTO_TIC2000)
-#include <csp/dspc2000/dsp_c2000_general.h>
-
-#elif (MASTERCHIP == GMP_AUTO_WINDOWS)
-#include <csp/windows/win_include.hpp>
-
-#endif//MASTERCHIP
+//#endif//MASTERCHIP
 
 

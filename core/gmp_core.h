@@ -12,6 +12,9 @@
 // invoke system default config
 #include <.config.h>
 
+// invoke CSP default config
+#include <csp.config.h>
+
 
 //////////////////////////////////////////////////////////////////////////
 // Step II System includes
@@ -36,21 +39,12 @@
 //////////////////////////////////////////////////////////////////////////
 // Step III GMP basement
 // 
-// Compiler support
-#include <core/std/compiler_sup.h>
 
-// GMP error code support
-#include <core/std/error_code.h>
+// Basic GMP standard type definition
+#include <core/std/gmp.std.h>
 
 // <csp> default chip type definition
 #include <csp/chip_port.h>
-
-// default types
-// This header may be seized in `chip_port.h`
-#include <core/std/default.types.h>
-
-// peripheral structure definitions
-#include <core/std/gmp_peripheral_definition.h>
 
 // default peripheral types
 // This header may be seized in `chip_port.h`
