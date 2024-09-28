@@ -89,10 +89,7 @@ void user_loop(void)
 //	else
 //		HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
 	
-	controller_state_dispatch((ctl_object_nano_t*)&pmsm);
-	HAL_TIM_Base_Start(&htim1);
-	
-	
+
 
 }
 

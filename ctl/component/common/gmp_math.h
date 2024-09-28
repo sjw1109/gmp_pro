@@ -1,4 +1,8 @@
 
+// invoke all the GMP features
+#include <core/gmp_core.h>
+
+
 #ifndef _FILE_GMP_CTL_MATH_H_
 #define _FILE_GMP_CTL_MATH_H_
 

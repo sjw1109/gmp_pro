@@ -128,9 +128,7 @@ size_gt spi_tx_direct(spi_handle_t* hspi, data_gt* data, size_gt length)
 
 #ifdef HAL_RCC_MODULE_ENABLED
 
-time_gt gmp_port_system_tick(
-	void
-)
+time_gt gmp_port_system_tick(void)
 {
 	return HAL_GetTick();
 }
@@ -138,31 +136,29 @@ time_gt gmp_port_system_tick(
 
 #endif
 
-void gmp_port_feed_dog(
-	void
-)
+void gmp_port_feed_dog(void)
 {
 #if defined SPECIFY_ENABLE_FEED_WATCHDOG
 	HAL_IWDG_Refresh(&hiwdg);
 #endif // SPECIFY_ENABLE_FEED_WATCHDOG
 }
 
-
-void gmp_csp_startup(
-
-)
+// This function may be called and used to initilize all the peripheral. 
+void gmp_csp_startup(void)
 {}
 
-
-void gmp_port_system_stuck(
-	void
-)
+// This function would be called when fatal error occorred.
+void gmp_port_system_stuck(void)
 {}
 
+// This function would be called when all the initilization process happened.
 void csp_post_process(void)
 {}
 	
-	
 // This function is unreachable.
 void gmp_exit_routine(void)
+{}
+
+// This function may invoke when main loop occurred.
+void gmp_csp_loop(void)
 {}

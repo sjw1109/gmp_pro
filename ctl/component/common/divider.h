@@ -1,3 +1,6 @@
+
+#include <ctl/component/common/gmp_math.h>
+
 #ifndef _FILE_DIVIDER_H_
 #define _FILE_DIVIDER_H_
 

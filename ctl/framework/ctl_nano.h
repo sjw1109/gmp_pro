@@ -1,5 +1,8 @@
 
 
+// Basic headers
+#include <core/gmp_core.h>
+#include <ctl/component/common/divider.h>
 
 #ifndef _FILE_CTL_NANO_H_
 #define _FILE_CTL_NANO_H_

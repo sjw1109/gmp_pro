@@ -1,5 +1,17 @@
 {
-    "files.associations": {
-        "typedef.h": "c"
-    }
+    
+    "clangd.fallbackFlags": [
+        "-I${workspaceFolder}",
+        "-I${workspaceFolder}/csp/example",
+        "-I${workspaceFolder}/third_party/iqmath",
+        "-I${workspaceFolder}/user/example"
+    ],
+
+    "clangd.enableCodeCompletion": true,
+
+    "clangd.arguments": [
+        "--background-index",
+        "-j=12",
+        "--all-scopes-completion",
+    ]
 }

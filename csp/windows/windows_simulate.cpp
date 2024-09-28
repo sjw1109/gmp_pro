@@ -146,3 +146,28 @@ int main(int argc, char* argv[])
 
     gmp_entry();
 }
+
+// This function may invoke when main loop occurred.
+void gmp_csp_loop(void)
+{
+    
+#if defined CTL_DISABLE_MULTITHREAD
+
+		static size_t ctl_invoked_counter = 0;
+
+		ctl_invoked_counter += 1;
+
+		if (ctl_invoked_counter % CTL_MAIN_LOOP_RUNNING_RATIO == 0)
+		{
+			if (gmp_ctl_dispatch())
+			{
+				// meet fatal error.
+				break;
+			}
+		}
+
+		
+#endif // CTL_PC_TEST_ENABLE
+
+}
+

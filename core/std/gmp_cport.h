@@ -1,3 +1,7 @@
+
+// GMP standard type support
+//#include <core/std/gmp.std.h>
+
 // This file should ensure that the user may compile it as a C source file.
 // User may include this file and access the GMP library.
 
@@ -84,6 +88,9 @@ extern "C"
 	// That means user init process may isolate with the controller init process. 
 	void ctl_init(void);
 
+	// This function would be implemented in ctl_main.h
+	void ctl_loop(void);
+
 	// This function would be the endless loop.
 	// User should implement all the loop tasks and round-robin tasks.
 	//
@@ -126,6 +133,9 @@ extern "C"
 	// This function contain a label show of GMP.
 	// 
 	void gmp_setup_label(void);
+
+	// This function would be called every main loop routine.
+	void gmp_csp_loop(void)
 
 	// This function is the last function before mainloop.
 	// This function is implemented by CSP

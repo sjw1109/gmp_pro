@@ -34,6 +34,11 @@ void gmp_port_feed_dog()
     ServiceDog();
 }
 
+// This function may invoke when main loop occurred.
+void gmp_csp_loop(void)
+{}
+
+
 //
 #define EPWM1_TIMER_TBPRD  2000  // Period register
 #define EPWM1_MAX_CMPA     1950

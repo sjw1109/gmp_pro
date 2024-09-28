@@ -1,3 +1,5 @@
+
+
 #include <core/gmp_core.hpp>
 #include <ctl/ctl_core.h>
 
@@ -238,19 +240,21 @@ void ctl_init()
 #endif
 }
 
+// This function would be called in endless loop
+void ctl_loop(void)
+{
+	controller_state_dispatch((ctl_object_nano_t*)&pmsm);
+	HAL_TIM_Base_Start(&htim1);
+	
+}
+
 
 // CTL loop routine
 // This function would be called every controller ISR
 void ctl_dispatch(void)
 {
-
-
-
     // Call CTL nano framework
     controller_dispatch((ctl_object_nano_t*)&pmsm);
-
-
-
 }
 
 

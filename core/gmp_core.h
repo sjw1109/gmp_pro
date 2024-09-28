@@ -7,7 +7,7 @@
 // 
 
 // invoke user config file
-#include "user.config.h"
+#include <user.config.h>
 
 // invoke system default config
 #include <.config.h>
