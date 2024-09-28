@@ -2,7 +2,7 @@
 // gmp header
 #include <core/gmp_core.hpp>
 
-#include "workflow.hpp"
+#include <core/pm/workflow/workflow.hpp>
 
 gmp_wf_node_base_gt wf_end_node_entity(gmp_workflow_t::gmp_wf_end_id);
 gmp_wf_node_base_gt* wf_end_node = &wf_end_node_entity;

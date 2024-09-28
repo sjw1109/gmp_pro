@@ -20,4 +20,4 @@ AlignConsecutiveMacros:
 
 
 # EOF with new line
-InsertNewlineAtEOF: true
+#InsertNewlineAtEOF: true

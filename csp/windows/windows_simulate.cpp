@@ -3,14 +3,9 @@
 
 #include <core/gmp_core.hpp>
 
-
-
-
-
 using std::cout;
 
 std::thread ctl_thread;
-
 
 // Model Interface: receive package
 // Controller Interface: transmit package
@@ -21,12 +16,11 @@ typedef struct _tag_receive_package_t
     double time;
 
     // other informations are ignored here.
-    // ... 
+    // ...
 
-}receive_package_t;
+} receive_package_t;
 
 extern receive_package_t rx_pak;
-
 
 // Global variables
 
@@ -34,9 +28,7 @@ extern receive_package_t rx_pak;
 // UDP server object
 upd_svr_obj_t udp_svr_obj;
 
-
 #endif // USING_SIMULINK_UDP_SIMULATE
-
 
 time_gt gmp_port_system_tick()
 {
@@ -45,35 +37,26 @@ time_gt gmp_port_system_tick()
     return sys.wMinute * 60 + sys.wSecond;
 }
 
-
 time_gt gmp_base_get_system_tick()
 {
     return (time_gt)(rx_pak.time * 1000);
 }
 
-
-void gmp_port_system_stuck(
-    void
-)
+void gmp_port_system_stuck(void)
 {
-
 }
 
 #if defined SPECIFY_ENABLE_FEED_WATCHDOG
 // This function should be implemented by user,
 // Every Loop routine, this function would be called.
 // And user should ensure that the function has only one thing is to feed the watchdog
-void gmp_port_feed_dog(
-    void
-)
+void gmp_port_feed_dog(void)
 {
-
 }
 #endif // SPECIFY_ENABLE_FEED_WATCHDOG
 
 void gmp_setup_peripheral()
 {
-
 }
 
 void gmp_csp_startup(void)
@@ -85,14 +68,12 @@ void gmp_csp_startup(void)
     }
 
     // create a new thread for controller
-
-    
 }
 
 // in order to correct control flow direction
 // This function may send one package first
 // This value is the initial value from user.
-// 
+//
 void csp_post_process(void)
 {
 #ifdef USING_SIMULINK_UDP_SIMULATE
@@ -123,7 +104,6 @@ int gmp_ctl_dispatch(void)
 #endif // USING_SIMULINK_UDP_SIMULATE
 
     return 0;
-
 }
 
 // Resources need to release
@@ -131,15 +111,16 @@ void gmp_exit_routine(void)
 {
     release_udp_server();
 
-    cout << "[INFO] All process has done. " << udp_svr_obj.recv_bytes << " bytes are received, " << udp_svr_obj.send_bytes << " bytes are sent." << std::endl;
-    cout << "[INFO] User-friendly view: receive: " << (double)udp_svr_obj.recv_bytes / 1024 << " kB, transmit: " << (double)udp_svr_obj.send_bytes / 1024 << " kB." << std::endl;
-    cout << "[INFO] Receive Package(s): " << udp_svr_obj.recv_cnt << ", Send Packages(s): " << udp_svr_obj.send_cnt << std::endl;
-
+    cout << "[INFO] All process has done. " << udp_svr_obj.recv_bytes << " bytes are received, "
+         << udp_svr_obj.send_bytes << " bytes are sent." << std::endl;
+    cout << "[INFO] User-friendly view: receive: " << (double)udp_svr_obj.recv_bytes / 1024
+         << " kB, transmit: " << (double)udp_svr_obj.send_bytes / 1024 << " kB." << std::endl;
+    cout << "[INFO] Receive Package(s): " << udp_svr_obj.recv_cnt << ", Send Packages(s): " << udp_svr_obj.send_cnt
+         << std::endl;
 }
 
-
 // Windows Actual Entry here
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     printf("GMP Simulator says: Hello World~\r\n");
     printf("GMP will launch...\r\n\n\n");
@@ -150,24 +131,21 @@ int main(int argc, char* argv[])
 // This function may invoke when main loop occurred.
 void gmp_csp_loop(void)
 {
-    
+
 #if defined CTL_DISABLE_MULTITHREAD
 
-		static size_t ctl_invoked_counter = 0;
+    static size_t ctl_invoked_counter = 0;
 
-		ctl_invoked_counter += 1;
+    ctl_invoked_counter += 1;
 
-		if (ctl_invoked_counter % CTL_MAIN_LOOP_RUNNING_RATIO == 0)
-		{
-			if (gmp_ctl_dispatch())
-			{
-				// meet fatal error.
-				break;
-			}
-		}
+    if (ctl_invoked_counter % CTL_MAIN_LOOP_RUNNING_RATIO == 0)
+    {
+        if (gmp_ctl_dispatch())
+        {
+            // meet fatal error.
+            return;
+        }
+    }
 
-		
 #endif // CTL_PC_TEST_ENABLE
-
 }
-

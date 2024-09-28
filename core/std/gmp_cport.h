@@ -135,7 +135,7 @@ extern "C"
 	void gmp_setup_label(void);
 
 	// This function would be called every main loop routine.
-	void gmp_csp_loop(void)
+	void gmp_csp_loop(void);
 
 	// This function is the last function before mainloop.
 	// This function is implemented by CSP

@@ -39,7 +39,7 @@ GMP_NO_OPT_SUFFIX
 void user_loop(void)
 {
 	//Sleep(1);
-	controller_state_dispatch((ctl_object_nano_t*)&pmsm);
+	
 
 	time_gt time = gmp_base_get_system_tick();
 
@@ -54,3 +54,5 @@ void user_loop(void)
 
 
 }
+
+

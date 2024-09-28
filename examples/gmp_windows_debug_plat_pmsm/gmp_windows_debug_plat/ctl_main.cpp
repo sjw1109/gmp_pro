@@ -151,6 +151,11 @@ void ctl_init()
 #endif
 }
 
+void ctl_loop(void)
+{
+    controller_state_dispatch((ctl_object_nano_t *)&pmsm);
+}
+
 // CTL loop routine
 void ctl_dispatch(void)
 {
