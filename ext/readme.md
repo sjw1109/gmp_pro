@@ -1,0 +1,36 @@
+# GMP peripheral extension module
+
+
+
+This folder provide a lot of peripherals, User may use these modules directly via GMP general interface. 
+
+If a chip has a valid CSP module, the `ext` module will vary easy to use.
+
+
+
+## Summary of Ext module
+
+Ext module provide a lot of single chip peripherals, including ADC, DAC, motor encoder, DDS, power manager, sensor and etc. .
+
+| Submodule                              | folder          | Summary                                                      |
+| -------------------------------------- | --------------- | ------------------------------------------------------------ |
+| ADC<br />(Analog-to-digital converter) | `ext/adc`       | ADC chip with SPI interface, IIC interface, parallel interface. |
+| DAC<br />(Digital-to-analog converter) | `ext/dac`       | DAC chip with SPI interface, IIC interface, parallel interface. |
+| DDS<br />(Direct Digital Synthesizer)  | `ext/dds`       | DDS chip with SPI interface.                                 |
+| Other Analog Devices                   | `ext/analog`    | Some analog MUX chip, Digitally Controlled Potemiometer (DCP). |
+| Communication Related                  | `ext/comm`      | Communication extension. Such as SPI to Ethernet, SPI to CAN, SPI to LoRa, SPI to  EtherCAT, UART to RS485, IIS interface. |
+| IO Extension                           | `ext/io_ext`    | IO extension module. These chips support user to extend their low speed IO interface via IIC interface or SPI interface. |
+| Power Manager                          | `ext/power_mgr` | Power Management module. This module provide chip power management and auto reset. |
+| Sensors                                | `ext/sensor`    | There're several sensors, such as temperature, humidity, light and some others. |
+| Display                                | `ext/display`   | Display module to drive LED or e-paper and etc. .            |
+| Motor Encoder                          | `ext/encoder`   | Motor Encoder                                                |
+| Storage Module                         | `ext/storage`   | Storage module, such as EEPROM, SPI FLASH, and some other modules. |
+
+
+
+
+
+##  Details of Each Sub-modules
+
+
+
