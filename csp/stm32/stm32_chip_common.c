@@ -83,7 +83,7 @@ void gmp_gpio_clear(hgpio_gt *hgpio)
  * @param recv_buf data buffer, DMA mode only
  */
 void gmp_uart_setup(stm32_uart_t *huart, UART_HandleTypeDef *uart_handle, DMA_HandleTypeDef *uart_tx_dma_handle,
-                    DMA_HandleTypeDef *uart_rx_dma_handle, half_duplex_ift *data_buffer, data_gt *recv_buf)
+                    DMA_HandleTypeDef *uart_rx_dma_handle, duplex_ift *data_buffer, data_gt *recv_buf)
 {
     huart->uart_handle = uart_handle;
     huart->uart_tx_dma_handle = uart_tx_dma_handle;
@@ -127,7 +127,7 @@ void gmp_uart_bind_duplex_dma(stm32_uart_t *huart, duplex_ift *data)
  */
 void gmp_uart_listen(stm32_uart_t *huart)
 {
-    HAL_UART_Receive_DMA(&huart1, (uint8_t *)huart->recv_buf, huart->buffer->capacity);
+    HAL_UART_Receive_DMA(huart->uart_handle, (uint8_t *)huart->recv_buf, huart->buffer->capacity);
 }
 
 /**
@@ -147,8 +147,10 @@ size_gt gmp_uart_get_listen_status(stm32_uart_t *huart)
  * This function should be called in UART interrupt function
  * @param huart
  */
-void gmp_uart_listen_routine(stm32_uart_t *huart)
+void gmp_uart_listen_routine(stm32_uart_t *uart)
 {
+	size_gt data_length;
+	
     if (__HAL_UART_GET_FLAG(uart->uart_handle, UART_FLAG_IDLE) == SET)
     {
         // 清除空闲标志位
@@ -158,25 +160,25 @@ void gmp_uart_listen_routine(stm32_uart_t *huart)
         HAL_UART_DMAStop(uart->uart_handle);
 
         // 计算接收到的数据长度
-        data_length = huart->buffer->capacity - __HAL_DMA_GET_COUNTER(huart->uart_rx_dma_handle);
+        data_length = uart->buffer->capacity - __HAL_DMA_GET_COUNTER(uart->uart_rx_dma_handle);
 
         // 判定是否真的接收到数据
         if (data_length >= 1)
         {
             // 此时确实有数据收到
-            received_flag = 1;
+            //received_flag = 1;
             // 将数据移出接收缓存，理论上应当移动到栈中
-            memcpy(dest, huart->recv_buf, data_length);
+            memcpy(uart->buffer->rx_buf, uart->recv_buf, data_length);
         }
 
         // 重新启动DMA接收
-        HAL_UART_Receive_DMA(&huart1, (uint8_t *)huart->recv_buf, huart->buffer->capacity);
+        HAL_UART_Receive_DMA(uart->uart_handle, (uint8_t *)uart->recv_buf, uart->buffer->capacity);
 
         // 启动MDA接收使能
-        __HAL_DMA_ENABLE(huart->uart_rx_dma_handle);
+        __HAL_DMA_ENABLE(uart->uart_rx_dma_handle);
 
         // 再次启用UART空闲状态的中断
-        __HAL_UART_ENABLE_IT(huart->uart_handle, UART_IT_IDLE);
+        __HAL_UART_ENABLE_IT(uart->uart_handle, UART_IT_IDLE);
     }
 }
 
@@ -191,7 +193,7 @@ void gmp_uart_consign(stm32_uart_t *huart)
     // judge if a buffer has bind to the object
     assert(huart != nullptr);
 
-    if (huart->buffer == nullptr || huart->buffer->tx_buf == bullptr)
+    if (huart->buffer == nullptr || huart->buffer->tx_buf == nullptr)
         // ignore this error
         return;
 
@@ -229,7 +231,7 @@ fast_gt gmp_uart_get_consign_status(stm32_uart_t *huart)
 
 #if defined HAL_SPI_MODULE_ENABLED
 
-size_gt spi_tx_direct(spi_handle_t *hspi, data_gt *data, size_gt length)
+size_gt spi_tx_direct(stm32_spi_t *hspi, data_gt *data, size_gt length)
 {
     HAL_StatusTypeDef stat;
     data_gt spi_data[16];

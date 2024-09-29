@@ -84,7 +84,7 @@ extern "C"
      * @param recv_buf data buffer, DMA mode only
      */
     void gmp_uart_setup(stm32_uart_t *huart, UART_HandleTypeDef *uart_handle, DMA_HandleTypeDef *uart_tx_dma_handle,
-                        DMA_HandleTypeDef *uart_rx_dma_handle, half_duplex_ift *data_buffer, data_gt *recv_buf);
+                        DMA_HandleTypeDef *uart_rx_dma_handle, duplex_ift *data_buffer, data_gt *recv_buf);
 
     //
     // The following function prototype is copy from gmp_csp_cport.
@@ -151,20 +151,42 @@ extern "C"
 //
 #ifdef HAL_SPI_MODULE_ENABLED
 
-    typedef struct _tag_spi_handle
+    typedef struct _tag_stm32_spi_handle
     {
         // chip select
         gpio_model_stm32_t nchip_select;
 
         // SPI handle
         SPI_HandleTypeDef *hspi;
-    } spi_handle_t;
+    } stm32_spi_t;
 
-    // length < 16
-    size_gt spi_tx_direct(spi_handle_t *hspi, data_gt *data, size_gt length);
+		#define GMP_PORT_HSPI_T stm32_spi_t
 
-#define GMP_PORT_HSPI_T SPI_HandleTypeDef
 
+
+		
+				 /**
+     * @brief send data via half duplex SPI
+     * @param spi handle of SPI
+     * @param data half_duplex data interface
+     */
+    void gmp_spi_send(stm32_spi_t *spi, half_duplex_ift *data);
+
+    /**
+     * @brief receive data via SPI
+     * @param spi handle of SPI
+     * @param data half_duplex data interface
+     */
+    void gmp_spi_recv(stm32_spi_t *spi, half_duplex_ift *data);
+
+    /**
+     * @brief receive and transmit data via SPI interface
+     * This function should only be called in SPI duplex mode.
+     * @param spi handle of SPI
+     * @param data duplex data interface
+     */
+    void gmp_spi_send_recv(stm32_spi_t *spi, duplex_ift *data);
+		
 #endif // HAL_SPI_MODULE_ENABLED
 
 // ....................................................................//
@@ -176,6 +198,44 @@ extern "C"
 //
 #ifdef HAL_I2C_MODULE_ENABLED
 
+		typedef struct _tag_stm32_iic_handle
+		{
+			// IIC handle
+			I2C_HandleTypeDef *iic;
+			
+		}stm32_iic_t;
+		
+		#define GMP_PORT_HI2C_T stm32_iic_t
+		
+		   /**
+     * @brief IIC memory function, send a IIC memory frame.
+     * @param iic handle of IIC
+     * @param mem memory send message
+     */
+    void gmp_iic_mem_send(stm32_iic_t *iic, iic_memory_ift *mem);
+
+    /**
+     * @brief IIC memory function, recveive a IIC memory frame.
+     * @param iic handle of IIC
+     * @param mem memory receive message
+     */
+    void gmp_iic_mem_recv(stm32_iic_t *iic, iic_memory_ift *mem);
+
+    /**
+     * @brief IIC device send function 
+     * @param iic handle of IIC
+     * @param msg IIC send message
+     */
+    void gmp_iic_send(stm32_iic_t *iic, half_duplex_with_addr_ift *msg);
+
+    /**
+     * @brief IIC device receive function
+     * @param iic handle of IIC
+     * @param msg IIC receive message
+     */
+    void gmp_iic_recv(stm32_iic_t *iic, half_duplex_with_addr_ift *msg);
+
+		
 #endif // HAL_I2C_MODULE_ENABLED
 
 #ifdef __cplusplus

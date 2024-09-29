@@ -1,4 +1,6 @@
 
+#include <ctl/component/common/gmp_math.h>
+
 #ifndef _FILE_PI_H_
 #define _FILE_PI_H_
 

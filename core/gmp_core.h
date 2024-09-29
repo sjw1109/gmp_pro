@@ -54,6 +54,10 @@
 // memory management support
 #include <core/std/gmp_cport.h>
 
+// public C CSP ports functions
+// peripheral functions
+#include <core/std/gmp_csp_cport.h>
+
 //////////////////////////////////////////////////////////////////////////
 // Step IV other C core modules
 //
