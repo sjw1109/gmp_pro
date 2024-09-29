@@ -6,18 +6,15 @@
 time_gt gmp_port_system_tick(void)
 {}
 
-void gmp_port_feed_dog(void)
-{}
-
-// This function may be called and used to initilize all the peripheral. 
+// This function may be called and used to initialize all the peripheral. 
 void gmp_csp_startup(void)
 {}
 
-// This function would be called when fatal error occorred.
+// This function would be called when fatal error occurred.
 void gmp_port_system_stuck(void)
 {}
 
-// This function would be called when all the initilization process happened.
+// This function would be called when all the initialization process happened.
 void csp_post_process(void)
 {}
 	

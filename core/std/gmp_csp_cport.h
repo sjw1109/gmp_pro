@@ -166,6 +166,22 @@ extern "C"
      */
     void gmp_iic_recv(hiic_gt *iic, half_duplex_with_addr_ift *msg);
 
+    //////////////////////////////////////////////////////////////////////////
+    // CAN general port
+
+    
+    //////////////////////////////////////////////////////////////////////////
+    // WatchDog peripheral general interface
+
+    /**
+     * @brief This function may fresh IWDG counter.
+     * This function should be implemented by CSP,
+     * Every Loop routine, this function would be called.
+     * CSP implementation should ensure that the function has only one thing is to feed the watchdog
+     */
+    void gmp_wd_feed(void);
+
+
 #ifdef __cplusplus
 }
 #endif // __cplusplus

@@ -139,7 +139,7 @@ void gmp_loop()
 
 
 #if defined SPECIFY_ENABLE_FEED_WATCHDOG
-	gmp_port_feed_dog();
+	gmp_wd_feed();
 #endif 
 
 	

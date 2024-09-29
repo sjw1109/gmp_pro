@@ -154,18 +154,25 @@ extern "C"
     typedef struct _tag_stm32_spi_handle
     {
         // chip select
-        gpio_model_stm32_t nchip_select;
+        gpio_model_stm32_t *nchip_select;
 
         // SPI handle
         SPI_HandleTypeDef *hspi;
     } stm32_spi_t;
 
-		#define GMP_PORT_HSPI_T stm32_spi_t
+#define GMP_PORT_HSPI_T stm32_spi_t
 
+    /**
+     * @brief GMP SPI peripheral interface
+     * This function should be called in peripheral mapping routine.
+     * @param spi  handle of spi device
+     * @param hspi handle of STM32 SPI device
+     * @param ncs  Chip Select GPIO
+     */
+    void gmp_spi_setup(stm32_spi_t *spi, 
+        SPI_HandleTypeDef *hspi, gpio_model_stm32_t *ncs);
 
-
-		
-				 /**
+    /**
      * @brief send data via half duplex SPI
      * @param spi handle of SPI
      * @param data half_duplex data interface
@@ -186,7 +193,7 @@ extern "C"
      * @param data duplex data interface
      */
     void gmp_spi_send_recv(stm32_spi_t *spi, duplex_ift *data);
-		
+
 #endif // HAL_SPI_MODULE_ENABLED
 
 // ....................................................................//
@@ -198,16 +205,24 @@ extern "C"
 //
 #ifdef HAL_I2C_MODULE_ENABLED
 
-		typedef struct _tag_stm32_iic_handle
-		{
-			// IIC handle
-			I2C_HandleTypeDef *iic;
-			
-		}stm32_iic_t;
-		
-		#define GMP_PORT_HI2C_T stm32_iic_t
-		
-		   /**
+    typedef struct _tag_stm32_iic_handle
+    {
+        // IIC handle
+        I2C_HandleTypeDef *iic;
+
+    } stm32_iic_t;
+
+#define GMP_PORT_HI2C_T stm32_iic_t
+
+    /**
+     * @brief GMP IIC peripheral interface
+     * This function should be called in peripheral mapping routine.
+     * @param iic  handle of iic device
+     * @param hi2c handle of STM32 IIC device
+     */
+    void gmp_iic_setup(stm32_iic_t *iic, I2C_HandleTypeDef *hi2c);
+
+    /**
      * @brief IIC memory function, send a IIC memory frame.
      * @param iic handle of IIC
      * @param mem memory send message
@@ -222,7 +237,7 @@ extern "C"
     void gmp_iic_mem_recv(stm32_iic_t *iic, iic_memory_ift *mem);
 
     /**
-     * @brief IIC device send function 
+     * @brief IIC device send function
      * @param iic handle of IIC
      * @param msg IIC send message
      */
@@ -235,7 +250,6 @@ extern "C"
      */
     void gmp_iic_recv(stm32_iic_t *iic, half_duplex_with_addr_ift *msg);
 
-		
 #endif // HAL_I2C_MODULE_ENABLED
 
 #ifdef __cplusplus

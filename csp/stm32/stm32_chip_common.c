@@ -16,11 +16,25 @@
 #ifdef HAL_GPIO_MODULE_ENABLED
 
 /**
+ * @brief Setup GPIO port and pin.
+ * @param hgpio handle of GPIO
+ * @param gpio_port GPIO port of STM32
+ * @param gpio_pin GPIO pin of STM32
+ */
+void gmp_gpio_setup(gpio_model_stm32_t *hgpio, GPIO_TypeDef *gpio_port, uint32_t gpio_pin)
+{
+    hgpio->gpio_port = gpio_port;
+    hgpio->gpio_pin = gpio_pin;
+}
+
+/**
  * @brief Set mode of gpio port, mode 0: input, mode 1: output.
  * @param hgpio handle of gpio. Type of GPIO handle is given by CSP.
  * @param mode target mode of GPIO. mode 0 is input mode, 1 is output mode.
  */
-void gmp_gpio_set_mode(hgpio_gt *hgpio, fast_gt mode);
+void gmp_gpio_set_mode(hgpio_gt *hgpio, fast_gt mode)
+{
+}
 
 /**
  * @brief Write GPIO port. This port must be an output port.
@@ -100,6 +114,12 @@ void gmp_uart_setup(stm32_uart_t *huart, UART_HandleTypeDef *uart_handle, DMA_Ha
  */
 void gmp_uart_send(stm32_uart_t *huart, half_duplex_ift *data)
 {
+    assert(huart != nullptr);
+    assert(huart->uart_handle != nullptr);
+
+        assert(data != nullptr);
+    
+    HAL_UART_Transmit(huart->uart_handle, data->buf, data->length, 1);
 }
 
 /**
@@ -109,6 +129,7 @@ void gmp_uart_send(stm32_uart_t *huart, half_duplex_ift *data)
  */
 void gmp_uart_recv(stm32_uart_t *huart, half_duplex_ift *data)
 {
+    HAL_UART_Receive(huart->uart_handle, data->buf, data->length, 1);
 }
 
 /**
@@ -149,8 +170,8 @@ size_gt gmp_uart_get_listen_status(stm32_uart_t *huart)
  */
 void gmp_uart_listen_routine(stm32_uart_t *uart)
 {
-	size_gt data_length;
-	
+    size_gt data_length;
+
     if (__HAL_UART_GET_FLAG(uart->uart_handle, UART_FLAG_IDLE) == SET)
     {
         // 清除空闲标志位
@@ -166,7 +187,7 @@ void gmp_uart_listen_routine(stm32_uart_t *uart)
         if (data_length >= 1)
         {
             // 此时确实有数据收到
-            //received_flag = 1;
+            // received_flag = 1;
             // 将数据移出接收缓存，理论上应当移动到栈中
             memcpy(uart->buffer->rx_buf, uart->recv_buf, data_length);
         }
@@ -223,7 +244,6 @@ fast_gt gmp_uart_get_consign_status(stm32_uart_t *huart)
         return 0; // DMA is still in using
 }
 
-
 #endif // HAL_UART_MODULE_ENABLED
 
 //////////////////////////////////////////////////////////////////////////
@@ -231,22 +251,109 @@ fast_gt gmp_uart_get_consign_status(stm32_uart_t *huart)
 
 #if defined HAL_SPI_MODULE_ENABLED
 
-size_gt spi_tx_direct(stm32_spi_t *hspi, data_gt *data, size_gt length)
+/**
+ * @brief GMP SPI peripheral interface
+ * This function should be called in peripheral mapping routine.
+ * @param spi  handle of spi device
+ * @param hspi handle of STM32 SPI device
+ * @param ncs  Chip Select GPIO
+ */
+void gmp_spi_setup(stm32_spi_t *spi, SPI_HandleTypeDef *hspi, gpio_model_stm32_t *ncs)
 {
-    HAL_StatusTypeDef stat;
-    data_gt spi_data[16];
+    spi->hspi = hspi;
+    spi->nchip_select = ncs;
+}
 
-    gmp_gpio_clear(&hspi->nchip_select);
-    stat = HAL_SPI_TransmitReceive(hspi->hspi, data, spi_data, length, 10);
-    gmp_gpio_set(&hspi->nchip_select);
+/**
+ * @brief send data via half duplex SPI
+ * @param spi handle of SPI
+ * @param data half_duplex data interface
+ */
+void gmp_spi_send(stm32_spi_t *spi, half_duplex_ift *data)
+{
 
-    if (stat == HAL_OK)
-        return length;
-    else
-        return 0;
+    HAL_SPI_Transmit(spi->hspi, (uint8_t *)data->buf, data->length, 1);
+}
+
+/**
+ * @brief receive data via SPI
+ * @param spi handle of SPI
+ * @param data half_duplex data interface
+ */
+void gmp_spi_recv(stm32_spi_t *spi, half_duplex_ift *data)
+{
+    HAL_SPI_Receive(spi->hspi, (uint8_t *)data->buf, data->length, 1);
+}
+
+/**
+ * @brief receive and transmit data via SPI interface
+ * This function should only be called in SPI duplex mode.
+ * @param spi handle of SPI
+ * @param data duplex data interface
+ */
+void gmp_spi_send_recv(stm32_spi_t *spi, duplex_ift *data)
+{
+    HAL_SPI_TransmitReceive(spi->hspi, (uint8_t *)data->tx_buf, (uint8_t *)data->rx_buf, data->length, 1);
 }
 
 #endif // HAL_SPI_MODULE_ENABLED
+
+//////////////////////////////////////////////////////////////////////////
+// IIC Model
+#ifdef HAL_I2C_MODULE_ENABLED
+
+/**
+ * @brief GMP IIC peripheral interface
+ * This function should be called in peripheral mapping routine.
+ * @param iic  handle of iic device
+ * @param hi2c handle of STM32 IIC device
+ */
+void gmp_iic_setup(stm32_iic_t *iic, I2C_HandleTypeDef *hi2c)
+{
+    iic->iic = hi2c;
+}
+
+/**
+ * @brief IIC memory function, send a IIC memory frame.
+ * @param iic handle of IIC
+ * @param mem memory send message
+ */
+void gmp_iic_mem_send(stm32_iic_t *iic, iic_memory_ift *mem)
+{
+    HAL_I2C_Mem_Write(iic->iic, mem->dev_addr, mem->mem_addr, mem->mem_length, mem->msg, mem->length, 1);
+}
+
+/**
+ * @brief IIC memory function, recveive a IIC memory frame.
+ * @param iic handle of IIC
+ * @param mem memory receive message
+ */
+void gmp_iic_mem_recv(stm32_iic_t *iic, iic_memory_ift *mem)
+{
+    HAL_I2C_Mem_Read(iic->iic, mem->dev_addr, mem->mem_addr, mem->mem_length, mem->msg, mem->length, 1);
+}
+
+/**
+ * @brief IIC device send function
+ * @param iic handle of IIC
+ * @param msg IIC send message
+ */
+void gmp_iic_send(stm32_iic_t *iic, half_duplex_with_addr_ift *msg)
+{
+    HAL_I2C_Master_Transmit(iic->iic, msg->address, msg->msg, msg->length, 1);
+}
+
+/**
+ * @brief IIC device receive function
+ * @param iic handle of IIC
+ * @param msg IIC receive message
+ */
+void gmp_iic_recv(stm32_iic_t *iic, half_duplex_with_addr_ift *msg)
+{
+    HAL_I2C_Master_Receive(iic->iic, msg->address, msg->msg, msg->length, 1);
+}
+
+#endif // HAL_I2C_MODULE_ENABLED
 
 //////////////////////////////////////////////////////////////////////////
 // System Model
@@ -261,12 +368,19 @@ time_gt gmp_port_system_tick(void)
 
 #endif
 
-void gmp_port_feed_dog(void)
+/**
+ * @brief This function may fresh IWDG counter.
+ * This function should be implemented by CSP,
+ * Every Loop routine, this function would be called.
+ * CSP implementation should ensure that the function has only one thing is to feed the watchdog
+ */
+void gmp_wd_feed(void)
 {
 #if defined SPECIFY_ENABLE_FEED_WATCHDOG
     HAL_IWDG_Refresh(&hiwdg);
 #endif // SPECIFY_ENABLE_FEED_WATCHDOG
 }
+
 
 // This function may be called and used to initilize all the peripheral.
 void gmp_csp_startup(void)

@@ -27,6 +27,15 @@ extern "C"
 #define GMP_PORT_HGPIO_T gpio_model_stm32_t
 
     /**
+     * @brief Setup GPIO port and pin.
+     * @param hgpio handle of GPIO
+     * @param gpio_port GPIO port of STM32
+     * @param gpio_pin GPIO pin of STM32    
+     */
+    void gmp_gpio_setup(gpio_model_stm32_t *hgpio,
+     GPIO_TypeDef *gpio_port, uint32_t gpio_pin );
+
+    /**
      * @brief Set mode of gpio port, mode 0: input, mode 1: output.
      * @param hgpio handle of gpio. Type of GPIO handle is given by CSP.
      * @param mode target mode of GPIO. mode 0 is input mode, 1 is output mode.
