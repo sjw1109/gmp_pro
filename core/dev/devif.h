@@ -22,7 +22,6 @@ extern "C"
     {
         /**
          * @brief this is a pointer of data to be transmit
-         *
          */
         data_gt *buf;
 
