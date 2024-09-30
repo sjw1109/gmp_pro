@@ -73,21 +73,21 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>E:\lib\gmp_pro;E:\lib\gmp_pro;$(IncludePath)</IncludePath>
-    <ExternalIncludePath>.;E:\lib\gmp_pro\csp\windows;E:\lib\gmp_pro\;E:\lib\gmp_pro\third_party\iqmath\;$(ExternalIncludePath)</ExternalIncludePath>
-    <PublicIncludeDirectories>E:\lib\gmp_pro\;E:\lib\gmp_pro\third_party\iqmath\;</PublicIncludeDirectories>
+    <ExternalIncludePath>.;$(ProjectDir);$(ProjectDir)../../../;$(ProjectDir)../../../csp\windows;$(ProjectDir)../../../third_party\iqmath\;$(ExternalIncludePath)</ExternalIncludePath>
+    <PublicIncludeDirectories>$(ProjectDir)../../../;$(ProjectDir)../../../third_party\iqmath\</PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>E:\lib\gmp_pro;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <ExternalIncludePath>.;E:\lib\gmp_pro\csp\windows;E:\lib\gmp_pro\;E:\lib\gmp_pro\third_party\iqmath\;$(ExternalIncludePath)</ExternalIncludePath>
-    <PublicIncludeDirectories>E:\lib\gmp_pro\;E:\lib\gmp_pro\third_party\iqmath\;</PublicIncludeDirectories>
+    <ExternalIncludePath>.;$(ProjectDir);$(ProjectDir)../../../;$(ProjectDir)../../../csp\windows;$(ProjectDir)../../../third_party\iqmath\;$(ExternalIncludePath)</ExternalIncludePath>
+    <PublicIncludeDirectories>$(ProjectDir)../../../;$(ProjectDir)../../../third_party\iqmath\</PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ExternalIncludePath>.;E:\lib\gmp_pro\csp\windows;E:\lib\gmp_pro\;E:\lib\gmp_pro\third_party\iqmath\;$(ExternalIncludePath)</ExternalIncludePath>
-    <PublicIncludeDirectories>E:\lib\gmp_pro\;E:\lib\gmp_pro\third_party\iqmath\;</PublicIncludeDirectories>
+    <ExternalIncludePath>.;$(ProjectDir);$(ProjectDir)../../../;$(ProjectDir)../../../csp\windows;$(ProjectDir)../../../third_party\iqmath\;$(ExternalIncludePath)</ExternalIncludePath>
+    <PublicIncludeDirectories>$(ProjectDir)../../../;$(ProjectDir)../../../third_party\iqmath\</PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ExternalIncludePath>.;E:\lib\gmp_pro\csp\windows;E:\lib\gmp_pro\;E:\lib\gmp_pro\third_party\iqmath\;$(ExternalIncludePath)</ExternalIncludePath>
-    <PublicIncludeDirectories>E:\lib\gmp_pro\;E:\lib\gmp_pro\third_party\iqmath\;</PublicIncludeDirectories>
+    <ExternalIncludePath>.;$(ProjectDir);$(ProjectDir)../../../;$(ProjectDir)../../../csp\windows;$(ProjectDir)../../../third_party\iqmath\;$(ExternalIncludePath)</ExternalIncludePath>
+    <PublicIncludeDirectories>$(ProjectDir)../../../;$(ProjectDir)../../../third_party\iqmath\</PublicIncludeDirectories>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
