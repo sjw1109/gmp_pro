@@ -60,3 +60,6 @@
 
 // + static inline modifier
 #define GMP_FORCE_INLINE _Pragma("FORCEINLINE")
+
+// + NOP
+#define GMP_INSTRUCTION_NOP asm("nop")

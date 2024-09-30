@@ -44,3 +44,5 @@
 // + variables aligned
 #define GMP_MEM_ALIGN  __declspec(align(8))
 
+// + NOP
+#define GMP_INSTRUCTION_NOP asm("nop")

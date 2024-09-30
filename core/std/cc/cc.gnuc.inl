@@ -48,3 +48,6 @@
 
 // + variables aligned
 #define GMP_MEM_ALIGN __attribute__((aligned (4)))
+
+// + NOP
+#define GMP_INSTRUCTION_NOP asm("nop")
