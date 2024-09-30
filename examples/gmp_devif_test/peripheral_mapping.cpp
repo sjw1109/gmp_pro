@@ -57,21 +57,21 @@ extern DMA_HandleTypeDef hdma_usart1_tx;
 //////////////////////////////////////////////////////////////////////////
 // Peripheral general port
 
-hgpio_gt spi1_ncs;
-hgpio_gt spi2_ncs;
+gpio_halt spi1_ncs;
+gpio_halt spi2_ncs;
 
-hspi_gt spi1;
-hspi_gt spi2;
+spi_halt spi1;
+spi_halt spi2;
 
-huart_gt uart1;
-huart_gt uart2;
+uart_halt uart1;
+uart_halt uart2;
 
 duplex_ift uart1_if;
 data_gt recv_buffer[128];
 data_gt uart1_rx[128];
 data_gt uart1_tx[128];
 
-hiic_gt iic;
+iic_halt iic;
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -85,15 +85,15 @@ void gmp_setup_peripheral()
 void gmp_init_peripheral_tree()
 {
 	
-	gmp_uart_setup(&uart1, &huart1, &hdma_usart1_tx, &hdma_usart1_rx, &uart1_if,recv_buffer);
+	gmp_hal_uart_setup(&uart1, &huart1, &hdma_usart1_tx, &hdma_usart1_rx, &uart1_if,recv_buffer);
 	
-	gmp_iic_setup(&iic, &hi2c2);
+	gmp_hal_iic_setup(&iic, &hi2c2);
 	
-	gmp_gpio_setup(&spi1_ncs, SPI1_NSS_GPIO_Port, SPI1_NSS_Pin);
-	gmp_spi_setup(&spi1, &hspi1, &spi1_ncs);
+	gmp_hal_gpio_setup(&spi1_ncs, SPI1_NSS_GPIO_Port, SPI1_NSS_Pin);
+	gmp_hal_spi_setup(&spi1, &hspi1, &spi1_ncs);
 	
-	gmp_gpio_setup(&spi2_ncs, LORA_NRST_GPIO_Port, LORA_NSS_Pin);
-	gmp_spi_setup(&spi2, &hspi2, &spi2_ncs);
+	gmp_hal_gpio_setup(&spi2_ncs, LORA_NRST_GPIO_Port, LORA_NSS_Pin);
+	gmp_hal_spi_setup(&spi2, &hspi2, &spi2_ncs);
 	
 	
 }

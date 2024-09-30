@@ -81,7 +81,7 @@ extern "C"
  * @brief Specify `stm32_uart_t` type as huart_gt type
  *
  */
-#define GMP_PORT_HUART_T stm32_uart_t
+#define GMP_PORT_UART_T stm32_uart_t
 
     /**
      * @brief Setup GMP UART handle.
@@ -93,7 +93,7 @@ extern "C"
      * @param data data buffer, DMA mode only
      * @param recv_buf data buffer, DMA mode only
      */
-    void gmp_uart_setup(stm32_uart_t *huart, UART_HandleTypeDef *uart_handle, DMA_HandleTypeDef *uart_tx_dma_handle,
+    void gmp_hal_uart_setup(stm32_uart_t *huart, UART_HandleTypeDef *uart_handle, DMA_HandleTypeDef *uart_tx_dma_handle,
                         DMA_HandleTypeDef *uart_rx_dma_handle, duplex_ift *data_buffer, data_gt *recv_buf);
 
     //
@@ -106,47 +106,47 @@ extern "C"
      * @param huart handle of UART
      * @param data half_duplex data interface
      */
-    void gmp_uart_send(stm32_uart_t *huart, half_duplex_ift *data);
+    gmp_stat_t gmp_hal_uart_send(stm32_uart_t *huart, half_duplex_ift *data);
 
     /**
      * @brief receive data via UART
      * @param huart handle of UART
      * @param data half_duplex data interface
      */
-    void gmp_uart_recv(stm32_uart_t *huart, half_duplex_ift *data);
+    gmp_stat_t gmp_hal_uart_recv(stm32_uart_t *huart, half_duplex_ift *data);
 
     /**
      * @brief bind a duplex data buffer to UART channel.
      * @param huart handle of UART
      * @param data duplex data buffer
      */
-    void gmp_uart_bind_duplex_dma(stm32_uart_t *huart, duplex_ift *data);
+    gmp_stat_t gmp_hal_uart_bind_duplex_dma(stm32_uart_t *huart, duplex_ift *data);
 
     /**
      * @brief start UART listen to receive routine
      * @param huart handle of UART
      */
-    void gmp_uart_listen(stm32_uart_t *huart);
+    gmp_stat_t gmp_hal_uart_listen(stm32_uart_t *huart);
 
     /**
      * @brief Get UART listen status, return current receive bytes number.
      * @param huart
      * @return size_gt size of received bytes.
      */
-    size_gt gmp_uart_get_listen_status(stm32_uart_t *huart);
+    size_gt gmp_hal_uart_get_listen_status(stm32_uart_t *huart);
 
     /**
      * @brief start UART consign to transmit routine.
      * @param huart handle of UART
      */
-    void gmp_uart_consign(stm32_uart_t *huart);
+    gmp_stat_t gmp_hal_uart_consign(stm32_uart_t *huart);
 
     /**
      * @brief Get UART consign status, return if consign routine is free.
      * @param huart
      * @return fast_gt
      */
-    fast_gt gmp_uart_get_consign_status(stm32_uart_t *huart);
+    fast_gt gmp_hal_uart_get_consign_status(stm32_uart_t *huart);
 
 #endif // HAL_UART_MODULE_ENABLED
 
@@ -170,7 +170,7 @@ extern "C"
         SPI_HandleTypeDef *hspi;
     } stm32_spi_t;
 
-#define GMP_PORT_HSPI_T stm32_spi_t
+#define GMP_PORT_SPI_T stm32_spi_t
 
     /**
      * @brief GMP SPI peripheral interface
@@ -179,7 +179,7 @@ extern "C"
      * @param hspi handle of STM32 SPI device
      * @param ncs  Chip Select GPIO
      */
-    void gmp_spi_setup(stm32_spi_t *spi, 
+    void gmp_hal_spi_setup(stm32_spi_t *spi, 
         SPI_HandleTypeDef *hspi, gpio_model_stm32_t *ncs);
 
     /**
@@ -187,14 +187,14 @@ extern "C"
      * @param spi handle of SPI
      * @param data half_duplex data interface
      */
-    void gmp_spi_send(stm32_spi_t *spi, half_duplex_ift *data);
+    gmp_stat_t gmp_hal_spi_send(stm32_spi_t *spi, half_duplex_ift *data);
 
     /**
      * @brief receive data via SPI
      * @param spi handle of SPI
      * @param data half_duplex data interface
      */
-    void gmp_spi_recv(stm32_spi_t *spi, half_duplex_ift *data);
+    gmp_stat_t gmp_hal_spi_recv(stm32_spi_t *spi, half_duplex_ift *data);
 
     /**
      * @brief receive and transmit data via SPI interface
@@ -202,7 +202,7 @@ extern "C"
      * @param spi handle of SPI
      * @param data duplex data interface
      */
-    void gmp_spi_send_recv(stm32_spi_t *spi, duplex_ift *data);
+    gmp_stat_t gmp_hal_spi_send_recv(stm32_spi_t *spi, duplex_ift *data);
 
 #endif // HAL_SPI_MODULE_ENABLED
 
@@ -222,7 +222,7 @@ extern "C"
 
     } stm32_iic_t;
 
-#define GMP_PORT_HI2C_T stm32_iic_t
+#define GMP_PORT_I2C_T stm32_iic_t
 
     /**
      * @brief GMP IIC peripheral interface
@@ -230,35 +230,35 @@ extern "C"
      * @param iic  handle of iic device
      * @param hi2c handle of STM32 IIC device
      */
-    void gmp_iic_setup(stm32_iic_t *iic, I2C_HandleTypeDef *hi2c);
+    void gmp_hal_iic_setup(stm32_iic_t *iic, I2C_HandleTypeDef *hi2c);
 
     /**
      * @brief IIC memory function, send a IIC memory frame.
      * @param iic handle of IIC
      * @param mem memory send message
      */
-    void gmp_iic_mem_send(stm32_iic_t *iic, iic_memory_ift *mem);
+    gmp_stat_t gmp_hal_iic_mem_send(stm32_iic_t *iic, iic_memory_ift *mem);
 
     /**
      * @brief IIC memory function, recveive a IIC memory frame.
      * @param iic handle of IIC
      * @param mem memory receive message
      */
-    void gmp_iic_mem_recv(stm32_iic_t *iic, iic_memory_ift *mem);
+    gmp_stat_t gmp_hal_iic_mem_recv(stm32_iic_t *iic, iic_memory_ift *mem);
 
     /**
      * @brief IIC device send function
      * @param iic handle of IIC
      * @param msg IIC send message
      */
-    void gmp_iic_send(stm32_iic_t *iic, half_duplex_with_addr_ift *msg);
+    gmp_stat_t gmp_hal_iic_send(stm32_iic_t *iic, half_duplex_with_addr_ift *msg);
 
     /**
      * @brief IIC device receive function
      * @param iic handle of IIC
      * @param msg IIC receive message
      */
-    void gmp_iic_recv(stm32_iic_t *iic, half_duplex_with_addr_ift *msg);
+    gmp_stat_t gmp_hal_iic_recv(stm32_iic_t *iic, half_duplex_with_addr_ift *msg);
 
 #endif // HAL_I2C_MODULE_ENABLED
 

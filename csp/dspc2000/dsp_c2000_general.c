@@ -35,7 +35,7 @@ void gmp_port_system_stuck(
 
 
 // The following function is a feed a dog routine
-void gmp_wd_feed()
+void gmp_hal_wd_feed()
 {
     // This function is defined in TI C2000ware.
     // you may find the function definition in 

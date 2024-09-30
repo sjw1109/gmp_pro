@@ -60,7 +60,7 @@ void gmp_port_system_stuck(void)
 // This function should be implemented by user,
 // Every Loop routine, this function would be called.
 // And user should ensure that the function has only one thing is to feed the watchdog
-void gmp_wd_feed()
+void gmp_hal_wd_feed()
 {
 #if defined SPECIFY_ENABLE_FEED_WATCHDOG
 

@@ -1,24 +1,23 @@
 /**
  * @file gmp_main.cpp
  * @author Javnson (javnson@zju.edu.cn)
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2024-09-30
- * 
+ *
  * @copyright Copyright GMP(c) 2024
- * 
+ *
  */
- 
+
 #define _CRT_SECURE_NO_WARNINGS
 
-// necessary System headers 
+// necessary System headers
 #include <stdarg.h>
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
 
 // Module dependences
 #include <core/gmp_core.hpp>
-
 
 //////////////////////////////////////////////////////////////////////////
 // Step I: Global variables
@@ -32,10 +31,8 @@ size_gt g_delay_ms;
 // default heap
 GMP_MEM_ALIGN data_gt default_heap[GMP_DEFAULT_HEAP_SIZE];
 // handle of default heap
-gmp_mem_area_head* default_mem_heap;
+gmp_mem_area_head *default_mem_heap;
 #endif // SPECIFY_GMP_BLOCK_MEMORY_ENABLE
-
-
 
 //////////////////////////////////////////////////////////////////////////
 // This function should be called in `main` after initialize routine.
@@ -43,63 +40,60 @@ gmp_mem_area_head* default_mem_heap;
 // NOTICE: This function will not return!
 void gmp_entry(void)
 {
-	// user initialize section
-	gmp_init();
+    // user initialize section
+    gmp_init();
 
 #if defined SPECIFY_ENABLE_TEST_ENVIRONMENT
-	// print warning informations
-	gmp_dbg_prt("[NOTE] GMP DEBUG MODE IS ENABLE! Program functionality may be affected.\r\n");
+    // print warning informations
+    gmp_dbg_prt("[NOTE] GMP DEBUG MODE IS ENABLE! Program functionality may be affected.\r\n");
 
-	// GMP test bench trans_setup
-	gmp_test_init();
+    // GMP test bench trans_setup
+    gmp_test_init();
 #else
-	// Call user initialize
-	user_init();
+    // Call user initialize
+    user_init();
 #endif // SPECIFY_ENABLE_TEST_ENVIRONMENT
 
-
-	// Call CTL(Controller Template Library) initialization function.
-	ctl_init();
+    // Call CTL(Controller Template Library) initialization function.
+    ctl_init();
 
 #ifndef SPECIFY_DISABLE_GMP_LOGO
-	// Debug information print
-	gmp_setup_label();
+    // Debug information print
+    gmp_setup_label();
 #endif // SPECIFY_DISABLE_GMP_LOGO
 
-	// latest function before mainloop
-	csp_post_process();
+    // latest function before mainloop
+    csp_post_process();
 
-	size_t test_loop_cnt;
+    size_t test_loop_cnt;
 
-	// take over `main loop`
+    // take over `main loop`
 #ifdef SPECIFY_PC_TEST_ENV
-	for (test_loop_cnt = 0; test_loop_cnt < MAX_ITERATION_LOOPS; ++test_loop_cnt)
+    for (test_loop_cnt = 0; test_loop_cnt < MAX_ITERATION_LOOPS; ++test_loop_cnt)
 #else
-	while (1)
+    while (1)
 #endif
-	{
-		// Call GMP general loop routine
-		// This function may call watch-dog feeding function and scheduling function.
-		gmp_loop();
+    {
+        // Call GMP general loop routine
+        // This function may call watch-dog feeding function and scheduling function.
+        gmp_loop();
 
-		// Call GMP CSP module loop routine
-		gmp_csp_loop();
+        // Call GMP CSP module loop routine
+        gmp_csp_loop();
 
-		// Call user general loop routine
-		user_loop();
+        // Call user general loop routine
+        user_loop();
 
-		// call user Controller Loop routine
-		ctl_loop();
+        // call user Controller Loop routine
+        ctl_loop();
+    }
 
-	}
+    // Unreachable region
 
-	// Unreachable region
-	
-	// This function call may only happen when PC simulation.
-	gmp_exit_routine();
-	//return;
+    // This function call may only happen when PC simulation.
+    gmp_exit_routine();
+    // return;
 }
-
 
 // Main function
 // GMP library initialization function
@@ -109,32 +103,30 @@ void gmp_entry(void)
 void gmp_init()
 {
 #ifndef DISABLE_GMP_INITIALIZATION_FUNCTION_INVOKE
-	// CSP start up function
-	gmp_csp_startup();
+    // CSP start up function
+    gmp_csp_startup();
 
-	// initialize peripheral
-	// This function was defined in <bsp/user/peripheral_mapping.c>
-	gmp_setup_peripheral();
+    // initialize peripheral
+    // This function was defined in <bsp/user/peripheral_mapping.c>
+    gmp_setup_peripheral();
 
-	// initialize peripheral tree
-	// This function was defined in <bsp/user/peripheral_mapping.c>
-	gmp_init_peripheral_tree();
+    // initialize peripheral tree
+    // This function was defined in <bsp/user/peripheral_mapping.c>
+    gmp_init_peripheral_tree();
 #endif
 
-	// Setup GMP library
+    // Setup GMP library
 
 #if defined SPECIFY_GMP_BLOCK_MEMORY_ENABLE
-	// Setup default heap memory controller
-	default_mem_heap = gmp_mem_setup(default_heap, GMP_DEFAULT_HEAP_SIZE, GMP_MEM_BLOCK_SIZE);
+    // Setup default heap memory controller
+    default_mem_heap = gmp_mem_setup(default_heap, GMP_DEFAULT_HEAP_SIZE, GMP_MEM_BLOCK_SIZE);
 #endif
 
-	// initialize global delay 
-	g_delay = TIMEOUT_CNT;
-	g_delay_ms = TIMEOUT_MS;
+    // initialize global delay
+    g_delay = TIMEOUT_CNT;
+    g_delay_ms = TIMEOUT_MS;
 
-	// initialize global error code
-
-
+    // initialize global error code
 }
 
 // This function would invoke some GMP based loop routine.
@@ -143,40 +135,34 @@ void gmp_init()
 void gmp_loop()
 {
 #if defined SPECIFY_ENABLE_TEST_ENVIRONMENT
-	// This function would happened when debug mode.
-	gmp_test_loop();
+    // This function would happened when debug mode.
+    gmp_test_loop();
 #endif // SPECIFY_ENABLE_TEST_ENVIRONMENT
 
-
 #if defined SPECIFY_ENABLE_FEED_WATCHDOG
-	gmp_wd_feed();
-#endif 
-
-	
-
+    gmp_hal_wd_feed();
+#endif
 }
-
-
 
 #ifndef SPECIFY_DISABLE_GMP_LOGO
 // This function would print a GMP label
 void gmp_setup_label()
 {
-	gmp_dbg_prt("................................................\r\n");
-	gmp_dbg_prt(".....MMMMMMMM.........MM.....,MMM....=MMWWDMN,..\r\n");
-	gmp_dbg_prt("...8MM.......M.......MMMM....N8MM ....:MM...MM8.\r\n");
-	gmp_dbg_prt("...MMM............. MM..MM?.?N.8M=....:MM..:MM..\r\n");
-	gmp_dbg_prt("..=MMD.............=M,..DMM.N..8M=....:MMMMZ,...\r\n");
-	gmp_dbg_prt("...MMM.....MMM.....=M,...MMMN..8M=....:MM.......\r\n");
-	gmp_dbg_prt("...=MM......M......=M,....MM...8M=....:MM.......\r\n");
-	gmp_dbg_prt(".....$M$$$$MMM.....===..........===..=NNMM+.....\r\n");
-	gmp_dbg_prt("................................................\r\n");
-	gmp_dbg_prt("................................................\r\n");
-	gmp_dbg_prt("....General.........Motor............Platform...\r\n");
-	gmp_dbg_prt(".........for all Motor & all Platform...........\r\n");
-	gmp_dbg_prt("................................................\r\n");
-	gmp_dbg_prt("................................................\r\n");
-	gmp_dbg_prt("[okay] General motor platform ready.\r\n");
+    gmp_dbg_prt("................................................\r\n");
+    gmp_dbg_prt(".....MMMMMMMM.........MM.....,MMM....=MMWWDMN,..\r\n");
+    gmp_dbg_prt("...8MM.......M.......MMMM....N8MM ....:MM...MM8.\r\n");
+    gmp_dbg_prt("...MMM............. MM..MM?.?N.8M=....:MM..:MM..\r\n");
+    gmp_dbg_prt("..=MMD.............=M,..DMM.N..8M=....:MMMMZ,...\r\n");
+    gmp_dbg_prt("...MMM.....MMM.....=M,...MMMN..8M=....:MM.......\r\n");
+    gmp_dbg_prt("...=MM......M......=M,....MM...8M=....:MM.......\r\n");
+    gmp_dbg_prt(".....$M$$$$MMM.....===..........===..=NNMM+.....\r\n");
+    gmp_dbg_prt("................................................\r\n");
+    gmp_dbg_prt("................................................\r\n");
+    gmp_dbg_prt("....General.........Motor............Platform...\r\n");
+    gmp_dbg_prt(".........for all Motor & all Platform...........\r\n");
+    gmp_dbg_prt("................................................\r\n");
+    gmp_dbg_prt("................................................\r\n");
+    gmp_dbg_prt("[okay] General motor platform ready.\r\n");
 }
 #endif // SPECIFY_DISABLE_GMP_LOGO
 
@@ -187,80 +173,71 @@ void gmp_setup_label()
 // The following function would be called by libraries in the default case.
 
 // unit byte
-void* gmp_malloc(size_gt size)
+void *gmp_malloc(size_gt size)
 {
-	// This function was specified by <user_config.h>
-	return GMP_BLOCK_ALLOC_FUNC(size);
+    // This function was specified by <user_config.h>
+    return GMP_BLOCK_ALLOC_FUNC(size);
 }
 
-
-void gmp_free(void* ptr)
+void gmp_free(void *ptr)
 {
-	// This function was specified by <user_config.h>
-	GMP_BLOCK_FREE_FUNC(ptr);
+    // This function was specified by <user_config.h>
+    GMP_BLOCK_FREE_FUNC(ptr);
 }
-
 
 //////////////////////////////////////////////////////////////////////////
 // implement of new and delete operator
 // TODO impl
-
 
 //////////////////////////////////////////////////////////////////////////
 // default debug device handle
 // This pointer should be redirect by <user/peripheral_mapping.c>
 #if defined SPECIFY_ENABLE_DEFUALT_DEBUG_PRINT_FUNC
 
-
-
-dbgptr_gt default_debug_dev = nullptr;
-
-
+dbgptr_halt default_debug_dev = nullptr;
 
 // implement the gmp_debug_print routine.
-size_gt gmp_dbg_prt_fn(const char* p_fmt, ...)
+size_gt gmp_dbg_prt_fn(const char *p_fmt, ...)
 {
-	uart_content_t content;
-	size_gt ret = 0;
+    uart_content_t content;
+    size_gt ret = 0;
 
-	// if no one was specified to output, just ignore the request.
-	if (default_debug_dev == nullptr)
-	{
-		return ret;
-	}
+    // if no one was specified to output, just ignore the request.
+    if (default_debug_dev == nullptr)
+    {
+        return ret;
+    }
 
 #ifndef GMP_PORT_DBG_PRINT_NOT_IMPLEMENTED
 
-	size_gt size = strlen(p_fmt);
+    size_gt size = strlen(p_fmt);
 #if defined SPECIFY_DISABLE_DYNAMIC_ALLOC_OF_DBGPTR
-	static data_gt str[48 + _GMP_CHAR_EXT];
-	memset(str, 0, 48 + _GMP_CHAR_EXT);
+    static data_gt str[48 + _GMP_CHAR_EXT];
+    memset(str, 0, 48 + _GMP_CHAR_EXT);
 #else
-	data_gt* str = (data_gt*)gmp_malloc(size + _GMP_CHAR_EXT);
-	memset(str, 0, size + _GMP_CHAR_EXT);
+    data_gt *str = (data_gt *)gmp_malloc(size + _GMP_CHAR_EXT);
+    memset(str, 0, size + _GMP_CHAR_EXT);
 #endif // SPECIFY_DISABLE_DYNAMIC_ALLOC_OF_DBGPTR
 
-	va_list vArgs;
-	va_start(vArgs, p_fmt);
-	vsprintf((char*)str, (char const*)p_fmt, vArgs);
-	va_end(vArgs);
+    va_list vArgs;
+    va_start(vArgs, p_fmt);
+    vsprintf((char *)str, (char const *)p_fmt, vArgs);
+    va_end(vArgs);
 
-	content.text = str;
-	content.length = strlen((char*)str);
+    content.text = str;
+    content.length = strlen((char *)str);
 
-
-	ret = GMP_PORT_DBG_PRINT_FUNC(default_debug_dev, &content);
+    ret = GMP_PORT_DBG_PRINT_FUNC(default_debug_dev, &content);
 
 #if defined SPECIFY_DISABLE_DYNAMIC_ALLOC_OF_DBGPTR
-#else 
-	gmp_free(str);
-#endif //SPECIFY_DISABLE_DYNAMIC_ALLOC_OF_DBGPTR
+#else
+    gmp_free(str);
+#endif // SPECIFY_DISABLE_DYNAMIC_ALLOC_OF_DBGPTR
 
 #endif // GMP_PORT_DBG_PRINT_NOT_IMPLEMENTED
 
-	return ret;
+    return ret;
 }
-
 
 #endif // SPECIFY_ENABLE_DEFUALT_DEBUG_PRINT_FUNC
 
@@ -268,36 +245,33 @@ size_gt gmp_dbg_prt_fn(const char* p_fmt, ...)
 // GMP Library error handler
 void gmp_system_stuck(void)
 {
-	// disable the GMP library and freeze the scene
-	// TODO impl
+    // disable the GMP library and freeze the scene
+    // TODO impl
 
-
-	// invoke user stuck function 
-	gmp_port_system_stuck();
+    // invoke user stuck function
+    gmp_port_system_stuck();
 }
 
 //////////////////////////////////////////////////////////////////////////
 // A function is not implement, this is just a place holder.
 
-void gmp_not_impl(const char* file, uint32_t line)
+void gmp_not_impl(const char *file, uint32_t line)
 {
 
 #if defined SPECIFY_ENABLE_UNIMPL_FUNC_WARNING
-	// print the error information
-	gmp_dbg_prt("[Erro] invoke unimplemented function: [%s, %d].\r\n", file, line);
+    // print the error information
+    gmp_dbg_prt("[Erro] invoke unimplemented function: [%s, %d].\r\n", file, line);
 #endif // SPECIFY_ENABLE_UNIMPL_FUNC_WARNING
 
 #if defined SPECIFY_STUCK_WHEN_UNIMPL_FUNC
 #if defined SPECIFY_ENABLE_UNIMPL_FUNC_WARNING
-	gmp_dbg_prt("[INFO] Program has stuck!\r\n");
+    gmp_dbg_prt("[INFO] Program has stuck!\r\n");
 #endif // SPECIFY_ENABLE_UNIMPL_FUNC_WARNING
 
-	// Stop program right now
-	gmp_system_stuck();
+    // Stop program right now
+    gmp_system_stuck();
 
 #endif // SPECIFY_STUCK_WHEN_UNIMPL_FUNC
-
-
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -310,26 +284,20 @@ void gmp_not_impl(const char* file, uint32_t line)
 
 uint16_t gmp_l2b16(uint16_t data)
 {
-	return ((data & 0xFF) << 8) | ((data & 0xFF00) >> 8);
+    return ((data & 0xFF) << 8) | ((data & 0xFF00) >> 8);
 }
 
 uint32_t gmp_l2b32(uint32_t data)
 {
-	return ((data & 0xFF000000) >> 24) | ((data & 0xFF0000) >> 8)
-		| ((data & 0xFF00) << 8) | ((data & 0xFF) << 24);
+    return ((data & 0xFF000000) >> 24) | ((data & 0xFF0000) >> 8) | ((data & 0xFF00) << 8) | ((data & 0xFF) << 24);
 }
 
 #ifdef SPECIFY_ENABLE_INTEGER64
 uint64_t gmp_l2b64(uint64_t data)
 {
-	return ((data & 0xFF00000000000000) >> 56)
-		| ((data & 0xFF000000000000) >> 40)
-		| ((data & 0xFF0000000000) >> 24)
-		| ((data & 0xFF00000000) >> 8)
-		| ((data & 0xFF000000) << 8)
-		| ((data & 0xFF0000) << 24)
-		| ((data & 0xFF00) << 40)
-		| ((data & 0xFF) << 56);
+    return ((data & 0xFF00000000000000) >> 56) | ((data & 0xFF000000000000) >> 40) | ((data & 0xFF0000000000) >> 24) |
+           ((data & 0xFF00000000) >> 8) | ((data & 0xFF000000) << 8) | ((data & 0xFF0000) << 24) |
+           ((data & 0xFF00) << 40) | ((data & 0xFF) << 56);
 }
 #endif // SPECIFY_ENABLE_INTEGER64
 
@@ -339,7 +307,7 @@ uint64_t gmp_l2b64(uint64_t data)
 #if 0
 
 //GMP_WEAK_FUNC_PREFIX
-#pragma WEAK (gmp_setup_peripheral)
+#pragma WEAK(gmp_setup_peripheral)
 void gmp_setup_peripheral()
 GMP_WEAK_FUNC_SUFFIX
 {}
@@ -372,4 +340,3 @@ GMP_WEAK_FUNC_SUFFIX
 {}
 
 #endif // disable weak symbols
-

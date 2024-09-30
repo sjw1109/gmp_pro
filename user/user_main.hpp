@@ -38,7 +38,7 @@ extern "C"
 	// Peripheral Variables
 #if defined SPECIFY_ENABLE_DEFUALT_DEBUG_PRINT_FUNC
 // This is the default debug device handle
-extern dbgptr_gt default_debug_dev;
+extern dbgptr_halt default_debug_dev;
 #endif // SPECIFY_ENABLE_DEFUALT_DEBUG_PRINT_FUNC
 
 

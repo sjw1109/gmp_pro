@@ -9,6 +9,14 @@
  *
  */
 
+#ifndef _FILE_GMP_EXT_ADS8688_H_
+#define _FILE_GMP_EXT_ADS8688_H_
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif // __cplusplus
+
 //////////////////////////////////////////////////////////////////////////
 // Command List
 //
@@ -235,11 +243,11 @@
  */
 #define ADS8688_REG_CMD_RDBK (0x3F)
 
-//////////////////////////////////////////////////////////////////////////
-// Channel Mask
-// These macros are used to set AUTO SCAN SEQUENCING CONTROL register.
-// They are ADS8688_REG_AUTO_SEQ_EN, ADS8688_REG_CHANNEL_PD.
-//
+    //////////////////////////////////////////////////////////////////////////
+    // Channel Mask
+    // These macros are used to set AUTO SCAN SEQUENCING CONTROL register.
+    // They are ADS8688_REG_AUTO_SEQ_EN, ADS8688_REG_CHANNEL_PD.
+    //
 
 #define ADS8688_PARAM_CHANNEL_MASK0 ((0x01))
 #define ADS8688_PARAM_CHANNEL_MASK1 ((0x02))
@@ -250,36 +258,36 @@
 #define ADS8688_PARAM_CHANNEL_MASK6 ((0x40))
 #define ADS8688_PARAM_CHANNEL_MASK7 ((0x80))
 
-//////////////////////////////////////////////////////////////////////////
-// ADS868X Control Register
-// These macros are used to set DEVICE FEATURES SELECTION CONTROL register.
-// They are ADS8688_REG_CTRL
-//
-// 0-2: SDO data format bits
-// 6-7: Device ID bits
-//
+    //////////////////////////////////////////////////////////////////////////
+    // ADS868X Control Register
+    // These macros are used to set DEVICE FEATURES SELECTION CONTROL register.
+    // They are ADS8688_REG_CTRL
+    //
+    // 0-2: SDO data format bits
+    // 6-7: Device ID bits
+    //
 
-// SDO mode config
-// Description of Program Register Bits for SDO Data Format
-//
-// SDO MODE |  BIT 24-9  | BIT 8-5  | BIT 4-3 | BIT 2-0         |
-// 000 (0)  | ADC Result |             SDO Pulled LOW           |
-// 001 (1)  | ADC Result | CHN ADDR |       SDO Pulled LOW      |
-// 010 (2)  | ADC Result | CHN ADDR | DEV ADDR | SDO Pulled LOW |
-// 011 (3)  | ADC Result | CHN ADDR | DEV ADDR |  Input Range   |
-//
-//
-// Bit Description for the SDO Data
-//
-// ADC Result  (24- 9): 16 bits of conversion result for the channel represented in MSB-first format.
-//                      16th SCLK falling edge, no latency.
-// CHN ADDR    (8 - 5): Four bits of channel address.
-//                      0-3: Channel 0-3,
-//                      4-7: Channel 4-7, valid only for the ADS8688
-// DEV ADDR    (4 - 3): Two bits of device address (mainly useful in daisy-chain mode).
-// Input Range (2 - 0): Three LSB bits of input voltage range.
-//                      The value of input range reference Range Selection Reg parameter.
-//
+    // SDO mode config
+    // Description of Program Register Bits for SDO Data Format
+    //
+    // SDO MODE |  BIT 24-9  | BIT 8-5  | BIT 4-3 | BIT 2-0         |
+    // 000 (0)  | ADC Result |             SDO Pulled LOW           |
+    // 001 (1)  | ADC Result | CHN ADDR |       SDO Pulled LOW      |
+    // 010 (2)  | ADC Result | CHN ADDR | DEV ADDR | SDO Pulled LOW |
+    // 011 (3)  | ADC Result | CHN ADDR | DEV ADDR |  Input Range   |
+    //
+    //
+    // Bit Description for the SDO Data
+    //
+    // ADC Result  (24- 9): 16 bits of conversion result for the channel represented in MSB-first format.
+    //                      16th SCLK falling edge, no latency.
+    // CHN ADDR    (8 - 5): Four bits of channel address.
+    //                      0-3: Channel 0-3,
+    //                      4-7: Channel 4-7, valid only for the ADS8688
+    // DEV ADDR    (4 - 3): Two bits of device address (mainly useful in daisy-chain mode).
+    // Input Range (2 - 0): Three LSB bits of input voltage range.
+    //                      The value of input range reference Range Selection Reg parameter.
+    //
 
 #define ADS8688_PARAM_CTRL_SDO_MODE0 ((0x00))
 #define ADS8688_PARAM_CTRL_SDO_MODE1 ((0x01))
@@ -299,122 +307,151 @@
 // 11 = ID for device 3 in daisy-chain mode
 #define ADS8688_PARAM_CTRL_DEV_ID3 ((0xC0))
 
-//////////////////////////////////////////////////////////////////////////
-// interface redirection
+    //////////////////////////////////////////////////////////////////////////
+    // interface redirection
 
-// null here
+    // null here
 
-// user may set SPI handle to null, in order to send duplex message manually.
-
-typedef struct _tag_ads8688_t
-{
-    /**
-     * @brief SPI interface which is attached to ADS8688
-     */
-    spi_gt *spi;
+    // user may set SPI handle to null, in order to send duplex message manually.
 
     /**
-     * @brief nCS (Chip Select) GPIO interface
+     * @brief This is ADS8688 ADS8684 ADC source type.
      */
-    gpio_gt *ncs;
-
-    /**
-     * @brief nRST (Reset) & nPD (Power Done) GPIO interface
-     */
-    gpio_gt *nrst;
-
-    /**
-     * @brief transmit buffer.
-     */
-    data_gt send_buffer[4];
-
-    /**
-     * @brief receive buffer.
-     */
-    data_gt recv_buffer[4];
-
-    /**
-     * @brief This is the SPI message
-     */
-    duplex_ift spi_msg;
-
-} adc_ads8688_t;
-
-gmp_stat_t gmpe_ads8688_init(adc_ads8688_t *obj, spi_gt *hspi, gpio_gt *ncs, gpio_gt *nrst)
-{
-    // init SPI msg item
-    obj->spi_msg.capacity = 4;
-    obj->spi_msg.length = 0;
-    obj->spi_msg.rx_buf = obj->recv_buffer;
-    obj->spi_msg.tx_buf = obj->send_buffer;
-
-    // bind SPI driver
-    obj->spi = hspi;
-    obj->ncs = ncs;
-    obj->nrst = nrst;
-
-    // Send SPI msg to init device
-    gmpe_rst_device(obj);
-
-    return GMP_STAT_OK;
-}
-
-gmp_stat_t gmpe_ads8688_rst(adc_ads8688_t *obj)
-{
-
-    // judge if hardware rst is enable
-    if (obj->nrst)
+    typedef struct _tag_ads8688_t
     {
-        gmp_gpio_clear(obj->nrst);
-        for (int i = 0; i < 5; ++i)
-            GMP_INSTRUCTION_NOP;
-        gmp_gpio_set(obk->nrst);
+        /**
+         * @brief SPI interface which is attached to ADS8688
+         */
+        spi_halt *spi;
+
+        /**
+         * @brief nCS (Chip Select) GPIO interface
+         */
+        gpio_halt *ncs;
+
+        /**
+         * @brief nRST (Reset) & nPD (Power Done) GPIO interface
+         */
+        gpio_halt *nrst;
+
+        /**
+         * @brief transmit buffer.
+         */
+        data_gt send_buffer[4];
+
+        /**
+         * @brief receive buffer.
+         */
+        data_gt recv_buffer[4];
+
+        /**
+         * @brief This is the SPI message
+         */
+        duplex_ift spi_msg;
+
+    } adc_ads8688_t;
+
+    /**
+     * @brief init a ADS8688 objects
+     * @param obj handle to object
+     * @param hspi target spi handle, could be nullptr, if user will send these message manually.
+     * @param ncs target nCS GPIO handle, could be nullptr.
+     * @param nrst target nRST GPIO hanle, could be nullptr.
+     * @return gmp_stat_t
+     */
+    gmp_stat_t gmpe_ads8688_init(adc_ads8688_t *obj, spi_halt *hspi, gpio_halt *ncs, gpio_halt *nrst)
+    {
+        // init SPI msg item
+        obj->spi_msg.capacity = 4;
+        obj->spi_msg.length = 0;
+        obj->spi_msg.rx_buf = obj->recv_buffer;
+        obj->spi_msg.tx_buf = obj->send_buffer;
+
+        // bind SPI driver
+        obj->spi = hspi;
+        obj->ncs = ncs;
+        obj->nrst = nrst;
+
+        // Send SPI msg to init device
+        gmpe_rst_device(obj);
+
+        return GMP_STAT_OK;
     }
 
-    // software reset
-    obj->spi_msg.length = 2;
-    obj->spi_msg.tx_buf[0] = (ADS8688_CMD_RESET_REGS & 0xFF00) >> 8;
-    obj->spi_msg.tx_buf[1] = ADS8688_CMD_RESET_REGS & 0x00FF;
-
-    if (obj->spi)
+    /**
+     * @brief Reset the ADS8688 device.
+     * @param obj object to ADS8688
+     * @return gmp_stat_t
+     */
+    gmp_stat_t gmpe_ads8688_rst(adc_ads8688_t *obj)
     {
-        if (obj->ncs)
-            gmp_gpio_clear(obj->ncs);
 
-        gmp_spi_send_recv(obj->spi, &obj->spi_msg);
+        // judge if hardware rst is enable
+        if (obj->nrst)
+        {
+            gmp_hal_gpio_clear(obj->nrst);
+            for (int i = 0; i < 5; ++i)
+                GMP_INSTRUCTION_NOP;
+            gmp_hal_gpio_set(obj->nrst);
+        }
 
-        if (obj->ncs)
-            gmp_gpio_set(obj->ncs);
+        // software reset
+        obj->spi_msg.length = 2;
+        obj->spi_msg.tx_buf[0] = (ADS8688_CMD_RESET_REGS & 0xFF00) >> 8;
+        obj->spi_msg.tx_buf[1] = ADS8688_CMD_RESET_REGS & 0x00FF;
+
+        if (obj->spi)
+        {
+            if (obj->ncs)
+                gmp_hal_gpio_clear(obj->ncs);
+
+            gmp_hal_spi_send_recv(obj->spi, &obj->spi_msg);
+
+            if (obj->ncs)
+                gmp_hal_gpio_set(obj->ncs);
+        }
+
+        return GMP_STAT_OK;
     }
 
-    return GMP_STAT_OK;
-}
-
-// ADS8688_CMD_MANUAL_CH0
-gmp_stat_t gmpe_ads8688_request(adc_ads8688_t *obj, uint16_t target_channel_cmd, uint16_t *result)
-{
-    // clear send buffer
-    memset(obj->send_buffer, 0, 4);
-
-    // fill command
-    obj->send_buffer[0] = (target_channel_cmd & 0xFF00) >> 8;
-    obj->send_buffer[1] = target_channel_cmd & 0x00FF;
-
-    // communication stage
-    if (obj->spi)
+    /**
+     * @brief ADS8688 specify a adc channel to measure.
+     *
+     * @param obj handle of ADC
+     * @param target_channel_cmd ADS8688_CMD_MANUAL_CH0 to ADS8688_CMD_MANUAL_CH8
+     * @param result return the last target, could be nullptr if the result could be ignored.
+     * @return gmp_stat_t
+     */
+    gmp_stat_t gmpe_ads8688_request(adc_ads8688_t *obj, uint16_t target_channel_cmd, uint16_t *result)
     {
-        if (obj->ncs)
-            gmp_gpio_clear(obj->ncs);
+        // clear send buffer
+        memset(obj->send_buffer, 0, 4);
 
-        gmp_spi_send_recv(obj->spi, &obj->spi_msg);
+        // fill command
+        obj->send_buffer[0] = (target_channel_cmd & 0xFF00) >> 8;
+        obj->send_buffer[1] = target_channel_cmd & 0x00FF;
 
-        if (obj->ncs)
-            gmp_gpio_set(obj->ncs);
+        // communication stage
+        if (obj->spi)
+        {
+            if (obj->ncs)
+                gmp_hal_gpio_clear(obj->ncs);
+
+            gmp_hal_spi_send_recv(obj->spi, &obj->spi_msg);
+
+            if (obj->ncs)
+                gmp_hal_gpio_set(obj->ncs);
+        }
+
+        // get result
+        if (result)
+            *result = gmp_l2b16(*((uint16_t *)(obj->recv_buffer + 2)));
+
+        return GMP_STAT_OK;
     }
 
-    // get result
-    if (result)
-        *result = gmp_l2b16(*((uint16_t *)(obj->recv_buffer + 2)));
-
-    return GMP_STAT_OK;
+#ifdef __cplusplus
 }
+#endif // __cplusplus
+
+#endif // _FILE_GMP_EXT_ADS8688_H_

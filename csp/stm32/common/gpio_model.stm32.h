@@ -33,7 +33,7 @@ extern "C"
     } gpio_model_stm32_t;
 
 // specify the GPIO model to be STM32 model
-#define GMP_PORT_HGPIO_T gpio_model_stm32_t
+#define GMP_PORT_GPIO_T gpio_model_stm32_t
 
     /**
      * @brief Setup GPIO port and pin.
@@ -41,7 +41,7 @@ extern "C"
      * @param gpio_port GPIO port of STM32
      * @param gpio_pin GPIO pin of STM32    
      */
-    void gmp_gpio_setup(gpio_model_stm32_t *hgpio,
+    void gmp_hal_gpio_setup(gpio_model_stm32_t *hgpio,
      GPIO_TypeDef *gpio_port, uint32_t gpio_pin );
 
     /**
@@ -49,7 +49,7 @@ extern "C"
      * @param hgpio handle of gpio. Type of GPIO handle is given by CSP.
      * @param mode target mode of GPIO. mode 0 is input mode, 1 is output mode.
      */
-    void gmp_gpio_set_mode(gpio_model_stm32_t *hgpio, fast_gt mode);
+    gmp_stat_t gmp_hal_gpio_set_mode(gpio_model_stm32_t *hgpio, fast_gt mode);
 
     /**
      * @brief Write GPIO port. This port must be an output port.
@@ -57,7 +57,7 @@ extern "C"
      * @param hgpio handle of GPIO
      * @param level target electrical level of GPIO port.
      */
-    void gmp_gpio_write(gpio_model_stm32_t *hgpio, fast_gt level);
+    gmp_stat_t gmp_hal_gpio_write(gpio_model_stm32_t *hgpio, fast_gt level);
 
     /**
      * @brief Read GPIO port, This port should be an input port.
@@ -65,21 +65,21 @@ extern "C"
      * @param hgpio handle of GPIO
      * @return fast_gt return GPIO electrical level
      */
-    fast_gt gmp_gpio_read(gpio_model_stm32_t *hgpio);
+    fast_gt gmp_hal_gpio_read(gpio_model_stm32_t *hgpio);
 
     /**
      * @brief Set GPIO electrical level to high.
      * if GPIO mode is not output mode, the result is undefined.
      * @param hgpio handle of GPIO
      */
-    void gmp_gpio_set(gpio_model_stm32_t *hgpio);
+    gmp_stat_t gmp_hal_gpio_set(gpio_model_stm32_t *hgpio);
 
     /**
      * @brief Set GPIO electrical level to low.
      * if GPIO mode is not output mode, the result is undefined.
      * @param hgpio handle of GPIO
      */
-    void gmp_gpio_clear(gpio_model_stm32_t *hgpio);
+    gmp_stat_t gmp_hal_gpio_clear(gpio_model_stm32_t *hgpio);
 
 #endif // HAL_GPIO_MODULE_ENABLED
 

@@ -45,7 +45,13 @@
 extern IWDG_HandleTypeDef hiwdg;
 #endif // HAL_IWDG_MODULE_ENABLED, IWDG enabled
 
-
+/**
+ * @brief This function may fresh IWDG counter.
+ * This function should be implemented by CSP,
+ * Every Loop routine, this function would be called.
+ * CSP implementation should ensure that the function has only one thing is to feed the watchdog
+ */
+void gmp_hal_wd_feed(void);
 
 #endif // HAL_IWDG_MODULE_ENABLED
 
