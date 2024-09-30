@@ -138,7 +138,95 @@ extern "C"
 #define DAC8563_CONFIG_POWER_ON_DACB  (0x0002)
 #define DAC8563_CONFIG_POWER_ON_DACAB (0x0003)
 
-#define DAC8563_CMD_POWER_DOWN        (0x20)
+    /**
+     * @brief Power down DAC-A or/and DAC-B with 1 kOhm to GND
+     * parameters to specify which channel will power down
+     */
+#define DAC8563_CONFIG_POWER_DOWN_DACA_1K  (0x0009)
+#define DAC8563_CONFIG_POWER_DOWN_DACB_1K  (0x000A)
+#define DAC8563_CONFIG_POWER_DOWN_DACAB_1K (0x000B)
+
+    /**
+     * @brief Power down DAC-A or/and DAC-B with 100 kOhm to GND
+     * parameters to specify which channel will power down
+     */
+#define DAC8563_CONFIG_POWER_DOWN_DACA_100K  (0x0011)
+#define DAC8563_CONFIG_POWER_DOWN_DACB_100K  (0x0012)
+#define DAC8563_CONFIG_POWER_DOWN_DACAB_100K (0x0013)
+
+    /**
+     * @brief Power down DAC-A or/and DAC-B with Hi-Z to GND
+     * parameters to specify which channel will power down
+     */
+#define DAC8563_CONFIG_POWER_DOWN_DACA  (0x0019)
+#define DAC8563_CONFIG_POWER_DOWN_DACB  (0x001A)
+#define DAC8563_CONFIG_POWER_DOWN_DACAB (0x001B)
+
+
+/**
+ * @brief Reset Command
+ * parameters should be one of DAC8563_CONFIG_RESET_x
+ */
+#define DAC8563_CMD_RESET               (0x28)
+
+    /**
+     * @brief Reset DAC-A and DAC-B input register and update all DACs
+     */
+#define DAC8563_CONFIG_RESET_ONLY_INPUT (0x0000) 
+
+    /**
+     * @brief Reset all registers and update all DACs (Power-on-reset update)
+     */
+#define DAC8563_CONFIG_RESET_ALL        (0x0001)
+
+
+/**
+ * @brief Set LDAC pin utilities
+ * parameters should be one of DAC8563_CONFIG_LDAC_x
+ */
+#define DAC8563_CMD_SET_LDAC_PIN        (0x30)
+
+    /**
+     * @brief LDAC pin active for DAC-B and DAC-A
+     */
+#define DAC8563_CONFIG_LDAC_AB (0x0000)
+
+    /**
+     * @brief LDAC pin active for DAC-B and DAC-A
+     */
+#define DAC8563_CONFIG_LDAC_B (0x0001)
+
+    /**
+     * @brief LDAC pin active for DAC-B and DAC-A
+     */
+#define DAC8563_CONFIG_LDAC_A (0x0002)
+
+    /**
+     * @brief LDAC pin active for DAC-B and DAC-A
+     */
+#define DAC8563_CONFIG_LDAC_NULL (0x0003)
+
+
+/**
+ * @brief Enable internal reference or disable internal reference 
+ * parameters should be one of DAC8563_CONFIG_INREF_x
+ */
+#define DAC8563_CMD_SET_INTERNAL_REF        (0x38)
+
+    /**
+     * @brief Disable internal reference and reset DACs to gain = 1
+     */
+#define DAC8563_CONFIG_INREF_DISABLE (0x0000)
+
+    /**
+     * @brief Enable internal reference and reset DACs to gain = 2
+     */
+#define DAC8563_CONFIG_INREF_ENABLE  (0x0001)
+
+
+
+
+
 
 
 
