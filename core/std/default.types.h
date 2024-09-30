@@ -1,3 +1,14 @@
+/**
+ * @file default.types.h
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
+
 
 // This file provide the default type of the whole environment.
 // This file should only be included to a headers after the chip configure is included.

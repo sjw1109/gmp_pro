@@ -1,8 +1,23 @@
+/**
+ * @file peripheral_model.stm32.h
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
 
 // This file contains all the peripheral implements
 
 #ifndef _FILE_PERIPHERAL_MODEL_STM32_H_
 #define _FILE_PERIPHERAL_MODEL_STM32_H_
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif // __cplusplus
 
 // ....................................................................//
 // PWM controller
@@ -15,44 +30,125 @@
 //
 #ifdef HAL_TIM_MODULE_ENABLED
 
-
 #endif // HAL_TIM_MODULE_ENABLED
 
-
 // ....................................................................//
-// UART 
+// UART
 //
 // kernel functions:
-// + Write 
+// + Write
 // + Read
-// + Set Baud Rate
 //
 #ifdef HAL_UART_MODULE_ENABLED
 
-// Note:
-// 发送和接收提供基础版本
-// 发送提供池模式，接收提供缓冲模式
+    /**
+     * @brief STM32 UART handle
+     *
+     */
+    typedef struct _tag_uart_stm32_t
+    {
+        //
+        /**
+         * @brief Handle of STM32 UART
+         */
+        UART_HandleTypeDef *uart_handle;
 
+        /**
+         * @brief TX DMA handle
+         */
+        DMA_HandleTypeDef *uart_tx_dma_handle;
 
-typedef struct _tag_uart_handle
-{
-	UART_HandleTypeDef* uart_handle;
-	DMA_HandleTypeDef* uart_tx_dma_handle;
-	DMA_HandleTypeDef* uart_rx_dma_handle;
-}uart_handle_t;
+        /**
+         * @brief RX DMA handle
+         */
+        DMA_HandleTypeDef *uart_rx_dma_handle;
 
+        /**
+         * @brief This is a buffer pointer of duplex interface.
+         * User may band to this buffer to get necessary informations.
+         */
+        duplex_ift *buffer;
 
-size_gt uart_tx_dma(uart_handle_t* huart, uart_content_t* content);
+        /**
+         * @brief This is a buffer for receive.
+         * This buffer should have the same length with duplex buffer.
+         */
+        data_gt *recv_buf;
 
-size_gt uart_tx_direct(UART_HandleTypeDef* huart, uart_content_t* content);
+    } stm32_uart_t;
 
-#define GMP_PORT_HUART_T UART_HandleTypeDef
-#define GMP_PORT_DBG_PRINT_HANDLE_T uart_handle_t*
-#define GMP_PORT_DBG_PRINT_FUNC uart_tx_dma
+/**
+ * @brief Specify `stm32_uart_t` type as huart_gt type
+ *
+ */
+#define GMP_PORT_HUART_T stm32_uart_t
 
+    /**
+     * @brief Setup GMP UART handle.
+     * This function should be called in `peripheral_mapping.c`
+     * @param huart handle of GMP handle
+     * @param uart_handle STM32 handle of UART
+     * @param uart_tx_dma_handle STM32 DMA handle of UART TX
+     * @param uart_rx_dma_handle STM32 DMA handle of UART RX
+     * @param data data buffer, DMA mode only
+     * @param recv_buf data buffer, DMA mode only
+     */
+    void gmp_uart_setup(stm32_uart_t *huart, UART_HandleTypeDef *uart_handle, DMA_HandleTypeDef *uart_tx_dma_handle,
+                        DMA_HandleTypeDef *uart_rx_dma_handle, duplex_ift *data_buffer, data_gt *recv_buf);
+
+    //
+    // The following function prototype is copy from gmp_csp_cport.
+    // All these functions support async and sync UART transmition.
+    //
+
+    /**
+     * @brief send data via UART
+     * @param huart handle of UART
+     * @param data half_duplex data interface
+     */
+    void gmp_uart_send(stm32_uart_t *huart, half_duplex_ift *data);
+
+    /**
+     * @brief receive data via UART
+     * @param huart handle of UART
+     * @param data half_duplex data interface
+     */
+    void gmp_uart_recv(stm32_uart_t *huart, half_duplex_ift *data);
+
+    /**
+     * @brief bind a duplex data buffer to UART channel.
+     * @param huart handle of UART
+     * @param data duplex data buffer
+     */
+    void gmp_uart_bind_duplex_dma(stm32_uart_t *huart, duplex_ift *data);
+
+    /**
+     * @brief start UART listen to receive routine
+     * @param huart handle of UART
+     */
+    void gmp_uart_listen(stm32_uart_t *huart);
+
+    /**
+     * @brief Get UART listen status, return current receive bytes number.
+     * @param huart
+     * @return size_gt size of received bytes.
+     */
+    size_gt gmp_uart_get_listen_status(stm32_uart_t *huart);
+
+    /**
+     * @brief start UART consign to transmit routine.
+     * @param huart handle of UART
+     */
+    void gmp_uart_consign(stm32_uart_t *huart);
+
+    /**
+     * @brief Get UART consign status, return if consign routine is free.
+     * @param huart
+     * @return fast_gt
+     */
+    fast_gt gmp_uart_get_consign_status(stm32_uart_t *huart);
 
 #endif // HAL_UART_MODULE_ENABLED
-
 
 // ....................................................................//
 // SPI
@@ -62,23 +158,51 @@ size_gt uart_tx_direct(UART_HandleTypeDef* huart, uart_content_t* content);
 // + Read
 // + ReadWrite
 // + Set SPI Mode
-// 
+//
 #ifdef HAL_SPI_MODULE_ENABLED
 
-typedef struct _tag_spi_handle
-{
-	// chip select
-	gpio_model_stm32_t nchip_select;
+    typedef struct _tag_stm32_spi_handle
+    {
+        // chip select
+        gpio_model_stm32_t *nchip_select;
 
-	// SPI handle 
-	SPI_HandleTypeDef* hspi;
-}spi_handle_t;
+        // SPI handle
+        SPI_HandleTypeDef *hspi;
+    } stm32_spi_t;
 
-// length < 16
-size_gt spi_tx_direct(spi_handle_t* hspi, data_gt* data, size_gt length);
+#define GMP_PORT_HSPI_T stm32_spi_t
 
-#define GMP_PORT_HSPI_T SPI_HandleTypeDef
+    /**
+     * @brief GMP SPI peripheral interface
+     * This function should be called in peripheral mapping routine.
+     * @param spi  handle of spi device
+     * @param hspi handle of STM32 SPI device
+     * @param ncs  Chip Select GPIO
+     */
+    void gmp_spi_setup(stm32_spi_t *spi, 
+        SPI_HandleTypeDef *hspi, gpio_model_stm32_t *ncs);
 
+    /**
+     * @brief send data via half duplex SPI
+     * @param spi handle of SPI
+     * @param data half_duplex data interface
+     */
+    void gmp_spi_send(stm32_spi_t *spi, half_duplex_ift *data);
+
+    /**
+     * @brief receive data via SPI
+     * @param spi handle of SPI
+     * @param data half_duplex data interface
+     */
+    void gmp_spi_recv(stm32_spi_t *spi, half_duplex_ift *data);
+
+    /**
+     * @brief receive and transmit data via SPI interface
+     * This function should only be called in SPI duplex mode.
+     * @param spi handle of SPI
+     * @param data duplex data interface
+     */
+    void gmp_spi_send_recv(stm32_spi_t *spi, duplex_ift *data);
 
 #endif // HAL_SPI_MODULE_ENABLED
 
@@ -91,6 +215,55 @@ size_gt spi_tx_direct(spi_handle_t* hspi, data_gt* data, size_gt length);
 //
 #ifdef HAL_I2C_MODULE_ENABLED
 
+    typedef struct _tag_stm32_iic_handle
+    {
+        // IIC handle
+        I2C_HandleTypeDef *iic;
+
+    } stm32_iic_t;
+
+#define GMP_PORT_HI2C_T stm32_iic_t
+
+    /**
+     * @brief GMP IIC peripheral interface
+     * This function should be called in peripheral mapping routine.
+     * @param iic  handle of iic device
+     * @param hi2c handle of STM32 IIC device
+     */
+    void gmp_iic_setup(stm32_iic_t *iic, I2C_HandleTypeDef *hi2c);
+
+    /**
+     * @brief IIC memory function, send a IIC memory frame.
+     * @param iic handle of IIC
+     * @param mem memory send message
+     */
+    void gmp_iic_mem_send(stm32_iic_t *iic, iic_memory_ift *mem);
+
+    /**
+     * @brief IIC memory function, recveive a IIC memory frame.
+     * @param iic handle of IIC
+     * @param mem memory receive message
+     */
+    void gmp_iic_mem_recv(stm32_iic_t *iic, iic_memory_ift *mem);
+
+    /**
+     * @brief IIC device send function
+     * @param iic handle of IIC
+     * @param msg IIC send message
+     */
+    void gmp_iic_send(stm32_iic_t *iic, half_duplex_with_addr_ift *msg);
+
+    /**
+     * @brief IIC device receive function
+     * @param iic handle of IIC
+     * @param msg IIC receive message
+     */
+    void gmp_iic_recv(stm32_iic_t *iic, half_duplex_with_addr_ift *msg);
+
 #endif // HAL_I2C_MODULE_ENABLED
+
+#ifdef __cplusplus
+}
+#endif // __cplusplus
 
 #endif // _FILE_PERIPHERAL_MODEL_STM32_H_

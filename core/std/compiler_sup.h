@@ -1,4 +1,14 @@
-
+/**
+ * @file compiler_sup.h
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
+ 
 // This file provided a set of macros to help user to config the code.
 
 #ifndef _FILE_COMPILER_SUP_H_

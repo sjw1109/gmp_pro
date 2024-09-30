@@ -1,4 +1,14 @@
-
+/**
+ * @file basic_pos_loop_p.h
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
+ 
 // This is a position loop P controller
 
 #include <ctl/component/common/divider.h>

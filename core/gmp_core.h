@@ -1,3 +1,14 @@
+/**
+ * @file gmp_core.h
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
+
 
 // This file is GMP library C source header
 
@@ -7,7 +18,7 @@
 // 
 
 // invoke user config file
-#include "user.config.h"
+#include <user.config.h>
 
 // invoke system default config
 #include <.config.h>
@@ -53,6 +64,10 @@
 // public C ports function
 // memory management support
 #include <core/std/gmp_cport.h>
+
+// public C CSP ports functions
+// peripheral functions
+#include <core/std/gmp_csp_cport.h>
 
 //////////////////////////////////////////////////////////////////////////
 // Step IV other C core modules

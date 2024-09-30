@@ -1,0 +1,39 @@
+/**
+ * @file example.c
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
+
+// This file provide a set of function that CSP must defined.
+
+#include <core/gmp_core.h>
+
+// User should invoke this function to get time (system tick).
+time_gt gmp_port_system_tick(void)
+{}
+
+// This function may be called and used to initialize all the peripheral. 
+void gmp_csp_startup(void)
+{}
+
+// This function would be called when fatal error occurred.
+void gmp_port_system_stuck(void)
+{}
+
+// This function would be called when all the initialization process happened.
+void csp_post_process(void)
+{}
+	
+// This function is unreachable.
+void gmp_exit_routine(void)
+{}
+
+// This function may invoke when main loop occurred.
+void gmp_csp_loop(void)
+{}
+

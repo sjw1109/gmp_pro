@@ -1,4 +1,15 @@
-﻿// error_code_config_compiler is a compiler module for error code Excel file.
+﻿/**
+ * @file error_code_config_compiler.cpp
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
+
+// error_code_config_compiler is a compiler module for error code Excel file.
 //
 
 //////////////////////////////////////////////////////////////////////////

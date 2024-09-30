@@ -1,3 +1,13 @@
+/**
+ * @file dsp_c2000_general.c
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
 
 // invoke GMP header
 #include <core/gmp_core.h>
@@ -25,7 +35,7 @@ void gmp_port_system_stuck(
 
 
 // The following function is a feed a dog routine
-void gmp_port_feed_dog()
+void gmp_wd_feed()
 {
     // This function is defined in TI C2000ware.
     // you may find the function definition in 
@@ -33,6 +43,11 @@ void gmp_port_feed_dog()
     // prototype is void ServiceDog(void);
     ServiceDog();
 }
+
+// This function may invoke when main loop occurred.
+void gmp_csp_loop(void)
+{}
+
 
 //
 #define EPWM1_TIMER_TBPRD  2000  // Period register

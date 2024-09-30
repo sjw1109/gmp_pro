@@ -1,4 +1,14 @@
-
+/**
+ * @file gmp_main.cpp
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
+ 
 #define _CRT_SECURE_NO_WARNINGS
 
 // necessary System headers 
@@ -64,42 +74,25 @@ void gmp_entry(void)
 	// take over `main loop`
 #ifdef SPECIFY_PC_TEST_ENV
 	for (test_loop_cnt = 0; test_loop_cnt < MAX_ITERATION_LOOPS; ++test_loop_cnt)
-	{
-		gmp_loop();
-
-		// Call user general loop routine
-		user_loop();
-
-#if defined CTL_DISABLE_MULTITHREAD
-
-		static size_t ctl_invoked_counter = 0;
-
-		ctl_invoked_counter += 1;
-
-		if (ctl_invoked_counter % CTL_MAIN_LOOP_RUNNING_RATIO == 0)
-		{
-			if (gmp_ctl_dispatch())
-			{
-				// meet fatal error.
-				break;
-			}
-		}
-
-		
-#endif // CTL_PC_TEST_ENABLE
-
-	}
 #else
 	while (1)
+#endif
 	{
 		// Call GMP general loop routine
 		// This function may call watch-dog feeding function and scheduling function.
 		gmp_loop();
 
+		// Call GMP CSP module loop routine
+		gmp_csp_loop();
+
 		// Call user general loop routine
 		user_loop();
+
+		// call user Controller Loop routine
+		ctl_loop();
+
 	}
-#endif
+
 	// Unreachable region
 	
 	// This function call may only happen when PC simulation.
@@ -156,7 +149,7 @@ void gmp_loop()
 
 
 #if defined SPECIFY_ENABLE_FEED_WATCHDOG
-	gmp_port_feed_dog();
+	gmp_wd_feed();
 #endif 
 
 	

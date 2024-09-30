@@ -1,4 +1,13 @@
-
+/**
+ * @file user_main.cpp
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
 
 //////////////////////////////////////////////////////////////////////////
 // invoke headers
@@ -39,7 +48,7 @@ GMP_NO_OPT_SUFFIX
 void user_loop(void)
 {
 	//Sleep(1);
-	controller_state_dispatch((ctl_object_nano_t*)&pmsm);
+	
 
 	time_gt time = gmp_base_get_system_tick();
 
@@ -54,3 +63,5 @@ void user_loop(void)
 
 
 }
+
+

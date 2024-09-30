@@ -1,4 +1,15 @@
-﻿// UDP_test.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
+﻿/**
+ * @file UDP_test.cpp
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
+
+// UDP_test.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
 //
 
 #include <iostream>

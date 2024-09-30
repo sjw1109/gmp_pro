@@ -1,4 +1,13 @@
-
+/**
+ * @file ctl_core.h
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
 
 // Invoke All the GMP features
 #include <core/gmp_core.h>

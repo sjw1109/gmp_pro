@@ -1,4 +1,14 @@
-
+/**
+ * @file Buck_constant_param.cpp
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
+ 
 #include "Buck_constant_param.h"
 
 // parameters

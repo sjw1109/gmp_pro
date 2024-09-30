@@ -1,5 +1,17 @@
+/**
+ * @file ctl_nano.h
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
 
-
+// Basic headers
+#include <core/gmp_core.h>
+#include <ctl/component/common/divider.h>
 
 #ifndef _FILE_CTL_NANO_H_
 #define _FILE_CTL_NANO_H_

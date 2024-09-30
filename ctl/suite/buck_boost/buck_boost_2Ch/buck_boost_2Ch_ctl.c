@@ -1,4 +1,14 @@
-
+/**
+ * @file buck_boost_2Ch_ctl.c
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
+ 
 #include <core/gmp_core.h>
 #include <ctl/ctl_core.h>
 #include <ctl/ctrl_plant/dspc/buck_boost_2Ch/buck_boost_2Ch_ctl.h>

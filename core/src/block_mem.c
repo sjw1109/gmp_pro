@@ -1,3 +1,13 @@
+/**
+ * @file block_mem.c
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
 
 // This file provide a memory controller for the GMP
 // The implementation of the MM is controlled by block.

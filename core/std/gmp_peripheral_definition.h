@@ -1,3 +1,13 @@
+/**
+ * @file gmp_peripheral_definition.h
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
 
 #ifndef _FILE_GMP_PERIPHERAL_DEFINITION_H_
 #define _FILE_GMP_PERIPHERAL_DEFINITION_H_

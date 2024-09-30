@@ -1,3 +1,14 @@
+/**
+ * @file gmp_core.hpp
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
+
 // This file contains all the core functions
 // If you need to use GMP library you should include this header first
 
@@ -41,12 +52,6 @@ extern "C"
 //
 // invoke basic IO concepts
 #include <core/dev/io_concept.hpp>
-
-// invoke peripheral driver entity class
-#include <core/dev/peripheral_driver.hpp>
-
-// invoke devices abstract
-#include <core/dev/device_prototype.hpp>
 
 
 //////////////////////////////////////////////////////////////////////////

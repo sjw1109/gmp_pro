@@ -1,3 +1,13 @@
+/**
+ * @file TLE5012.h
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
 
 // This header is for TLE5012 GMR-Based Angle Sensor
 
