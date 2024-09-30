@@ -53,12 +53,6 @@ extern "C"
 // invoke basic IO concepts
 #include <core/dev/io_concept.hpp>
 
-// invoke peripheral driver entity class
-#include <core/dev/peripheral_driver.hpp>
-
-// invoke devices abstract
-#include <core/dev/device_prototype.hpp>
-
 
 //////////////////////////////////////////////////////////////////////////
 // Step V import peripheral mapping
