@@ -1,4 +1,14 @@
-
+/**
+ * @file divider.h
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
+ 
 #include <ctl/component/common/gmp_math.h>
 
 #ifndef _FILE_DIVIDER_H_

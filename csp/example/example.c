@@ -1,3 +1,14 @@
+/**
+ * @file example.c
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
+
 // This file provide a set of function that CSP must defined.
 
 #include <core/gmp_core.h>

@@ -1,4 +1,13 @@
-
+/**
+ * @file bh1730.h
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
 
 
 #include <core/std/devif.h>

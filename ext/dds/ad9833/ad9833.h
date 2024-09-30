@@ -1,3 +1,14 @@
+/**
+ * @file ad9833.h
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
+
 #ifndef _FILE_GMP_EXT_AD9833_H_
 #define _FILE_GMP_EXT_AD9833_H_
 

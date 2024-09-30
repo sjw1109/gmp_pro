@@ -1,4 +1,13 @@
-
+/**
+ * @file encoder.h
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
 
 // based on filter module
 #include <ctl/component/common/filter.h>

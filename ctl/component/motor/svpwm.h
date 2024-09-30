@@ -1,3 +1,14 @@
+/**
+ * @file svpwm.h
+ * @author Javnson (javnson@zju.edu.cn), GUO Qichen
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
+
 // Space Vector Pulse Width Modulation, SVPWM module
 
 #ifndef _FILE_SVPWM_H_

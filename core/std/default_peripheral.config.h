@@ -1,3 +1,14 @@
+/**
+ * @file default_peripheral.config.h
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
+
 #ifndef _FILE_DEFAULT_PERIPHERAL_CONFIG_H_
 #define _FILE_DEFAULT_PERIPHERAL_CONFIG_H_
 

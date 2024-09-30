@@ -1,3 +1,14 @@
+/**
+ * @file udp_svr.hpp
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
+
 // This header is a windows UDP controller simulate server.
 // All the application include this server should compiled as Windows X86 Application.
 
@@ -6,7 +17,7 @@
 #define _FILE_UDP_SERVER_HPP_
 
 //////////////////////////////////////////////////////////////////////////
-// 以下这部分内容编码到XML中，解析得到，可以在编译之后修改。
+// 锟斤拷锟斤拷锟解部锟斤拷锟斤拷锟捷憋拷锟诫到XML锟叫ｏ拷锟斤拷锟斤拷锟矫碉拷锟斤拷锟斤拷锟斤拷锟节憋拷锟斤拷之锟斤拷锟睫改★拷
 
 // Simulation settings
 #ifndef MAX_ITERATION_LOOPS

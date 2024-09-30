@@ -1,4 +1,14 @@
-
+/**
+ * @file pll.h
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
+ 
 // This file is for PLL (Phase lock Loop) Module
 
 // PLL module is based on PID module and filter module

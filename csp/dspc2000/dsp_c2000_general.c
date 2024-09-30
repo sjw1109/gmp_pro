@@ -1,3 +1,13 @@
+/**
+ * @file dsp_c2000_general.c
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
 
 // invoke GMP header
 #include <core/gmp_core.h>

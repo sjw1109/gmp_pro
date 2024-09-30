@@ -1,3 +1,14 @@
+/**
+ * @file track_pid.h
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
+
 // This is a PID basic package
 
 #include <ctl/component/common/pid.h>

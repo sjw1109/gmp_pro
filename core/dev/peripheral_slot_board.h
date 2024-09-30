@@ -1,3 +1,13 @@
+/**
+ * @file peripheral_slot_board.h
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
 
 // This file provide a peripheral slot
 // This file will provide a standard communication with MATLAB Simulink.

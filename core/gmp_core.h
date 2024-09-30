@@ -1,3 +1,14 @@
+/**
+ * @file gmp_core.h
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
+
 
 // This file is GMP library C source header
 

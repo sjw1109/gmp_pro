@@ -1,4 +1,14 @@
-
+/**
+ * @file data_ring_buffer.c
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
+ 
 #include <core/gmp_core.h>
 #include <core/util/ds/data_ring_buffer.h>
 

@@ -1,4 +1,14 @@
-﻿// buck_boost_core_control_law_simulate.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
+﻿/**
+ * @file buck_boost_core_control_law_simulate.cpp
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
+// buck_boost_core_control_law_simulate.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
 //
 
 #include <iostream>

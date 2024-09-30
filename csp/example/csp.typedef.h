@@ -1,3 +1,14 @@
+/**
+ * @file csp.typedef.h
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
+
 
 // Config GMP default type 
 // reference: <core/std/default.types.h>

@@ -1,3 +1,14 @@
+/**
+ * @file dac8563.h
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
+
 // This file is for DAC8563 DAC chip
 
 #ifndef _FILE_GMP_EXT_DAC8563_H_
