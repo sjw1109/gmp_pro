@@ -15,7 +15,9 @@
 
 // User should invoke this function to get time (system tick).
 time_gt gmp_port_system_tick(void)
-{}
+{
+    return 0;
+}
 
 // This function may be called and used to initialize all the peripheral. 
 void gmp_csp_startup(void)
@@ -60,7 +62,15 @@ void gmp_port_system_stuck(void)
 
 // This function would be called when all the initialization process happened.
 void csp_post_process(void)
-{}
+{
+    EALLOW;
+
+    // Enable global Interrupts and higher priority real-time debug events:
+        EINT;   // Enable Global interrupt INTM
+        ERTM;   // Enable Global realtime interrupt DBGM
+
+    EDIS;
+}
     
 // This function is unreachable.
 void gmp_exit_routine(void)
@@ -264,7 +274,8 @@ void PieVectTableInit(void)
     PieCtrlRegs.PIECTRL.bit.ENPIE = 1;
 }
 
-interrupt void ISR_ILLEGAL(void) // Illegal operation TRAP
+// Illegal operation TRAP
+interrupt void ISR_ILLEGAL(void) 
 {
     // Insert ISR Code here
 
@@ -280,7 +291,7 @@ interrupt void ISR_ILLEGAL(void) // Illegal operation TRAP
 
 // This function initializes the Flash Control registers
 
-//                   CAUTION
+// CAUTION
 // This function MUST be executed out of RAM. Executing it
 // out of OTP/Flash will yield unpredictable results
 

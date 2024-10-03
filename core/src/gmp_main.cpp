@@ -175,14 +175,22 @@ void gmp_setup_label()
 // unit byte
 void *gmp_malloc(size_gt size)
 {
+#ifdef SPECIFY_GMP_BLOCK_MEMORY_ENABLE
     // This function was specified by <user_config.h>
     return GMP_BLOCK_ALLOC_FUNC(size);
+#else
+    return malloc(size);
+#endif
 }
 
 void gmp_free(void *ptr)
 {
+#ifdef SPECIFY_GMP_BLOCK_MEMORY_ENABLE
     // This function was specified by <user_config.h>
     GMP_BLOCK_FREE_FUNC(ptr);
+#else
+    free(ptr);
+#endif
 }
 
 //////////////////////////////////////////////////////////////////////////
