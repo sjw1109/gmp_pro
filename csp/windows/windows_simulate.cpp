@@ -33,6 +33,9 @@ typedef struct _tag_receive_package_t
 
 extern receive_package_t rx_pak;
 
+// Main ISR function prototype
+extern "C" void MainISR(void);
+
 // Global variables
 
 #ifdef USING_SIMULINK_UDP_SIMULATE
@@ -68,9 +71,6 @@ void gmp_hal_wd_feed()
 #endif // SPECIFY_ENABLE_FEED_WATCHDOG
 }
 
-void gmp_setup_peripheral()
-{
-}
 
 void gmp_csp_startup(void)
 {
@@ -153,11 +153,7 @@ void gmp_csp_loop(void)
 
     if (ctl_invoked_counter % CTL_MAIN_LOOP_RUNNING_RATIO == 0)
     {
-        if (gmp_ctl_dispatch())
-        {
-            // meet fatal error.
-            return;
-        }
+        MainISR();
     }
 
 #endif // CTL_PC_TEST_ENABLE

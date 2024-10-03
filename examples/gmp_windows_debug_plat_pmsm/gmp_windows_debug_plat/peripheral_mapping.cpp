@@ -14,8 +14,36 @@
 #include <ctl/ctl.config.h>
 
 
+void gmp_setup_peripheral()
+{
+
+}
+
 void gmp_init_peripheral_tree()
 {
 
 }
 
+
+void MainISR(void)
+{
+    // Get ADC result
+#ifdef USING_SIMULINK_UDP_SIMULATE
+    if (periodic_recv_routine(&udp_svr_obj) == 1)
+    {
+        exit(1);
+    }
+#endif // USING_SIMULINK_UDP_SIMULATE
+
+    // Call GMP CTL
+    ctl_dispatch();
+
+    // write back PWM result
+#ifdef USING_SIMULINK_UDP_SIMULATE
+    if (periodic_transmit_routine(&udp_svr_obj) == 1)
+    {
+        exit(1);
+    }
+#endif // USING_SIMULINK_UDP_SIMULATE
+
+}

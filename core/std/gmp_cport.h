@@ -71,14 +71,16 @@ extern "C"
     //
     void user_loop(void);
 
-    // This function will be called by gmp_ctl_dispatch.
+    // This function would be called by main ISR function.
+    // User should call this function, in your ctl_main.cpp or just ignore it.
+    // When you need to simulate your controller, this function would be invoked.
     void ctl_dispatch(void);
 
     // This function would be called by main ISR function.
     // User should call this function, in your ctl_main.cpp or just ignore it.
     // When you need to simulate your controller, this function would be invoked.
     // return 0 is normal, and any non-zero value means error.
-    int gmp_ctl_dispatch(void);
+    //int gmp_ctl_dispatch(void);
 
     //////////////////////////////////////////////////////////////////////////
     // Step II: These function have implemented by GMP

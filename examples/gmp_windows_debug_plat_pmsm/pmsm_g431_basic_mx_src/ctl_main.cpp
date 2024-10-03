@@ -1,14 +1,3 @@
-/**
- * @file ctl_main.cpp
- * @author Javnson (javnson@zju.edu.cn)
- * @brief 
- * @version 0.1
- * @date 2024-09-30
- * 
- * @copyright Copyright GMP(c) 2024
- * 
- */
-
 #include <core/gmp_core.hpp>
 #include <ctl/ctl_core.h>
 
@@ -472,14 +461,4 @@ void ctl_request_stage_routine(ctl_object_nano_t* pctl_obj)
 
 
 
-// ADC Complete callback
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
-{
-	uint32_t cpu_usage = __HAL_TIM_GET_COUNTER(&htim1);
-	
-    ctl_dispatch();
-	
-	uint32_t cpu_usage2 = __HAL_TIM_GET_COUNTER(&htim1);
-	
-	pmsm.base.control_law_CPU_usage_tick = cpu_usage2 - cpu_usage;
-}
+

@@ -21,30 +21,34 @@ extern "C"
 {
 #endif // __cplusplus
 
-	// Network Support
+    // Network Support
 //#include <winsock2.h>
 
-	// Windows Standard headers
+    // Windows Standard headers
 #include <Windows.h>
 
-	// System tick
-	typedef struct simulink_timer
-	{
-		// time from Simulink
-		double simulink_time;
+    // System tick
+    typedef struct simulink_timer
+    {
+        // time from Simulink
+        double simulink_time;
 
-		// time from Windows
-		SYSTEMTIME system_time;
+        // time from Windows
+        SYSTEMTIME system_time;
 
 
-	};
+    };
+
+    // Main ISR function prototype
+    void MainISR(void);
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
 
+
 // UDP communication with MATLAB
-// udp server communicate with MATLAB Simulink
+// UDP server communicate with MATLAB Simulink
 #ifdef USING_SIMULINK_UDP_SIMULATE
 #include <core/util/udp_svr/udp_svr.hpp>
 #endif // USING_SIMULINK_UDP_SIMULATE
