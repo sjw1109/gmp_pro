@@ -38,7 +38,6 @@ extern gmp_concept_write_direct* default_debug_dev;
 
 	//////////////////////////////////////////////////////////////////////////
 	// Devices on the peripheral
-	extern gmp_uart_dspc2000_impl_t uart;
 
 
 

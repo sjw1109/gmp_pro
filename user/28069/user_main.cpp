@@ -28,7 +28,7 @@
 //////////////////////////////////////////////////////////////////////////
 // global variables here
 
-gmp_uart_dspc2000_impl_t uart(&SciaRegs);
+
 
 //////////////////////////////////////////////////////////////////////////
 // initialize routine here
@@ -39,8 +39,6 @@ GMP_NO_OPT_PREFIX
 void user_init(void)
 GMP_NO_OPT_SUFFIX
 {
-    uart.write((const char*)"Hello World!\r\n",14);
-    
 
 
 }
