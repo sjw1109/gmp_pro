@@ -35,6 +35,8 @@
 #include "stm32f1xx_hal.h"
 #elif defined STM32F411xx
 #include "stm32f4xx_hal.h"
+#elif defined STM32U083xx
+#include "stm32u0xx_hal.h"
 
 #endif
 

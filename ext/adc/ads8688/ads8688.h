@@ -9,6 +9,13 @@
  *
  */
 
+// Reference Config
+// Data Size: 8
+// BaudRate: 10.5 MHz
+// CPOL: Low
+// CPHA: 2 Edge
+
+
 #ifndef _FILE_GMP_EXT_ADS8688_H_
 #define _FILE_GMP_EXT_ADS8688_H_
 
@@ -180,35 +187,35 @@ extern "C"
 /**
  * @brief RANGE SELECT REGISTERS
  * Channel 0 Input Range, CHN0_INPUT_RANGE
- * Default, 0x00, Input range is set to ¡À2.5 x VREF
+ * Default, 0x00, Input range is set to ï¿½ï¿½2.5 x VREF
  */
 #define ADS8688_REG_CHN0_INPUT_RANGE (0x05)
 
 /**
  * @brief RANGE SELECT REGISTERS
  * Channel 1 Input Range, CHN1_INPUT_RANGE
- * Default, 0x00, Input range is set to ¡À2.5 x VREF
+ * Default, 0x00, Input range is set to ï¿½ï¿½2.5 x VREF
  */
 #define ADS8688_REG_CHN1_INPUT_RANGE (0x06)
 
 /**
  * @brief RANGE SELECT REGISTERS
  * Channel 2 Input Range, CHN0_INPUT_RANGE
- * Default, 0x00, Input range is set to ¡À2.5 x VREF
+ * Default, 0x00, Input range is set to ï¿½ï¿½2.5 x VREF
  */
 #define ADS8688_REG_CHN2_INPUT_RANGE (0x07)
 
 /**
  * @brief RANGE SELECT REGISTERS
  * Channel 3 Input Range, CHN1_INPUT_RANGE
- * Default, 0x00, Input range is set to ¡À2.5 x VREF
+ * Default, 0x00, Input range is set to ï¿½ï¿½2.5 x VREF
  */
 #define ADS8688_REG_CHN3_INPUT_RANGE (0x08)
 
 /**
  * @brief RANGE SELECT REGISTERS
  * Channel 4 Input Range, CHN0_INPUT_RANGE
- * Default, 0x00, Input range is set to ¡À2.5 x VREF
+ * Default, 0x00, Input range is set to ï¿½ï¿½2.5 x VREF
  * This register is ADS8688 chip only, ADS8684 is not support.
  */
 #define ADS8688_REG_CHN4_INPUT_RANGE (0x09)
@@ -216,7 +223,7 @@ extern "C"
 /**
  * @brief RANGE SELECT REGISTERS
  * Channel 5 Input Range, CHN1_INPUT_RANGE
- * Default, 0x00, Input range is set to ¡À2.5 x VREF
+ * Default, 0x00, Input range is set to ï¿½ï¿½2.5 x VREF
  * This register is ADS8688 chip only, ADS8684 is not support.
  */
 #define ADS8688_REG_CHN5_INPUT_RANGE (0x0A)
@@ -224,7 +231,7 @@ extern "C"
 /**
  * @brief RANGE SELECT REGISTERS
  * Channel 6 Input Range, CHN0_INPUT_RANGE
- * Default, 0x00, Input range is set to ¡À2.5 x VREF
+ * Default, 0x00, Input range is set to ï¿½ï¿½2.5 x VREF
  * This register is ADS8688 chip only, ADS8684 is not support.
  */
 #define ADS8688_REG_CHN6_INPUT_RANGE (0x0B)
@@ -232,7 +239,7 @@ extern "C"
 /**
  * @brief RANGE SELECT REGISTERS
  * Channel 7 Input Range, CHN1_INPUT_RANGE
- * Default, 0x00, Input range is set to ¡À2.5 x VREF
+ * Default, 0x00, Input range is set to ï¿½ï¿½2.5 x VREF
  * This register is ADS8688 chip only, ADS8684 is not support.
  */
 #define ADS8688_REG_CHN7_INPUT_RANGE (0x0C)
@@ -351,32 +358,6 @@ extern "C"
 
     } adc_ads8688_t;
 
-    /**
-     * @brief init a ADS8688 objects
-     * @param obj handle to object
-     * @param hspi target spi handle, could be nullptr, if user will send these message manually.
-     * @param ncs target nCS GPIO handle, could be nullptr.
-     * @param nrst target nRST GPIO hanle, could be nullptr.
-     * @return gmp_stat_t
-     */
-    gmp_stat_t gmpe_ads8688_init(adc_ads8688_t *obj, spi_halt *hspi, gpio_halt *ncs, gpio_halt *nrst)
-    {
-        // init SPI msg item
-        obj->spi_msg.capacity = 4;
-        obj->spi_msg.length = 0;
-        obj->spi_msg.rx_buf = obj->recv_buffer;
-        obj->spi_msg.tx_buf = obj->send_buffer;
-
-        // bind SPI driver
-        obj->spi = hspi;
-        obj->ncs = ncs;
-        obj->nrst = nrst;
-
-        // Send SPI msg to init device
-        gmpe_rst_device(obj);
-
-        return GMP_STAT_OK;
-    }
 
     /**
      * @brief Reset the ADS8688 device.
@@ -414,6 +395,38 @@ extern "C"
         return GMP_STAT_OK;
     }
 
+
+    /**
+     * @brief init a ADS8688 objects
+     * @param obj handle to object
+     * @param hspi target spi handle, could be nullptr, if user will send these message manually.
+     * @param ncs target nCS GPIO handle, could be nullptr.
+     * @param nrst target nRST GPIO hanle, could be nullptr.
+     * @return gmp_stat_t
+     */
+    gmp_stat_t gmpe_ads8688_init(adc_ads8688_t *obj, spi_halt *hspi, gpio_halt *ncs, gpio_halt *nrst)
+    {
+        // init SPI msg item
+        obj->spi_msg.capacity = 4;
+        obj->spi_msg.length = 0;
+        obj->spi_msg.rx_buf = obj->recv_buffer;
+        obj->spi_msg.tx_buf = obj->send_buffer;
+
+        // bind SPI driver
+        obj->spi = hspi;
+        obj->ncs = ncs;
+        obj->nrst = nrst;
+
+        // Send SPI msg to init device
+        gmpe_ads8688_rst(obj);
+
+            
+                gmp_hal_gpio_set(nrst);
+        return GMP_STAT_OK;
+    }
+
+
+
     /**
      * @brief ADS8688 specify a adc channel to measure.
      *
@@ -424,6 +437,10 @@ extern "C"
      */
     gmp_stat_t gmpe_ads8688_request(adc_ads8688_t *obj, uint16_t target_channel_cmd, uint16_t *result)
     {
+            //request command
+            obj->spi_msg.length = 4;
+            
+            
         // clear send buffer
         memset(obj->send_buffer, 0, 4);
 

@@ -25,19 +25,7 @@
 
 void gmp_setup_peripheral()
 {
-	// start DMA first
-	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_data, 6);
-
-	// Enable HRTIM
-	HAL_HRTIM_WaveformCounterStart(&hhrtim1,
-		HRTIM_TIMERID_MASTER | HRTIM_TIMERID_TIMER_A | HRTIM_TIMERID_TIMER_B);
-
-	// Enable TIM16 for CPU usage counter
-	HAL_TIM_Base_Start(&htim16);
-
-
-	// ADC enable
-	//__HAL_ADC_ENABLE_IT(&hadc1, ADC_IT_EOS);
+	
 }
 
 // This function should be implement by bsp_c1
