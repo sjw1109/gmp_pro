@@ -1,12 +1,12 @@
 /**
  * @file ad9833.h
  * @author Javnson (javnson@zju.edu.cn)
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2024-09-30
- * 
+ *
  * @copyright Copyright GMP(c) 2024
- * 
+ *
  */
 
 #ifndef _FILE_GMP_EXT_AD9833_H_
@@ -17,12 +17,6 @@ extern "C"
 {
 #endif
 
-#ifndef AD9833_SPI_INTERFACE
-#define AD9833_SPI_INTERFACE
-#define AD9833_INTERFACE_TYPE spi_handle_t
-#define AD9833_INTERFACE_TX_FUNC spi_tx_direct
-#endif // AD9833_SPI_INTERFACE
-
 	// register address
 #define AD9833_REG_CTRL     ((0x00 << 12))
 #define AD9833_REG_FREQ0    ((0x40 << 12))
@@ -31,10 +25,12 @@ extern "C"
 #define AD9833_REG_PHASE1   ((0xE0 << 12))
 
 	// predefined commands
-#define AD9833_CMD_SET_FREQ0 0x2000
+#define AD9833_CMD_SET_FREQ0 ((0x2000))
 
+#define AD9833_CMD_RESET     ((0x0100))
+#define AD9833_CMD_WRITE     ((0x2100))
 
-	typedef struct _Tag_ad9833_ctrl_reg
+	typedef struct _tag_ad9833_ctrl_reg
 	{
 		// keep 0
 		uint16_t reserve0 : 1;
@@ -109,38 +105,78 @@ extern "C"
 
 		// keep 0
 		uint16_t reserve15 : 1;
-	}ad9833_ctrl_reg_t;
+	}dds_ad9833_ctrl_reg_t;
 
-	typedef struct _tag_ad9833
+	typedef struct _tag_dds_ad9833
 	{
-		// interface, spi port
-		AD9833_INTERFACE_TYPE* _if;
+		/**
+		 * @brief SPI interface which is attached to AD9833
+		 */
+		spi_halt spi;
 
-		// FSYNC is NCS signal of AD9833 
-			
-		ad9833_ctrl_reg_t ctrl;
-		
-		// data buffer
+		/**
+		 * @brief nCS (Chip Select) GPIO interface
+		 * nCS pin is named as FSYNC.
+		 */
+		gpio_halt* ncs;
+
+		/**
+		 * @brief This is the SPI message
+		 */
+		half_duplex_ift spi_msg;
+
+		/**
+		 * @brief transmit buffer.
+		 */
 		uint16_t data_buf;
-	}ad9833_t;
+	}dds_ad9833_t;
 
 
 #define AD9833_CHANNEL1 0x00
 #define AD9833_CHANNEL2 0x01
+
+	void gmpe_init_ad9833(dds_ad9833_t* dds, spi_halt* spi, gpio_halt* ncs)
+	{
+		dds->spi = spi;
+		dds->ncs = ncs;
+		dds->data_buf = 0;
+
+		dds->spi_msg.buf = &dds->data_buf;
+		dds->spi_msg.capacity = 2;
+		dds->spi_msg.capacity = 2;
+	}
+
+	void gmpe_ad9833_set_param(dds_ad9833_t* dds, uint32_t freq, fast_gt freq_sfr, fast_gt waveform, uint32_t phase)
+	{
+		dds_ad9833_ctrl_reg_t ctrl_reg;
+
+		uint16_t freq_lsb = freq & 0x3FFF;
+		uint16_t freq_msb = (freq >> 14) & 0x3FFF;
+
+		uint32_t phase_data = phase | 0xC000;
+		
+		ctrl_reg.reset = 1;
+
+		dds->data_buf = 
+
+		gmp_hal_spi_send(dds->spi, &dds->spi_msg);
+
+		AD9833_Write(0x0100);
+	}
 
 	// handle: ad9833 object
 	// channel : AD9833_CHANNEL1 or AD9833_CHANNEL2
 	// freq0: target frequency
 	void ad9833_write_freq(ad9833_t* handle, uint32_t channel, uint32_t freq0);
 
-	
+
 
 	// handle: ad9833 object
 	// channel: AD9833_CHANNEL1 or AD9833_CHANNEL2
 	// phase: target phase
 	void ad9833_write_phase(ad9833_t* handle, uint32_t channel, uint32_t phase);
-	
-	
+
+
 
 	// Four standard waveform
 #define AD9833_SINUSOID_WAVE 0x00
