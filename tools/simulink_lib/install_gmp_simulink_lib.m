@@ -2,12 +2,19 @@
 
 function install_gmp_simulink_lib()
 
+matlab_version = matlabRelease; %matlab_version.Release => R2022b
+matlab_path = fileparts(mfilename('fullpath'));
+simulink_lib_path = append(fullfile(matlab_path), '\install_path/', matlab_version.Release);
+
 upgrade_gmp_simulink_lib();
 
 %% register model path
 
 addpath(simulink_lib_path);
-%addpath_m(fullfile(matlab_path));
+
+m_file_path = append(simulink_lib_path, '/src');
+addpath(m_file_path);
+
 savepath;
 
 %% enable Simulink Model Library

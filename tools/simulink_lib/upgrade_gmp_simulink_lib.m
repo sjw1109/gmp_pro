@@ -53,27 +53,30 @@ close_system('fp_utilities_src.slx', 0);
 close_system('peripheral_utilities.slx', 0);
 close_system('peripheral_utilities_src.slx', 0);
 
+generate_single_slx_lib('gmp_simulink_utilities');
+generate_single_slx_lib('fp_utilities');
+generate_single_slx_lib('peripheral_utilities');
 
-load_system('simulink_lib_src/gmp_simulink_utilities_src.slx');
-target_file = append('install_path/',matlab_version.Release,'/gmp_simulink_utilities.slx');
-%set_param('gmp_simulink_utilities_src','Lock','off')
-save_system('simulink_lib_src/gmp_simulink_utilities_src.slx',target_file);
-close_system('gmp_simulink_utilities.slx');
-% close_system('gmp_simulink_utilities_src.slx');
-
-load_system('simulink_lib_src/fp_utilities_src.slx');
-target_file = append('install_path/',matlab_version.Release,'/fp_utilities.slx');
-%set_param('fp_utilities_src','Lock','off')
-save_system('simulink_lib_src/fp_utilities_src.slx',target_file);
-close_system('fp_utilities.slx');
-% close_system('fp_utilities_src.slx');
-
-load_system('simulink_lib_src/peripheral_utilities_src.slx');
-target_file = append('install_path/',matlab_version.Release,'/peripheral_utilities.slx');
-%set_param('peripheral_utilities_src','Lock','off')
-save_system('simulink_lib_src/peripheral_utilities_src.slx',target_file);
-close_system('peripheral_utilities.slx');
-% close_system('peripheral_utilities_src.slx');
+% load_system('simulink_lib_src/gmp_simulink_utilities_src.slx');
+% target_file = append('install_path/',matlab_version.Release,'/gmp_simulink_utilities.slx');
+% %set_param('gmp_simulink_utilities_src','Lock','off')
+% save_system('simulink_lib_src/gmp_simulink_utilities_src.slx',target_file);
+% close_system('gmp_simulink_utilities.slx');
+% % close_system('gmp_simulink_utilities_src.slx');
+% 
+% load_system('simulink_lib_src/fp_utilities_src.slx');
+% target_file = append('install_path/',matlab_version.Release,'/fp_utilities.slx');
+% %set_param('fp_utilities_src','Lock','off')
+% save_system('simulink_lib_src/fp_utilities_src.slx',target_file);
+% close_system('fp_utilities.slx');
+% % close_system('fp_utilities_src.slx');
+% 
+% load_system('simulink_lib_src/peripheral_utilities_src.slx');
+% target_file = append('install_path/',matlab_version.Release,'/peripheral_utilities.slx');
+% %set_param('peripheral_utilities_src','Lock','off')
+% save_system('simulink_lib_src/peripheral_utilities_src.slx',target_file);
+% close_system('peripheral_utilities.slx');
+% % close_system('peripheral_utilities_src.slx');
 
 warning('on','all')
 
@@ -85,6 +88,39 @@ disp('GMP Simulink Library: Other necessary files are copying.');
 target_file = append('install_path/',matlab_version.Release,'/slblocks.m');
 copyfile('simulink_lib_src/slblocks.m', target_file);
 
+% copy all m files
+if (~exist(append(simulink_lib_path,'/src')))
+    mkdir(append(simulink_lib_path,'/src'));
+end
 
+copyfile('simulink_lib_src/src', append(simulink_lib_path,'/src'));
+
+% copy all icon files
+if (~exist(append(simulink_lib_path,'/icon')))
+    mkdir(append(simulink_lib_path,'/icon'));
+end
+
+copyfile('simulink_lib_src/icon', append(simulink_lib_path,'/icon'));
 
 end % function end
+
+
+%% static utility function
+function generate_single_slx_lib(libname)
+% Get matlab release version
+matlab_version = matlabRelease;
+
+% ensure all the libfile is closed
+close_system(append(libname,'.slx'), 0);
+close_system(append(libname,'_src.slx'), 0);
+
+% generate lib file
+load_system(append('simulink_lib_src/',libname, '_src.slx'));
+target_file = append('install_path/',matlab_version.Release,'/',libname,'.slx');
+%set_param(append(libname,'_src'),'Lock','off')
+save_system(append('simulink_lib_src/',libname, '_src.slx'), target_file);
+close_system(append(libname,'.slx'));
+close_system(append(libname,'_src.slx'), 0);
+
+end
+
