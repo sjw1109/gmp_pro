@@ -1,0 +1,7 @@
+{
+	"target_address": "127.0.0.1",
+	"receive_port": 12330,
+	"transmit_port": 12701,
+	"command_recv_port": 12702,
+	"command_trans_port": 12703
+}
