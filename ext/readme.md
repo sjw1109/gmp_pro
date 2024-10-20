@@ -32,5 +32,12 @@ Ext module provide a lot of single chip peripherals, including ADC, DAC, motor e
 
 ##  Details of Each Sub-modules
 
+## Code standard
 
+All the GMP extension modules' function has an prefix `gmpe_`, that is GMP Extention.
+
+For initialize function, `gmpe_init_<module/chip name>` is the standard name.
+
+For other utilities function, `gmpe_<module/chip name>_<do>[_<target>]` is the standard name.
+For instantce, `<do>` can be change to `request`, `get`, `set` and etc. .
 

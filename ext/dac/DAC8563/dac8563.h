@@ -223,10 +223,116 @@ extern "C"
      */
 #define DAC8563_CONFIG_INREF_ENABLE  (0x0001)
 
+typedef struct _tag_dac8563_t
+{
+        /**
+         * @brief SPI interface which is attached to ADS8688
+         */
+        spi_halt *spi;
+
+        /**
+         * @brief nCS (Chip Select) GPIO interface
+         */
+        gpio_halt *ncs;
+
+        /**
+         * @brief half duplex interface.
+         */
+        half_duplex_ift msg;
+
+        /**
+         * @brief send buffer
+         */
+         data_gt msg_buffer[3];
 
 
 
 
+}dac_dac8563_t;
+
+/**
+ * @brief 
+ * 
+ * @param dac 
+ * @param hspi 
+ * @param ncs 
+ */
+void gmpe_init_dac_dac8563(dac_dac8563_t* dac, spi_halt *hspi, gpio_halt *ncs)
+{
+    dac->msg.buf = dac->msg_buffer;
+    dac->msg.length = 3;
+    dac->msg.capacity = 3;
+    
+    memset(msg_buffer, 3, 0);
+
+    dac->ncs = ncs;
+    dac->spi = hspi;
+}
+
+/**
+ * @brief default command is `DAC8563_CMD_WRITE_DAC_A_UPDATE_ALL`
+ * 
+ * @param dac 
+ * @param target 
+ */
+void gmpe_dac8563_set_channelA(dac_dac8563_t* dac, uint16_t target)
+{
+
+}
+
+/**
+ * @brief default command is `DAC8563_CMD_WRITE_DAC_B_UPDATE_ALL`
+ * 
+ * @param dac 
+ * @param target 
+ */
+void gmpe_dac8563_set_channelB(dac_dac8563_t* dac, uint16_t target)
+{
+
+}
+
+/**
+ * @brief Write a DAC write command.
+ * 
+ * @param dac 
+ * @param target 
+ */
+void gmpe_dac8563_send_write_command(dac_dac8563_t* dac, uint16_t target)
+{
+
+}
+
+/**
+ * @brief Send a update command.
+ * `DAC8563_CMD_UPDATE_DAC_AB`
+ * 
+ * @param dac 
+ */
+void gmpe_dac8563_update(dac_dac8563_t* dac)
+{
+
+}
+
+/**
+ * @brief Send a poweron command to DAC
+ * 
+ * @param dac 
+ * @param poweron_cmd 
+ */
+void gmpe_dac8563_poweron(dac_dac8563_t* dac, uint16_t poweron_cmd)
+{
+
+}
+
+/**
+ * @brief Power on dual DAC channel, DAC8563_CONFIG_POWER_ON_DACAB
+ * 
+ * @param dac dac handle.
+ */
+void gmpe_dac8563_poweron_all(dac_dac8563_t* dac)
+{
+
+}
 
 
 

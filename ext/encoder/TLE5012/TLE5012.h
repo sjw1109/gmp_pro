@@ -15,9 +15,10 @@
 #ifndef _FILE_TLE5012_H_
 #define _FILE_TLE5012_H_
 
-#include "core/dev/devif.h"
 #include "core/std/default_peripheral.config.h"
+#include "core/dev/devif.h"
 #include <cstdint>
+
 #define TLE5012_READ_STATUS     0x8000
 #define TLE5012_READ_ANGLE      0x8020
 #define TLE5012_READ_SPEED      0x8030
@@ -57,17 +58,26 @@ typedef struct _tag_tle5012_t
 
 } encoder_tle5012_t;
 
-void init_tle5012_encoder(encoder_tle5012_t *enc)
+/**
+ * @brief GMP Extension module. initialize a TLE5012 module
+ * @param enc encoder handle
+ * @param hspi spi handle
+ * @param ncs cs pin GPIO handle
+ */
+void gmpe_init_tle5012_encoder(encoder_tle5012_t *enc, spi_halt *hspi, gpio_halt *ncs)
 {
     memset(enc->rx_buffer, 4, 0);
     memset(enc->tx_buffer, 4, 0);
 
     init_half_duplex_channel(enc->rx, enc->rx_buffer, 4, 4);
     init_half_duplex_channel(enc->tx, enc->tx_buffer, 4, 4);
+
+    enc->spi = hspi;
+    enc->ncs = ncs;
 }
 
 // TODO: This funciton should be validate.
-uint16_t get_tle5012_encoder_postion(encoder_tle5012_t *enc)
+uint16_t gmpe_tle5012_get_encoder_postion(encoder_tle5012_t *enc)
 {
 
     uint16_t req_cmd = TLE5012_READ_ANGLE;
