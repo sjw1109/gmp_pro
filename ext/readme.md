@@ -41,3 +41,6 @@ For initialize function, `gmpe_init_<module/chip name>` is the standard name.
 For other utilities function, `gmpe_<module/chip name>_<do>[_<target>]` is the standard name.
 For instantce, `<do>` can be change to `request`, `get`, `set` and etc. .
 
+## Naming Standard
+
+所有的ext模块需要以`gmpe_`作为开头，同时每一个模块应当至少实现init和setup两个函数，init函数需要初始化（分配内存和初值），setup函数需要为模块赋予初值。
