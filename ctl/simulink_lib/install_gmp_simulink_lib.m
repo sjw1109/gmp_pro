@@ -47,7 +47,7 @@ cd(installer_path);
 
 
 %% Complete
-disp('GMP Simulink Library has installed.');
+disp('GMP Simulink Library has installed Successfully.');
 
 
 end % function end
