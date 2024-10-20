@@ -61,17 +61,18 @@ typedef GMP_PORT_DATA_T data_gt;
 
 typedef GMP_PORT_FAST_T fast_gt;
 
-// ....................................................................//
-// basic element data type, which is for fast at least 8-bit type
-// Any code may only user the first 8 bits contents
-//
-#ifndef GMP_PORT_FAST8_T
-#define GMP_PORT_FAST8_T              int_fast8_t
-#define GMP_PORT_FAST8_SIZE_PER_BITS  (16)
-#define GMP_PORT_FAST8_SIZE_PER_BYTES (2)
-#endif // GMP_PORT_FAST8_T
+// This type is disabled, and user should use fast_gt instead.
+// // ....................................................................//
+// // basic element data type, which is for fast at least 8-bit type
+// // Any code may only user the first 8 bits contents
+// //
+// #ifndef GMP_PORT_FAST8_T
+// #define GMP_PORT_FAST8_T              int_fast8_t
+// #define GMP_PORT_FAST8_SIZE_PER_BITS  (16)
+// #define GMP_PORT_FAST8_SIZE_PER_BYTES (2)
+// #endif // GMP_PORT_FAST8_T
 
-typedef GMP_PORT_FAST8_T fast8_gt;
+// typedef GMP_PORT_FAST8_T fast8_gt;
 
 
 // ....................................................................//

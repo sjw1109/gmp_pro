@@ -36,5 +36,32 @@ In addition, `ctrl_gt` has plus (`+`) and minus (`-`) operation with other types
 
 
 
+## Naming Standard for CTL function
 
+all the functions in CTL model is begin with `ctl_`，all the components has at least three function:
+
+| basic function           | note                   |
+| ------------------------ | ---------------------- |
+| `ctl_init_<ModuleName>`  | init and assign memory |
+| `ctl_setup_<ModuleName>` | setup the component    |
+| `ctl_step_<ModuleName>`  | Step the Component     |
+
+And some complex components has the following functions
+
+| extension function         | note                                                         |
+| -------------------------- | ------------------------------------------------------------ |
+| `ctl_input_<ModuleName>`   | input or unit conversion, copy these input data to components. |
+| `ctl_output_<ModuleName>`  | get output of the components.                                |
+| `ctl_prestep_<ModuleName>` | 一些模块具备提前运行的内容，这个函数需要在step之前调用       |
+| `ctl_bind_<ModuleName>`    | 在初始化时将器件和其他的器件绑定                             |
+| `ctl_set_<ModuleName>`     | 设置模块参数                                                 |
+| `ctl_get_<ModuleName>`     | 获取模块的参数                                               |
+
+对于控制器框架函数应当用`ctl_fm_`作为开头，其中需要用户定义的函数以`ctl_fmif_`作为开头，意为框架接口。
+
+CTL中使用的数学常数，以`CTL_CONST_`打头，分数的分数线用`OVER_`表示，有特殊含义的符号用特殊符号标记。
+
+## Suite
+
+在CTL模块中提供了数字电源控制器和电机控制器两个基本控制器的类型，并且支持新能源光伏控制器。
 

@@ -1,3 +1,5 @@
+// abolish
+
 /**
  * @file gmp_peripheral_definition.h
  * @author Javnson (javnson@zju.edu.cn)
