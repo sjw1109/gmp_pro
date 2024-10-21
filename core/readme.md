@@ -42,7 +42,15 @@ the init function is aim at init all the members of the structure.
 
 这个文件中定义了全部的通信接口，所有的通信过程将会基于这个文件中提供的结构体展开。这些结构体将通信分为半双工、全双工、特殊的通信协议（IIC或者CAN）等。
 
-这个文件同时提供了初始化函数，这些函数都以init作为开头。（检查一下这里是否需要变更，是否需要变为`gmp_dev_init_`）同时这个文件提供了其他的辅助函数，以`gmp_dev_util_`开始。
+这个文件同时提供了初始化函数，这些函数都以`gmp_dev_init_`开头，同时这个文件提供了其他的辅助函数，以`gmp_dev_util_`开始。
+
+| 功能前缀         | Note                                 |
+| ---------------- | ------------------------------------ |
+| `gmp_dev_init_`  | 外设对象初始化（分配内存、赋予初值） |
+| `gmp_dev_setup_` | 外设对象赋予初始值                   |
+| `gmp_dev_util_`  | 外设对象的辅助函数                   |
+
+
 
 ## Memory Management
 
@@ -50,7 +58,15 @@ All the memory management of GMP library is stored in `core/mm` folder.
 
 其中提供了内存管理模块的初始化函数，并且可以利用初始化后的内存模块进行内存的申请和释放。
 
-即提供了`gmp_<module name>_alloc`和`gmp_<module name>_free`用于进行内存管理。
+即提供了`gmp_mm_<ModuleName>_alloc`和`gmp_mm_<ModuleName>_free`用于进行内存管理。初始化函数以`gmp_mm_init_<ModuleName>`，初始值设定函数以`gmp_mm_setup_<ModuleName>`作为前缀，其他的辅助函数以`gmp_mm_util_`作为前缀。
+
+| 函数前缀                        | Note                 |
+| ------------------------------- | -------------------- |
+| `gmp_mm_init_<ModuleName>`      | 初始化内存模块       |
+| `gmp_mm_setup_<ModuleName>`     | 内存管理对象启动     |
+| `gmp_mm_<ModuleName>_alloc`     | 内存分配函数         |
+| `gmp_mm_<ModuleName>_free`      | 内存释放函数         |
+| `gmp_mm_util_<ModuleName>_<op>` | 内存管理其他辅助函数 |
 
 
 
@@ -76,19 +92,30 @@ GMP对于标准化的设计分为如下几个部分：
 
 下面这些功能是编译器标准化实现的。
 
-基本的C++语义宏的定义：`constexpr`, `nullptr`, `override`, `final`.
+基本的C++语义宏的定义，用来支持C++03允许部分C++11的关键字：`constexpr`, `nullptr`, `override`, `final`.
+
+| 补充定义的关键字 | 定义  | 说明           |
+| ---------------- | ----- | -------------- |
+| constexpr        | const | 常量定义       |
+| nullptr          | NULL  | 用于声明空指针 |
+| override         |       | 执行类相关操作 |
+| final            |       | 执行类相关操作 |
+
+
 
 基本的连接器选项：
 
-> GMP_STATIC_INLINE: 指定函数必须实现为静态内联函数。
->
-> GMP_WEAK_FUNC_PERFIX和GMP_WEAK_FUNC_SUFFIX作为弱函数的实现标志。
->
-> GMP_NO_OPT_PREFIX 指定函数不能够被优化
->
-> GMP_MEM_ALIGN 指定内存对齐的颗粒度
->
-> GMP_INSTRUCTION_NOP 执行一个空指令
+
+
+| 需要编译器和链接器提供的功能               | Note                                                 |
+| ------------------------------------------ | ---------------------------------------------------- |
+| GMP_STATIC_INLINE                          | 指定函数必须实现为静态内联函数                       |
+| GMP_WEAK_FUNC_PERFIX和GMP_WEAK_FUNC_SUFFIX | 作为弱函数的实现标志，需要加在弱函数的函数定义头和尾 |
+| GMP_NO_OPT_PREFIX                          | 指定函数不能够被优化，通常应用在调试过程中           |
+| GMP_MEM_ALIGN                              | 指定内存对齐（颗粒度）                               |
+| GMP_INSTRUCTION_NOP                        | 执行一个空指令                                       |
+
+
 
 
 
@@ -129,36 +156,52 @@ STD模块提供了标准的GMP类型定义。
 
 另外有一组以`_halt`为后缀的类型作为外设类型的接口。接口的实际定义在CSP中给出，`default_peripheral_config.h`中给出了这些类型的形式定义，这些定义在代码中实际是无效的。接口相关的函数原型在`gmp_csp_cport.h`中给出，这些函数的实现要求在CSP支持包中实现。
 
-这一组函数在命名上满足以`gmp_hal_<peripheral_type>_<do>`作为典型的命名规则。
-
-`<do>`的名称有`set, get, reset, clear, read, write, recv, send`。
-
-
-
 + Peripheral interface Standardization
 
-在`gmp_peripheral_definition.h`文件中给出了
+这一组函数在命名上满足以`gmp_hal_<peripheral_type>_<do>`作为典型的命名规则。
+
+其中，下面这些函数的命名方式标志着这些函数是阻塞函数
+
+| 函数名                                                       | Note                                   |
+| ------------------------------------------------------------ | -------------------------------------- |
+| `gmp_hal_<Peripheral>_recv`, `gmp_hal_<Peripheral>_send`     | 阻塞的外设收发函数                     |
+| `gmp_hal_gpio_set`, `gmp_hal_gpio_clear`                     | 作为GPIO的置位和清零标志，只能是阻塞的 |
+| `gmp_hal_gpio_read`, `gmp_hal_gpio_write`                    | GPIO的读写函数，只能是阻塞的           |
+| `gmp_hal_gpio_set_mode`                                      | 改变GPIO的方向，只能是阻塞的           |
+| `gmp_hal_wd_feed`, `gmp_hal_wd_disable`, `gmp_hal_wd_enable` | 看门狗操作函数，只能是阻塞的           |
+
+下面这些函数是异步的
+
+| 函数名                                                       | Note                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| `gmp_hal_<Peripheral>_asyc_recv`, `gmp_hal_<Peripheral>_async_send` | 异步的收发函数，通常这些函数用于发收一些半双工、双工的接口   |
+| `gmp_hal_<Peripheral>_async_post`, `gmp_hal_<Peripheral>_async_request` | 异步收发函数，通常用来发收一些具备特定帧结构的消息。比如应用在IIC外设或者CAN外设等，相应的有一个消息队列和这些函数一起工作 |
+| `gmp_hal_read`_<Peripheral>, `gmp_hal_write_<Peripheral>`    | 对于外设的读写函数是异步的                                   |
+
+异步收发机制的配置函数是阻塞的（同步的）
+
+
 
 + Error code Standardization
 
 在GMP项目中错误的类型分为如下四种类型：
 
-| Error Type | Note                                                         |
-| ---------- | ------------------------------------------------------------ |
-| INFO       | 运行结果正常，只是需要作为信息提醒用户                       |
-| WARN       | 警告信息，需要程序员和用户关注是否正常运行                   |
-| ERROR      | 错误，一定需要用户或者程序员干预，以确保程序正确运行         |
-| FATAL      | 严重错误，程序需要立刻终止的错误发生，控制器的结束程序将会被调用，同时主循环将会卡住，通过调用堆栈可以快速找到发生错误的位置。 |
+| Error Type | Prefix for Error Code | Note                                                         |
+| ---------- | --------------------- | ------------------------------------------------------------ |
+| INFO       | `GMP_STAT_INFO_`      | 运行结果正常，只是需要作为信息提醒用户                       |
+| WARN       | `GMP_STAT_WARN_`      | 警告信息，需要程序员和用户关注是否正常运行                   |
+| ERROR      | `GMP_STAT_ERRO`       | 错误，一定需要用户或者程序员干预，以确保程序正确运行         |
+| FATAL      | `GMP_STAT_FATAL_`     | 严重错误，程序需要立刻终止的错误发生，控制器的结束程序将会被调用，同时主循环将会卡住，通过调用堆栈可以快速找到发生错误的位置。 |
 
 对于四种类型的错误，可以借助工具配置各个错误的具体代码。
 
 借助以下四个函数可以判定运行状态是否正常。
 
-| function name              | Note                         |
-| -------------------------- | ---------------------------- |
-| gmp_is_error(gmp_stat_t)   | 判定给是否出现错误           |
-| gmp_is_warning(gmp_stat_t) | 判定是否出现警告             |
-| gmp_is_fine(gmp_stat_t)    | 判定是否返回值为info或者成功 |
+| function name                | Note                         |
+| ---------------------------- | ---------------------------- |
+| `gmp_is_error(gmp_stat_t)`   | 判定给是否出现错误           |
+| `gmp_is_warning(gmp_stat_t)` | 判定是否出现警告             |
+| `gmp_is_fine(gmp_stat_t)`    | 判定是否返回值为info或者成功 |
 
 
 
@@ -166,20 +209,28 @@ STD模块提供了标准的GMP类型定义。
 
 GMP提供了一组基础函数供用户可以方便的实现一些通用的系统功能，如下：
 
-| function name             | Note                                                         |
-| ------------------------- | ------------------------------------------------------------ |
-| gmp_base_get_syste_tick() | 获得系统当前的时钟计数，返回值类型为time_gt，每一个tick之间的长度通过宏给出（todo，将i这一组宏定义出来） |
-| gmp_base_system_stuck()   | 当系统发生严重错误，需要停止时，这个函数应当被调用，这一函数应当组织各个功能有序停止、尽可能保留现场。 |
-| gmp_base_print()          | 打印调试信息                                                 |
-| gmp_base_malloc()         | 分配内存                                                     |
-| gmp_base_free()           | 释放内存                                                     |
-|                           |                                                              |
+| function name               | Note                                                         |
+| --------------------------- | ------------------------------------------------------------ |
+| `gmp_base_get_syste_tick()` | 获得系统当前的时钟计数，返回值类型为time_gt，每一个tick之间的长度通过宏给出（todo，将i这一组宏定义出来） |
+| `gmp_base_system_stuck()`   | 当系统发生严重错误，需要停止时，这个函数应当被调用，这一函数应当组织各个功能有序停止、尽可能保留现场。 |
+| `gmp_base_print()`          | 打印调试信息                                                 |
+| `gmp_base_malloc()`         | 全局默认的分配内存函数                                       |
+| `gmp_base_free()`           | 全局默认的释放内存函数                                       |
+|                             |                                                              |
 
 
 
 + Big-endian & Little-endian
 
-LE(x),将x指定为小端数，BE(x)将x指定为大端数，l2b(x)将x进行大小端转换。
+LE(x),将x指定为小端数，BE(x)将x指定为大端数，l2b(x)将x进行大小端转换。大小端转换基于
+
+| function / macro | Note                    |
+| ---------------- | ----------------------- |
+| LE(x)            | 将x强制转换为小端数据   |
+| BE(x)            | 将x强制转换为大端数据   |
+| l2b(x)           | 将x进行一次大小端转换。 |
+
+
 
 
 

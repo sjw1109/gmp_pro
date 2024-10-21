@@ -358,35 +358,6 @@ extern "C"
 
     } adc_ads8688_t;
 
-<<<<<<< Updated upstream
-=======
-    /**
-     * @brief init a ADS8688 objects
-     * @param obj handle to object
-     * @param hspi target spi handle, could be nullptr, if user will send these message manually.
-     * @param ncs target nCS GPIO handle, could be nullptr.
-     * @param nrst target nRST GPIO hanle, could be nullptr.
-     * @return gmp_stat_t
-     */
-    gmp_stat_t gmpe_init_ads8688(adc_ads8688_t *obj, spi_halt *hspi, gpio_halt *ncs, gpio_halt *nrst)
-    {
-        // init SPI msg item
-        obj->spi_msg.capacity = 4;
-        obj->spi_msg.length = 0;
-        obj->spi_msg.rx_buf = obj->recv_buffer;
-        obj->spi_msg.tx_buf = obj->send_buffer;
-
-        // bind SPI driver
-        obj->spi = hspi;
-        obj->ncs = ncs;
-        obj->nrst = nrst;
-
-        // Send SPI msg to init device
-        gmpe_rst_device(obj);
-
-        return GMP_STAT_OK;
-    }
->>>>>>> Stashed changes
 
     /**
      * @brief Reset the ADS8688 device.

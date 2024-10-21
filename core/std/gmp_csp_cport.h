@@ -181,6 +181,10 @@ extern "C"
      */
     void gmp_hal_wd_feed(void);
 
+    void gmp_hal_wd_enable(void);
+
+    void gmp_hal_wd_disable(void);
+
 
 #ifdef __cplusplus
 }

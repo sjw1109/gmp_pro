@@ -36,11 +36,23 @@ Ext module provide a lot of single chip peripherals, including ADC, DAC, motor e
 
 All the GMP extension modules' function has an prefix `gmpe_`, that is GMP Extention.
 
-For initialize function, `gmpe_init_<module/chip name>` is the standard name.
+For initialize function, `gmpe_init_<module/chip name>` is the standard name.所有的ext模块需要以`gmpe_`作为开头，同时每一个模块应当至少实现init和setup两个函数，init函数需要初始化（分配内存和初值），setup函数需要为模块赋予初值。
+
+| Function Name           | Note                 |
+| ----------------------- | -------------------- |
+| `gmpe_<PartName>_init`  | 初始化一个外设对象   |
+| `gmpe_<PartName>_setup` | 初步配置一个外设对象 |
 
 For other utilities function, `gmpe_<module/chip name>_<do>[_<target>]` is the standard name.
-For instantce, `<do>` can be change to `request`, `get`, `set` and etc. .
+For instantce, `<do>` can be change to `request`, `get`, `set` and etc. .其他可用函数有
 
-## Naming Standard
+| Function Name                                            | Note                   |
+| -------------------------------------------------------- | ---------------------- |
+| `gmpe_<PartName>_get`, `gmpe_<PartName>_set`             | 设置，获得本地的参数   |
+| `gmpe_<PartName>_request`, `gmpe_<PartName>_sync_config` | 同步、获得外设端的参数 |
+| `gmpe_<PartName>_read`, `gmpe_<PartName>_write`          | 对外设进行读写         |
 
-所有的ext模块需要以`gmpe_`作为开头，同时每一个模块应当至少实现init和setup两个函数，init函数需要初始化（分配内存和初值），setup函数需要为模块赋予初值。
+
+
+
+
