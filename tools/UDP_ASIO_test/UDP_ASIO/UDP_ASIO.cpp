@@ -45,9 +45,10 @@ int main(int argc, char *argv[])
     {
         config = json::parse(network_json);
     }
-    catch (std::exception *e)
+    catch (const std::exception &e)
     {
         std::cout << "[ERRO] Cannot parse json file, " << config_file_name << std::endl;
+        std::cerr << e.what() << std::endl;
 
         return 1;
     }
@@ -61,15 +62,12 @@ int main(int argc, char *argv[])
 
     // asio load library
     asio::error_code ecVAR;
-    asio::io_context context;
 
     udp::endpoint recv_terminal(asio::ip::make_address(config["target_address"]), config["receive_port"]);
     udp::endpoint tran_terminal(asio::ip::make_address(config["target_address"]), config["transmit_port"]);
 
-
     asio::io_context recv_context, tran_context;
     udp::socket recv_socket(recv_context), tran_socket(tran_context);
-
 
     tran_socket.connect(tran_terminal);
 
@@ -79,24 +77,21 @@ int main(int argc, char *argv[])
     // asio buffer for data containing
     char *data_buffer = new char[1024];
 
-    double data = 10;
-    double data_t = 0;
+    double data[2] = {10, 10};
+    double data_t[2] = {0, 0};
 
-    
-    tran_socket.send(asio::buffer((char *)&data, sizeof(double)));
+    // tran_socket.send(asio::buffer(data_buffer, 12));
+    tran_socket.send(asio::buffer((char *)&data, sizeof(data)));
 
     for (int i = 0; i < 100; ++i)
     {
-        //recv_socket.receive(asio::buffer((char *)&data_t, sizeof(double)));
-        recv_socket.receive_from(asio::buffer((char *)&data_t, sizeof(double)), recv_terminal);
+        // recv_socket.receive(asio::buffer((char *)&data_t, sizeof(double)));
+        recv_socket.receive_from(asio::buffer((char *)&data_t, sizeof(data_t)), recv_terminal);
 
-        data = data_t;
+        memcpy(data, data_t, sizeof(data));
 
-        tran_socket.send(asio::buffer((char *)&data, sizeof(double)));
+        tran_socket.send(asio::buffer((char *)&data, sizeof(data_t)));
     }
 
     return 0;
 }
-
-
-

@@ -52,10 +52,13 @@ close_system('fp_utilities.slx', 0);
 close_system('fp_utilities_src.slx', 0);
 close_system('peripheral_utilities.slx', 0);
 close_system('peripheral_utilities_src.slx', 0);
+close_system('gmp_sil_core.slx', 0);
+close_system('gmp_sil_core_src.slx', 0);
 
 generate_single_slx_lib('gmp_simulink_utilities');
 generate_single_slx_lib('fp_utilities');
 generate_single_slx_lib('peripheral_utilities');
+generate_single_slx_lib('gmp_sil_core');
 
 % load_system('simulink_lib_src/gmp_simulink_utilities_src.slx');
 % target_file = append('install_path/',matlab_version.Release,'/gmp_simulink_utilities.slx');
@@ -80,6 +83,12 @@ generate_single_slx_lib('peripheral_utilities');
 
 warning('on','all')
 
+%% Compiling MEX Library
+
+disp('Compiling MEX_UDP_Helper.');
+
+% compile_cmd = sprintf('mex ''-I"E:\lib\gmp_pro\core\util\udp_helper"''')
+
 
 %% Copy other files
 
@@ -92,6 +101,10 @@ copyfile('simulink_lib_src/slblocks.m', target_file);
 if (~exist(append(simulink_lib_path,'/src')))
     mkdir(append(simulink_lib_path,'/src'));
 end
+
+
+clear GMP_SIL_Core
+clear MEX_UDP_Helper
 
 copyfile('simulink_lib_src/src', append(simulink_lib_path,'/src'));
 

@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{2D9C37E7-DF89-4F2E-B6B7-F317334413D4}</ProjectGuid>
+    <ProjectGuid>{69F68A2F-60D5-43F9-A6C4-6EC48F4BA49B}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -47,7 +47,7 @@
     <Matlab_LibraryPath>$(MatlabRoot)extern\lib\win64\microsoft\</Matlab_LibraryPath>
     <Matlab_Dependencies>libmx.lib;libmex.lib;libmat.lib;libMatlabDataArray.lib;libMatlabEngine.lib</Matlab_Dependencies>
     <Matlab_PreprocessorDefinitions>MATLAB_MEXCMD_RELEASE=R2017b;MX_COMPAT_64;USE_MEX_CMD;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;_SECURE_SCL=0;MATLAB_MEX_FILE</Matlab_PreprocessorDefinitions>
-    <IncludePath>$(SolutionDir)/../../../;$(SolutionDir)/../../../third_party;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)/../../../;$(SolutionDir)/../../../third_party;$(VC_IncludePath);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -60,7 +60,6 @@
     <Matlab_LibraryPath>$(MatlabRoot)extern\lib\win64\microsoft\</Matlab_LibraryPath>
     <Matlab_Dependencies>libmx.lib;libmex.lib;libmat.lib;libMatlabDataArray.lib;libMatlabEngine.lib</Matlab_Dependencies>
     <Matlab_PreprocessorDefinitions>MATLAB_MEXCMD_RELEASE=R2017b;MX_COMPAT_64;USE_MEX_CMD;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;_SECURE_SCL=0;MATLAB_MEX_FILE</Matlab_PreprocessorDefinitions>
-    <IncludePath>$(SolutionDir)/../../../;$(SolutionDir)/../../../third_party;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -129,7 +128,7 @@
     </ManifestResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="MEXFunction_UDP.cpp" />
+    <ClCompile Include="GMP_SIL_Core.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Import Project="$(MSBuildProjectDirectory)\matlab.targets" />
