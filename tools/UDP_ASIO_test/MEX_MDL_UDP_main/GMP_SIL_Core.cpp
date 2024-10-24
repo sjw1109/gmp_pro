@@ -785,7 +785,7 @@ static void mdlStart(SimStruct *S)
     ssSetPWorkValue(S, 1, tranBuffer);
     ssSetPWorkValue(S, 2, recvBuffer);
 
-    // TODO: Setup Network Communication here.
+    // Setup Network Communication
     sprintf(msg, "%s: mdlStart is invoked\r\n", DRIVER);
     ssPrintf(msg);
 
@@ -814,11 +814,11 @@ static void mdlStart(SimStruct *S)
             DRIVER, trans_port, recv_port, cmd_trans_port, cmd_recv_port);
     ssPrintf(msg);
 
-    std::string target_ip = "127.0.0.1";
-    // recv_port = 12301;
-    // trans_port = 12300;
-    // cmd_recv_port = 12303;
-    // cmd_trans_port = 12302;
+    // std::string target_ip = "127.0.0.1";
+    //  recv_port = 12301;
+    //  trans_port = 12300;
+    //  cmd_recv_port = 12303;
+    //  cmd_trans_port = 12302;
 
     asio_udp_helper *udp_helper = (asio_udp_helper *)ssGetPWorkValue(S, 0);
     if (udp_helper != nullptr)
@@ -828,7 +828,8 @@ static void mdlStart(SimStruct *S)
         ssWarning(S, msg);
     }
 
-    udp_helper = new asio_udp_helper(target_ip, recv_port, trans_port, cmd_recv_port, cmd_trans_port);
+    // udp_helper = new asio_udp_helper(target_ip, recv_port, trans_port, cmd_recv_port, cmd_trans_port);
+    udp_helper = new asio_udp_helper(ipaddr.str(), recv_port, trans_port, cmd_recv_port, cmd_trans_port);
 
     if (udp_helper == nullptr)
     {
@@ -841,6 +842,57 @@ static void mdlStart(SimStruct *S)
         ssSetErrorStatus(S, msg);
     }
 
+    // Generate Configuration files
+    json network_config;
+
+
+    // CMD has been exchange in m file setup
+    network_config["target_address"] = ipaddr.str();
+    //network_config["receive_port"] = recv_port;
+    //network_config["transmit_port"] = trans_port;
+    //network_config["command_recv_port"] = cmd_recv_port;
+    //network_config["command_trans_port"] = cmd_trans_port;
+
+    // exchange order to fit controller.
+    network_config["receive_port"] = trans_port;
+    network_config["transmit_port"] = recv_port;
+    network_config["command_recv_port"] = cmd_trans_port;
+    network_config["command_trans_port"] = cmd_recv_port;
+
+    // show .json content
+    std::stringstream json_src;
+    json_src << network_config;
+
+    sprintf(msg, "\r\n  %s\r\n\n", json_src.str().c_str());
+    ssPrintf(msg);
+
+    sprintf(msg, "\r\n%s: Network Script is generated.\r\n", DRIVER);
+    ssPrintf(msg);
+
+    std::fstream network_json_file("network.json", std::ios::in | std::ios::out | std::ios::binary);
+    // network_json_file.clear();
+
+    if (!network_json_file.is_open())
+    {
+        sprintf(msg, "%s: Cannot create or open `network.json`, network script is not generated.\r\n", DRIVER);
+        ssWarning(S, msg);
+    }
+    else
+    {
+        // Seek to the head of the file
+        network_json_file.seekp(std::ios_base::beg);
+
+        network_json_file << network_config;
+        network_json_file.close();
+
+        sprintf(msg, "%s: network.json is generated, this script is for controller program!", DRIVER);
+        ssPrintf(msg);
+    }
+
+    // Set Overtime
+    udp_helper->set_overtime();
+
+    // Connect to Target
     try
     {
         // Create connection
@@ -861,6 +913,10 @@ static void mdlStart(SimStruct *S)
     }
 
     ssSetPWorkValue(S, 0, udp_helper);
+
+    // Send CMD Start to Controller Host
+    std::string cmd("Start");
+    udp_helper->send_cmd(cmd.c_str(), (uint32_t)cmd.length());
 }
 
 // Compute the signals that this block emits
@@ -1011,12 +1067,15 @@ static void mdlTerminate(SimStruct *S)
     ssSetPWorkValue(S, 1, tranBuffer);
     ssSetPWorkValue(S, 2, recvBuffer);
 
-    // release network handle here
+    // Send CMD Stop to Controller Host
+    asio_udp_helper *udp_helper = (asio_udp_helper *)ssGetPWorkValue(S, 0);
+    
+    std::string cmd("Stop");
+    udp_helper->send_cmd(cmd.c_str(), (uint32_t)cmd.length());
 
+    // release network handle here
     sprintf(msg, "%s: mdlStop is invoked\r\n", DRIVER);
     ssPrintf(msg);
-
-    asio_udp_helper *udp_helper = (asio_udp_helper *)ssGetPWorkValue(S, 0);
 
     if (udp_helper != nullptr)
         udp_helper->release_connect();

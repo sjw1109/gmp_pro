@@ -180,7 +180,7 @@ class MexFunction : public matlab::mex::Function
 
             // create .json file and save config
             std::fstream network_json_file("network.json", std::fstream::in | std::fstream::out);
-            network_json_file.clear();
+            //network_json_file.clear();
 
             if (!network_json_file.is_open())
             {
