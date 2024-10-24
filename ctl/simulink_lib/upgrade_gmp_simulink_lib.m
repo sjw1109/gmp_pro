@@ -1,6 +1,9 @@
 % This function may upgrade GMP Simulink Library
 function upgrade_gmp_simulink_lib()
 
+clear all; %#ok
+bdclose;
+
 %% validate MATLAB version
 if (hex2dec(version('-release')) < hex2dec('2022b'))
 	disp('Error: Please use Matlab 2022b or later version!');
@@ -52,13 +55,13 @@ close_system('fp_utilities.slx', 0);
 close_system('fp_utilities_src.slx', 0);
 close_system('peripheral_utilities.slx', 0);
 close_system('peripheral_utilities_src.slx', 0);
-close_system('gmp_sil_core.slx', 0);
-close_system('gmp_sil_core_src.slx', 0);
+close_system('gmp_sil_core_pack.slx', 0);
+close_system('gmp_sil_core_pack_src.slx', 0);
 
 generate_single_slx_lib('gmp_simulink_utilities');
 generate_single_slx_lib('fp_utilities');
 generate_single_slx_lib('peripheral_utilities');
-generate_single_slx_lib('gmp_sil_core');
+generate_single_slx_lib('gmp_sil_core_pack');
 
 % load_system('simulink_lib_src/gmp_simulink_utilities_src.slx');
 % target_file = append('install_path/',matlab_version.Release,'/gmp_simulink_utilities.slx');
@@ -130,10 +133,18 @@ close_system(append(libname,'_src.slx'), 0);
 % generate lib file
 load_system(append('simulink_lib_src/',libname, '_src.slx'));
 target_file = append('install_path/',matlab_version.Release,'/',libname,'.slx');
-%set_param(append(libname,'_src'),'Lock','off')
+set_param(append(libname,'_src'),'Lock','off')
 save_system(append('simulink_lib_src/',libname, '_src.slx'), target_file);
-close_system(append(libname,'.slx'));
-close_system(append(libname,'_src.slx'), 0);
+
+matlab_version_str = extract(matlab_version.Release, digitsPattern);
+if(str2double(matlab_version_str)>2023)
+    close_system(libname, 1);
+    close_system(append(libname,'_src'), 0);
+
+else
+    close_system(append(libname,'.slx'));
+    close_system(append(libname,'_src'), 0);
+end
 
 end
 

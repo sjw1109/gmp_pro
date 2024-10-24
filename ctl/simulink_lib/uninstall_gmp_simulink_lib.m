@@ -2,12 +2,14 @@
 
 function uninstall_gmp_simulink_lib()
 
+clear all; %#ok
+
 %% remove MATLAB path
 disp('Remove MATLAB path');
 
 matlab_version = matlabRelease; %matlab_version.Release => R2022b
 matlab_path = fileparts(mfilename('fullpath'));
-simulink_lib_path = append(fullfile(matlab_path), '\install_path/', matlab_version.Release);
+simulink_lib_path = append(fullfile(matlab_path), '\install_path\', matlab_version.Release);
 
 rmpath(simulink_lib_path);
 

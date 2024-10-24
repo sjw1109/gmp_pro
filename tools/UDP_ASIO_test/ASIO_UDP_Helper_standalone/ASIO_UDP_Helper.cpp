@@ -1,9 +1,9 @@
 ﻿// ASIO_UDP_Helper.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
 //
 
+#include <core/util/udp_helper/asio_udp_helper.hpp>
 #include <iostream>
 #include <stdlib.h>
-#include <core/util/udp_helper/asio_udp_helper.hpp>
 
 int main()
 {
@@ -17,18 +17,23 @@ int main()
         exit(1);
     }
 
+    // Connect to Simulink Model
     helper->connect_to_target();
 
+    // enable this program acknowledge "Stop" Command from Simulink
     helper->server_ack_cmd();
 
-    double data[2] = {10, 10};
-    double data_t[2] = {0, 0};
-
-    helper->send_msg((char *)data, sizeof(data));
+    // Message buffer
+    double tx[3] = {0};
+    double rx[3] = {0};
+    
+    // Send the first message to enable the simulink model.
+    helper->send_msg((char *)tx, sizeof(tx));
 
     for (int i = 0; i < 1000; i++)
     {
-        if (helper->recv_msg((char*)data_t, sizeof(data_t)))
+        // Receive message from Simulink
+        if (helper->recv_msg((char *)rx, sizeof(rx)))
         {
             std::cout << "receive complete." << std::endl;
             system("@pause");
@@ -36,8 +41,13 @@ int main()
         }
 
         // operation here
+        tx[0] = rx[1];
+        tx[1] = 1;
+        tx[2] = rx[0];
 
-        helper->send_msg((char *)data, sizeof(data));
+
+        // Send message to simulink
+        helper->send_msg((char *)tx, sizeof(tx));
     }
 
     delete helper;

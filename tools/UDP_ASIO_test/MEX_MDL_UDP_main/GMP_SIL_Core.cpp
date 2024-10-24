@@ -845,13 +845,12 @@ static void mdlStart(SimStruct *S)
     // Generate Configuration files
     json network_config;
 
-
     // CMD has been exchange in m file setup
     network_config["target_address"] = ipaddr.str();
-    //network_config["receive_port"] = recv_port;
-    //network_config["transmit_port"] = trans_port;
-    //network_config["command_recv_port"] = cmd_recv_port;
-    //network_config["command_trans_port"] = cmd_trans_port;
+    // network_config["receive_port"] = recv_port;
+    // network_config["transmit_port"] = trans_port;
+    // network_config["command_recv_port"] = cmd_recv_port;
+    // network_config["command_trans_port"] = cmd_trans_port;
 
     // exchange order to fit controller.
     network_config["receive_port"] = trans_port;
@@ -874,8 +873,26 @@ static void mdlStart(SimStruct *S)
 
     if (!network_json_file.is_open())
     {
-        sprintf(msg, "%s: Cannot create or open `network.json`, network script is not generated.\r\n", DRIVER);
-        ssWarning(S, msg);
+        network_json_file.open("network.json", std::ios::out | std::ios::app);
+
+        if (!network_json_file.is_open())
+        {
+            sprintf(msg, "%s: Cannot create or open `network.json`, network script is not generated.\r\n", DRIVER);
+            ssWarning(S, msg);
+        }
+        network_json_file.close();
+
+        // restart
+        network_json_file.open("network.json", std::ios::in | std::ios::out | std::ios::binary);
+
+        // Seek to the head of the file
+        network_json_file.seekp(std::ios_base::beg);
+
+        network_json_file << network_config;
+        network_json_file.close();
+
+        sprintf(msg, "%s: network.json is generated, this script is for controller program!", DRIVER);
+        ssPrintf(msg);
     }
     else
     {
@@ -1069,7 +1086,7 @@ static void mdlTerminate(SimStruct *S)
 
     // Send CMD Stop to Controller Host
     asio_udp_helper *udp_helper = (asio_udp_helper *)ssGetPWorkValue(S, 0);
-    
+
     std::string cmd("Stop");
     udp_helper->send_cmd(cmd.c_str(), (uint32_t)cmd.length());
 
