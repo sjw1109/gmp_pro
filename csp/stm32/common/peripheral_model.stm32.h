@@ -106,27 +106,27 @@ extern "C"
      * @param huart handle of UART
      * @param data half_duplex data interface
      */
-    gmp_stat_t gmp_hal_uart_send(stm32_uart_t *huart, half_duplex_ift *data);
+    ec_gt gmp_hal_uart_send(stm32_uart_t *huart, half_duplex_ift *data);
 
     /**
      * @brief receive data via UART
      * @param huart handle of UART
      * @param data half_duplex data interface
      */
-    gmp_stat_t gmp_hal_uart_recv(stm32_uart_t *huart, half_duplex_ift *data);
+    ec_gt gmp_hal_uart_recv(stm32_uart_t *huart, half_duplex_ift *data);
 
     /**
      * @brief bind a duplex data buffer to UART channel.
      * @param huart handle of UART
      * @param data duplex data buffer
      */
-    gmp_stat_t gmp_hal_uart_bind_duplex_dma(stm32_uart_t *huart, duplex_ift *data);
+    ec_gt gmp_hal_uart_bind_duplex_dma(stm32_uart_t *huart, duplex_ift *data);
 
     /**
      * @brief start UART listen to receive routine
      * @param huart handle of UART
      */
-    gmp_stat_t gmp_hal_uart_listen(stm32_uart_t *huart);
+    ec_gt gmp_hal_uart_listen(stm32_uart_t *huart);
 
     /**
      * @brief Get UART listen status, return current receive bytes number.
@@ -139,7 +139,7 @@ extern "C"
      * @brief start UART consign to transmit routine.
      * @param huart handle of UART
      */
-    gmp_stat_t gmp_hal_uart_consign(stm32_uart_t *huart);
+    ec_gt gmp_hal_uart_consign(stm32_uart_t *huart);
 
     /**
      * @brief Get UART consign status, return if consign routine is free.

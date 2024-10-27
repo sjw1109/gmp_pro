@@ -9,10 +9,13 @@
  * 
  */
 
+#include <csp.config.h>
 
 //////////////////////////////////////////////////////////////////////////
 // Step I: Select HAL library
 //
+
+#ifndef SPECIFY_PROJECT_GENERATED_BY_CUBEMX
 
 // Due to STM32 has unique macro to specify the chip set,
 // just judge these macros.
@@ -35,17 +38,19 @@
 #include "stm32f1xx_hal.h"
 #elif defined STM32F411xx
 #include "stm32f4xx_hal.h"
+#elif defined STM32F411xE
+#include "stm32f4xx_hal.h"
 #elif defined STM32U083xx
 #include "stm32u0xx_hal.h"
 
+#endif // STM32 SERIES
+
+#else
+
+// Cube MX will generate main.h so just use it.
+#include "main.h"
+
 #endif
-
-
-
-// Invoke default GMP CSP headers
-#include <core/std/gmp.std.h>
-
-
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -63,8 +68,5 @@
 
 // STM32 general peripheral
 #include <csp/stm32/common/peripheral_model.stm32.h>
-
-// Invoke default peripheral definition here
-#include <core/std/default_peripheral.config.h>
 
 

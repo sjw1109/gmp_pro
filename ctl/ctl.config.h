@@ -57,7 +57,7 @@
 // FIX controller configuration
 #ifdef USING_FIXED_LIBRARY
 
-#define CTRL_T(x) _IQ(x)
+#define float2ctrl(x) _IQ(x)
 #define ctrl_mpy(A, B) _IQmpy(A, B)
 #define ctrl_sat(A, Pos, Neg) _IQsat(A, Pos, Neg) 
 #define ctrl2float(x) _IQ24toF(x)

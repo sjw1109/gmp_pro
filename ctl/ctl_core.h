@@ -10,26 +10,34 @@
  */
 
 // Invoke All the GMP features
-#include <core/gmp_core.h>
+#include <gmp_core.h>
+
+#if !defined SPECIFY_DISABLE_GMP_CTL
 
 // Invoke CTL configurations 
 #include <ctl/ctl.config.h>
 
 // Invoke Necessary math supports
-#include <ctl/component/common/gmp_math.h>
+#include <ctl/math_block/gmp_math.h>
 
 // necessary components
-#include <ctl/component/interface_util/adc_channel.h>
-#include <ctl/component/interface_util/pwm_channel.h>
+//#include <ctl/component/interface_util/adc_channel.h>
+//#include <ctl/component/interface_util/pwm_channel.h>
 
-#include <ctl/component/common/divider.h>
+//#include <ctl/component/common/divider.h>
+
+#if defined SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
 // Invoke necessary CTL libraries
 #include <ctl/framework/ctl_nano.h>
 
-#include <ctl/component/common/pid.h>
-#include <ctl/component/common/slope_lim.h>
-#include <ctl/component/common/fusing.h>
+#endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+
+//#include <ctl/component/common/pid.h>
+//#include <ctl/component/common/slope_lim.h>
+//#include <ctl/component/common/fusing.h>
+
+#endif // SPECIFY_ENABLE_GMP_CTL
 
 
 // register default controller objects

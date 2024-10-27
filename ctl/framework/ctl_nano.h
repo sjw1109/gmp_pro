@@ -10,8 +10,8 @@
  */
 
 // Basic headers
-#include <core/gmp_core.h>
-#include <ctl/component/common/divider.h>
+#include <gmp_core.h>
+#include <ctl/component/intrinsic/discrete/divider.h>
 
 #ifndef _FILE_CTL_NANO_H_
 #define _FILE_CTL_NANO_H_
@@ -84,7 +84,7 @@ extern "C"
 		ctl_nano_state_machine state_machine;
 
 		// controller error code
-		gmp_stat_t error_code;
+		ec_gt error_code;
 
 		// Control Period Counter
 //		uint32_t period_count;

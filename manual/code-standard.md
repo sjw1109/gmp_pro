@@ -2,7 +2,7 @@
 
 ## Section I Folder Standard
 
-
+在src中的文件需要带`gmp_`前缀以免文件名重复，头文件不用，因为使用的是相对gmp根目录的相对路径。
 
 
 ## Section II GMP Port Function Standard

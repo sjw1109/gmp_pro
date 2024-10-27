@@ -17,50 +17,50 @@
 // All the error code definitions
 // 
 // This area to define all infos, warnings or errors.
-#define GMP_STAT_OK				        ((0x00000000))
-#define GMP_STAT_GENERAL_WARN           ((GMP_STAT_WARN_BEGIN  + 1))
-#define GMP_STAT_GENERAL_ERROR	        ((GMP_STAT_ERRO_BEGIN  + 1))
+#define GMP_EC_OK                       ((0x00000000))
+#define GMP_EC_GENERAL_WARN             ((GMP_EC_WARN_BEGIN  + 1))
+#define GMP_EC_GENERAL_ERROR            ((GMP_EC_ERRO_BEGIN + 1))
 
-#define GMP_STAT_WARN_PRINT             ((GMP_STAT_WARN_BEGIN  + 2))
-// branch should not be reached
-#define GMP_STAT_UNDEFINED_ACTION       ((GMP_STAT_FATAL_BEGIN + 3))
-// Hardware damaged
-#define GMP_STAT_HARD_ERROR             ((GMP_STAT_FATAL_BEGIN + 4))
+#define GMP_EC_WARN_PRINT               ((GMP_EC_WARN_BEGIN + 2))
+// branch should not be reached	
+#define GMP_EC_UNDEFINED_ACTION ((GMP_EC_FATAL_BEGIN + 3))
+// Hardware damaged	
+#define GMP_EC_HARD_ERROR ((GMP_EC_FATAL_BEGIN + 4))
 // User should implement the function before use.
-#define GMP_STAT_NOT_IMPL               ((GMP_STAT_ERRO_BEGIN  + 5))
+#define GMP_EC_NOT_IMPL ((GMP_EC_ERRO_BEGIN + 5))
 // Device is busy
-#define GMP_STAT_BUSY                   ((GMP_STAT_WARN_BEGIN  + 6))
+#define GMP_EC_BUSY ((GMP_EC_WARN_BEGIN + 6))
 // Device is not ready, maybe you haven't trans_init the peripheral
-#define GMP_STAT_NOT_READY              ((GMP_STAT_ERRO_BEGIN  + 7))
+#define GMP_EC_NOT_READY ((GMP_EC_ERRO_BEGIN + 7))
 // MM module to less memory too small
-#define GMP_STAT_MM_NOT_ENOUGH_MEM      ((GMP_STAT_ERRO_BEGIN  + 8))
+#define GMP_EC_MM_NOT_ENOUGH_MEM ((GMP_EC_ERRO_BEGIN + 8))
 // MM module cannot write these memory, or memory check wfr_fault
-#define GMP_STAT_MM_WRITE_REFUSE        ((GMP_STAT_ERRO_BEGIN  + 8))
+#define GMP_EC_MM_WRITE_REFUSE ((GMP_EC_ERRO_BEGIN + 8))
 // MM module pass an invalid parameter into the function
-#define GMP_STAT_INVALID_PARAM          ((GMP_STAT_ERRO_BEGIN  + 9))
+#define GMP_EC_INVALID_PARAM ((GMP_EC_ERRO_BEGIN + 9))
 // MM module unable to find the specified memory block
-#define GMP_STAT_MM_NO_SPECIFIED_BLOCK  ((GMP_STAT_ERRO_BEGIN  + 10))
+#define GMP_EC_MM_NO_SPECIFIED_BLOCK ((GMP_EC_ERRO_BEGIN + 10))
 // Timeout
-#define GMP_STAT_RESPONSE_TIMEOUT		((GMP_STAT_WARN_BEGIN  + 11))
+#define GMP_EC_RESPONSE_TIMEOUT ((GMP_EC_WARN_BEGIN + 11))
 // data struct overflow
-#define GMP_STAT_OVERFLOW               ((GMP_STAT_WARN_BEGIN  + 12))
+#define GMP_EC_OVERFLOW ((GMP_EC_WARN_BEGIN + 12))
 // This function is disabled
-#define GMP_STAT_FUNCTION_DISABLE       ((GMP_STAT_ERRO_BEGIN  + 13))
+#define GMP_EC_FUNCTION_DISABLE ((GMP_EC_ERRO_BEGIN + 13))
 // workflow disabled
-#define GMP_STAT_WF_DISABLED            ((GMP_STAT_INFO_BEGIN  + 14))
+#define GMP_EC_WF_DISABLED ((GMP_EC_INFO_BEGIN + 14))
 // object reinit
-#define GMP_STAT_REINIT                 ((GMP_STAT_INFO_BEGIN  + 15))
+#define GMP_EC_REINIT ((GMP_EC_INFO_BEGIN + 15))
 // A null pointer is treated as function parameters
-#define GMP_STAT_ZERO_PTR               ((GMP_STAT_ERRO_BEGIN  + 16))
+#define GMP_EC_ZERO_PTR ((GMP_EC_ERRO_BEGIN + 16))
 // The module has been launched, so trans_init function should not be called!
-#define GMP_STAT_MODULE_LAUNCHED        ((GMP_STAT_ERRO_BEGIN  + 17))
+#define GMP_EC_MODULE_LAUNCHED ((GMP_EC_ERRO_BEGIN + 17))
 // The Workflow module is running, so user cannot modify the config of the class
-#define GMP_STAT_WF_CANNOT_MODIFY       ((GMP_STAT_ERRO_BEGIN  + 18))
+#define GMP_EC_WF_CANNOT_MODIFY ((GMP_EC_ERRO_BEGIN + 18))
 // If the workflow module is in reachable verify mode, and the verify is said non-reachable.
-#define GMP_STAT_WF_NONREACHABLE        ((GMP_STAT_ERRO_BEGIN  + 19))
+#define GMP_EC_WF_NONREACHABLE ((GMP_EC_ERRO_BEGIN + 19))
 // the workflow object has start
-#define GMP_STAT_WF_HAS_START           ((GMP_STAT_WARN_BEGIN  + 20))
+#define GMP_EC_WF_HAS_START ((GMP_EC_WARN_BEGIN + 20))
 // the workflow is not initialize complete, user should reset the class
-#define GMP_STAT_WF_NO_RESET            ((GMP_STAT_ERRO_BEGIN  + 21))
+#define GMP_EC_WF_NO_RESET ((GMP_EC_ERRO_BEGIN + 21))
 // Operation was refused
-#define GMP_STAT_REFUSED                ((GMP_STAT_ERRO_BEGIN  + 22))
+#define GMP_EC_REFUSED ((GMP_EC_ERRO_BEGIN + 22))

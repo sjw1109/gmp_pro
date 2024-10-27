@@ -49,7 +49,7 @@ extern "C"
      * @param hgpio handle of gpio. Type of GPIO handle is given by CSP.
      * @param mode target mode of GPIO. mode 0 is input mode, 1 is output mode.
      */
-    gmp_stat_t gmp_hal_gpio_set_mode(gpio_model_stm32_t *hgpio, fast_gt mode);
+    ec_gt gmp_hal_gpio_set_mode(gpio_model_stm32_t *hgpio, fast_gt mode);
 
     /**
      * @brief Write GPIO port. This port must be an output port.
@@ -57,7 +57,7 @@ extern "C"
      * @param hgpio handle of GPIO
      * @param level target electrical level of GPIO port.
      */
-    gmp_stat_t gmp_hal_gpio_write(gpio_model_stm32_t *hgpio, fast_gt level);
+    ec_gt gmp_hal_gpio_write(gpio_model_stm32_t *hgpio, fast_gt level);
 
     /**
      * @brief Read GPIO port, This port should be an input port.
@@ -72,14 +72,14 @@ extern "C"
      * if GPIO mode is not output mode, the result is undefined.
      * @param hgpio handle of GPIO
      */
-    gmp_stat_t gmp_hal_gpio_set(gpio_model_stm32_t *hgpio);
+    ec_gt gmp_hal_gpio_set(gpio_model_stm32_t *hgpio);
 
     /**
      * @brief Set GPIO electrical level to low.
      * if GPIO mode is not output mode, the result is undefined.
      * @param hgpio handle of GPIO
      */
-    gmp_stat_t gmp_hal_gpio_clear(gpio_model_stm32_t *hgpio);
+    ec_gt gmp_hal_gpio_clear(gpio_model_stm32_t *hgpio);
 
 #endif // HAL_GPIO_MODULE_ENABLED
 

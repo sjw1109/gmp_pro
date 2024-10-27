@@ -381,3 +381,6 @@ FodyWeavers.xsd
 
 test/*
 /examples/gmp_windows_debug_plat_pmsm/slprj
+/examples/stm32f411ce_dev_test/Drivers
+/examples/stm32f411ce_dev_test/MDK-ARM/stm32f411ce_dev_test
+/examples/tms320f28035_motorctrl/.settings

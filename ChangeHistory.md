@@ -8,3 +8,9 @@
 > 完善SimulinkLib的安装、更新、卸载程序；
 > 完善定义GMP库的编程规范
 > 
+
++ 2024.10.25
+
+> Simulink GMP SIL Core模块完成。
+> 更新Simulink安装脚本
+

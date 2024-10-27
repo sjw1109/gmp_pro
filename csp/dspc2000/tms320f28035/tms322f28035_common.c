@@ -11,7 +11,7 @@
 
 // This file provide a set of function that CSP must defined.
 
-#include <core/gmp_core.h>
+#include <gmp_core.h>
 
 // User should invoke this function to get time (system tick).
 time_gt gmp_port_system_tick(void)
@@ -61,7 +61,7 @@ void gmp_port_system_stuck(void)
 {}
 
 // This function would be called when all the initialization process happened.
-void csp_post_process(void)
+void gmp_csp_post_process(void)
 {
     EALLOW;
 
@@ -263,7 +263,7 @@ void PieCntlInit(void)
 void PieVectTableInit(void)
 {
     int16 i;
-    PINT *Dest = &PieVectTable.TINT1;
+    volatile PINT *Dest = &PieVectTable.TINT1;
 
     EALLOW;
     for (i = 0; i < 115; i++)

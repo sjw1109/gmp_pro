@@ -76,6 +76,16 @@ Process management is stored in `core/pm` folder.
 
 进程管理模块提供了Workflow模块、状态机模块、消息管理模块、调度器模块。这一部分内容目前没有正常投入使用。
 
+### FP (Function Player)
+
+
+
+### WF (Workflow)
+
+
+
+
+
 
 
 ## Standardization
@@ -88,7 +98,7 @@ GMP对于标准化的设计分为如下几个部分：
 
 + Compiler Standardization
 
-`compiler_sup.h`  and `core/std/cc` provide the compiler standard.
+这些定义在`core/std/cfg/compiler.cfg.h` 实现， and `core/std/cc` provide the implementation of  compiler standard.
 
 下面这些功能是编译器标准化实现的。
 
@@ -121,7 +131,7 @@ GMP对于标准化的设计分为如下几个部分：
 
 + Type Standardization
 
-STD模块提供了标准的GMP类型定义。
+STD模块提供了标准的GMP类型定义。这些定义在`core/std/cfg/compiler.cfg.h`
 
 每一个类型至少需要提供三项基本信息类型的名字、类型的字节长度、类型的比特长度。
 
@@ -158,6 +168,8 @@ STD模块提供了标准的GMP类型定义。
 
 + Peripheral interface Standardization
 
+对于外设的基本类型符合`<peripheral>_halt`的命名规则。这些定义在`csp`中给出具体的实现，在`core/std/cfg/peripheral.cfg.h`中给出形式定义。
+
 这一组函数在命名上满足以`gmp_hal_<peripheral_type>_<do>`作为典型的命名规则。
 
 其中，下面这些函数的命名方式标志着这些函数是阻塞函数
@@ -184,28 +196,37 @@ STD模块提供了标准的GMP类型定义。
 
 + Error code Standardization
 
+对于错误代码的内容定义在头文件`core/std/cfg/errorcode.cfg.h`
+
+在GMP项目中错误代码使用一个32位整数表示，使用类型`ec_gt`，error code general type来表示。
+
 在GMP项目中错误的类型分为如下四种类型：
+
+
 
 | Error Type | Prefix for Error Code | Note                                                         |
 | ---------- | --------------------- | ------------------------------------------------------------ |
-| INFO       | `GMP_STAT_INFO_`      | 运行结果正常，只是需要作为信息提醒用户                       |
-| WARN       | `GMP_STAT_WARN_`      | 警告信息，需要程序员和用户关注是否正常运行                   |
-| ERROR      | `GMP_STAT_ERRO`       | 错误，一定需要用户或者程序员干预，以确保程序正确运行         |
-| FATAL      | `GMP_STAT_FATAL_`     | 严重错误，程序需要立刻终止的错误发生，控制器的结束程序将会被调用，同时主循环将会卡住，通过调用堆栈可以快速找到发生错误的位置。 |
+| OK         | `GMP_EC_OK`           | 返回值正确                                                   |
+| INFO       | `GMP_EC_INFO_`        | 运行结果正常，只是需要作为信息提醒用户                       |
+| WARN       | `GMP_EC_WARN_`        | 警告信息，需要程序员和用户关注是否正常运行                   |
+| ERROR      | `GMP_EC_ERRO`         | 错误，一定需要用户或者程序员干预，以确保程序正确运行         |
+| FATAL      | `GMP_EC_FATAL_`       | 严重错误，程序需要立刻终止的错误发生，控制器的结束程序将会被调用，同时主循环将会卡住，通过调用堆栈可以快速找到发生错误的位置。 |
 
 对于四种类型的错误，可以借助工具配置各个错误的具体代码。
 
 借助以下四个函数可以判定运行状态是否正常。
 
-| function name                | Note                         |
-| ---------------------------- | ---------------------------- |
-| `gmp_is_error(gmp_stat_t)`   | 判定给是否出现错误           |
-| `gmp_is_warning(gmp_stat_t)` | 判定是否出现警告             |
-| `gmp_is_fine(gmp_stat_t)`    | 判定是否返回值为info或者成功 |
+| function name           | Note                         |
+| ----------------------- | ---------------------------- |
+| `gmp_is_error(ec_gt)`   | 判定给是否出现错误           |
+| `gmp_is_warning(ec_gt)` | 判定是否出现警告             |
+| `gmp_is_fine(ec_gt)`    | 判定是否返回值为info或者成功 |
 
 
 
 + GMP Basic Functions
+
+这些函数的原型在`core/std/gmp_cport.h`文件中给出。
 
 GMP提供了一组基础函数供用户可以方便的实现一些通用的系统功能，如下：
 
@@ -216,26 +237,36 @@ GMP提供了一组基础函数供用户可以方便的实现一些通用的系�
 | `gmp_base_print()`          | 打印调试信息                                                 |
 | `gmp_base_malloc()`         | 全局默认的分配内存函数                                       |
 | `gmp_base_free()`           | 全局默认的释放内存函数                                       |
+| `gmp_base_not_impl()`       | 当一个函数没有实现的时候，可以调用这个函数，这个函数将会决定是否程序仍然能够继续执行。 |
+| `gmp_base_show_label()`     | GMP显示label函数                                             |
 |                             |                                                              |
+
+Special function
+
+以下两个函数要求用户主动调用。
+
+| function name         | Note                                                         |
+| --------------------- | ------------------------------------------------------------ |
+| `gmp_base_entry()`    | This function would be called when need to entry GMP.        |
+| `gmp_base_ctl_step()` | GMP CTL periodic interrupt function. User should call this function in Main ISR. |
+
+
 
 
 
 + Big-endian & Little-endian
 
+大小端转换函数在`gmp_cport.h`文件中给出定义。
+
 LE(x),将x指定为小端数，BE(x)将x指定为大端数，l2b(x)将x进行大小端转换。大小端转换基于
 
-| function / macro | Note                    |
-| ---------------- | ----------------------- |
-| LE(x)            | 将x强制转换为小端数据   |
-| BE(x)            | 将x强制转换为大端数据   |
-| l2b(x)           | 将x进行一次大小端转换。 |
+| function / macro     | Note                    |
+| -------------------- | ----------------------- |
+| `LE_<data size>(x)`  | 将x强制转换为小端数据   |
+| `BE_<data size>(x)`  | 将x强制转换为大端数据   |
+| `L2B_<data size>(x)` | 将x进行一次大小端转换。 |
+
+其中，`<data size>` 可以是12，16，32，64（如果系统支持64位数据的话）。
 
 
 
-
-
-## Utility
-
-这一模块中提供了一些必要的其他核心模块。
-
-udp_svr是目前和MATLAB通信的模块。
