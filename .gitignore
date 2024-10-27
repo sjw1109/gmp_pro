@@ -384,3 +384,4 @@ test/*
 /examples/stm32f411ce_dev_test/Drivers
 /examples/stm32f411ce_dev_test/MDK-ARM/stm32f411ce_dev_test
 /examples/tms320f28035_motorctrl/.settings
+examples/stm32f411ce_dev_test/MDK-ARM/stm32f411ce_dev_test.uvguix.javnson

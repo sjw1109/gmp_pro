@@ -47,6 +47,7 @@ GMP CTL Components Root Directory.
 | Function Name          | Note                                                         |
 | ---------------------- | ------------------------------------------------------------ |
 | `float2ctrl(x)`        | 将x（通常是浮点类型）转换为`ctrl_gt`类型，通常用于变量的初始化和常数的定义 |
+| `ctrl2float(x)`        | 将ctrl类型转换为float类型                                    |
 | `int2ctrl(A)`          | 将`int`类型转接为`ctrl_gt`类型                               |
 | `ctrl2int(A)`          | 进行类型转换，获得`ctrl_gt`类型的整数部分                    |
 | `ctl_mod_1(A)`         | 获得`ctrl_gt`类型的小数部分                                  |
