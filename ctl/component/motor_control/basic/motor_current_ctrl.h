@@ -1,0 +1,131 @@
+// FOC Motor Controller general framework
+// This module would be implemented by FPGA.
+
+// necessary headers
+#include <ctl/component/intrinsic/discrete/pid.h>
+#include <ctl/component/intrinsic/interface/adc_channel.h>
+#include <ctl/component/intrinsic/interface/pwm_channel.h>
+
+#include <ctl/math_block/coordinate/coord_trans.h>
+
+
+
+// INPUT:
+//  + ctrl_gt: udc
+//  + vector3: iabc
+//  + vector2: idq_ref
+//  + vector2: vdq_ff
+//  + ctrl_gt: theta
+
+// OUTPUT:
+// + vector3: Tabc
+// + vector3: idq0
+// + vector3: iab0
+// + vector2: udq0
+// + vector2: uab0
+
+// Structure:
+// iab = clark(iabc)
+// idq = park(iab)
+// pi_iq: PI(iq - iq_ref) = vq_ctrl;
+// pi_id: PI(id - id_ref) = vd_crrl;
+// vq = vq_ctrl + vq_ff;
+// vd = vd_ctrl + vd_ff;
+// vab = inv_park(vdq);
+// Tabc = svpwm(vab) / udc;
+
+typedef struct _tag_motor_current_ctrl
+{
+    // input parameters
+    ctrl_gt udc;
+    ctl_vector3_t iabc;
+    ctl_vector2_t idq_ref;
+    ctl_vector2_t vdq_ff;
+    ctrl_gt theta;
+
+    // output parameters
+    ctl_vector3_t Tabc;
+    ctl_vector3_t idq0;
+    ctl_vector3_t iab0;
+    ctl_vector3_t vdq0;
+    ctl_vector3_t vab0;
+
+    // controller objects
+    ctl_pid_t idq_ctrl[2];
+
+    // flags
+    fast_gt flag_enable_current_controller;
+
+} motor_current_ctrl_t;
+
+ec_gt ctl_init_motor_current_ctrl(motor_current_ctrl_t *obj);
+
+
+ec_gt ctl_setup_motor_current_ctrl(motor_current_ctrl_t *obj,
+                                   // PID parameter for motor current controller
+                                   ctrl_gt kp, ctrl_gt ki, ctrl_gt kd,
+                                   // PID saturation parameter for motor current controller
+                                   ctrl_gt out_min, ctrl_gt out_max);
+
+
+GMP_STATIC_INLINE
+void ctl_input_motor_current_ctrl(motor_current_ctrl_t *obj, adc_tri_channel_t *adc_channel)
+{
+    ctl_get_adc_tri_channel_via_vector3(adc_channel, &obj->iabc);
+}
+
+GMP_STATIC_INLINE
+void ctl_set_motor_current_ctrl_idq_ref(motor_current_ctrl_t *obj, ctrl_gt id_ref, ctrl_gt iq_ref)
+{
+    obj->idq_ref.dat[phase_d] = id_ref;
+    obj->idq_ref.dat[phase_q] = iq_ref;
+}
+
+GMP_STATIC_INLINE
+void ctl_set_motor_current_ctrl_vdq_ff(motor_current_ctrl_t *obj, ctrl_gt vd_ref, ctrl_gt vq_ref)
+{
+    obj->vdq_ff.dat[phase_d] = vd_ref;
+    obj->vdq_ff.dat[phase_q] = vq_ref;
+}
+
+GMP_STATIC_INLINE
+void ctl_step_motor_current_ctrl(motor_current_ctrl_t *obj, ctrl_gt theta)
+{
+    ctl_vector2_t phasor;
+
+    // Save theta
+    obj->theta = theta;
+
+    // + iab = clark(iabc)
+    ctl_ct_clark(&obj->iabc, &obj->iab0);
+
+    // + phasor = \angle(theta)
+    ctl_set_phasor_via_angle(obj->theta, &phasor);
+    // idq = park(iab)
+    ctl_ct_park(&obj->iab0, &phasor, &obj->idq0);
+
+    // enable current controller
+    if (obj->flag_enable_current_controller)
+    {
+        // pi_iq: PI(iq - iq_ref) = vq_ctrl;
+        obj->vdq0.dat[phase_d] = ctl_step_pid_ser(&obj->idq_ctrl[phase_d], obj->idq_ref.dat[phase_d] - obj->idq0.dat[phase_d]);
+
+        // pi_id: PI(id - id_ref) = vd_crrl;
+        obj->vdq0.dat[phase_q] = ctl_step_pid_ser(&obj->idq_ctrl[phase_q], obj->idq_ref.dat[phase_q] - obj->idq0.dat[phase_q]);
+    }
+
+    // vq = vq_ctrl + vq_ff;
+    obj->vdq0.dat[phase_d] += obj->vdq_ff.dat[phase_d];
+
+    // vd = vd_ctrl + vd_ff;
+    obj->vdq0.dat[phase_q] += obj->vdq_ff.dat[phase_q];
+
+    obj->vdq0.dat[phase_0] = 0;
+
+    // vab = inv_park(vdq);
+    ctl_ct_ipark(&obj->vdq0, &phasor, &obj->vab0);
+
+    // Tabc = svpwm(vab) / udc;
+    ctl_ct_svpwm_calc(&obj->vab0, &obj->Tabc);
+
+}

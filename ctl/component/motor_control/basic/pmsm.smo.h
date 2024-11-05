@@ -12,9 +12,9 @@
 // This module is a PMSM SMO module
 
 // include pll module
-#include <ctl/component/common/pll.h>
-#include <ctl/component/motor/motor_driver_consultant.h>
-#include <ctl/component/motor/pmsm_consultant.h>
+//#include <ctl/component/common/pll.h>
+#include <ctl/component/motor_control/consultant/motor_driver_consultant.h>
+#include <ctl/component/motor_control/consultant/pmsm_consultant.h>
 
 
 //#include <arm_math.h>
@@ -124,29 +124,29 @@ extern"C"
 		ctrl_gt ctl_step_pmsm_smo(ctl_pmsm_smo_observer_t* smo)
 	{
 		// Model
-		ctrl_gt delta_i_alpha = ctrl_mpy(smo->k1, smo->u_alpha - smo->e_alpha_est - smo->z_alpha)
-			- ctrl_mpy(smo->k2, smo->i_alpha_est)
-			- ctrl_mpy(ctrl_mpy(smo->wr, smo->k3), smo->i_beta_est);
+		ctrl_gt delta_i_alpha = ctl_mul(smo->k1, smo->u_alpha - smo->e_alpha_est - smo->z_alpha)
+			- ctl_mul(smo->k2, smo->i_alpha_est)
+			- ctl_mul(ctl_mul(smo->wr, smo->k3), smo->i_beta_est);
 
-		ctrl_gt delta_i_beta = ctrl_mpy(smo->k1, smo->u_beta - smo->e_beta_est - smo->z_beta)
-			- ctrl_mpy(smo->k2, smo->i_beta_est)
-			+ ctrl_mpy(ctrl_mpy(smo->wr, smo->k3), smo->i_alpha_est);
+		ctrl_gt delta_i_beta = ctl_mul(smo->k1, smo->u_beta - smo->e_beta_est - smo->z_beta)
+			- ctl_mul(smo->k2, smo->i_beta_est)
+			+ ctl_mul(ctl_mul(smo->wr, smo->k3), smo->i_alpha_est);
 
 		// Step i est
 		smo->i_alpha_est += delta_i_alpha;
 		smo->i_beta_est += delta_i_beta;
 
 		// Slide model
-		smo->z_alpha = ctrl_mpy(ctrl_sat(smo->i_alpha_est - smo->i_alpha, CTRL_T(0.1), -CTRL_T(0.1)),
+		smo->z_alpha = ctl_mul(ctl_sat(smo->i_alpha_est - smo->i_alpha, float2ctrl(0.1), -float2ctrl(0.1)),
 			smo->k_slide);
-		smo->z_beta = ctrl_mpy(ctrl_sat(smo->i_beta_est - smo->i_beta, CTRL_T(0.1), -CTRL_T(0.1)),
+		smo->z_beta = ctl_mul(ctl_sat(smo->i_beta_est - smo->i_beta, float2ctrl(0.1), -float2ctrl(0.1)),
 			smo->k_slide);
 
 		// Filter and get e est
-		smo->e_alpha_est = ctrl_mpy(smo->z_alpha, smo->k_filter_e)
-			+ ctrl_mpy(smo->e_alpha_est, CTRL_T(1.0) - smo->k_filter_e);
-		smo->e_beta_est = ctrl_mpy(smo->z_beta, smo->k_filter_e)
-			+ ctrl_mpy(smo->e_beta_est, CTRL_T(1.0) - smo->k_filter_e);
+		smo->e_alpha_est = ctl_mul(smo->z_alpha, smo->k_filter_e)
+			+ ctl_mul(smo->e_alpha_est, float2ctrl(1.0) - smo->k_filter_e);
+		smo->e_beta_est = ctl_mul(smo->z_beta, smo->k_filter_e)
+			+ ctl_mul(smo->e_beta_est, float2ctrl(1.0) - smo->k_filter_e);
 
 		// PLL get angle out
 		// 0. generate phasor
@@ -156,15 +156,15 @@ extern"C"
 		//smo->phasor.dat[1] = (arm_cos_q31(smo->theta_est << (31 - 24))) >> (31 - 24);
 
 		// 1. error signal generate
-		ctrl_gt e_error = -ctrl_mpy(smo->e_alpha_est, smo->phasor.dat[1])
-			- ctrl_mpy(smo->e_beta_est, smo->phasor.dat[0]);
+		ctrl_gt e_error = -ctl_mul(smo->e_alpha_est, smo->phasor.dat[1])
+			- ctl_mul(smo->e_beta_est, smo->phasor.dat[0]);
 
 		// 2. PLL speed lock routine
 		ctl_step_pid_ser(&smo->pid_pll, e_error);
 
 		// 3. filter speed, unit rad/tick
-		smo->wr = ctrl_mpy(smo->pid_pll.out, smo->k_filter_omega)
-			+ ctrl_mpy(smo->wr, CTRL_T(1.0) - smo->k_filter_omega);
+		smo->wr = ctl_mul(smo->pid_pll.out, smo->k_filter_omega)
+			+ ctl_mul(smo->wr, float2ctrl(1.0) - smo->k_filter_omega);
 
 		// 4. update theta
 		smo->theta_est += smo->wr;
@@ -176,7 +176,7 @@ extern"C"
 
 
 		// 5. update speed
-		smo->spd_est_pu = ctrl_mpy(smo->wr, smo->spd_sf);
+		smo->spd_est_pu = ctl_mul(smo->wr, smo->spd_sf);
 
 
 		// 6. output phase 

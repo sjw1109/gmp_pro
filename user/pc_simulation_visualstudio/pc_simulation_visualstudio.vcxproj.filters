@@ -69,6 +69,12 @@
     <ClCompile Include="..\..\ctl\component\intrinsic\src\ctl_component_protection.c">
       <Filter>GMP/CTL</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\ctl\component\motor_control\src\ctl_mc_basic.c">
+      <Filter>GMP/CTL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ctl\component\motor_control\src\ctl_mc_motion.c">
+      <Filter>GMP/CTL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="user.config.h">

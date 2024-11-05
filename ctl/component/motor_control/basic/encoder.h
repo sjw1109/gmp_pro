@@ -10,7 +10,7 @@
  */
 
 // based on filter module
-#include <ctl/component/common/filter.h>
+#include <ctl/component/intrinsic/discrete/filter.h>
 
 
 #ifndef _FILE_ENCODER_H_
@@ -54,15 +54,15 @@ void ctl_setup_pos_encoder(ctl_pos_encoder_t* enc, uint16_t poles, uint32_t posi
 GMP_STATIC_INLINE
 void ctl_input_pos_encoder(ctl_pos_encoder_t* pos_encoder, uint32_t raw)
 {
-	pos_encoder->position = ctrl_div(raw, pos_encoder->position_base);
+	pos_encoder->position = ctl_div(raw, pos_encoder->position_base);
 }
 
-GMP_STATIC_INLINE
-void ctl_input_pos_encoder_shift(ctl_pos_encoder_t* pos_encoder,
-	uint32_t raw, fast_gt shift)
-{
-	pos_encoder->position = raw << shift;
-}
+//GMP_STATIC_INLINE
+//void ctl_input_pos_encoder_shift(ctl_pos_encoder_t* pos_encoder,
+//	uint32_t raw, fast_gt shift)
+//{
+//	pos_encoder->position = raw << shift;
+//}
 
 
 // GET ANGLE, unit rad
@@ -71,9 +71,9 @@ ctrl_gt ctl_get_elec_angle_via_pos_encoder(ctl_pos_encoder_t* pos_encoder)
 {
 	ctrl_gt elec_pos = pos_encoder->poles * (pos_encoder->position + GMP_CONST_1 - pos_encoder->offset);
 
-	elec_pos = ctrl_mod_1(elec_pos);
+	ctrl_gt elec_pos_pu = ctrl_mod_1(elec_pos);
 
-	ctrl_gt angle = ctrl_mpy(elec_pos, GMP_CONST_2_PI);
+	ctrl_gt angle = ctl_mul(elec_pos_pu, GMP_CONST_2_PI);
 
 	pos_encoder->elec_angle = angle;
 
@@ -198,7 +198,7 @@ void ctl_step_spd_calc(ctl_spd_calculator_t* sc, ctrl_gt position_rad)
 			delta -= CTRL_2PI;
 		}
 
-		ctrl_gt new_spd = ctrl_mpy((delta), sc->scale_factor);
+		ctrl_gt new_spd = ctl_mul((delta), sc->scale_factor);
 				
 		sc->speed = ctl_step_lowpass_filter(&sc->spd_filter, new_spd);
 		// sc->speed = sc->spd_filter.out;
@@ -213,17 +213,17 @@ ctrl_gt ctl_get_spd_via_pos_encoder(ctl_spd_calculator_t* sc)
 }
 
 
-GMP_STATIC_INLINE
-void ctl_enable_spd_calc(ctl_spd_calculator_t* sc)
-{
-	sc->div.flag_bypass = 0;
-}
-
-GMP_STATIC_INLINE
-void ctl_disable_spd_calc(ctl_spd_calculator_t* sc)
-{
-	sc->div.flag_bypass = 1;
-}
+//GMP_STATIC_INLINE
+//void ctl_enable_spd_calc(ctl_spd_calculator_t* sc)
+//{
+//	sc->div.flag_bypass = 0;
+//}
+//
+//GMP_STATIC_INLINE
+//void ctl_disable_spd_calc(ctl_spd_calculator_t* sc)
+//{
+//	sc->div.flag_bypass = 1;
+//}
 
 // input variables
 // absolute position encoder

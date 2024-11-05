@@ -12,7 +12,7 @@
 #define float2ctrl(x) ((float)x)
 #define int2ctrl(x)   ((float)x)
 #define ctrl2int(x)   ((int)x)
-#define ctrl_mod_1(x) (float((float)A - (int32_t)A))
+#define ctrl_mod_1(x) ((float)(((float)x) - ((int32_t)x)))
 
 // Calculation
 #define pwm_mul(A, B)        ((pwm_gt)((float)A * B))

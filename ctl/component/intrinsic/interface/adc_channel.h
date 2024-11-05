@@ -287,6 +287,7 @@ extern "C"
     fast_gt ctl_step_adc_bias_calibrator(adc_bias_calibrator_t *obj, uint32_t main_isr_tick, ctrl_gt adc_value);
 
     // get calibrated bias
+    GMP_STATIC_INLINE
     ctrl_gt ctl_get_adc_bias_calibrator_result(adc_bias_calibrator_t *obj)
     {
         return obj->bias_output;

@@ -55,8 +55,8 @@
 #include <ctl/math_block/matrix_lite/matrix2.h>
 
 // Const variables
-#include <ctl/math_block/const/math_ctrl_const_param.h>
-#include <ctl/math_block/const/math_float_const_param.h>
+#include <ctl/math_block/const/math_ctrl_const.h>
+#include <ctl/math_block/const/math_param_const.h>
 
 // Coordinate transform
 #include <ctl/math_block/coordinate/coord_trans.h>
