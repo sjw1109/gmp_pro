@@ -41,7 +41,7 @@ extern "C"
     // This function should be implemented by CSP submodule.
     // And generally, this function is a null function.
     //
-    void gmp_csp_exit_routine(void);
+    void gmp_csp_exit(void);
 
     // GMP system stuck routine
     // This function shoudl implemented by CSP

@@ -34,15 +34,15 @@ typedef struct _tag_svpwm_channel_t
 	// output stage II variables: modulation output
 	pwm_gt pwm_cmp[3];
 
-}svpwm_channel_t;
+} ctl_svpwm_channel_t;
 
 
-void ctl_init_svpwm(svpwm_channel_t* svpwm);
+void ctl_init_svpwm(ctl_svpwm_channel_t *svpwm);
 
-void ctl_setup_svpwm(svpwm_channel_t* svpwm, pwm_gt pwm_period);
+void ctl_setup_svpwm(ctl_svpwm_channel_t *svpwm, pwm_gt pwm_period);
 
 GMP_STATIC_INLINE
-void ctl_set_svpwm_via_ab(svpwm_channel_t* svpwm, ctl_vector3_t* ab)
+void ctl_set_svpwm_via_ab(ctl_svpwm_channel_t *svpwm, ctl_vector3_t *ab)
 {
 	svpwm->Ualpha = ab->dat[0];
 	svpwm->Ubeta = ab->dat[1];
@@ -51,7 +51,7 @@ void ctl_set_svpwm_via_ab(svpwm_channel_t* svpwm, ctl_vector3_t* ab)
 // SVPWM calculation stage I
 // alpha-beta -> Tabc
 GMP_STATIC_INLINE
-void ctl_svpwm_calc(svpwm_channel_t* svpwm)
+void ctl_svpwm_calc(ctl_svpwm_channel_t *svpwm)
 {
 	ctrl_gt Ua, Ub, Uc; // Uabc three phase parameters
 	ctrl_gt Umax, Umin, Ucom;
@@ -100,7 +100,7 @@ void ctl_svpwm_calc(svpwm_channel_t* svpwm)
 // another formal algorithm
 // alpha-beta -> Tabc
 GMP_STATIC_INLINE
-void ctl_svpwm_calc2(svpwm_channel_t* svpwm)
+void ctl_svpwm_calc2(ctl_svpwm_channel_t *svpwm)
 {
 
 	// u2s: Ualpha ,Ubeta
@@ -218,7 +218,7 @@ void ctl_svpwm_calc2(svpwm_channel_t* svpwm)
 // SVPWM generation Stage II
 // Tabc -> cmp vlaue
 GMP_STATIC_INLINE
-void ctl_svpwm_modulation(svpwm_channel_t* svpwm)
+void ctl_svpwm_modulation(ctl_svpwm_channel_t *svpwm)
 {
 	int i = 0;
 
@@ -240,7 +240,7 @@ void ctl_svpwm_modulation(svpwm_channel_t* svpwm)
 // with inverse modulation output
 // Tabc -> cmp vlaue
 GMP_STATIC_INLINE
-void ctl_svpwm_inv_modulation(svpwm_channel_t* svpwm)
+void ctl_svpwm_inv_modulation(ctl_svpwm_channel_t *svpwm)
 {
 	int i = 0;
 

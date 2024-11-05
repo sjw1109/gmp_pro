@@ -35,4 +35,7 @@
 #define ctl_sqrt(A)     (qfp_fsqrt(A))
 #define ctl_isqrt(A)    (qfp_fdiv(1.0f, qfp_fsqrt(A)))
 
+// Specify ctrl_gt is a float number
+#define CTRL_GT_IS_FLOAT
+
 #endif // _FILE_QPF_FLOAT_MACROS_H_

@@ -48,7 +48,7 @@ void gmp_base_entry(void)
 
 #ifdef SPECIFY_PC_ENVIRONMENT
     // PC simulate environment, finite iteration
-    for (loop_tick = 0; looptick < PC_ENV_MAX_ITERATION; +loop_tick)
+    for (loop_tick = 0; loop_tick < PC_ENV_MAX_ITERATION; ++loop_tick)
 #else  // SPECIFY_PC_ENVIRONMENT
     // real processor routine
     for (;;)
@@ -72,16 +72,14 @@ void gmp_base_entry(void)
         ctl_loop();
 #endif // SPECIFY_ENABLE_GMP_CTL
     }
+
+    // This function is unreachable.
+    gmp_csp_exit();
+
+
 }
 
-// This function should be called in MainISR
-void gmp_base_ctl_step(void)
-{
 
-#ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
-
-#endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
-}
 
 // This function should be called when System fatal error happened.
 void gmp_base_system_stuck(void)
@@ -107,7 +105,7 @@ size_gt gmp_base_print(const char *p_fmt, ...)
         return ret;
     }
 
-    size_gt size = strlen(p_fmt);
+    size_gt size = (size_gt)strlen(p_fmt);
 
     static data_gt str[GMP_BASE_PRINT_CHAR_EXT];
     memset(str, 0, GMP_BASE_PRINT_CHAR_EXT);
@@ -118,10 +116,10 @@ size_gt gmp_base_print(const char *p_fmt, ...)
     va_end(vArgs);
 
     ptr.buf = str;
-    ptr.length = strlen((char *)str);
+    ptr.length = (size_gt)strlen((char *)str);
     ptr.capacity = GMP_BASE_PRINT_CHAR_EXT;
 
-    gmp_hal_uart_send(default_debug_dev, &ptr);
+    GMP_BASE_PRINT_FUNCTION(default_debug_dev, &ptr);
 
     ret = ptr.length;
 

@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="GMP">
+      <UniqueIdentifier>{b407ff38-7232-47ea-ad5a-e3f91100948a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GMP/CSP">
+      <UniqueIdentifier>{acec1097-adbe-4f6e-ba57-0c600a2c3e20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GMP/CTL">
+      <UniqueIdentifier>{579a9459-6537-4464-89e6-bddb01e97c0e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pc_simulation_visualstudio.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\core\src\gmp_dev_util.c">
+      <Filter>GMP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\core\src\gmp_mm_block_memory.c">
+      <Filter>GMP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\core\src\gmp_std_error_code.c">
+      <Filter>GMP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\core\src\gmp_std_port.c">
+      <Filter>GMP</Filter>
+    </ClCompile>
+    <ClCompile Include="ctl_main.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="peripheral_mapping.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="user_main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\csp\windows_simulink\windows_simulink_main.cpp">
+      <Filter>GMP/CSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ctl\framework\src\ctl_nano.c">
+      <Filter>GMP/CTL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ctl\component\intrinsic\src\ctl_component_advance.c">
+      <Filter>GMP/CTL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ctl\component\intrinsic\src\ctl_component_combo.c">
+      <Filter>GMP/CTL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ctl\component\intrinsic\src\ctl_component_discrete.c">
+      <Filter>GMP/CTL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ctl\component\intrinsic\src\ctl_component_interface.c">
+      <Filter>GMP/CTL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ctl\component\intrinsic\src\ctl_component_protection.c">
+      <Filter>GMP/CTL</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="user.config.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\csp\windows_simulink\csp.config.h">
+      <Filter>GMP/CSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\csp\windows_simulink\csp.general.h">
+      <Filter>GMP/CSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\csp\windows_simulink\csp.general.hpp">
+      <Filter>GMP/CSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\csp\windows_simulink\csp.typedef.h">
+      <Filter>GMP/CSP</Filter>
+    </ClInclude>
+    <ClInclude Include="user_main.hpp">
+      <Filter>源文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

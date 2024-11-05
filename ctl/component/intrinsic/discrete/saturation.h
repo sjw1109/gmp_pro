@@ -30,7 +30,7 @@ extern "C"
     } saturation_t;
 
     GMP_STATIC_INLINE
-    ec_gt ctl_step_saturation(saturation_t *obj, ctrl_gt input)
+    ctrl_gt ctl_step_saturation(saturation_t *obj, ctrl_gt input)
     {
         return obj->out = ctl_sat(input, obj->out_max, obj->out_min);
     }

@@ -18,7 +18,7 @@
      * @param length
      * @param capacity
      */
-    void init_half_duplex_channel(half_duplex_ift *channel, data_gt *buf, size_gt length, size_gt capacity)
+void gmp_dev_init_half_duplex_channel(half_duplex_ift *channel, data_gt *buf, size_gt length, size_gt capacity)
     {
         channel->buf = buf;
         channel->length = length;
@@ -33,7 +33,8 @@
      * @param length length of transmit and receive buffer
      * @param capacity capacity of tx and rx buffer
      */
-    void init_duplex_channel(duplex_ift *channel, data_gt *tx_buf, data_gt *rx_buf, size_gt length, size_gt capacity)
+    void gmp_dev_init_duplex_channel(duplex_ift *channel, data_gt *tx_buf, data_gt *rx_buf, size_gt length,
+                                     size_gt capacity)
     {
         channel->tx_buf = tx_buf;
         channel->rx_buf = rx_buf;
@@ -48,7 +49,8 @@
      * @param msg msg source address
      * @param length length of address
      */
-    void init_half_duplex_with_addr_channel(half_duplex_with_addr_ift *channel, addr32_gt address, data_gt *msg, size_gt length)
+    void gmp_dev_init_half_duplex_with_addr_channel(half_duplex_with_addr_ift *channel, addr32_gt address, data_gt *msg,
+                                                    size_gt length)
     {
         channel->address = address;
         channel->msg = msg;
@@ -64,7 +66,8 @@
      * @param msg message object
      * @param length length of message
      */
-    void init_iic_memory_channel(iic_memory_ift *channel, addr32_gt dev_addr, addr32_gt mem_addr, fast_gt mem_length, data_gt *msg, size_gt length)
+    void gmp_dev_init_iic_memory_channel(iic_memory_ift *channel, addr32_gt dev_addr, addr32_gt mem_addr,
+                                         fast_gt mem_length, data_gt *msg, size_gt length)
     {
         channel->dev_addr = dev_addr;
         channel->mem_addr = mem_addr;
@@ -81,7 +84,7 @@
      * @param properties can frame type
      * @param length can data length
      */
-    void init_can_channel(can_ift *channel, addr32_gt id, uint32_t properties)
+    void gmp_dev_init_can_channel(can_ift *channel, addr32_gt id, uint32_t properties)
     {
         channel->id = id;
         channel->properties = properties;

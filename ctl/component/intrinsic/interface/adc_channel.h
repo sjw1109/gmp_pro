@@ -48,16 +48,21 @@ extern "C"
     {
         adc_obj->raw = raw;
 
-        // transfer ADC data to _IQ24
+#if defined CTRL_GT_IS_FIXED
+        // for fixed point number, transfer ADC data to _IQ24
         ctrl_gt raw_data = adc_obj->raw << (GLOBAL_Q - adc_obj->iqn);
+#elif defined CTRL_GT_IS_FLOAT
+    // for float point number, transfer ADC data to p.u.
+    ctrl_gt raw_data = (ctrl_gt)adc_obj->raw / (1 << adc_obj->iqn);
+#endif // CTRL_GT_IS_XXX
 
         // remove bias
         ctrl_gt raw_without_bias = raw_data - adc_obj->bias;
 
         // Gain
-        adc_obj->value = ctrl_mpy(raw_without_bias, adc_obj->gain);
+        adc_obj->value = ctl_mul(raw_without_bias, adc_obj->gain);
 
-        return adc->value;
+        return adc_obj->value;
     }
 
     // get result
@@ -99,7 +104,7 @@ extern "C"
                                      fast_gt iqn);
 
     GMP_STATIC_INLINE
-    void ctl_step_adc_dual_channel(adc_dual_channel_t *adc, adc_gt raw1, adc_gt raw2)
+    void ctl_step_adc_dual_channel(adc_dual_channel_t *adc_obj, adc_gt raw1, adc_gt raw2)
     {
         ctrl_gt raw_data;
         ctrl_gt raw_without_bias;
@@ -111,14 +116,19 @@ extern "C"
 
         for (i = 0; i < 2; ++i)
         {
+#if defined CTRL_GT_IS_FIXED
             // transfer ADC data to _IQ24
-            raw_data = adc->raw[i] << (GLOBAL_Q - adc->iqn);
+            raw_data = adc_obj->raw[i] << (GLOBAL_Q - adc_obj->iqn);
+#elif defined CTRL_GT_IS_FLOAT
+        // for float point number, transfer ADC data to p.u.
+        raw_data = (ctrl_gt)adc_obj->raw[i] / (1 << adc_obj->iqn);
+#endif // CTRL_GT_IS_XXX
 
             // remove bias
-            raw_without_bias = raw_data - adc->bias[i];
+            raw_without_bias = raw_data - adc_obj->bias[i];
 
             // Gain
-            adc->value[i] = ctrl_mpy(raw_without_bias, adc->gain[i]);
+            adc_obj->value[i] = ctl_mul(raw_without_bias, adc_obj->gain[i]);
         }
         return;
     }
@@ -153,7 +163,7 @@ extern "C"
     GMP_STATIC_INLINE
     ctrl_gt ctl_get_adc_dual_channel_comm(adc_dual_channel_t *adc)
     {
-        return ctrl_div2(adc->value[0] + adc->value[1]);
+        return ctl_div2(adc->value[0] + adc->value[1]);
     }
 
     GMP_STATIC_INLINE
@@ -193,9 +203,8 @@ extern "C"
     ec_gt ctl_setup_adc_tri_channel(adc_tri_channel_t *adc, ctrl_gt gain, ctrl_gt bias, fast_gt resolution,
                                     fast_gt iqn);
 
-
     GMP_STATIC_INLINE
-    void ctl_step_adc_tri_channel(adc_tri_channel_t *adc, adc_gt raw1, adc_gt raw2, adc_gt raw3)
+    void ctl_step_adc_tri_channel(adc_tri_channel_t *adc_obj, adc_gt raw1, adc_gt raw2, adc_gt raw3)
     {
         ctrl_gt raw_data;
         ctrl_gt raw_without_bias;
@@ -208,14 +217,20 @@ extern "C"
 
         for (i = 0; i < 3; ++i)
         {
+
+#if defined CTRL_GT_IS_FIXED
             // transfer ADC data to _IQ24
-            raw_data = adc->raw[i] << (GLOBAL_Q - adc->iqn);
+            raw_data = adc_obj->raw[i] << (GLOBAL_Q - adc_obj->iqn);
+#elif defined CTRL_GT_IS_FLOAT
+        // for float point number, transfer ADC data to p.u.
+        raw_data = (ctrl_gt)adc_obj->raw[i] / (1 << adc_obj->iqn);
+#endif // CTRL_GT_IS_XXX
 
             // remove bias
-            raw_without_bias = raw_data - adc->bias[i];
+            raw_without_bias = raw_data - adc_obj->bias[i];
 
             // Gain
-            adc->value[i] = ctrl_mpy(raw_without_bias, adc->gain[i]);
+            adc_obj->value[i] = ctl_mul(raw_without_bias, adc_obj->gain[i]);
         }
         return;
     }
@@ -231,7 +246,7 @@ extern "C"
     //////////////////////////////////////////////////////////////////////////
     // ADC bias calibrator
 
-#include <ctl/component/common/filter.h>
+#include <ctl/component/intrinsic/discrete/filter.h>
 
     typedef struct _tag_adc_bias_calibrator_t
     {
@@ -262,9 +277,9 @@ extern "C"
 
     } adc_bias_calibrator_t;
 
-    ctrl_gt ctl_init_adc_bias_calibrator(adc_bias_calibrator_t *obj);
+    ec_gt ctl_init_adc_bias_calibrator(adc_bias_calibrator_t *obj);
 
-    ctrl_gt ctl_setup_adc_bias_calibrator(adc_bias_calibrator_t *obj, ctl_filter_IIR2_setup_t *filter_parameter);
+    ec_gt ctl_setup_adc_bias_calibrator(adc_bias_calibrator_t *obj, ctl_filter_IIR2_setup_t *filter_parameter);
 
     void ctl_restart_adc_bias_calibrator(adc_bias_calibrator_t *obj);
 
@@ -272,9 +287,9 @@ extern "C"
     fast_gt ctl_step_adc_bias_calibrator(adc_bias_calibrator_t *obj, uint32_t main_isr_tick, ctrl_gt adc_value);
 
     // get calibrated bias
-    ctrl_gt ctl_get_adc_bias_calibrator_result(adc_bias_calibrator_t* obj)
+    ctrl_gt ctl_get_adc_bias_calibrator_result(adc_bias_calibrator_t *obj)
     {
-        return bias_output;
+        return obj->bias_output;
     }
 
 #ifdef __cplusplus

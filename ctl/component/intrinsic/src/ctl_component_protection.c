@@ -1,24 +1,27 @@
 
-
+#include <ctl/ctl_core.h>
+#include <gmp_core.h>
 
 //////////////////////////////////////////////////////////////////////////
 // Fusing
 
-#include <ctl/component/intrinsic/discrete/fusing.h>
+#include <ctl/component/intrinsic/protection/fusing.h>
 
-void ctl_init_bipolar_fusing(bipolar_fusing_t *fusing)
+ec_gt ctl_init_bipolar_fusing(bipolar_fusing_t *fusing)
 {
     fusing->target_object = NULL;
 
-    fusing->upper_bound = CTRL_T(1.0f);
-    fusing->lower_bound = -CTRL_T(1.0f);
+    fusing->upper_bound = float2ctrl(1.0f);
+    fusing->lower_bound = -float2ctrl(1.0f);
 
     fusing->last_tick = 0;
 
     fusing->error_code = 1;
+
+    return GMP_EC_OK;
 }
 
-void ctl_bind_bipolar_fusing(bipolar_fusing_t *obj, ctrl_gt *target, gmp_stat_t error_code)
+void ctl_bind_bipolar_fusing(bipolar_fusing_t *obj, ctrl_gt *target, ec_gt error_code)
 {
     obj->target_object = target;
     obj->error_code = error_code;

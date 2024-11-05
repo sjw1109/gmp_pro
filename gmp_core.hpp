@@ -19,7 +19,7 @@
 extern "C"
 {
 
-#include <core/gmp_core.h>
+#include <gmp_core.h>
 
 }
 
@@ -50,15 +50,13 @@ extern "C"
 //////////////////////////////////////////////////////////////////////////
 // Step IV import core system modules
 //
-// invoke basic IO concepts
-#include <core/dev/io_concept.hpp>
+
 
 
 //////////////////////////////////////////////////////////////////////////
 // Step V import peripheral mapping
 //
 
-#include <user/user_main.hpp>
 
 //////////////////////////////////////////////////////////////////////////
 // Step VI import other necessary modules

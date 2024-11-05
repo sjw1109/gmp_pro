@@ -35,4 +35,7 @@
 #define ctl_sqrt(A)     sqrt(A)
 #define ctl_isqrt(A)    (1.0f / sqrt(A))
 
+// Specify ctrl_gt is a float number
+#define CTRL_GT_IS_FLOAT
+
 #endif // _FILE_FLOAT_MACROS_H_

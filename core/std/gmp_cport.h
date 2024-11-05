@@ -24,6 +24,53 @@ extern "C"
     // The following functions should be implemented by user
     //
 
+    // ....................................................................//
+    // User should implement this two functions
+    //
+
+    // This function would execute only once.
+    // User should implement all the initialization code in this function.
+    //
+    void init(void);
+
+    // This function would be the endless loop.
+    // User should implement all the loop tasks and round-robin tasks.
+    //
+    void mainloop(void);
+
+    // This function should setup all the peripherals.
+    // In this function the code could be platform related.
+    //
+    void setup_peripheral(void);
+
+    // ....................................................................//
+    // User should implement this 3 functions
+    //
+
+    // This function would be implemented in ctl_main.c
+    // This function would execute only once.
+    // User should implement all the controller related initialization code in this function.
+    // That means user init process may isolate with the controller init process.
+    //
+    void ctl_init(void);
+
+    // This function would be implemented in ctl_main.c
+    // This function would be called by main ISR function.
+    // User should call this function, in your ctl_main.cpp or just ignore it.
+    // When you need to simulate your controller, this function would be invoked.
+    // return 0 is normal, and any non-zero value means error.
+    //
+    void ctl_mainloop(void);
+
+    // This function would be implemented in ctl_main.c
+    // This function would be called in every controller loop
+    // This function would be called by `gmp_base_ctl_step`
+    //
+    void ctl_dispatch(void);
+
+    // ....................................................................//
+    // The following function would be called by user.
+
     // Key this function must do implement, otherwise the time-based part may invalid.
     // This function would return the system tick point right now.
     //
@@ -62,45 +109,21 @@ extern "C"
     // User should call this function, in your ctl_main.cpp or just ignore it.
     // When you need to simulate your controller, this function would be invoked.
     //
-    void gmp_base_ctl_step(void);
+    GMP_STATIC_INLINE
+    void gmp_base_ctl_step(void)
+    {
+#ifdef SPECIFY_ENABLE_GMP_CTL
+#ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
-    // ....................................................................//
-    // User should implement this two functions
-    //
 
-    // This function would execute only once.
-    // User should implement all the initialization code in this function.
-    //
-    void init(void);
 
-    // This function would be the endless loop.
-    // User should implement all the loop tasks and round-robin tasks.
-    //
-    void mainloop(void);
+#endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
-    // This function should setup all the peripherals.
-    // In this function the code could be platform related.
-    //
-    void setup_peripheral(void);
+        // call user controller user defined ISR
+        ctl_dispatch();
 
-    // ....................................................................//
-    // User should implement this two functions
-    //
-
-    // This function would be implemented in ctl_main.c
-    // This function would execute only once.
-    // User should implement all the controller related initialization code in this function.
-    // That means user init process may isolate with the controller init process.
-    //
-    void ctl_init(void);
-
-    // This function would be implemented in ctl_main.c
-    // This function would be called by main ISR function.
-    // User should call this function, in your ctl_main.cpp or just ignore it.
-    // When you need to simulate your controller, this function would be invoked.
-    // return 0 is normal, and any non-zero value means error.
-    //
-    void ctl_mainloop(void);
+#endif // SPECIFY_ENABLE_GMP_CTL
+    }
 
     //////////////////////////////////////////////////////////////////////////
     // Step II: These function have implemented by GMP
@@ -171,9 +194,9 @@ extern "C"
     //
     extern size_gt g_delay_ms;
 
-   
-
-
+    // Default print device handle
+    //
+    extern GMP_BASE_PRINT_DEFAULT_HANDLE_TYPE *default_debug_dev;
 
 #ifdef __cplusplus
 }

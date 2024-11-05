@@ -75,8 +75,8 @@ ec_gt ctl_init_filter_iir2(ctl_filter_IIR2_t *obj)
     }
 
     obj->b[2] = 0;
-		
-		return GMP_EC_OK;
+        
+        return GMP_EC_OK;
 }
 
 ec_gt ctl_setup_filter_iir2(ctl_filter_IIR2_t *obj, ctl_filter_IIR2_setup_t *setup_obj)
@@ -122,7 +122,7 @@ ec_gt ctl_setup_filter_iir2(ctl_filter_IIR2_t *obj, ctl_filter_IIR2_setup_t *set
         break;
     }
 
-    		return GMP_EC_OK;
+            return GMP_EC_OK;
 
 }
 

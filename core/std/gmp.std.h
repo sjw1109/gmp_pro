@@ -19,16 +19,7 @@ extern "C"
 {
 #endif // __cplusplus
 
-// ....................................................................//
-// invoke all the necessary system headers
-//
 
-#include <assert.h>
-#include <stdarg.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 
 // ....................................................................//
 // invoke all the configurations
@@ -54,6 +45,17 @@ extern "C"
 // invoke validate configuration
 //
 #include <core/std/cfg/validate.cfg.h>
+
+
+// ....................................................................//
+// invoke all the necessary system headers
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
+#include <stdint.h>
+
 
 // ....................................................................//
 // invoke all the GMP STD (standard support)

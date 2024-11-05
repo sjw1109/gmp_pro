@@ -16,9 +16,12 @@
 
 // Calculation
 #define pwm_mul(A, B)        ((pwm_gt)((float)A * B))
+#define pwm_sat(A, Pos, Neg) saturation_macro(A, Pos, Neg)
 #define ctl_mul(A, B)        ((float)((float)A * B))
 #define ctl_div(A, B)        ((float)((float)A / B))
 #define ctl_sat(A, Pos, Neg) saturation_macro(A, Pos, Neg)
+
+// #define pwm_mpy(CTRL_RESULT, PWM_SAT) ()
 
 // Extension Calculation
 #define ctl_div2(A) ((float)((float)A / 2))
@@ -37,5 +40,8 @@
 #define ctl_ln(A)       logf(A)
 #define ctl_sqrt(A)     sqrtf(A)
 #define ctl_isqrt(A)    (1.0f / sqrtf(A))
+
+// Specify ctrl_gt is a float number
+#define CTRL_GT_IS_FLOAT
 
 #endif // _FILE_FLOAT_MACROS_H_

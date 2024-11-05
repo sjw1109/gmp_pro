@@ -1,0 +1,31 @@
+/**
+ * @file csp.general.h
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-30
+ * 
+ * @copyright Copyright GMP(c) 2024
+ * 
+ */
+
+
+//////////////////////////////////////////////////////////////////////////
+// Step I: Select HAL library
+//
+
+
+//////////////////////////////////////////////////////////////////////////
+// Step II: Invoke default GMP CSP headers
+#include <core/std/gmp.std.h>
+
+// invoke GMP Simulink Communication buffer type
+#include <csp/windows_simulink/simulink_buffer.h>
+
+
+//////////////////////////////////////////////////////////////////////////
+// Step III: Invoke all the other CSP headers
+//
+
+ec_gt windows_print_function(uint32_t *handle, half_duplex_ift* port);
+

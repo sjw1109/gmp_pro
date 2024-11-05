@@ -50,6 +50,10 @@ class asio_udp_helper
 
     std::string cmd_recv_buf;
 
+    uint32_t stop_cmd_received;
+
+    uint32_t start_cmd_received;
+
   public:
     asio_udp_helper(const std::string ip_addr, uint32_t recv_port, uint32_t trans_port, uint32_t cmd_recv_port,
                     uint32_t cmd_trans_port)
@@ -60,7 +64,7 @@ class asio_udp_helper
           cmd_recv_context(), cmd_tran_context(), recv_socket(recv_context), tran_socket(tran_context),
           cmd_recv_socket(cmd_recv_context), cmd_tran_socket(cmd_tran_context), recv_port(recv_port),
           trans_port(trans_port), cmd_recv_port(cmd_recv_port), cmd_trans_port(cmd_trans_port), ip_addr(ip_addr),
-          cmd_recv_buf(1024, '\0')
+          cmd_recv_buf(1024, '\0'), stop_cmd_received(0), start_cmd_received(0)
     {
     }
 
@@ -76,6 +80,9 @@ class asio_udp_helper
 
         cmd_recv_socket.open(asio::ip::udp::v4());
         cmd_recv_socket.bind(cmd_recv_terminal);
+
+        stop_cmd_received = 0;
+        start_cmd_received = 0;
     }
 
     void release_connect()
@@ -89,6 +96,9 @@ class asio_udp_helper
         cmd_recv_context.stop();
         cmd_recv_socket.cancel();
         cmd_recv_socket.close();
+
+        //stop_cmd_received = 0;
+        //start_cmd_received = 0;
     }
 
     void send_msg(const char *msg, uint32_t len)
@@ -140,6 +150,8 @@ class asio_udp_helper
                     // judge if this is a stop Command
                     if (!strcmp(cmd_recv_buf.c_str(), "Stop"))
                     {
+                        stop_cmd_received = 1;
+
                         // Stop the whole process
                         std::cout << "[ASIO-UDP Helper] Simulation Stop Command is received, and connection would be released.\r\n";
                         Sleep(1);
@@ -148,8 +160,10 @@ class asio_udp_helper
                     // judge if this is a Start Command
                     else if (!strcmp(cmd_recv_buf.c_str(), "Start"))
                     {
-                        // Stop the whole process
+                        // Start the whole process
                         std::cout << "[ASIO-UDP Helper] Simulation Start Command is received.\r\n";
+
+                        start_cmd_received = 1;
                     }
 
                     std::fill(cmd_recv_buf.begin(), cmd_recv_buf.end(), 0);

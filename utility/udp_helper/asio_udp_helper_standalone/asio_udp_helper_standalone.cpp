@@ -11,7 +11,7 @@ int main()
 
     if (helper == nullptr)
     {
-        std::cout << "Cannot create ASOI Helper.\r\n" << std::endl;
+        std::cout << "Cannot create ASIO Helper.\r\n" << std::endl;
         exit(1);
     }
 

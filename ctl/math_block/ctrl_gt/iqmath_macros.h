@@ -37,4 +37,7 @@
 #define ctl_sqrt(A)     (_IQsqrt(A))
 #define ctl_isqrt(A)    (_IQisqrt(A))
 
+// Specify ctrl_gt is a fixed number
+#define CTRL_GT_IS_FIXED
+
 #endif // _FILE_IQMATH_MACROS_H_
