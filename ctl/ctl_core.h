@@ -20,11 +20,6 @@
 // Invoke Necessary math supports
 #include <ctl/math_block/gmp_math.h>
 
-// necessary components
-//#include <ctl/component/interface_util/adc_channel.h>
-//#include <ctl/component/interface_util/pwm_channel.h>
-
-//#include <ctl/component/common/divider.h>
 
 #if defined SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
@@ -33,9 +28,6 @@
 
 #endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
-//#include <ctl/component/common/pid.h>
-//#include <ctl/component/common/slope_lim.h>
-//#include <ctl/component/common/fusing.h>
 
 #endif // SPECIFY_ENABLE_GMP_CTL
 

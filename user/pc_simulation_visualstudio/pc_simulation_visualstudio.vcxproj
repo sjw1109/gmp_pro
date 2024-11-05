@@ -160,6 +160,7 @@
     <ClInclude Include="..\..\csp\windows_simulink\csp.general.h" />
     <ClInclude Include="..\..\csp\windows_simulink\csp.general.hpp" />
     <ClInclude Include="..\..\csp\windows_simulink\csp.typedef.h" />
+    <ClInclude Include="..\..\csp\windows_simulink\simulink_buffer.h" />
     <ClInclude Include="user.config.h" />
     <ClInclude Include="user_main.hpp" />
   </ItemGroup>

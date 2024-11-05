@@ -201,7 +201,8 @@ extern "C"
     //
     void ctl_fm_force_online(ctl_object_nano_t *ctl_obj);
 
-    // MSVC 
+    // default ctl nano object
+    ec_gt ctl_setup_default_ctl_nano_obj(ctl_object_nano_t *ctl_obj);
 
 
 

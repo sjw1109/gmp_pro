@@ -48,4 +48,7 @@ struct mc_foc_core
     ctl_pid_t idq[2];
     ctl_svpwm_channel_t svpwm;
 
+    // flags
+    fast_gt flag_enable_current_controller;
+
 };

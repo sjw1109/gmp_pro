@@ -34,6 +34,7 @@ void gmp_base_entry(void)
     // Call CTL(Controller template library) initialization function
     //
     ctl_init();
+
 #endif // SPECIFY_ENABLE_GMP_CTL
 
     // Call user initialization function
@@ -45,6 +46,12 @@ void gmp_base_entry(void)
     //
     gmp_csp_post_process();
 #endif // SPECIFY_DISABLE_CSP
+
+#if defined SPECIFY_ENABLE_GMP_CTL
+#ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+    ctl_fm_controller_inspection(ctl_nano_handle);
+#endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+#endif // SPECIFY_ENABLE_GMP_CTL
 
 #ifdef SPECIFY_PC_ENVIRONMENT
     // PC simulate environment, finite iteration
@@ -60,7 +67,14 @@ void gmp_base_entry(void)
         // Call GMP CSP module loop routine
         //
         gmp_csp_loop();
+
 #endif // SPECIFY_DISABLE_CSP
+
+#if defined SPECIFY_ENABLE_GMP_CTL
+#ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+        ctl_fm_state_dispatch(ctl_nano_handle);
+#endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+#endif // SPECIFY_ENABLE_GMP_CTL
 
         // Call user general loop routine
         //
@@ -69,17 +83,13 @@ void gmp_base_entry(void)
 #if defined SPECIFY_ENABLE_GMP_CTL
         // Call controller loop routine
         //
-        ctl_loop();
+        ctl_mainloop();
 #endif // SPECIFY_ENABLE_GMP_CTL
     }
 
     // This function is unreachable.
     gmp_csp_exit();
-
-
 }
-
-
 
 // This function should be called when System fatal error happened.
 void gmp_base_system_stuck(void)
@@ -150,7 +160,6 @@ void gmp_base_show_label(void)
 }
 #endif // SPECIFY_DISABLE_GMP_LOGO
 
-
 //////////////////////////////////////////////////////////////////////////
 // A function is not implement, this is just a place holder.
 
@@ -195,12 +204,138 @@ void *gmp_base_malloc(size_gt size)
 void gmp_base_free(void *ptr)
 {
 #if SPECIFY_GMP_DEFAULT_ALLOC == USING_DEFAULT_SYSTEM_DEFAULT_FUNCTION
-
+    free(ptr);
 #elif SPECIFY_GMP_DEFAULT_ALLOC == USING_GMP_BLOCK_DEFAULT_FUNCTION
-
+    gmp_mm_block_free(default_gmp_area_mem_handle, ptr);
 #elif SPECIFY_GMP_DEFAULT_ALLOC == USING_MANUAL_SPECIFY_FUNCTION
-
+    return SPECIFY_GMP_USER_FREE(ptr);
 #else //  not implement
 
 #endif // SPECIFY_GMP_DEFAULT_ALLOC
 }
+
+//////////////////////////////////////////////////////////////////////////
+// Weak function definition
+
+#ifdef _MSC_VER
+// This function would execute only once.
+// User should implement all the initialization code in this function.
+//
+#pragma comment(linker, "/alternatename:init=gmp_defualt_msvc_init")
+void gmp_defualt_msvc_init(void)
+{
+    // not implement
+}
+
+// This function would be the endless loop.
+// User should implement all the loop tasks and round-robin tasks.
+//
+#pragma comment(linker, "/alternatename:mainloop=gmp_defualt_msvc_mainloop")
+void gmp_defualt_msvc_mainloop(void)
+{
+    // not implement
+}
+
+// This function should setup all the peripherals.
+// In this function the code could be platform related.
+//
+#pragma comment(linker, "/alternatename:setup_peripheral=gmp_defualt_msvc_setup_peripheral")
+void gmp_defualt_msvc_setup_peripheral(void)
+{
+    // not implement
+}
+
+// This function would be implemented in ctl_main.c
+// This function would execute only once.
+// User should implement all the controller related initialization code in this function.
+// That means user init process may isolate with the controller init process.
+//
+#pragma comment(linker, "/alternatename:ctl_init=gmp_defualt_msvc_ctl_init")
+void gmp_defualt_msvc_ctl_init(void)
+{
+}
+
+// This function would be implemented in ctl_main.c
+// This function would be called by main ISR function.
+// User should call this function, in your ctl_main.cpp or just ignore it.
+// When you need to simulate your controller, this function would be invoked.
+// return 0 is normal, and any non-zero value means error.
+//
+#pragma comment(linker, "/alternatename:ctl_mainloop=gmp_defualt_msvc_ctl_mainloop")
+void gmp_defualt_msvc_ctl_mainloop(void)
+{
+    // not implement
+}
+
+// This function would be implemented in ctl_main.c
+// This function would be called in every controller loop
+// This function would be called by `gmp_base_ctl_step`
+//
+#pragma comment(linker, "/alternatename:ctl_dispatch=gmp_defualt_msvc_ctl_dispatch")
+void gmp_defualt_msvc_ctl_dispatch(void)
+{
+    // not implement
+}
+
+#else // other compiler support weak symbol
+
+// This function would execute only once.
+// User should implement all the initialization code in this function.
+//
+GMP_WEAK_FUNC_PREFIX
+void init(void) GMP_WEAK_FUNC_SUFFIX
+{
+    // not implement
+}
+
+// This function would be the endless loop.
+// User should implement all the loop tasks and round-robin tasks.
+//
+GMP_WEAK_FUNC_PREFIX
+void mainloop(void) GMP_WEAK_FUNC_SUFFIX
+{
+    // not implement
+}
+
+// This function should setup all the peripherals.
+// In this function the code could be platform related.
+//
+GMP_WEAK_FUNC_PREFIX
+void setup_peripheral(void) GMP_WEAK_FUNC_SUFFIX
+{
+    // not implement
+}
+
+// This function would be implemented in ctl_main.c
+// This function would execute only once.
+// User should implement all the controller related initialization code in this function.
+// That means user init process may isolate with the controller init process.
+//
+GMP_WEAK_FUNC_PREFIX
+void ctl_init(void) GMP_WEAK_FUNC_SUFFIX
+{
+}
+
+// This function would be implemented in ctl_main.c
+// This function would be called by main ISR function.
+// User should call this function, in your ctl_main.cpp or just ignore it.
+// When you need to simulate your controller, this function would be invoked.
+// return 0 is normal, and any non-zero value means error.
+//
+GMP_WEAK_FUNC_PREFIX
+void ctl_mainloop(void) GMP_WEAK_FUNC_SUFFIX
+{
+    // not implement
+}
+
+// This function would be implemented in ctl_main.c
+// This function would be called in every controller loop
+// This function would be called by `gmp_base_ctl_step`
+//
+GMP_WEAK_FUNC_PREFIX
+void ctl_dispatch(void) GMP_WEAK_FUNC_SUFFIX
+{
+    // not implement
+}
+
+#endif // other compiler support weak symbol

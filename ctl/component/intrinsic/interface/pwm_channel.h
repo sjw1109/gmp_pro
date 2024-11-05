@@ -41,7 +41,7 @@ ec_gt ctl_init_pwm_channel(pwm_channel_t* pwm_obj);
 ec_gt ctl_setup_pwm_channel(pwm_channel_t *pwm_obj, pwm_gt phase, pwm_gt full_scale);
 
 // calculate function 
-pwm_gt ctl_calc_pwm_channel(pwm_channel_t* pwm_obj, ctrl_gt raw);
+pwm_gt ctl_calc_pwm_channel(pwm_channel_t *pwm_obj, ctrl_gt raw);
 pwm_gt ctl_calc_pwm_channel_warp(pwm_channel_t *pwm_obj, ctrl_gt raw);
 pwm_gt ctl_calc_pwm_channel_inv(pwm_channel_t *pwm_obj, ctrl_gt raw);
 

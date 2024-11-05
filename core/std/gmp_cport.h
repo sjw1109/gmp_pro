@@ -25,7 +25,8 @@ extern "C"
     //
 
     // ....................................................................//
-    // User should implement this two functions
+    // User should implement this three functions
+    // These function is weak function
     //
 
     // This function would execute only once.
@@ -105,6 +106,12 @@ extern "C"
     //
     void gmp_base_entry(void);
 
+#ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+    // extern controller nano object
+    extern ctl_object_nano_t *ctl_nano_handle;
+
+#endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+
     // This function would be called by main ISR function, by user.
     // User should call this function, in your ctl_main.cpp or just ignore it.
     // When you need to simulate your controller, this function would be invoked.
@@ -115,7 +122,8 @@ extern "C"
 #ifdef SPECIFY_ENABLE_GMP_CTL
 #ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
-
+        // Call periodic dispatch
+        ctl_fm_periodic_dispatch(ctl_nano_handle);
 
 #endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 

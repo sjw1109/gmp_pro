@@ -29,6 +29,18 @@ half_duplex_ift simulink_tx;
 gmp_pc_simulink_rx_buffer_t simulink_rx_buffer;
 gmp_pc_simulink_tx_buffer_t simulink_tx_buffer;
 
+// Simulink Enable signal
+void csp_sl_enable_output(void)
+{
+    simulink_tx_buffer.enable = 1;
+}
+
+// Simulink Disable signal
+void csp_sl_disable_output(void)
+{
+    simulink_tx_buffer.enable = 0;
+}
+
 // User should invoke this function to get time (system tick).
 time_gt gmp_port_system_tick(void)
 {
@@ -62,17 +74,15 @@ void gmp_csp_startup(void)
     // Config send & recv buffer
     gmp_dev_init_half_duplex_channel(&simulink_rx, (data_gt *)&simulink_rx_buffer, sizeof(simulink_rx_buffer),
                                      sizeof(simulink_rx_buffer));
+    // simulink_rx.buf = (data_gt *)&simulink_rx_buffer;
+    // simulink_rx.length = sizeof(simulink_rx_buffer);
+    // simulink_rx.capacity = sizeof(simulink_rx_buffer);
 
     gmp_dev_init_half_duplex_channel(&simulink_tx, (data_gt *)&simulink_tx_buffer, sizeof(simulink_tx_buffer),
                                      sizeof(simulink_tx_buffer));
-
-    //simulink_rx.buf = (data_gt *)&simulink_rx_buffer;
-    //simulink_rx.length = sizeof(simulink_rx_buffer);
-    //simulink_rx.capacity = sizeof(simulink_rx_buffer);
-
-    //simulink_tx.buf = (data_gt *)&simulink_tx_buffer;
-    //simulink_tx.length = sizeof(simulink_tx_buffer);
-    //simulink_tx.capacity = sizeof(simulink_tx_buffer);
+    // simulink_tx.buf = (data_gt *)&simulink_tx_buffer;
+    // simulink_tx.length = sizeof(simulink_tx_buffer);
+    // simulink_tx.capacity = sizeof(simulink_tx_buffer);
 }
 
 // This function may be called and used to initialize all the peripheral.
@@ -80,8 +90,6 @@ void gmp_csp_post_process(void)
 {
     // Send the first message to enable the Simulink model.
     helper->send_msg((char *)simulink_tx.buf, simulink_tx.length);
-
-
 }
 
 // This function is unreachable.
@@ -128,6 +136,11 @@ void gmp_csp_loop(void)
         {
             std::cout << "receive complete." << std::endl;
 
+            std::cout << "received " << helper->recv_counter << " Bytes, aka " << (double)helper->recv_counter / 1024
+                      << "kBytes" << std::endl;
+            std::cout << "transmitted " << helper->tran_counter << " Bytes, aka " << (double)helper->tran_counter / 1024
+                      << "kBytes" << std::endl;
+
             delete helper;
 
             system("@pause");
@@ -137,12 +150,14 @@ void gmp_csp_loop(void)
         // Controller operation here
         gmp_base_ctl_step();
 
+#ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+        ctl_fm_periodic_dispatch(ctl_nano_handle);
+#endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+
         // Send message to Simulink
         helper->send_msg((char *)simulink_tx.buf, simulink_tx.length);
     }
-
 }
-
 
 // This function would be called when fatal error occurred.
 void gmp_port_system_stuck(void)
@@ -155,7 +170,6 @@ void gmp_port_system_stuck(void)
     }
 }
 
-
 // Windows print function
 ec_gt windows_print_function(uint32_t *handle, half_duplex_ift *port)
 {
@@ -163,4 +177,10 @@ ec_gt windows_print_function(uint32_t *handle, half_duplex_ift *port)
         putchar(port->buf[i]);
 
     return GMP_EC_OK;
+}
+
+// Windows simulink system tick function
+time_gt gmp_base_get_system_tick()
+{
+    return (time_gt)(simulink_rx_buffer.time * SPECIFY_SYSTEM_TICK_FREQUENCY);
 }

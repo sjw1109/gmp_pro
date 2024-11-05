@@ -388,7 +388,7 @@ ec_gt gmp_hal_iic_recv(stm32_iic_t *iic, half_duplex_with_addr_ift *msg)
 
 #ifdef HAL_RCC_MODULE_ENABLED
 
-time_gt gmp_port_system_tick(void)
+time_gt gmp_base_get_system_tick(void)
 {
     return HAL_GetTick();
 }

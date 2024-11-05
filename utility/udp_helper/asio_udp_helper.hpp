@@ -54,6 +54,9 @@ class asio_udp_helper
 
     uint32_t start_cmd_received;
 
+    uint32_t recv_counter;
+    uint32_t tran_counter;
+
   public:
     asio_udp_helper(const std::string ip_addr, uint32_t recv_port, uint32_t trans_port, uint32_t cmd_recv_port,
                     uint32_t cmd_trans_port)
@@ -64,7 +67,7 @@ class asio_udp_helper
           cmd_recv_context(), cmd_tran_context(), recv_socket(recv_context), tran_socket(tran_context),
           cmd_recv_socket(cmd_recv_context), cmd_tran_socket(cmd_tran_context), recv_port(recv_port),
           trans_port(trans_port), cmd_recv_port(cmd_recv_port), cmd_trans_port(cmd_trans_port), ip_addr(ip_addr),
-          cmd_recv_buf(1024, '\0'), stop_cmd_received(0), start_cmd_received(0)
+          cmd_recv_buf(1024, '\0'), stop_cmd_received(0), start_cmd_received(0), recv_counter(0), tran_counter(0)
     {
     }
 
@@ -83,6 +86,9 @@ class asio_udp_helper
 
         stop_cmd_received = 0;
         start_cmd_received = 0;
+
+        recv_counter = 0;
+        tran_counter = 0;
     }
 
     void release_connect()
@@ -97,8 +103,8 @@ class asio_udp_helper
         cmd_recv_socket.cancel();
         cmd_recv_socket.close();
 
-        //stop_cmd_received = 0;
-        //start_cmd_received = 0;
+        // stop_cmd_received = 0;
+        // start_cmd_received = 0;
     }
 
     void send_msg(const char *msg, uint32_t len)
@@ -106,6 +112,8 @@ class asio_udp_helper
         try
         {
             tran_socket.send(asio::buffer(msg, len));
+
+            tran_counter += len;
         }
         catch (std::exception &e)
         {
@@ -116,6 +124,8 @@ class asio_udp_helper
 
     void send_cmd(const char *msg, uint32_t len)
     {
+        tran_counter += len;
+
         cmd_tran_socket.send(asio::buffer(msg, len));
     }
 
@@ -125,6 +135,8 @@ class asio_udp_helper
         {
             // recv_socket.receive(asio::buffer((char *)&data_t, sizeof(double)));
             recv_socket.receive_from(asio::buffer(msg, len), recv_terminal);
+
+            recv_counter += len;
         }
         catch (std::exception &e)
         {
@@ -141,9 +153,9 @@ class asio_udp_helper
 
         cmd_recv_socket.async_receive_from(
             asio::buffer(cmd_recv_buf), cmd_recv_terminal, [this](std::error_code ec, std::size_t bytes_recvd) {
-                //std::cout << "this function is reached, byte received:" << bytes_recvd << ".\r\n";
-                //std::cout << "content:" << cmd_recv_buf << std::endl;
-                //std::cout << "error code:" << ec.message() << std::endl;
+                // std::cout << "this function is reached, byte received:" << bytes_recvd << ".\r\n";
+                // std::cout << "content:" << cmd_recv_buf << std::endl;
+                // std::cout << "error code:" << ec.message() << std::endl;
 
                 if ((!ec.value()) && (bytes_recvd > 0))
                 {
@@ -153,7 +165,8 @@ class asio_udp_helper
                         stop_cmd_received = 1;
 
                         // Stop the whole process
-                        std::cout << "[ASIO-UDP Helper] Simulation Stop Command is received, and connection would be released.\r\n";
+                        std::cout << "[ASIO-UDP Helper] Simulation Stop Command is received, and connection would be "
+                                     "released.\r\n";
                         Sleep(1);
                         this->release_connect();
                     }

@@ -29,3 +29,7 @@
 
 ec_gt windows_print_function(uint32_t *handle, half_duplex_ift* port);
 
+
+// Simulink Disable/Enable output
+void csp_sl_enable_output(void);
+void csp_sl_disable_output(void);

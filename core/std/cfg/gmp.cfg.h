@@ -226,6 +226,12 @@
 // enable int64_t & uint64_t
 #define SPECIFY_ENABLE_INTEGER64
 
+// Specify system tick frequency
+// 1000 ticks per second
+#ifndef SPECIFY_SYSTEM_TICK_FREQUENCY
+#define SPECIFY_SYSTEM_TICK_FREQUENCY ((1000))
+#endif // SPECIFY_SYSTEM_TICK_FREQUENCY
+
 //....................................................................//
 // Print function implement
 

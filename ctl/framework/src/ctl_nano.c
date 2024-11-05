@@ -9,8 +9,8 @@
  *
  */
 
-#include <gmp_core.h>
 #include <ctl/ctl_core.h>
+#include <gmp_core.h>
 
 #include <ctl/framework/ctl_nano.h>
 
@@ -54,7 +54,7 @@ void default_ctl_fmif_request_stage_routine(ctl_object_nano_t *pctl_obj)
 // The following functions may running in Main Loop
 
 #pragma comment(linker, "/alternatename:ctl_fmif_monitor_routine=default_ctl_fmif_monitor_routine")
-void default_ctl_fmif_monitor_routine(ctl_object_nano_t *pctl_obj) 
+void default_ctl_fmif_monitor_routine(ctl_object_nano_t *pctl_obj)
 {
     // not implement
 }
@@ -128,7 +128,7 @@ void default_ctl_fmif_output_disable(ctl_object_nano_t *pctl_obj)
     // not implement
 }
 
-#else
+#else // Other Compiler support WEAK function
 
 // ....................................................................//
 // The following functions may running in Main ISR
@@ -429,7 +429,7 @@ void ctl_fm_init_nano_header(ctl_object_nano_t *ctl_obj)
 }
 
 void ctl_fm_setup_nano_header(ctl_object_nano_t *ctl_obj,
-                           uint32_t ctrl_freq // the frequency of the control law, unit Hz
+                              uint32_t ctrl_freq // the frequency of the control law, unit Hz
 )
 {
     ctl_obj->ctrl_freq = ctrl_freq;
@@ -444,4 +444,13 @@ void ctl_sm_nano_trnasfer(ctl_object_nano_t *ctl_obj, ctl_nano_state_machine tar
 void ctl_fm_force_online(ctl_object_nano_t *ctl_obj)
 {
     ctl_obj->state_machine = CTL_SM_ONLINE;
+}
+
+// controller nano object handle entity
+ctl_object_nano_t *ctl_nano_handle = NULL;
+
+ec_gt ctl_setup_default_ctl_nano_obj(ctl_object_nano_t *ctl_obj)
+{
+    ctl_nano_handle = ctl_obj;
+    return GMP_EC_OK;
 }

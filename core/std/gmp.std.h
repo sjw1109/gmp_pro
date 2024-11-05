@@ -19,8 +19,6 @@ extern "C"
 {
 #endif // __cplusplus
 
-
-
 // ....................................................................//
 // invoke all the configurations
 //
@@ -46,16 +44,14 @@ extern "C"
 //
 #include <core/std/cfg/validate.cfg.h>
 
-
 // ....................................................................//
 // invoke all the necessary system headers
+#include <assert.h>
 #include <stdarg.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
-#include <stdint.h>
-
 
 // ....................................................................//
 // invoke all the GMP STD (standard support)
@@ -103,7 +99,18 @@ extern "C"
 #include <core/mm/block_mem.h>
 
 // ....................................................................//
-// Invoke all the ports function
+// memory controller
+#ifdef SPECIFY_ENABLE_GMP_CTL
+#include <ctl/ctl_core.h>
+
+#ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+#include <ctl/framework/ctl_nano.h>
+
+#endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+#endif // SPECIFY_ENABLE_GMP_CTL
+
+    // ....................................................................//
+    // Invoke all the ports function
 
 // GMP C port function
 //
