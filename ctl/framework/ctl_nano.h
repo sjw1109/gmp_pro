@@ -203,7 +203,6 @@ extern "C"
 
     // MSVC 
 
-    #pragma comment(linker, "/alternatename:_ctl_fmif_input_stage_routine=_default_ctl_fmif_input_stage_routine") 
 
 
 #ifdef __cplusplus

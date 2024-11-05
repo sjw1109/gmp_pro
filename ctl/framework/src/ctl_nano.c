@@ -23,11 +23,110 @@
 
 #ifdef _MSC_VER
 
+// ....................................................................//
+// The following functions may running in Main ISR
+
+#pragma comment(linker, "/alternatename:ctl_fmif_input_stage_routine=default_ctl_fmif_input_stage_routine")
 void default_ctl_fmif_input_stage_routine(ctl_object_nano_t *pctl_obj)
 {
     // not implement
 }
 
+#pragma comment(linker, "/alternatename:ctl_fmif_core_stage_routine=default_ctl_fmif_core_stage_routine")
+void default_ctl_fmif_core_stage_routine(ctl_object_nano_t *pctl_obj)
+{
+    // not implement
+}
+
+#pragma comment(linker, "/alternatename:ctl_fmif_output_stage_routine=default_ctl_fmif_output_stage_routine")
+void default_ctl_fmif_output_stage_routine(ctl_object_nano_t *pctl_obj)
+{
+    // not implement
+}
+
+#pragma comment(linker, "/alternatename:ctl_fmif_request_stage_routine=default_ctl_fmif_request_stage_routine")
+void default_ctl_fmif_request_stage_routine(ctl_object_nano_t *pctl_obj)
+{
+    // not implement
+}
+
+// ....................................................................//
+// The following functions may running in Main Loop
+
+#pragma comment(linker, "/alternatename:ctl_fmif_monitor_routine=default_ctl_fmif_monitor_routine")
+void default_ctl_fmif_monitor_routine(ctl_object_nano_t *pctl_obj) 
+{
+    // not implement
+}
+
+#pragma comment(linker, "/alternatename:ctl_fmif_security_routine=default_ctl_fmif_security_routine")
+fast_gt default_ctl_fmif_security_routine(ctl_object_nano_t *pctl_obj)
+{
+    // not implement
+    return GMP_EC_OK;
+}
+
+// return value:
+// 1 change to next progress
+// 0 keep the same state
+#pragma comment(linker, "/alternatename:ctl_fmif_sm_pending_routine=default_ctl_fmif_sm_pending_routine")
+fast_gt default_ctl_fmif_sm_pending_routine(ctl_object_nano_t *pctl_obj)
+{
+    // not implement
+    return 0;
+}
+
+// return value:
+// 1 change to next progress
+// 0 keep the same state
+#pragma comment(linker, "/alternatename:ctl_fmif_sm_calibrate_routine=default_ctl_fmif_sm_calibrate_routine")
+fast_gt default_ctl_fmif_sm_calibrate_routine(ctl_object_nano_t *pctl_obj)
+{
+    // not implement
+    return 1;
+}
+
+#pragma comment(linker, "/alternatename:ctl_fmif_sm_ready_routine=default_ctl_fmif_sm_ready_routine")
+fast_gt default_ctl_fmif_sm_ready_routine(ctl_object_nano_t *pctl_obj)
+{
+    // not implement
+    return 0;
+}
+
+// Main relay close, power on the main circuit
+#pragma comment(linker, "/alternatename:ctl_fmif_sm_runup_routine=default_ctl_fmif_sm_runup_routine")
+fast_gt default_ctl_fmif_sm_runup_routine(ctl_object_nano_t *pctl_obj)
+{
+    // not implement
+    return 1;
+}
+
+#pragma comment(linker, "/alternatename:ctl_fmif_sm_online_routine=default_ctl_fmif_sm_online_routine")
+void default_ctl_fmif_sm_online_routine(ctl_object_nano_t *pctl_obj)
+{
+    // not implement
+}
+
+#pragma comment(linker, "/alternatename:ctl_fmif_sm_fault_routine=default_ctl_fmif_sm_fault_routine")
+void default_ctl_fmif_sm_fault_routine(ctl_object_nano_t *pctl_obj)
+{
+    // not implement
+}
+
+// ....................................................................//
+// The following functions may called in Main ISR and Main Loop
+
+#pragma comment(linker, "/alternatename:ctl_fmif_output_enable=default_ctl_fmif_output_enable")
+void default_ctl_fmif_output_enable(ctl_object_nano_t *pctl_obj)
+{
+    // not implement
+}
+
+#pragma comment(linker, "/alternatename:ctl_fmif_output_disable=default_ctl_fmif_output_disable")
+void default_ctl_fmif_output_disable(ctl_object_nano_t *pctl_obj)
+{
+    // not implement
+}
 
 #else
 
