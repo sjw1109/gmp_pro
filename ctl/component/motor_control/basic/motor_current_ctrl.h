@@ -56,12 +56,12 @@ typedef struct _tag_motor_current_ctrl
     // flags
     fast_gt flag_enable_current_controller;
 
-} motor_current_ctrl_t;
+} ctl_motor_current_ctrl_t;
 
-ec_gt ctl_init_motor_current_ctrl(motor_current_ctrl_t *obj);
+ec_gt ctl_init_motor_current_ctrl(ctl_motor_current_ctrl_t *obj);
 
 
-ec_gt ctl_setup_motor_current_ctrl(motor_current_ctrl_t *obj,
+ec_gt ctl_setup_motor_current_ctrl(ctl_motor_current_ctrl_t *obj,
                                    // PID parameter for motor current controller
                                    ctrl_gt kp, ctrl_gt ki, ctrl_gt kd,
                                    // PID saturation parameter for motor current controller
@@ -69,27 +69,27 @@ ec_gt ctl_setup_motor_current_ctrl(motor_current_ctrl_t *obj,
 
 
 GMP_STATIC_INLINE
-void ctl_input_motor_current_ctrl(motor_current_ctrl_t *obj, adc_tri_channel_t *adc_channel)
+void ctl_input_motor_current_ctrl(ctl_motor_current_ctrl_t *obj, adc_tri_channel_t *adc_channel)
 {
     ctl_get_adc_tri_channel_via_vector3(adc_channel, &obj->iabc);
 }
 
 GMP_STATIC_INLINE
-void ctl_set_motor_current_ctrl_idq_ref(motor_current_ctrl_t *obj, ctrl_gt id_ref, ctrl_gt iq_ref)
+void ctl_set_motor_current_ctrl_idq_ref(ctl_motor_current_ctrl_t *obj, ctrl_gt id_ref, ctrl_gt iq_ref)
 {
     obj->idq_ref.dat[phase_d] = id_ref;
     obj->idq_ref.dat[phase_q] = iq_ref;
 }
 
 GMP_STATIC_INLINE
-void ctl_set_motor_current_ctrl_vdq_ff(motor_current_ctrl_t *obj, ctrl_gt vd_ref, ctrl_gt vq_ref)
+void ctl_set_motor_current_ctrl_vdq_ff(ctl_motor_current_ctrl_t *obj, ctrl_gt vd_ref, ctrl_gt vq_ref)
 {
     obj->vdq_ff.dat[phase_d] = vd_ref;
     obj->vdq_ff.dat[phase_q] = vq_ref;
 }
 
 GMP_STATIC_INLINE
-void ctl_step_motor_current_ctrl(motor_current_ctrl_t *obj, ctrl_gt theta)
+void ctl_step_motor_current_ctrl(ctl_motor_current_ctrl_t *obj, ctrl_gt theta)
 {
     ctl_vector2_t phasor;
 

@@ -11,9 +11,9 @@
 
 // This is a PID basic package
 
-#include <ctl/component/common/pid.h>
-#include <ctl/component/common/divider.h>
-#include <ctl/component/common/slope_lim.h>
+#include <ctl/component/intrinsic/discrete/pid.h>
+#include <ctl/component/intrinsic/discrete/divider.h>
+#include <ctl/component/intrinsic/discrete/slope_lim.h>
 
 #ifndef _FILE_TRACK_PID_H_
 #define _FILE_TRACK_PID_H_
@@ -30,13 +30,11 @@ typedef struct _tag_track_pid_t
 
     ctl_divider_t div;
     ctl_slope_lim_t traj;
+}ctl_track_pid_t;
 
-    ctrl_gt out;
-}track_pid_t;
+ec_gt ctl_init_track_pid(ctl_track_pid_t* tp);
 
-void ctl_init_track_pid(track_pid_t* tp);
-
-void ctl_setup_track_pid(track_pid_t* tp,
+ec_gt ctl_setup_track_pid(ctl_track_pid_t* tp,
     ctrl_gt kp, ctrl_gt ki, ctrl_gt kd, // pid parameters
     ctrl_gt sat_min, ctrl_gt sat_max, // saturation limit
     ctrl_gt slope_min, ctrl_gt slope_max, // slope limit
@@ -44,36 +42,24 @@ void ctl_setup_track_pid(track_pid_t* tp,
 );
 
 GMP_STATIC_INLINE
-void ctl_step_track_pid(track_pid_t* tp,
+ctrl_gt ctl_step_track_pid(ctl_track_pid_t* tp,
     ctrl_gt target, ctrl_gt now)
 {
     if (ctl_step_divider(&tp->div))
     {
         ctl_step_slope_limit(&tp->traj, target);
 
-        ctl_step_pid_ser(&tp->pid,
+        return ctl_step_pid_ser(&tp->pid,
             tp->traj.out - now);
-
-        tp->out = tp->pid.out;
     }
+
+    return ctl_get_pid_output(&tp->pid);
 }
 
 GMP_STATIC_INLINE
-void ctl_enable_track_pid(track_pid_t* tp)
+ctrl_gt ctl_get_track_pid_output(ctl_track_pid_t* tp)
 {
-    tp->div.flag_bypass = 0;
-}
-
-GMP_STATIC_INLINE
-void ctl_disable_track_pid(track_pid_t* tp)
-{
-    tp->div.flag_bypass = 1;
-}
-
-GMP_STATIC_INLINE
-ctrl_gt ctl_get_track_pid_output(track_pid_t* tp)
-{
-    return tp->out;
+    return tp->pid.out;
 }
 
 #ifdef __cplusplus

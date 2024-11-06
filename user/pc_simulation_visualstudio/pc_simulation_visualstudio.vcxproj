@@ -152,6 +152,7 @@
     <ClCompile Include="..\..\ctl\component\motor_control\src\ctl_mc_basic.c" />
     <ClCompile Include="..\..\ctl\component\motor_control\src\ctl_mc_motion.c" />
     <ClCompile Include="..\..\ctl\framework\src\ctl_nano.c" />
+    <ClCompile Include="..\..\ctl\suite\motor_control\pmsm_servo\pmsm_servo.c" />
     <ClCompile Include="ctl_main.c" />
     <ClCompile Include="pc_simulation_visualstudio.cpp" />
     <ClCompile Include="peripheral_mapping.cpp" />

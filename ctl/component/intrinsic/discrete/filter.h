@@ -107,8 +107,8 @@ extern "C"
 
         obj->y[1] = obj->y[0];
         obj->y[0] = obj->out;
-			
-				return obj->out;
+            
+                return obj->out;
     }
 
     // clear all the intermediate variables

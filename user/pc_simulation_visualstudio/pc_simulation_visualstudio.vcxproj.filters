@@ -75,6 +75,9 @@
     <ClCompile Include="..\..\ctl\component\motor_control\src\ctl_mc_motion.c">
       <Filter>GMP/CTL</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\ctl\suite\motor_control\pmsm_servo\pmsm_servo.c">
+      <Filter>GMP/CTL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="user.config.h">

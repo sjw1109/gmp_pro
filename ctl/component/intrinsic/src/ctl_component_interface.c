@@ -249,3 +249,119 @@ pwm_gt ctl_calc_pwm_channel_inv(pwm_channel_t *pwm_obj, ctrl_gt raw)
 
     return pwm_obj->value;
 }
+
+//////////////////////////////////////////////////////////////////////////
+// PWM dual channel
+
+// init funciton for dual channel PWM channel
+ec_gt ctl_init_pwm_dual_channel(pwm_dual_channel_t *pwm_obj)
+{
+    for (int i = 0; i < 2; ++i)
+    {
+        pwm_obj->raw[i] = 0;
+        pwm_obj->value[i] = 0;
+    }
+
+    return GMP_EC_OK;
+}
+
+// setup pwm object
+ec_gt ctl_setup_pwm_dual_channel(pwm_dual_channel_t *pwm_obj, pwm_gt phase, pwm_gt full_scale)
+{
+    pwm_obj->full_scale = full_scale;
+    pwm_obj->phase = phase;
+
+    return GMP_EC_OK;
+}
+
+// calculate function
+void ctl_calc_pwm_dual_channel(pwm_dual_channel_t *pwm_obj, ctl_vector2_t *raw)
+{
+    for (int i = 0; i < 2; ++i)
+    {
+        pwm_obj->raw[i] = raw->dat[i];
+
+        pwm_obj->value[i] = pwm_mul(pwm_obj->raw[i], pwm_obj->full_scale) + pwm_obj->phase;
+        pwm_obj->value[i] = pwm_sat(pwm_obj->value[i], pwm_obj->full_scale, 0);
+    }
+}
+
+void ctl_calc_pwm_dual_channel_warp(pwm_dual_channel_t *pwm_obj, ctl_vector2_t *raw)
+{
+    for (int i = 0; i < 2; ++i)
+    {
+        pwm_obj->raw[i] = raw->dat[i];
+
+        pwm_obj->value[i] = pwm_mul(pwm_obj->raw[i], pwm_obj->full_scale) + pwm_obj->phase;
+        pwm_obj->value[i] = pwm_obj->value[i] % pwm_obj->full_scale;
+    }
+}
+
+void ctl_calc_pwm_dual_channel_inv(pwm_dual_channel_t *pwm_obj, ctl_vector2_t *raw)
+{
+    for (int i = 0; i < 2; ++i)
+    {
+        pwm_obj->raw[i] = raw->dat[i];
+
+        pwm_obj->value[i] = pwm_obj->full_scale - pwm_mul(pwm_obj->raw[i], pwm_obj->full_scale);
+        pwm_obj->value[i] = pwm_sat(pwm_obj->value[i], pwm_obj->full_scale, 0);
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////
+// PWM tri channel
+
+// init funciton for tri-channel PWM channel
+ec_gt ctl_init_pwm_tri_channel(pwm_tri_channel_t *pwm_obj)
+{
+    for (int i = 0; i < 3; ++i)
+    {
+        pwm_obj->raw[i] = 0;
+        pwm_obj->value[i] = 0;
+    }
+
+    return GMP_EC_OK;
+}
+
+// setup PWM object
+ec_gt ctl_setup_pwm_tri_channel(pwm_tri_channel_t *pwm_obj, pwm_gt phase, pwm_gt full_scale)
+{
+    pwm_obj->full_scale = full_scale;
+    pwm_obj->phase = phase;
+
+    return GMP_EC_OK;
+}
+
+// calculate function
+void ctl_calc_pwm_tri_channel(pwm_tri_channel_t *pwm_obj, ctl_vector3_t *raw)
+{
+    for (int i = 0; i < 3; ++i)
+    {
+        pwm_obj->raw[i] = raw->dat[i];
+
+        pwm_obj->value[i] = pwm_mul(pwm_obj->raw[i], pwm_obj->full_scale) + pwm_obj->phase;
+        pwm_obj->value[i] = pwm_sat(pwm_obj->value[i], pwm_obj->full_scale, 0);
+    }
+}
+
+void ctl_calc_pwm_tri_channel_warp(pwm_tri_channel_t *pwm_obj, ctl_vector3_t *raw)
+{
+    for (int i = 0; i < 3; ++i)
+    {
+        pwm_obj->raw[i] = raw->dat[i];
+
+        pwm_obj->value[i] = pwm_mul(pwm_obj->raw[i], pwm_obj->full_scale) + pwm_obj->phase;
+        pwm_obj->value[i] = pwm_obj->value[i] % pwm_obj->full_scale;
+    }
+}
+
+void ctl_calc_pwm_tri_channel_inv(pwm_tri_channel_t *pwm_obj, ctl_vector3_t *raw)
+{
+    for (int i = 0; i < 3; ++i)
+    {
+        pwm_obj->raw[i] = raw->dat[i];
+
+        pwm_obj->value[i] = pwm_obj->full_scale - pwm_mul(pwm_obj->raw[i], pwm_obj->full_scale);
+        pwm_obj->value[i] = pwm_sat(pwm_obj->value[i], pwm_obj->full_scale, 0);
+    }
+}

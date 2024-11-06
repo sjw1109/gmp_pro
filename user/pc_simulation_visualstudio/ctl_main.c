@@ -9,8 +9,8 @@
  *
  */
 
-#include <ctl/ctl_core.h>
 #include <gmp_core.h>
+#include <ctl/ctl_core.h>
 #include <math.h>
 
 // User may set (get handle) TX content via `gmp_csp_sl_get_tx_buffer`

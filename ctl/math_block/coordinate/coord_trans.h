@@ -245,6 +245,8 @@ void ctl_ct_svpwm_calc_theorem(ctl_vector3_t *ab0, GMP_CTL_OUTPUT_TAG ctl_vector
         T2 = -Z;
         break;
     default:
+        T1 = 0;
+        T2 = 0;
         break;
     }
     if ((T1 + T2) > GMP_CONST_1)

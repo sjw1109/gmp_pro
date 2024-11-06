@@ -49,7 +49,7 @@ extern "C"
     //////////////////////////////////////////////////////////////////////////
     // Dual channel PWM channel
 
-    typedef struct _tag_pwn_dual_channel
+    typedef struct _tag_pwm_dual_channel
     {
         // input raw data from control law
         ctrl_gt raw[2];
@@ -63,9 +63,48 @@ extern "C"
         // OUTPUT the PWM output channel
         pwm_gt value[2];
 
-    } pwm_dual_channel;
+    } pwm_dual_channel_t;
 
     // init funciton for dual channel PWM channel
+    ec_gt ctl_init_pwm_dual_channel(pwm_dual_channel_t *pwm_obj);
+
+    // setup pwm object
+    ec_gt ctl_setup_pwm_dual_channel(pwm_dual_channel_t *pwm_obj, pwm_gt phase, pwm_gt full_scale);
+
+    // calculate function 
+    void ctl_calc_pwm_dual_channel(pwm_dual_channel_t *pwm_obj, ctl_vector2_t *raw);
+    void ctl_calc_pwm_dual_channel_warp(pwm_dual_channel_t *pwm_obj, ctl_vector2_t *raw);
+    void ctl_calc_pwm_dual_channel_inv(pwm_dual_channel_t *pwm_obj, ctl_vector2_t *raw);
+
+    //////////////////////////////////////////////////////////////////////////
+    // Tri channel PWM channel
+
+    typedef struct _tag_pwm_tri_channel
+    {
+        // input raw data from control law
+        ctrl_gt raw[3];
+
+        // param full scale
+        pwm_gt full_scale;
+
+        // param phase shift
+        pwm_gt phase;
+
+        // OUTPUT the PWM output channel
+        pwm_gt value[3];
+
+    } pwm_tri_channel_t;
+
+    // init funciton for dual channel PWM channel
+    ec_gt ctl_init_pwm_tri_channel(pwm_tri_channel_t *pwm_obj);
+
+    // setup pwm object
+    ec_gt ctl_setup_pwm_tri_channel(pwm_tri_channel_t *pwm_obj, pwm_gt phase, pwm_gt full_scale);
+
+    // calculate function
+    void ctl_calc_pwm_tri_channel(pwm_tri_channel_t *pwm_obj, ctl_vector3_t *raw);
+    void ctl_calc_pwm_tri_channel_warp(pwm_tri_channel_t *pwm_obj, ctl_vector3_t *raw);
+    void ctl_calc_pwm_tri_channel_inv(pwm_tri_channel_t *pwm_obj, ctl_vector3_t *raw);
 
 
 

@@ -8,8 +8,9 @@
  * @copyright Copyright GMP(c) 2024
  *
  */
-#include <ctl/ctl_core.h>
 #include <gmp_core.h>
+#include <ctl/ctl_core.h>
+
 
 //////////////////////////////////////////////////////////////////////////
 // SVPWM module
@@ -266,7 +267,7 @@ void ctl_dsn_pmsm_pmsm_flux_via_Kt(ctl_pmsm_dsn_consultant_t *pmsm_dsn, paramete
 
 #include <ctl/component/motor_control/basic/motor_current_ctrl.h>
 
-ec_gt ctl_init_motor_current_ctrl(motor_current_ctrl_t *obj)
+ec_gt ctl_init_motor_current_ctrl(ctl_motor_current_ctrl_t *obj)
 {
     obj->udc = float2ctrl(1.0);
     ctl_clear_vector3(&obj->iabc);
@@ -288,7 +289,7 @@ ec_gt ctl_init_motor_current_ctrl(motor_current_ctrl_t *obj)
     return GMP_EC_OK;
 }
 
-ec_gt ctl_setup_motor_current_ctrl(motor_current_ctrl_t *obj,
+ec_gt ctl_setup_motor_current_ctrl(ctl_motor_current_ctrl_t *obj,
                                    // PID parameter for motor current controller
                                    ctrl_gt kp, ctrl_gt ki, ctrl_gt kd,
                                    // PID saturation parameter for motor current controller
