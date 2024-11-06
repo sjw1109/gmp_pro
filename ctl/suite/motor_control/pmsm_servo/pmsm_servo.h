@@ -97,8 +97,7 @@ extern "C"
                                          // Udc sensor parameters
                                          ctrl_gt udc_adc_gain, ctrl_gt udc_adc_bias,
                                          // PWM modulator full scale
-                                         pwm_gt pwm_full_scale
-    )
+                                         pwm_gt pwm_full_scale)
     {
         ctl_fm_setup_nano_header(&pmsm->base, ctrl_freq);
 
@@ -114,7 +113,7 @@ extern "C"
         // ADC bias filter
         ctl_filter_IIR2_setup_t adc_bias_filter;
         adc_bias_filter.fc = 20;
-        adc_bias_filter.fs = pmsm->base.ctrl_freq;
+        adc_bias_filter.fs = (parameter_gt)pmsm->base.ctrl_freq;
         adc_bias_filter.filter_type = FILTER_IIR2_TYPE_LOWPASS;
         adc_bias_filter.gain = float2ctrl(1.0);
         adc_bias_filter.q = float2ctrl(0.707);
@@ -122,7 +121,6 @@ extern "C"
         ctl_setup_adc_bias_calibrator(&pmsm->calibrator, &adc_bias_filter);
 
         return GMP_EC_OK;
-
     }
 
 #ifdef __cplusplus
