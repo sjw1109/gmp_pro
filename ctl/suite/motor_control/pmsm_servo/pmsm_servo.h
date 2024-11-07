@@ -36,6 +36,7 @@ extern "C"
         ctl_motor_current_ctrl_t current_ctrl;
 
         // motor speed controller
+        ctrl_gt spd_target;
         ctl_track_pid_t spd_ctrl;
 
         // ADC input
@@ -121,6 +122,12 @@ extern "C"
         ctl_setup_adc_bias_calibrator(&pmsm->calibrator, &adc_bias_filter);
 
         return GMP_EC_OK;
+    }
+
+GMP_STATIC_INLINE
+    void ctl_setp_pmsm_servo_framework(pmsm_servo_fm_t* pmsm)
+    {
+        ctl_step_track_pid(&pmsm->spd_ctrl, pmsm->spd_target, ctrl_gt now)
     }
 
 #ifdef __cplusplus

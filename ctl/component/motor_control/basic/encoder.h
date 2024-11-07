@@ -10,21 +10,46 @@
  */
 
 // based on filter module
+#include "core/std/gmp_cport.h"
 #include <ctl/component/intrinsic/discrete/filter.h>
 
 
 #ifndef _FILE_ENCODER_H_
 #define _FILE_ENCODER_H_
 
+#ifdef __cplusplus
+extern "C"
+{
+	#endif // __cplusplus
+
+
 // Two parts
 // Speed Encoder
 // Position Encoder
+
+typedef struct _tag_rotation_encoder_t
+{
+	// All the rotation encoder should start with the following one items
+
+	// position of the encoder 
+	// unit, p.u.
+	ctrl_gt position;
+
+}ctl_rotation_enc_t;
+
+// Get encoder position
+GMP_STATIC_INLINE
+ctrl_gt ctl_get_encoder_position(ctl_rotation_enc_t* enc)
+{
+	return enc->position;
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 // position encoder
 typedef struct _tag_ctl_pos_encoder_t
 {
-	// angle position, rad 0-2*pi
+	// angle position, p.u.
 	// Mechanical position
 	ctrl_gt position;
 
@@ -39,7 +64,7 @@ typedef struct _tag_ctl_pos_encoder_t
 	// uint32_t p.u. base value
 	uint32_t position_base;
 
-	// angle position, rad 0-2*pi
+	// angle position, p.u.
 	ctrl_gt elec_angle;
 
 }ctl_pos_encoder_t;
@@ -73,9 +98,9 @@ ctrl_gt ctl_get_elec_angle_via_pos_encoder(ctl_pos_encoder_t* pos_encoder)
 
 	ctrl_gt elec_pos_pu = ctrl_mod_1(elec_pos);
 
-	ctrl_gt angle = ctl_mul(elec_pos_pu, GMP_CONST_2_PI);
+//	ctrl_gt angle = ctl_mul(elec_pos_pu, GMP_CONST_2_PI);
 
-	pos_encoder->elec_angle = angle;
+	pos_encoder->elec_angle = elec_pos_pu;
 
 	return angle;
 }
@@ -93,10 +118,8 @@ void ctl_set_pos_encoder_offset(ctl_pos_encoder_t* enc, ctrl_gt offset)
 
 typedef struct _tag_ctl_pos_multiturn_encoder_t
 {
-	// lap counter
-	int32_t turns;
 
-	// angle position, rad 0-2*pi
+	// angle position, p.u.
 	// Mechanical position
 	ctrl_gt position;
 
@@ -107,6 +130,13 @@ typedef struct _tag_ctl_pos_multiturn_encoder_t
 	// pole_pairs
 	// poles*(position + offset) = Electrical position
 	uint16_t poles;
+
+	// angle position, position p.u.
+	ctrl_gt elec_angle;
+
+	// lap counter
+	int32_t turns;
+
 
 }ctl_pos_multiturn_encoder_t;
 
@@ -189,13 +219,13 @@ void ctl_step_spd_calc(ctl_spd_calculator_t* sc, ctrl_gt position_rad)
 
 		ctrl_gt delta = sc->position - sc->old_position;
 		// direction correction
-		if (delta < -CTRL_PI)
+		if (delta < -GMP_CONST_1_OVER_2)
 		{
-			delta += CTRL_2PI;
+			delta += GMP_CONST_1;
 		}
-		else if(delta > CTRL_PI)
+		else if(delta > GMP_CONST_1_OVER_2)
 		{
-			delta -= CTRL_2PI;
+			delta -= GMP_CONST_1;
 		}
 
 		ctrl_gt new_spd = ctl_mul((delta), sc->scale_factor);
@@ -278,4 +308,115 @@ ctrl_gt ctl_get_spd_via_pos_encoder(ctl_spd_calculator_t* sc)
 //
 //}gmp_tamagawa_encoder_t;
 
+//////////////////////////////////////////////////////////////////////////
+// Position Encoder calibrate
+
+typedef struct _tag_position_enc_calibrate
+{
+	// target motor current controller
+	ctl_motor_current_ctrl_t *mc;
+
+	// target motor encoder
+	ctl_rotation_encoder_t *encoder;
+
+	// parameters:
+
+	// when running position calibrate task,
+	// this current may treated as the target
+	ctrl_gt current_target;
+
+	// when current exceed the limit current
+	// the controller output would disable
+	ctrl_gt current_limit;
+
+	// target delta
+	ctrl_gt position_delta_target;
+
+	// old motor position
+	ctrl_gt old_position;
+
+	fast_gt flag_position_convergence;
+
+	flag_gt flag_stage1;
+
+	time_gt switch_time;
+
+	ctrl_gt offset;
+}ctl_position_enc_calibrate_t;
+
+ec_gt ctl_task_position_encoder_offset_calibrate(
+	ctl_position_enc_calibrate_t* obj
+)
+{
+	// Step I: set current target & voltage target
+	ctl_set_motor_current_ctrl_idq_ref(&obj->mc, obj->current_target,0);
+	ctl_set_motor_current_ctrl_vdq_ff(&obj->mc, 0,0);
+
+	// TODO: Safe routine
+	// judge if current is over current limit
+
+	// Step II: wait till encoder output is stable.
+	// encoder output delta is less than position delta target (default is 0.5%), 
+	// set `flag_position_convergence = 1`
+	if((obj->flag_stage1 == 0))
+	{
+		// judge position convergency
+		if(ctl_get_encoder_position(obj->encoder) - obj->old_position < obj->position_delta_target)
+		{
+			obj->flag_position_convergence = obj->flag_position_convergence << 1 | 0x00;
+		}
+		else // position still not convergency
+		{
+			obj->flag_position_convergence = obj->flag_position_convergence << 1 | 0x01;
+		}
+
+		// save old position
+		obj->old_position = ctl_get_encoder_position(obj->encoder);
+
+		// judge position convergency sequence is full 
+		if(obj->flag_position_convergence & 0x0F == 0)
+		{
+			obj->switch_time = gmp_base_get_system_tick();
+			obj->flag_stage1 = 1;
+		}
+
+		// Still running
+		return GMP_EC_OK;
+	}
+
+	// Step III: wait to infinity
+	// after output delta is satisfied the target, wait another 1 second. 
+	else
+	{
+		if(gmp_base_get_system_tick() - obj->switch_time)
+		{
+			// offset
+			ctrl_gt offset = obj->encoder->offset + ctl_get_encoder_position(obj->encoder);
+			offset = ctl_sat_1(offset);
+
+			// save valibrate result
+			obj->encoder->offset = offset;
+
+			// complete task
+			return 1;
+		}
+	}
+
+}
+
+ec_gt ctl_clear_position_encoder_calibrator(ctl_position_enc_calibrate_t* obj)
+{
+	obj->old_position = 0;
+	obj->flag_position_convergence = ~ 0;
+	obj->flag_stage1 = 0;
+	
+	ctl_set_motor_current_ctrl_idq_ref(&obj->mc, 0,0);
+	ctl_set_motor_current_ctrl_vdq_ff(&obj->mc, 0,0);
+}
+
+
 #endif // _FILE_ENCODER_H_
+
+#ifdef __cplusplus
+}
+#endif // __cplusplus
