@@ -25,8 +25,11 @@ extern "C"
         adc_gt raw;
 
         // resolution of ADC bits
+        // 16bit right aligned, 16
+        // 12bit right aligned, 12
+        // 12bit left aligned, 16
         fast_gt resolution;
-        // The result of ADC is IQn number
+        // The result of ADC is IQn number,IQ24->24
         fast_gt iqn;
 
         // The bias of the ADC data
@@ -52,10 +55,10 @@ extern "C"
 
 #if defined CTRL_GT_IS_FIXED
         // for fixed point number, transfer ADC data to _IQ24
-        ctrl_gt raw_data = adc_obj->raw << (GLOBAL_Q - adc_obj->iqn);
+        ctrl_gt raw_data = adc_obj->raw << (adc_obj->iqn - adc_obj->resolution);
 #elif defined CTRL_GT_IS_FLOAT
     // for float point number, transfer ADC data to p.u.
-    ctrl_gt raw_data = (ctrl_gt)adc_obj->raw / (1 << adc_obj->iqn);
+        ctrl_gt raw_data = (ctrl_gt)adc_obj->raw / (1 << adc_obj->resolution);
 #endif // CTRL_GT_IS_XXX
 
         // remove bias
@@ -120,10 +123,10 @@ extern "C"
         {
 #if defined CTRL_GT_IS_FIXED
             // transfer ADC data to _IQ24
-            raw_data = adc_obj->raw[i] << (GLOBAL_Q - adc_obj->iqn);
+            raw_data = adc_obj->raw[i] << (adc_obj->iqn - adc_obj->resolution);
 #elif defined CTRL_GT_IS_FLOAT
         // for float point number, transfer ADC data to p.u.
-        raw_data = (ctrl_gt)adc_obj->raw[i] / (1 << adc_obj->iqn);
+            raw_data = (ctrl_gt)adc_obj->raw[i] / (1 << adc_obj->resolution);
 #endif // CTRL_GT_IS_XXX
 
             // remove bias
@@ -222,7 +225,7 @@ extern "C"
 
 #if defined CTRL_GT_IS_FIXED
             // transfer ADC data to _IQ24
-            raw_data = adc_obj->raw[i] << (GLOBAL_Q - adc_obj->iqn);
+            raw_data = adc_obj->raw[i] << (adc_obj->iqn - adc_obj->resolution);
 #elif defined CTRL_GT_IS_FLOAT
         // for float point number, transfer ADC data to p.u.
         raw_data = (ctrl_gt)adc_obj->raw[i] / (1 << adc_obj->resolution);
