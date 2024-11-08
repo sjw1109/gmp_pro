@@ -1,4 +1,11 @@
 
+// #ifndef GLOBAL_Q
+//// Specify global Q value
+// #define GLOBAL_Q (24)
+// #endif // GLOBAL_Q
+
+// include iqmath library
+#include <third_party/iqmath/IQmathLib.h>
 
 #ifndef _FILE_IQMATH_MACROS_H_
 #define _FILE_IQMATH_MACROS_H_
@@ -12,12 +19,14 @@
 #define ctrl2float(x) (_IQtoF(x))
 #define int2ctrl(x)   (_IQ(x))
 #define ctrl2int(x)   (_IQint(x))
-#define ctrl_mod_1(x) (_IQfrac(A))
+#define ctrl_mod_1(x) (_IQfrac(x))
 
 // Calculation
+#define ctl_mul(A, B)        (_IQmpy(A, B))
 #define pwm_mul(A, B)        (_IQmpy(A, B))
 #define ctl_div(A, B)        (_IQdiv(A, B))
-#define ctl_sat(A, Pos, Neg) saturation_macro(A, Pos, Neg)
+#define ctl_sat(A, Pos, Neg) saturation_macro((A), (Neg), (Pos))
+#define pwm_sat(A, Pos, Neg) saturation_macro((A), (Neg), (Pos))
 
 // Extension Calculation
 #define ctl_div2(A) (_IQdiv2(A))
@@ -31,7 +40,7 @@
 #define ctl_sin(A)      (_IQsinPU(A))
 #define ctl_cos(A)      (_IQcosPU(A))
 #define ctl_tan(A)      (_IQdiv(_IQsinPU(A), _IQcosPU(A)))
-#define ctl_atan2(Y, X) (_IQatan2PU(Y, X))
+#define ctl_atan2(Y, X) (_IQatan2PU((Y), (X)))
 #define ctl_exp(A)      (_IQexp(A))
 #define ctl_ln(A)       (_IQlog(A))
 #define ctl_sqrt(A)     (_IQsqrt(A))

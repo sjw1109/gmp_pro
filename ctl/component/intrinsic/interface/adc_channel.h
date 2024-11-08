@@ -9,6 +9,8 @@
  *
  */
 
+#include <gmp_core.h>
+
 #ifndef _FILE_ADC_CHANNEL_H_
 #define _FILE_ADC_CHANNEL_H_
 

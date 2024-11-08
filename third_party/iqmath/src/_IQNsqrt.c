@@ -10,7 +10,7 @@
 
 #include "../support.h"
 #include "_IQNtables.h"
-#include "/third_party/iqmath/IQmathLib.h"
+#include "third_party/iqmath/IQmathLib.h"
 
 /*!
  * @brief Specifies inverse square root operation type.

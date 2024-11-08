@@ -2,7 +2,7 @@
 #define __SUPPORTH__
 
 #include "math.h"
-#include <core/gmp_core.h>
+#include <gmp_core.h>
 
 /* Common value defines. */
 #define q15_ln2          0x58b9

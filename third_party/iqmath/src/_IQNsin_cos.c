@@ -15,7 +15,9 @@
 /*!
  * @brief The value of PI
  */
+#ifndef PI
 #define PI (3.1415926536)
+#endif // PI
 
 /*!
  * @brief Used to specify sine operation

@@ -17,11 +17,9 @@
 
 // FIX controller configuration
 #if SPECIFY_CTRL_GT_TYPE == USING_FIXED_TI_IQ_LIBRARY
+
 // IQ MATH library
-
 #include <ctl/math_block/ctrl_gt/iqmath_macros.h>
-
-#define ctl_mod_1(A) ((A & ((1 << GLOBAL_Q) - 1)))
 
 #elif SPECIFY_CTRL_GT_TYPE == USING_FIXED_ARM_CMSIS_Q_LIBRARY
 
@@ -46,6 +44,77 @@
 #include <ctl/math_block/ctrl_gt/float_macros.h>
 
 #endif
+
+
+
+// ....................................................................//
+// basic type of Controller
+//
+
+#if (SPECIFY_CTRL_GT_TYPE == USING_FIXED_TI_IQ_LIBRARY)
+
+#ifndef GMP_PORT_CTRL_T
+#define GMP_PORT_CTRL_T              _iq
+#define GMP_PORT_CTRL_SIZE_PER_BITS  (32)
+#define GMP_PORT_CTRL_SIZE_PER_BYTES (4)
+#define USING_FIXED_LIBRARY
+#define GLOBAL_Q 24
+#endif // GMP_PORT_CTRL_T
+
+#elif (SPECIFY_CTRL_GT_TYPE == USING_FLOAT_FPU)
+
+#ifndef GMP_PORT_CTRL_T
+#define GMP_PORT_CTRL_T              float
+#define GMP_PORT_CTRL_SIZE_PER_BITS  (48)
+#define GMP_PORT_CTRL_SIZE_PER_BYTES (6)
+#endif // GMP_PORT_CTRL_T
+
+#elif (SPECIFY_CTRL_GT_TYPE == USING_DOUBLE_FPU)
+
+#ifndef GMP_PORT_CTRL_T
+#define GMP_PORT_CTRL_T              double
+#define GMP_PORT_CTRL_SIZE_PER_BITS  (64)
+#define GMP_PORT_CTRL_SIZE_PER_BYTES (8)
+#endif // GMP_PORT_CTRL_T
+
+#else
+
+#ifndef GMP_PORT_CTRL_T
+#define GMP_PORT_CTRL_T              float
+#define GMP_PORT_CTRL_SIZE_PER_BITS  (48)
+#define GMP_PORT_CTRL_SIZE_PER_BYTES (6)
+#endif // GMP_PORT_CTRL_T
+
+#endif // SPECIFY_CTRL_GT_TYPE
+
+typedef GMP_PORT_CTRL_T ctrl_gt;
+
+// #ifndef GMP_PORT_CTRL_T
+// #define GMP_PORT_CTRL_T                  _iq
+// #define GMP_PORT_CTRL_SIZE_PER_BITS      (32)
+// #define GMP_PORT_CTRL_SIZE_PER_BYTES     (4)
+// #define USING_FIXED_LIBRARY
+// #define GLOBAL_Q 24
+// #endif // GMP_PORT_CTRL_T
+//
+// typedef GMP_PORT_CTRL_T ctrl_gt;
+
+// ....................................................................//
+// basic type of Controller parameters
+//
+#ifndef GMP_PORT_PARAMETER_T
+#define GMP_PORT_PARAMETER_T              float
+#define GMP_PORT_PARAMETER_SIZE_PER_BITS  (48)
+#define GMP_PORT_PARAMETER_SIZE_PER_BYTES (6)
+#endif // GMP_PORT_PARAMETER_T
+
+typedef GMP_PORT_PARAMETER_T parameter_gt;
+
+
+
+
+
+
 
 //////////////////////////////////////////////////////////////////////////
 // Extension Types

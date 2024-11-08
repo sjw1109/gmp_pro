@@ -22,6 +22,9 @@
     <Filter Include="GMP/CTL">
       <UniqueIdentifier>{579a9459-6537-4464-89e6-bddb01e97c0e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="IQMATH">
+      <UniqueIdentifier>{b0afe93e-8e2d-41e4-9f60-360b6cc86897}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pc_simulation_visualstudio.cpp">
@@ -78,6 +81,60 @@
     <ClCompile Include="..\..\ctl\suite\motor_control\pmsm_servo\pmsm_servo.c">
       <Filter>GMP/CTL</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\third_party\iqmath\src\_atoIQN.c">
+      <Filter>IQMATH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\iqmath\src\_IQNasin_acos.c">
+      <Filter>IQMATH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\iqmath\src\_IQNatan2.c">
+      <Filter>IQMATH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\iqmath\src\_IQNdiv.c">
+      <Filter>IQMATH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\iqmath\src\_IQNexp.c">
+      <Filter>IQMATH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\iqmath\src\_IQNfrac.c">
+      <Filter>IQMATH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\iqmath\src\_IQNlog.c">
+      <Filter>IQMATH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\iqmath\src\_IQNmpy.c">
+      <Filter>IQMATH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\iqmath\src\_IQNmpyIQX.c">
+      <Filter>IQMATH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\iqmath\src\_IQNrepeat.c">
+      <Filter>IQMATH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\iqmath\src\_IQNrmpy.c">
+      <Filter>IQMATH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\iqmath\src\_IQNrsmpy.c">
+      <Filter>IQMATH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\iqmath\src\_IQNsin_cos.c">
+      <Filter>IQMATH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\iqmath\src\_IQNsqrt.c">
+      <Filter>IQMATH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\iqmath\src\_IQNtables.c">
+      <Filter>IQMATH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\iqmath\src\_IQNtoa.c">
+      <Filter>IQMATH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\iqmath\src\_IQNtoF.c">
+      <Filter>IQMATH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\iqmath\src\_IQNversion.c">
+      <Filter>IQMATH</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="user.config.h">
@@ -103,6 +160,15 @@
     </ClInclude>
     <ClInclude Include="pc_simulate_buffer.h">
       <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\iqmath\src\_IQNdiv.h">
+      <Filter>IQMATH</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\iqmath\src\_IQNmpy.h">
+      <Filter>IQMATH</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\iqmath\src\_IQNtables.h">
+      <Filter>IQMATH</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

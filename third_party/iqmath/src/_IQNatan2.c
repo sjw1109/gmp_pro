@@ -10,14 +10,16 @@
 
 #include "../support.h"
 #include "_IQNtables.h"
-#include "/third_party/iqmath/IQmathLib.h"
+#include "third_party/iqmath/IQmathLib.h"
 #include "_IQNmpy.h"
 #include "_IQNdiv.h"
 
 /*!
  * @brief The value of PI
  */
+#ifndef PI
 #define PI (3.1415926536)
+#endif // PI
 
 /*!
  * @brief Used to specify per-unit result
