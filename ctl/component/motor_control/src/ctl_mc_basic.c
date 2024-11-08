@@ -94,13 +94,21 @@ void ctl_init_spd_calculator(ctl_spd_calculator_t *sc)
 }
 
 void ctl_setup_spd_calculator(
+    // speed calculator objects
     ctl_spd_calculator_t *sc,
-    parameter_gt control_law_freq, // control law frequency, unit Hz
-    uint16_t speed_calc_div,       // division of control law frequency, unit ticks
-    parameter_gt rated_speed_rpm,  // Speed per unit base value, unit rpm
-    uint16_t pole_pairs,           // pole pairs, if you pass a elec angle,
+    // control law frequency, unit Hz
+    parameter_gt control_law_freq,
+    // division of control law frequency, unit ticks
+    uint16_t speed_calc_div,
+    // Speed per unit base value, unit rpm
+    parameter_gt rated_speed_rpm,
+    // pole pairs, if you pass a elec-angle,
+    uint16_t pole_pairs,
     // just set this value to 1.
-    parameter_gt speed_filter_fc) // generally, speed_filter_fc approx to speed_calc freq divided by 10
+    // generally, speed_filter_fc approx to speed_calc freq divided by 5
+    parameter_gt speed_filter_fc,
+    // link to a position encoder
+    ctl_rotation_encif_t *pos_encif)
 {
     uint16_t maximum_div = (uint16_t)rated_speed_rpm / 30;
     if (speed_calc_div < maximum_div)
@@ -108,9 +116,11 @@ void ctl_setup_spd_calculator(
         maximum_div = speed_calc_div;
     }
 
-    sc->scale_factor = float2ctrl(60.0 / 2 / PI * control_law_freq / maximum_div / pole_pairs / rated_speed_rpm);
+    sc->scale_factor = float2ctrl(60.0 * control_law_freq / maximum_div / pole_pairs / rated_speed_rpm);
     ctl_setup_lp_filter(&sc->spd_filter, control_law_freq / maximum_div, speed_filter_fc);
     ctl_setup_divider(&sc->div, maximum_div);
+
+    sc->pos_encif = pos_encif;
 }
 
 //////////////////////////////////////////////////////////////////////////

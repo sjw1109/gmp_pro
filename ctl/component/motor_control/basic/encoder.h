@@ -173,16 +173,26 @@ extern "C"
 
     // User must ensure fcalc > n_max_rpm / 30
     void ctl_setup_spd_calculator(
+        // speed calculator objects
         ctl_spd_calculator_t *sc,
-        parameter_gt control_law_freq, // control law frequency, unit Hz
-        uint16_t speed_calc_div,       // division of control law frequency, unit ticks
-        parameter_gt rated_speed_rpm,  // Speed per unit base value, unit rpm
-        uint16_t pole_pairs,           // pole pairs, if you pass a elec angle,
+        // control law frequency, unit Hz
+        parameter_gt control_law_freq,
+        // division of control law frequency, unit ticks
+        uint16_t speed_calc_div,
+        // Speed per unit base value, unit rpm
+        parameter_gt rated_speed_rpm,
+        // pole pairs, if you pass a elec-angle,
+        uint16_t pole_pairs,
         // just set this value to 1.
-        parameter_gt speed_filter_fc); // generally, speed_filter_fc approx to speed_calc freq divided by 5
+        // generally, speed_filter_fc approx to speed_calc freq divided by 5
+        parameter_gt speed_filter_fc, 
+        // link to a position encoder
+        ctl_rotation_encif_t *pos_encif
+    );
 
+    // Step Speed calculate function
     GMP_STATIC_INLINE
-    void ctl_step_spd_calc(ctl_spd_calculator_t *sc, ctrl_gt position_rad)
+    void ctl_step_spd_calc(ctl_spd_calculator_t *sc)
     {
         ctrl_gt CTRL_PI = GMP_CONST_PI;
         ctrl_gt CTRL_2PI = GMP_CONST_2_PI;
@@ -215,8 +225,8 @@ extern "C"
     }
 
     // This function is obsolete, use `ctl_get_encoder_speed` instead.
-    //GMP_STATIC_INLINE
-    //ctrl_gt ctl_get_spd_via_pos_encoder(ctl_spd_calculator_t *sc)
+    // GMP_STATIC_INLINE
+    // ctrl_gt ctl_get_spd_via_pos_encoder(ctl_spd_calculator_t *sc)
     //{
     //    return sc->speed;
     //}

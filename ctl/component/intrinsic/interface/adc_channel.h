@@ -225,7 +225,7 @@ extern "C"
             raw_data = adc_obj->raw[i] << (GLOBAL_Q - adc_obj->iqn);
 #elif defined CTRL_GT_IS_FLOAT
         // for float point number, transfer ADC data to p.u.
-        raw_data = (ctrl_gt)adc_obj->raw[i] / (1 << adc_obj->iqn);
+        raw_data = (ctrl_gt)adc_obj->raw[i] / (1 << adc_obj->resolution);
 #endif // CTRL_GT_IS_XXX
 
             // remove bias

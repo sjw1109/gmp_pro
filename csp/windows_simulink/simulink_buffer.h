@@ -14,7 +14,7 @@ extern "C"
     // Receive structure
     // + 1 current simulate time: double
     // + other controller parameters
-//#pragma pack(1)
+#pragma pack(1)
     typedef struct _tag_pc_simulink_rx_buffer_t
     {
         double time;
@@ -22,7 +22,7 @@ extern "C"
         GMP_PC_SIMULINK_RX_STRUCT rx_buf;
 
     } gmp_pc_simulink_rx_buffer_t;
-//#pragma pack()
+#pragma pack()
 
     extern gmp_pc_simulink_rx_buffer_t simulink_rx_buffer;
 
@@ -35,14 +35,14 @@ extern "C"
     // Send structure
     // + 1 Enable flag: double, 0 is disable, 1 is enable.
     // + other controller parameters
-//#pragma pack(1)
+#pragma pack(1)
     typedef struct _tag_pc_simulink_tx_buffer_t
     {
         uint32_t enable;
 
         GMP_PC_SIMULINK_TX_STRUCT tx_buf;
     } gmp_pc_simulink_tx_buffer_t;
-//#pragma pack()
+#pragma pack()
 
     extern gmp_pc_simulink_tx_buffer_t simulink_tx_buffer;
 

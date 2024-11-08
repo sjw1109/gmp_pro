@@ -153,7 +153,19 @@ void ctl_disable_motor_current_controller(ctl_motor_current_ctrl_t *obj)
 GMP_STATIC_INLINE
 void ctl_get_motor_current_controller_modulation(ctl_motor_current_ctrl_t *obj, ctl_vector3_t *tabc)
 {
-    tabc->dat[0] = obj->Tabc.dat[0];
-    tabc->dat[1] = obj->Tabc.dat[1];
-    tabc->dat[2] = obj->Tabc.dat[2];
+    tabc->dat[phase_A] = obj->Tabc.dat[phase_A];
+    tabc->dat[phase_B] = obj->Tabc.dat[phase_B];
+    tabc->dat[phase_C] = obj->Tabc.dat[phase_C];
+}
+
+GMP_STATIC_INLINE
+ctrl_gt ctl_get_motor_current_controller_id(ctl_motor_current_ctrl_t* obj)
+{
+    return obj->idq0.dat[phase_d];
+}
+
+GMP_STATIC_INLINE
+ctrl_gt ctl_get_motor_current_controller_iq(ctl_motor_current_ctrl_t* obj)
+{
+    return obj->idq0.dat[phase_q];
 }

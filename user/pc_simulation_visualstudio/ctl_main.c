@@ -47,11 +47,11 @@ void ctl_init()
 
     ctl_init_const_f_controller(&const_f);
 
-    ctl_setup_const_f_controller(&const_f, 1, CONTROLLER_FREQUENCY);
+    ctl_setup_const_f_controller(&const_f, 5, CONTROLLER_FREQUENCY);
 
-    ctl_setup_pos_encoder(&pos_enc, 2, (1 << 17) - 1);
+    ctl_setup_pos_encoder(&pos_enc, 1, (1 << 17) - 1);
 
-    ctl_setup_spd_calculator(&spd_enc, CONTROLLER_FREQUENCY, 5, 3000, 2, 20);
+    ctl_setup_spd_calculator(&spd_enc, CONTROLLER_FREQUENCY, 5, 3000, 1, 20, &pos_enc.encif);
 
     ctl_setup_pmsm_servo_framework(
         // link PMSM servo and encoder
@@ -69,7 +69,8 @@ void ctl_init()
         // ADC parameters
         // ADC resolution, iqn, current gain, current bias, voltage gain, voltage bias
         // NOTE iqn parameter is meaningless for float environment
-        16, 24, float2ctrl(0.1), float2ctrl(0.5), float2ctrl(0.1), float2ctrl(0.1),
+        // NOTE gain is negative value means ADC result is negative
+        16, 24, float2ctrl(-2.0), float2ctrl(0.5), float2ctrl(0.1), float2ctrl(0.1),
         // PWM parameters
         10000);
 
@@ -106,6 +107,9 @@ void ctl_fmif_input_stage_routine(ctl_object_nano_t *pctl_obj)
                                    // current input
                                    gmp_csp_sl_get_rx_buffer()->iabc[phase_U], gmp_csp_sl_get_rx_buffer()->iabc[phase_V],
                                    gmp_csp_sl_get_rx_buffer()->iabc[phase_W]);
+
+    ctl_step_pos_encoder(&pos_enc, gmp_csp_sl_get_rx_buffer()->encoder);
+    ctl_step_spd_calc(&spd_enc);
 }
 
 void ctl_fmif_core_stage_routine(ctl_object_nano_t *pctl_obj)
@@ -131,8 +135,13 @@ void ctl_fmif_output_stage_routine(ctl_object_nano_t *pctl_obj)
 
     gmp_csp_sl_get_tx_buffer()->monitor_port[0] = pmsm_servo.current_ctrl.Tabc.dat[0];
     gmp_csp_sl_get_tx_buffer()->monitor_port[1] = pmsm_servo.current_ctrl.Tabc.dat[1];
-    gmp_csp_sl_get_tx_buffer()->monitor_port[2] = pmsm_servo.current_ctrl.Tabc.dat[2];
-    gmp_csp_sl_get_tx_buffer()->monitor_port[3] = const_f.enc.elec_position;
+
+    // gmp_csp_sl_get_tx_buffer()->monitor_port[2] = gmp_csp_sl_get_rx_buffer()->encoder;
+    //gmp_csp_sl_get_tx_buffer()->monitor_port[2] = spd_enc.encif.speed;
+    //gmp_csp_sl_get_tx_buffer()->monitor_port[3] = pos_enc.encif.elec_position;
+
+    gmp_csp_sl_get_tx_buffer()->monitor_port[2] = ctl_get_motor_current_controller_id(&pmsm_servo.current_ctrl);
+    gmp_csp_sl_get_tx_buffer()->monitor_port[3] = ctl_get_motor_current_controller_iq(&pmsm_servo.current_ctrl);
 
     // gmp_csp_sl_get_tx_buffer()->monitor_port[0] = phasor.dat[0];
     // gmp_csp_sl_get_tx_buffer()->monitor_port[1] = phasor.dat[1];
