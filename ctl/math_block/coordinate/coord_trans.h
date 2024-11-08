@@ -163,7 +163,7 @@ void ctl_ct_svpwm_calc(ctl_vector3_t *ab0, GMP_CTL_OUTPUT_TAG ctl_vector3_t *Tab
     ctrl_gt Ubeta_tmp = ctl_mul(ab0->dat[phase_beta], GMP_CONST_SQRT_3_OVER_2);
 
     // tex: $$
-    //     U_a = U_\alpha, \\
+    //      U_a = U_\alpha, \\
     //U_b = -U_\alpha /2 + \sqrt{3}/2\cdot U_\beta, \\
     //U_c = -U_\alpha /2 - \sqrt{3}/2\cdot U_\beta,
     //$$
@@ -193,9 +193,9 @@ void ctl_ct_svpwm_calc(ctl_vector3_t *ab0, GMP_CTL_OUTPUT_TAG ctl_vector3_t *Tab
     Ucom = ctl_div2(Umax + Umin);
 
     // get SVPWM modulation result
-    Tabc->dat[phase_A] = Ua - Ucom;
-    Tabc->dat[phase_B] = Ub - Ucom;
-    Tabc->dat[phase_C] = Uc - Ucom;
+    Tabc->dat[phase_A] = Ua - Ucom + GMP_CONST_1_OVER_2;
+    Tabc->dat[phase_B] = Ub - Ucom + GMP_CONST_1_OVER_2;
+    Tabc->dat[phase_C] = Uc - Ucom + GMP_CONST_1_OVER_2;
 }
 
 // uab0(alpha-beta-0) to uabc SVPWM modulation result

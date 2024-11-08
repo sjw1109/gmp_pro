@@ -34,3 +34,10 @@ ec_gt ctl_setup_track_pid(ctl_track_pid_t *tp,
 
     return GMP_EC_OK;
 }
+
+void ctl_clear_track_pid(ctl_track_pid_t *tp)
+{
+    ctl_clear_pid(&tp->pid);
+    ctl_clear_divider(&tp->div);
+    ctl_clear_limit_slope(&tp->traj);
+}

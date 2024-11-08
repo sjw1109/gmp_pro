@@ -396,6 +396,15 @@ void ctl_fm_state_dispatch(ctl_object_nano_t *pctl_obj)
 // This function may check all the controller parameters.
 uint32_t ctl_fm_controller_inspection(ctl_object_nano_t *pctl_obj)
 {
+    if (ctl_nano_handle == NULL)
+    {
+        // fatal error default controller nano handle has not specified 
+        gmp_base_print("Error: User must specify the default controller nano header.\r\n");
+
+        while (1)
+            ;
+    }
+
     return GMP_EC_OK;
 }
 

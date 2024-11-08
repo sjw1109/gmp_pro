@@ -8,12 +8,12 @@
  * @copyright Copyright GMP(c) 2024
  *
  */
-#include <gmp_core.h>
 #include <ctl/ctl_core.h>
-
+#include <gmp_core.h>
 
 //////////////////////////////////////////////////////////////////////////
-// SVPWM module
+// SVPWM module, this module has been deleted
+// NEW SVPWM module please reference
 
 // #include <ctl/component/motor/svpwm.h>
 //
@@ -51,23 +51,29 @@
 
 #include <ctl/component/motor_control/basic/encoder.h>
 
-void ctl_init_pos_encoder(ctl_pos_encoder_t *pos_encoder)
+// Absolute rotation position encoder
+void ctl_init_pos_encoder(ctl_pos_encoder_t *enc)
 {
-    pos_encoder->position = 0;
-    pos_encoder->offset = 0;
-    pos_encoder->poles = 0;
+    // interface
+    enc->encif.position = 0;
+    enc->encif.elec_position = 0;
+
+    enc->offset = 0;
+    enc->pole_pairs = 1;
+    enc->position_base = 1;
 }
 
 void ctl_setup_pos_encoder(ctl_pos_encoder_t *enc, uint16_t poles, uint32_t position_base)
 {
-    enc->poles = poles;
+    enc->pole_pairs = poles;
     enc->position_base = position_base;
 }
 
+// Speed position encoder
 void ctl_init_spd_encoder(ctl_spd_encoder_t *spd_encoder)
 {
     spd_encoder->speed_base = 3000;
-    spd_encoder->speed = 0;
+    spd_encoder->encif.speed = 0;
     spd_encoder->speed_krpm = 0;
 }
 
@@ -78,10 +84,9 @@ void ctl_setup_spd_encoder(ctl_spd_encoder_t *enc, parameter_gt speed_base)
 
 void ctl_init_spd_calculator(ctl_spd_calculator_t *sc)
 {
-    sc->position = 0;
     sc->old_position = 0;
     sc->scale_factor = float2ctrl(1.0);
-    sc->speed = 0;
+    sc->encif.speed = 0;
     ctl_init_lp_filter(&sc->spd_filter);
     ctl_init_divider(&sc->div);
 }
@@ -297,9 +302,21 @@ ec_gt ctl_setup_motor_current_ctrl(ctl_motor_current_ctrl_t *obj,
 {
     ctl_setup_pid(&obj->idq_ctrl[phase_d], kp, ki, kd, out_min, out_max);
     ctl_setup_pid(&obj->idq_ctrl[phase_q], kp, ki, kd, out_min, out_max);
-    
+
     return GMP_EC_OK;
 }
+
+void ctl_clear_motor_current_ctrl(ctl_motor_current_ctrl_t *obj)
+{
+    // clear PID controller
+    ctl_clear_pid(&obj->idq_ctrl[0]);
+    ctl_clear_pid(&obj->idq_ctrl[1]);
+
+    // clear Feed forward controller
+    obj->vdq_ff.dat[0] = 0;
+    obj->vdq_ff.dat[1] = 0;
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 // pmsm smo

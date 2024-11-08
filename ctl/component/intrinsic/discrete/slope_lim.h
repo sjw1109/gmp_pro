@@ -40,8 +40,8 @@ extern "C"
         obj->out = obj->out + delta;
 
         //obj->out = ctrl_sat(obj->out + delta, obj->out_max, obj->out_min);
-			
-			return obj->out;
+            
+            return obj->out;
     }
 
     ec_gt ctl_init_slope_limit(ctl_slope_lim_t* obj);

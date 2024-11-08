@@ -41,6 +41,8 @@ ec_gt ctl_setup_track_pid(ctl_track_pid_t* tp,
     uint32_t division //division factor
 );
 
+void ctl_clear_track_pid(ctl_track_pid_t *tp);
+
 GMP_STATIC_INLINE
 ctrl_gt ctl_step_track_pid(ctl_track_pid_t* tp,
     ctrl_gt target, ctrl_gt now)

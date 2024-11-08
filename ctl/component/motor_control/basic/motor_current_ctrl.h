@@ -8,8 +8,6 @@
 
 #include <ctl/math_block/coordinate/coord_trans.h>
 
-
-
 // INPUT:
 //  + ctrl_gt: udc
 //  + vector3: iabc
@@ -60,13 +58,14 @@ typedef struct _tag_motor_current_ctrl
 
 ec_gt ctl_init_motor_current_ctrl(ctl_motor_current_ctrl_t *obj);
 
-
 ec_gt ctl_setup_motor_current_ctrl(ctl_motor_current_ctrl_t *obj,
                                    // PID parameter for motor current controller
                                    ctrl_gt kp, ctrl_gt ki, ctrl_gt kd,
                                    // PID saturation parameter for motor current controller
                                    ctrl_gt out_min, ctrl_gt out_max);
 
+// Clear all the residual informations
+void ctl_clear_motor_current_ctrl(ctl_motor_current_ctrl_t *obj);
 
 GMP_STATIC_INLINE
 void ctl_input_motor_current_ctrl(ctl_motor_current_ctrl_t *obj, adc_tri_channel_t *adc_channel)
@@ -82,16 +81,19 @@ void ctl_set_motor_current_ctrl_idq_ref(ctl_motor_current_ctrl_t *obj, ctrl_gt i
 }
 
 GMP_STATIC_INLINE
-void ctl_set_motor_current_ctrl_vdq_ff(ctl_motor_current_ctrl_t *obj, ctrl_gt vd_ref, ctrl_gt vq_ref)
+void ctl_set_motor_current_ctrl_vdq_ff(ctl_motor_current_ctrl_t *obj, ctrl_gt vd_ff, ctrl_gt vq_ff)
 {
-    obj->vdq_ff.dat[phase_d] = vd_ref;
-    obj->vdq_ff.dat[phase_q] = vq_ref;
+    obj->vdq_ff.dat[phase_d] = vd_ff;
+    obj->vdq_ff.dat[phase_q] = vq_ff;
 }
+
+// This is the debug variable
+//ctl_vector2_t phasor;
 
 GMP_STATIC_INLINE
 void ctl_step_motor_current_ctrl(ctl_motor_current_ctrl_t *obj, ctrl_gt theta)
 {
-    ctl_vector2_t phasor;
+     ctl_vector2_t phasor;
 
     // Save theta
     obj->theta = theta;
@@ -108,10 +110,17 @@ void ctl_step_motor_current_ctrl(ctl_motor_current_ctrl_t *obj, ctrl_gt theta)
     if (obj->flag_enable_current_controller)
     {
         // pi_iq: PI(iq - iq_ref) = vq_ctrl;
-        obj->vdq0.dat[phase_d] = ctl_step_pid_ser(&obj->idq_ctrl[phase_d], obj->idq_ref.dat[phase_d] - obj->idq0.dat[phase_d]);
+        obj->vdq0.dat[phase_d] =
+            ctl_step_pid_ser(&obj->idq_ctrl[phase_d], obj->idq_ref.dat[phase_d] - obj->idq0.dat[phase_d]);
 
         // pi_id: PI(id - id_ref) = vd_crrl;
-        obj->vdq0.dat[phase_q] = ctl_step_pid_ser(&obj->idq_ctrl[phase_q], obj->idq_ref.dat[phase_q] - obj->idq0.dat[phase_q]);
+        obj->vdq0.dat[phase_q] =
+            ctl_step_pid_ser(&obj->idq_ctrl[phase_q], obj->idq_ref.dat[phase_q] - obj->idq0.dat[phase_q]);
+    }
+    else
+    {
+        obj->vdq0.dat[phase_d] = 0;
+        obj->vdq0.dat[phase_q] = 0;
     }
 
     // vq = vq_ctrl + vq_ff;
@@ -127,5 +136,24 @@ void ctl_step_motor_current_ctrl(ctl_motor_current_ctrl_t *obj, ctrl_gt theta)
 
     // Tabc = svpwm(vab) / udc;
     ctl_ct_svpwm_calc(&obj->vab0, &obj->Tabc);
+}
 
+GMP_STATIC_INLINE
+void ctl_enable_motor_current_controller(ctl_motor_current_ctrl_t *obj)
+{
+    obj->flag_enable_current_controller = 1;
+}
+
+GMP_STATIC_INLINE
+void ctl_disable_motor_current_controller(ctl_motor_current_ctrl_t *obj)
+{
+    obj->flag_enable_current_controller = 0;
+}
+
+GMP_STATIC_INLINE
+void ctl_get_motor_current_controller_modulation(ctl_motor_current_ctrl_t *obj, ctl_vector3_t *tabc)
+{
+    tabc->dat[0] = obj->Tabc.dat[0];
+    tabc->dat[1] = obj->Tabc.dat[1];
+    tabc->dat[2] = obj->Tabc.dat[2];
 }

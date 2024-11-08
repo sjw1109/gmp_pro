@@ -101,5 +101,8 @@
     <ClInclude Include="..\..\csp\windows_simulink\simulink_buffer.h">
       <Filter>GMP/CSP</Filter>
     </ClInclude>
+    <ClInclude Include="pc_simulate_buffer.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
