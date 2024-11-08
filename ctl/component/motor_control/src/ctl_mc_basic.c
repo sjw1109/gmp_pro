@@ -8,8 +8,10 @@
  * @copyright Copyright GMP(c) 2024
  *
  */
-#include <ctl/ctl_core.h>
+
 #include <gmp_core.h>
+
+#include <ctl/ctl_core.h>
 
 //////////////////////////////////////////////////////////////////////////
 // SVPWM module, this module has been deleted
@@ -316,7 +318,6 @@ void ctl_clear_motor_current_ctrl(ctl_motor_current_ctrl_t *obj)
     obj->vdq_ff.dat[0] = 0;
     obj->vdq_ff.dat[1] = 0;
 }
-
 
 //////////////////////////////////////////////////////////////////////////
 // pmsm smo

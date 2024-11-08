@@ -8,8 +8,10 @@
  * @copyright Copyright GMP(c) 2024
  *
  */
-#include <ctl/ctl_core.h>
+
 #include <gmp_core.h>
+
+#include <ctl/ctl_core.h>
 
 //////////////////////////////////////////////////////////////////////////
 // ADC channel

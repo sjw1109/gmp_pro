@@ -132,6 +132,7 @@ void ctl_fmif_output_stage_routine(ctl_object_nano_t *pctl_obj)
     gmp_csp_sl_get_tx_buffer()->monitor_port[0] = pmsm_servo.current_ctrl.Tabc.dat[0];
     gmp_csp_sl_get_tx_buffer()->monitor_port[1] = pmsm_servo.current_ctrl.Tabc.dat[1];
     gmp_csp_sl_get_tx_buffer()->monitor_port[2] = pmsm_servo.current_ctrl.Tabc.dat[2];
+    gmp_csp_sl_get_tx_buffer()->monitor_port[3] = const_f.enc.elec_position;
 
     // gmp_csp_sl_get_tx_buffer()->monitor_port[0] = phasor.dat[0];
     // gmp_csp_sl_get_tx_buffer()->monitor_port[1] = phasor.dat[1];
