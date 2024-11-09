@@ -130,8 +130,6 @@ void ctl_init()
 // CTL loop routine
 void ctl_dispatch(void)
 {
-    
-
     // User Controller logic here.
     if (gmp_base_get_system_tick() > 2000)
     {
@@ -178,8 +176,6 @@ void ctl_fmif_core_stage_routine(ctl_object_nano_t *pctl_obj)
 
     // run pmsm servo framework ISR function
     ctl_step_pmsm_servo_framework(&pmsm_servo);
-
-    // modulation
 }
 
 //ctl_vector2_t phasor;

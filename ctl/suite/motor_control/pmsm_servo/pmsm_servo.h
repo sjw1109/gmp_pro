@@ -82,7 +82,7 @@ extern "C"
         adc_bias_calibrator_t calibrator;
         uint32_t calibrate_progress;
         // calibrator is running
-        //fast_gt flag_calibrate_running;
+        // fast_gt flag_calibrate_running;
 
     } pmsm_servo_fm_t;
 
@@ -126,40 +126,64 @@ extern "C"
     {
         if (ctl_fm_is_calibrate(&pmsm->base))
         {
-            if (pmsm->calibrate_progress == 0)
+            if (pmsm->calibrate_progress == 0 && (ctl_is_adc_calibration_cmpt(&pmsm->calibrator)))
             {
                 // init state
+                ctl_restart_adc_bias_calibrator(&pmsm->calibrator);
 
-                // restart calibrator
-                //pmsm->flag_calibrate_running = 1;
+                // pwm output enable
+                ctl_fmif_output_enable(&pmsm->base);
 
                 return GMP_EC_OK;
             }
             else if (pmsm->calibrate_progress <= 3)
             {
                 // calibrating current sensor
-                if (ctl_is_adc_calibration_cmpt(&pmsm->calibrator))
+                if (ctl_is_adc_calibration_cmpt(&pmsm->calibrator) && (ctl_is_adc_calibration_cmpt(&pmsm->calibrator)))
                 {
-                    // save result and restart the calibrate controller
-                    ctl_set_adc_tri_channel_bias(&pmsm->iabc_input, pmsm->calibrate_progress - 1,
-                                                 ctl_get_adc_bias_calibrator_result(&pmsm->calibrator) +
-                                                     ctl_get_tri_adc_bias(&pmsm->iabc_input, pmsm->calibrate_progress - 1));
+                    if (pmsm->iabc_input.gain < 0)
+                    {
+                        // save result and restart the calibrate controller
+                        ctl_set_adc_tri_channel_bias(
+                            &pmsm->iabc_input, pmsm->calibrate_progress - 1,
+                            ctl_get_tri_adc_bias(&pmsm->iabc_input, pmsm->calibrate_progress - 1) -
+                                ctl_get_adc_bias_calibrator_result(&pmsm->calibrator));
+                    }
+                    else // pmsm->iabc_input.gain > 0
+                    {
+                        // save result and restart the calibrate controller
+                        ctl_set_adc_tri_channel_bias(
+                            &pmsm->iabc_input, pmsm->calibrate_progress - 1,
+                            ctl_get_tri_adc_bias(&pmsm->iabc_input, pmsm->calibrate_progress - 1) +
+                                ctl_get_adc_bias_calibrator_result(&pmsm->calibrator));
+                    }
 
                     // restart calibrator
                     ctl_restart_adc_bias_calibrator(&pmsm->calibrator);
 
-                    // restart calibrator
-                    // pmsm->flag_calibrate_running = 1;
+                    // pwm output enable
+                    ctl_fmif_output_enable(&pmsm->base);
 
                     return GMP_EC_OK;
                 }
             }
             else if (pmsm->calibrate_progress == 4)
             {
-                if (ctl_is_adc_calibration_cmpt(&pmsm->calibrator))
+                if (ctl_is_adc_calibration_cmpt(&pmsm->calibrator) && (ctl_is_adc_calibration_cmpt(&pmsm->calibrator)))
                 {
                     // save result
-                    ctl_set_adc_channel_bias(&pmsm->udc_input, ctl_get_adc_bias_calibrator_result(&pmsm->calibrator));
+                    if (pmsm->udc_input.gain < 0)
+                    {
+                        ctl_set_adc_channel_bias(&pmsm->udc_input,
+                                                 ctl_get_adc_channel_bias(&pmsm->udc_input) -
+                                                     ctl_get_adc_bias_calibrator_result(&pmsm->calibrator));
+                    }
+                    else // gain > 0
+                    {
+                        ctl_set_adc_channel_bias(&pmsm->udc_input,
+                                                 ctl_get_adc_channel_bias(&pmsm->udc_input) +
+                                                     ctl_get_adc_bias_calibrator_result(&pmsm->calibrator));
+                    }
 
                     // change to next state
                     return 1;
@@ -194,7 +218,6 @@ extern "C"
 
         if (ctl_fm_is_online(&pmsm->base))
         {
-
             // speed controller
             if (pmsm->flag_enable_spd_ctrl)
             {
@@ -210,6 +233,10 @@ extern "C"
         }
         else if (ctl_fm_is_calibrate(&pmsm->base))
         {
+            pmsm->current_ctrl.Tabc.dat[phase_U] = float2ctrl(0.5);
+            pmsm->current_ctrl.Tabc.dat[phase_V] = float2ctrl(0.5);
+            pmsm->current_ctrl.Tabc.dat[phase_W] = float2ctrl(0.5);
+
             if (pmsm->calibrate_progress <= 2)
             {
                 // current calibrate routine
@@ -218,8 +245,10 @@ extern "C"
                                                  pmsm->current_ctrl.iabc.dat[pmsm->calibrate_progress]))
                 {
                     // calibrate is complete
-                    //pmsm->flag_calibrate_running = 0;
                     pmsm->calibrate_progress += 1;
+
+                    // pwm output disable
+                    ctl_fmif_output_disable(&pmsm->base);
                 }
             }
             else if (pmsm->calibrate_progress == 3)
@@ -228,8 +257,10 @@ extern "C"
                     ctl_step_adc_bias_calibrator(&pmsm->calibrator, pmsm->base.isr_tick, pmsm->current_ctrl.udc))
                 {
                     // calibrate is complete
-                    //pmsm->flag_calibrate_running = 0;
                     pmsm->calibrate_progress += 1;
+
+                    // pwm output disable
+                    ctl_fmif_output_disable(&pmsm->base);
                 }
             }
         }

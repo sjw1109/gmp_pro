@@ -78,8 +78,8 @@ ec_gt ctl_setup_pmsm_servo_framework(pmsm_servo_fm_t *pmsm,
     adc_bias_filter.fc = 20;
     adc_bias_filter.fs = (parameter_gt)pmsm->base.ctrl_freq;
     adc_bias_filter.filter_type = FILTER_IIR2_TYPE_LOWPASS;
-    adc_bias_filter.gain = float2ctrl(1.0);
-    adc_bias_filter.q = float2ctrl(0.707);
+    adc_bias_filter.gain = (1.0);
+    adc_bias_filter.q = (0.707);
 
     ctl_setup_adc_bias_calibrator(&pmsm->calibrator, &adc_bias_filter);
 

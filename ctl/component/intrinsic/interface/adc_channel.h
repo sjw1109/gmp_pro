@@ -35,6 +35,7 @@ extern "C"
         // The bias of the ADC data
         ctrl_gt bias;
         // The gain of the ADC data
+        // Negative gain is permitted 
         ctrl_gt gain;
 
         // OUTPUT the ADC data in ctrl_gt type
@@ -84,6 +85,13 @@ extern "C"
         adc->bias = bias;
     }
 
+    // get bias
+    GMP_STATIC_INLINE
+    ctrl_gt ctl_get_adc_channel_bias(adc_channel_t *adc)
+    {
+        return adc->bias;
+    }
+
     //////////////////////////////////////////////////
     // Dual channel ADC
 
@@ -103,6 +111,7 @@ extern "C"
         // The bias of the ADC data
         ctrl_gt bias[2];
         // The gain of the ADC data
+        // Negative gain is permitted 
         ctrl_gt gain[2];
 
         // OUTPUT the ADC data in ctrl_gt type
@@ -203,6 +212,7 @@ extern "C"
         // The bias of the ADC data
         ctrl_gt bias[3];
         // The gain of the ADC data
+        // Negative gain is permitted 
         ctrl_gt gain[3];
 
         // OUTPUT the ADC data in ctrl_gt type
