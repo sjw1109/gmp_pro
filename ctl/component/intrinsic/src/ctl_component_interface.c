@@ -151,6 +151,7 @@ void ctl_restart_adc_bias_calibrator(adc_bias_calibrator_t *obj)
 }
 
 // return value means if the calibration output is valid
+//GMP_STATIC_INLINE
 fast_gt ctl_step_adc_bias_calibrator(adc_bias_calibrator_t *obj, uint32_t main_isr_tick, ctrl_gt adc_value)
 {
     if (obj->start_period == 0)

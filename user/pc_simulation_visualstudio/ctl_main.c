@@ -90,7 +90,7 @@ void ctl_init()
 
 #if BUILD_LEVEL == 1
     // VF Control, voltage Open-loop
-    ctl_set_pmm_servo_pos_enc(&pmsm_servo, &const_f);
+    ctl_set_pmm_servo_pos_enc(&pmsm_servo, CTL_POSITION_IF(&const_f));
 
     ctl_vector2_t vdq_set = {float2ctrl(0.2), float2ctrl(0.2)};
     ctl_set_pmsm_servo_voltage_mode(&pmsm_servo);
@@ -98,7 +98,7 @@ void ctl_init()
 
 #elif BUILD_LEVEL == 2
     // Current open-loop
-    ctl_set_pmm_servo_pos_enc(&pmsm_servo, &const_f);
+    ctl_set_pmm_servo_pos_enc(&pmsm_servo, CTL_POSITION_IF(&const_f));
 
     ctl_vector2_t idq_set = {float2ctrl(0.0), float2ctrl(0.2)};
     ctl_set_pmsm_servo_current_mode(&pmsm_servo);
@@ -106,7 +106,7 @@ void ctl_init()
 
 #elif BUILD_LEVEL == 3
     // IF Control, current close-loop
-    ctl_set_pmm_servo_pos_enc(&pmsm_servo, &pos_enc);
+    ctl_set_pmm_servo_pos_enc(&pmsm_servo, CTL_POSITION_IF(&pos_enc));
 
     ctl_vector2_t idq_set = {float2ctrl(0.0), float2ctrl(0.2)};
     ctl_set_pmsm_servo_current_mode(&pmsm_servo);
@@ -114,7 +114,7 @@ void ctl_init()
 
 #elif BUILD_LEVEL == 4
     // speed control, speed close-loop
-    ctl_set_pmm_servo_pos_enc(&pmsm_servo, &pos_enc);
+    ctl_set_pmm_servo_pos_enc(&pmsm_servo, CTL_POSITION_IF(&pos_enc));
 
     ctl_set_pmsm_servo_spd_mode(&pmsm_servo);
     ctl_set_pmsm_servo_spd(&pmsm_servo, float2ctrl(0.5));
@@ -122,12 +122,15 @@ void ctl_init()
 #endif // BUILD_LEVEL
 
     // Debug mode online the controller
-    ctl_fm_force_online(&pmsm_servo.base);
+    //ctl_fm_force_online(&pmsm_servo.base);
+
+    ctl_fm_force_calibrate(&pmsm_servo.base);
 }
 
 // CTL loop routine
 void ctl_dispatch(void)
 {
+    
 
     // User Controller logic here.
     if (gmp_base_get_system_tick() > 2000)
@@ -141,7 +144,19 @@ void ctl_dispatch(void)
     }
 }
 
+
+
 #ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+
+fast_gt ctl_fmif_sm_calibrate_routine(ctl_object_nano_t* pctl_obj)
+{
+    return ctl_cb_pmsm_servo_frmework_current_calibrate(&pmsm_servo);
+}
+
+fast_gt ctl_fmif_sm_ready_routine(ctl_object_nano_t* pctl_obj)
+{
+    return 1;
+}
 
 void ctl_fmif_input_stage_routine(ctl_object_nano_t *pctl_obj)
 {
@@ -167,7 +182,7 @@ void ctl_fmif_core_stage_routine(ctl_object_nano_t *pctl_obj)
     // modulation
 }
 
-ctl_vector2_t phasor;
+//ctl_vector2_t phasor;
 
 void ctl_fmif_output_stage_routine(ctl_object_nano_t *pctl_obj)
 {

@@ -201,10 +201,38 @@ extern "C"
     //
     void ctl_fm_force_online(ctl_object_nano_t *ctl_obj);
 
+    void ctl_fm_force_calibrate(ctl_object_nano_t *ctl_obj);
+
     // default ctl nano object
     ec_gt ctl_setup_default_ctl_nano_obj(ctl_object_nano_t *ctl_obj);
 
+    // 1 means true
+    GMP_STATIC_INLINE
+    fast_gt ctl_fm_is_online(ctl_object_nano_t *ctl_obj)
+    {
+        return ctl_obj->state_machine == CTL_SM_ONLINE;
+    }
 
+    // 1 means true
+    GMP_STATIC_INLINE
+    fast_gt ctl_fm_is_calibrate(ctl_object_nano_t *ctl_obj)
+    {
+        return ctl_obj->state_machine == CTL_SM_CALIBRATE;
+    }
+
+    // 1 means true
+    GMP_STATIC_INLINE
+    fast_gt ctl_fm_is_runup(ctl_object_nano_t *ctl_obj)
+    {
+        return ctl_obj->state_machine == CTL_SM_RUNUP;
+    }
+
+    // change state
+    GMP_STATIC_INLINE
+    void ctl_fm_change_state(ctl_object_nano_t *ctl_obj, ctl_nano_state_machine sm)
+    {
+        ctl_obj->state_machine = sm;
+    }
 
 #ifdef __cplusplus
 }

@@ -88,12 +88,12 @@ void ctl_set_motor_current_ctrl_vdq_ff(ctl_motor_current_ctrl_t *obj, ctrl_gt vd
 }
 
 // This is the debug variable
-//ctl_vector2_t phasor;
+// ctl_vector2_t phasor;
 
 GMP_STATIC_INLINE
 void ctl_step_motor_current_ctrl(ctl_motor_current_ctrl_t *obj, ctrl_gt theta)
 {
-     ctl_vector2_t phasor;
+    ctl_vector2_t phasor;
 
     // Save theta
     obj->theta = theta;
@@ -159,13 +159,21 @@ void ctl_get_motor_current_controller_modulation(ctl_motor_current_ctrl_t *obj, 
 }
 
 GMP_STATIC_INLINE
-ctrl_gt ctl_get_motor_current_controller_id(ctl_motor_current_ctrl_t* obj)
+ctrl_gt ctl_get_motor_current_controller_id(ctl_motor_current_ctrl_t *obj)
 {
     return obj->idq0.dat[phase_d];
 }
 
 GMP_STATIC_INLINE
-ctrl_gt ctl_get_motor_current_controller_iq(ctl_motor_current_ctrl_t* obj)
+ctrl_gt ctl_get_motor_current_controller_iq(ctl_motor_current_ctrl_t *obj)
 {
     return obj->idq0.dat[phase_q];
+}
+
+GMP_STATIC_INLINE
+void ctl_set_motor_current_controller_zero_output(ctl_motor_current_ctrl_t *obj) 
+{
+    obj->Tabc.dat[0] = float2ctrl(0.5);
+    obj->Tabc.dat[1] = float2ctrl(0.5);
+    obj->Tabc.dat[2] = float2ctrl(0.5);
 }

@@ -58,7 +58,7 @@ extern "C"
         ctrl_gt raw_data = adc_obj->raw << (adc_obj->iqn - adc_obj->resolution);
 #elif defined CTRL_GT_IS_FLOAT
     // for float point number, transfer ADC data to p.u.
-        ctrl_gt raw_data = (ctrl_gt)adc_obj->raw / (1 << adc_obj->resolution);
+    ctrl_gt raw_data = (ctrl_gt)adc_obj->raw / (1 << adc_obj->resolution);
 #endif // CTRL_GT_IS_XXX
 
         // remove bias
@@ -75,6 +75,13 @@ extern "C"
     ctrl_gt ctl_get_adc_data(adc_channel_t *adc)
     {
         return adc->value;
+    }
+
+    // save bias
+    GMP_STATIC_INLINE
+    void ctl_set_adc_channel_bias(adc_channel_t *adc, ctrl_gt bias)
+    {
+        adc->bias = bias;
     }
 
     //////////////////////////////////////////////////
@@ -126,7 +133,7 @@ extern "C"
             raw_data = adc_obj->raw[i] << (adc_obj->iqn - adc_obj->resolution);
 #elif defined CTRL_GT_IS_FLOAT
         // for float point number, transfer ADC data to p.u.
-            raw_data = (ctrl_gt)adc_obj->raw[i] / (1 << adc_obj->resolution);
+        raw_data = (ctrl_gt)adc_obj->raw[i] / (1 << adc_obj->resolution);
 #endif // CTRL_GT_IS_XXX
 
             // remove bias
@@ -248,6 +255,18 @@ extern "C"
         vec->dat[2] = adc->value[2];
     }
 
+    GMP_STATIC_INLINE
+    void ctl_set_adc_tri_channel_bias(adc_tri_channel_t *adc, fast_gt index, ctrl_gt bias)
+    {
+        adc->bias[index] = bias;
+    }
+
+    GMP_STATIC_INLINE
+    ctrl_gt ctl_get_tri_adc_bias(adc_tri_channel_t *adc, fast_gt index)
+    {
+        return adc->bias[index];
+    }
+
     //////////////////////////////////////////////////////////////////////////
     // ADC bias calibrator
 
@@ -296,6 +315,13 @@ extern "C"
     ctrl_gt ctl_get_adc_bias_calibrator_result(adc_bias_calibrator_t *obj)
     {
         return obj->bias_output;
+    }
+
+    // judge if calibration process is complete
+    GMP_STATIC_INLINE
+    fast_gt ctl_is_adc_calibration_cmpt(adc_bias_calibrator_t *obj)
+    {
+        return obj->flag_output_valid;
     }
 
 #ifdef __cplusplus

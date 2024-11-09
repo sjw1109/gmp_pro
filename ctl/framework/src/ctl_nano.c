@@ -455,6 +455,11 @@ void ctl_fm_force_online(ctl_object_nano_t *ctl_obj)
     ctl_obj->state_machine = CTL_SM_ONLINE;
 }
 
+void ctl_fm_force_calibrate(ctl_object_nano_t* ctl_obj)
+{
+    ctl_obj->state_machine = CTL_SM_CALIBRATE;
+}
+
 // controller nano object handle entity
 ctl_object_nano_t *ctl_nano_handle = NULL;
 

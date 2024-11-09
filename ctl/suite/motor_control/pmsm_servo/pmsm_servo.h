@@ -81,6 +81,8 @@ extern "C"
         // ADC Calibrate Objects
         adc_bias_calibrator_t calibrator;
         uint32_t calibrate_progress;
+        // calibrator is running
+        //fast_gt flag_calibrate_running;
 
     } pmsm_servo_fm_t;
 
@@ -118,6 +120,62 @@ extern "C"
 
     void ctl_clear_pmsm_servo_framework(pmsm_servo_fm_t *pmsm);
 
+    // This function should be called in CLIBRATE state
+    GMP_STATIC_INLINE
+    ec_gt ctl_cb_pmsm_servo_frmework_current_calibrate(pmsm_servo_fm_t *pmsm)
+    {
+        if (ctl_fm_is_calibrate(&pmsm->base))
+        {
+            if (pmsm->calibrate_progress == 0)
+            {
+                // init state
+
+                // restart calibrator
+                //pmsm->flag_calibrate_running = 1;
+
+                return GMP_EC_OK;
+            }
+            else if (pmsm->calibrate_progress <= 3)
+            {
+                // calibrating current sensor
+                if (ctl_is_adc_calibration_cmpt(&pmsm->calibrator))
+                {
+                    // save result and restart the calibrate controller
+                    ctl_set_adc_tri_channel_bias(&pmsm->iabc_input, pmsm->calibrate_progress - 1,
+                                                 ctl_get_adc_bias_calibrator_result(&pmsm->calibrator) +
+                                                     ctl_get_tri_adc_bias(&pmsm->iabc_input, pmsm->calibrate_progress - 1));
+
+                    // restart calibrator
+                    ctl_restart_adc_bias_calibrator(&pmsm->calibrator);
+
+                    // restart calibrator
+                    // pmsm->flag_calibrate_running = 1;
+
+                    return GMP_EC_OK;
+                }
+            }
+            else if (pmsm->calibrate_progress == 4)
+            {
+                if (ctl_is_adc_calibration_cmpt(&pmsm->calibrator))
+                {
+                    // save result
+                    ctl_set_adc_channel_bias(&pmsm->udc_input, ctl_get_adc_bias_calibrator_result(&pmsm->calibrator));
+
+                    // change to next state
+                    return 1;
+                }
+            }
+            else
+            {
+                // complete or escape from this calibrate stage
+                // change to next state
+                return 1;
+            }
+        }
+
+        return GMP_EC_OK;
+    }
+
     GMP_STATIC_INLINE
     void ctl_input_pmsm_servo_framework(pmsm_servo_fm_t *pmsm, adc_gt raw1, adc_gt raw2, adc_gt raw3)
     {
@@ -134,18 +192,54 @@ extern "C"
         // position feedback
         ctrl_gt position_fbk = ctl_get_encoder_elec_postion(pmsm->pos_enc);
 
-        // speed controller
-        if (pmsm->flag_enable_spd_ctrl)
+        if (ctl_fm_is_online(&pmsm->base))
         {
-            ctl_step_track_pid(&pmsm->spd_ctrl, pmsm->spd_target, speed_fbk);
+
+            // speed controller
+            if (pmsm->flag_enable_spd_ctrl)
+            {
+                ctl_step_track_pid(&pmsm->spd_ctrl, pmsm->spd_target, speed_fbk);
+            }
+
+            // set idq ref
+            ctl_set_motor_current_ctrl_idq_ref(&pmsm->current_ctrl, pmsm->idq_ff.dat[phase_d],
+                                               pmsm->idq_ff.dat[phase_q] + ctl_get_track_pid_output(&pmsm->spd_ctrl));
+
+            // current controller & current transform
+            ctl_step_motor_current_ctrl(&pmsm->current_ctrl, position_fbk);
         }
-
-        // set idq ref
-        ctl_set_motor_current_ctrl_idq_ref(&pmsm->current_ctrl, pmsm->idq_ff.dat[phase_d],
-                                           pmsm->idq_ff.dat[phase_q] + ctl_get_track_pid_output(&pmsm->spd_ctrl));
-
-        // current controller & current transform
-        ctl_step_motor_current_ctrl(&pmsm->current_ctrl, position_fbk);
+        else if (ctl_fm_is_calibrate(&pmsm->base))
+        {
+            if (pmsm->calibrate_progress <= 2)
+            {
+                // current calibrate routine
+                if ((!ctl_is_adc_calibration_cmpt(&pmsm->calibrator)) &&
+                    ctl_step_adc_bias_calibrator(&pmsm->calibrator, pmsm->base.isr_tick,
+                                                 pmsm->current_ctrl.iabc.dat[pmsm->calibrate_progress]))
+                {
+                    // calibrate is complete
+                    //pmsm->flag_calibrate_running = 0;
+                    pmsm->calibrate_progress += 1;
+                }
+            }
+            else if (pmsm->calibrate_progress == 3)
+            {
+                if ((!ctl_is_adc_calibration_cmpt(&pmsm->calibrator)) &&
+                    ctl_step_adc_bias_calibrator(&pmsm->calibrator, pmsm->base.isr_tick, pmsm->current_ctrl.udc))
+                {
+                    // calibrate is complete
+                    //pmsm->flag_calibrate_running = 0;
+                    pmsm->calibrate_progress += 1;
+                }
+            }
+        }
+        else if (ctl_fm_is_runup(&pmsm->base))
+        {
+        }
+        else
+        {
+            ctl_set_motor_current_controller_zero_output(&pmsm->current_ctrl);
+        }
 
         // modulation
         ctl_calc_pwm_tri_channel(&pmsm->uabc, &pmsm->current_ctrl.Tabc);

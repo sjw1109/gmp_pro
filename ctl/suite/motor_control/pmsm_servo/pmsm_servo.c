@@ -15,6 +15,7 @@ ec_gt ctl_init_pmsm_servo_framework(pmsm_servo_fm_t *pmsm)
 
     ctl_init_adc_bias_calibrator(&pmsm->calibrator);
     pmsm->calibrate_progress = 0;
+    //pmsm->flag_calibrate_running = 0;
 
     // enable speed controller
     pmsm->flag_enable_spd_ctrl = 1;
