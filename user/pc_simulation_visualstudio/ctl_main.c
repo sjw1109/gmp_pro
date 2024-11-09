@@ -23,7 +23,11 @@
 // User may set (get handle) TX content via `gmp_csp_sl_get_tx_buffer`
 // User may get (get handle) RX content via `gmp_csp_sl_get_rx_buffer`
 
-#define BUILD_LEVEL (3)
+// BUILD_LEVEL 1: Voltage Open loop
+// BUILD_LEVEL 2: Current Open loop
+// BUILD_LEVEL 3: Current Open loop with actual position
+// BUILD_LEVEL 4: Speed Close loop
+#define BUILD_LEVEL (4)
 
 // position encoder
 ctl_pos_encoder_t pos_enc;
@@ -42,24 +46,26 @@ ctl_const_f_controller const_f;
 // CTL initialize routine
 void ctl_init()
 {
+    // position encoder & speed encoder
     ctl_init_pos_encoder(&pos_enc);
     ctl_init_spd_calculator(&spd_enc);
 
+    // PMSM servo controller framework based on Control Nano
     ctl_init_pmsm_servo_framework(&pmsm_servo);
 
+    // constant frequency virtual encoder
     ctl_init_const_f_controller(&const_f);
-
     ctl_setup_const_f_controller(&const_f, 5, CONTROLLER_FREQUENCY);
 
+    // setup position encoder & speed encoder
     ctl_setup_pos_encoder(&pos_enc, 1, (1 << 17) - 1);
-
     ctl_setup_spd_calculator(&spd_enc, CONTROLLER_FREQUENCY, 5, 3000, 1, 20, &pos_enc.encif);
 
+    // setup PMSM servo controller framework
     ctl_setup_pmsm_servo_framework(
         // link PMSM servo and encoder
         // PMSM servo object, position encoder, speed encoder, control law frequency
- //       &pmsm_servo, CTL_POSITION_IF(&const_f), CTL_SPEED_IF(&spd_enc), CONTROLLER_FREQUENCY,
-        &pmsm_servo, CTL_POSITION_IF(&pos_enc), CTL_SPEED_IF(&spd_enc), CONTROLLER_FREQUENCY,
+        &pmsm_servo, CTL_POSITION_IF(&const_f), CTL_SPEED_IF(&spd_enc), CONTROLLER_FREQUENCY,
         // current controller PID parameter
         // P, I, D, sat_min, sat_max
         float2ctrl(0.8), float2ctrl(0.01), 0, float2ctrl(-0.5), float2ctrl(0.5),
@@ -79,32 +85,44 @@ void ctl_init()
 
     gmp_base_print("PMSM SERVO struct has been inited, size :%d\r\n", sizeof(pmsm_servo_fm_t));
 
+    // Specify ctl nanao object
     ctl_setup_default_ctl_nano_obj(&pmsm_servo.base);
 
-    ctl_fm_force_online(&pmsm_servo.base);
-
 #if BUILD_LEVEL == 1
+    // VF Control, voltage Open-loop
+    ctl_set_pmm_servo_pos_enc(&pmsm_servo, &const_f);
 
     ctl_vector2_t vdq_set = {float2ctrl(0.2), float2ctrl(0.2)};
     ctl_set_pmsm_servo_voltage_mode(&pmsm_servo);
     ctl_set_pmsm_servo_ff_voltage(&pmsm_servo, &vdq_set);
 
 #elif BUILD_LEVEL == 2
+    // Current open-loop
+    ctl_set_pmm_servo_pos_enc(&pmsm_servo, &const_f);
 
     ctl_vector2_t idq_set = {float2ctrl(0.0), float2ctrl(0.2)};
     ctl_set_pmsm_servo_current_mode(&pmsm_servo);
     ctl_set_pmsm_servo_ff_current(&pmsm_servo, &idq_set);
 
 #elif BUILD_LEVEL == 3
+    // IF Control, current close-loop
+    ctl_set_pmm_servo_pos_enc(&pmsm_servo, &pos_enc);
+
+    ctl_vector2_t idq_set = {float2ctrl(0.0), float2ctrl(0.2)};
+    ctl_set_pmsm_servo_current_mode(&pmsm_servo);
+    ctl_set_pmsm_servo_ff_current(&pmsm_servo, &idq_set);
+
+#elif BUILD_LEVEL == 4
+    // speed control, speed close-loop
+    ctl_set_pmm_servo_pos_enc(&pmsm_servo, &pos_enc);
+
     ctl_set_pmsm_servo_spd_mode(&pmsm_servo);
     ctl_set_pmsm_servo_spd(&pmsm_servo, float2ctrl(0.5));
 
 #endif // BUILD_LEVEL
 
-    // ctl_fm_init_nano_header(&ctl_obj);
-    // ctl_fm_setup_nano_header(&ctl_obj, (uint32_t)10e3);
-
-    // ctl_fm_force_online(&ctl_obj);
+    // Debug mode online the controller
+    ctl_fm_force_online(&pmsm_servo.base);
 }
 
 // CTL loop routine
@@ -112,25 +130,38 @@ void ctl_dispatch(void)
 {
 
     // User Controller logic here.
+    if (gmp_base_get_system_tick() > 2000)
+    {
+        ctl_set_pmsm_servo_spd(&pmsm_servo, float2ctrl(-0.5));
+    }
+
+    else if (gmp_base_get_system_tick() > 1000)
+    {
+        ctl_set_pmsm_servo_spd(&pmsm_servo, float2ctrl(0.1));
+    }
 }
 
 #ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
 void ctl_fmif_input_stage_routine(ctl_object_nano_t *pctl_obj)
 {
+    // current sensor
     ctl_input_pmsm_servo_framework(&pmsm_servo,
                                    // current input
                                    gmp_csp_sl_get_rx_buffer()->iabc[phase_U], gmp_csp_sl_get_rx_buffer()->iabc[phase_V],
                                    gmp_csp_sl_get_rx_buffer()->iabc[phase_W]);
 
+    // position encoder
     ctl_step_pos_encoder(&pos_enc, gmp_csp_sl_get_rx_buffer()->encoder);
     ctl_step_spd_calc(&spd_enc);
 }
 
 void ctl_fmif_core_stage_routine(ctl_object_nano_t *pctl_obj)
 {
+    // constant frequency generator
     ctl_step_const_f_controller(&const_f);
 
+    // run pmsm servo framework ISR function
     ctl_step_pmsm_servo_framework(&pmsm_servo);
 
     // modulation
@@ -140,9 +171,7 @@ ctl_vector2_t phasor;
 
 void ctl_fmif_output_stage_routine(ctl_object_nano_t *pctl_obj)
 {
-    // gmp_csp_sl_get_tx_buffer()->output1 = gmp_csp_sl_get_rx_buffer()->input1;
-
-    simulink_tx_buffer.enable = 1;
+    //    ctl_fmif_output_enable(pctl_obj);
 
     gmp_csp_sl_get_tx_buffer()->tabc[phase_U] = ctl_get_pmsm_servo_modulation(&pmsm_servo, phase_U);
     gmp_csp_sl_get_tx_buffer()->tabc[phase_V] = ctl_get_pmsm_servo_modulation(&pmsm_servo, phase_V);

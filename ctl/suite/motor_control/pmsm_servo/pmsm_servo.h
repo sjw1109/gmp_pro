@@ -201,10 +201,31 @@ extern "C"
 
     // Set speed target
     GMP_STATIC_INLINE
-        void ctl_set_pmsm_servo_spd(pmsm_servo_fm_t* pmsm, ctrl_gt spd)
+    void ctl_set_pmsm_servo_spd(pmsm_servo_fm_t *pmsm, ctrl_gt spd)
     {
 
-            pmsm->spd_target = spd;
+        pmsm->spd_target = spd;
+    }
+
+    // Get motor mechanical position
+    GMP_STATIC_INLINE
+    ctrl_gt ctl_get_pmsm_servo_rotor_pos(pmsm_servo_fm_t *pmsm)
+    {
+        return pmsm->pos_enc->position;
+    }
+
+    // get motor speed
+    GMP_STATIC_INLINE
+    ctrl_gt ctl_get_pmsm_servo_speed(pmsm_servo_fm_t *pmsm)
+    {
+        return pmsm->spd_enc->speed;
+    }
+
+    // Set position signal source interface for PMSM servo object
+    GMP_STATIC_INLINE
+    void ctl_set_pmm_servo_pos_enc(pmsm_servo_fm_t *pmsm, ctl_rotation_encif_t *enc)
+    {
+        pmsm->pos_enc = enc;
     }
 
 #ifdef __cplusplus
