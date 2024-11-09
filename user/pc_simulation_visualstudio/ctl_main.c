@@ -23,6 +23,8 @@
 // User may set (get handle) TX content via `gmp_csp_sl_get_tx_buffer`
 // User may get (get handle) RX content via `gmp_csp_sl_get_rx_buffer`
 
+#define BUILD_LEVEL (3)
+
 // position encoder
 ctl_pos_encoder_t pos_enc;
 
@@ -56,13 +58,14 @@ void ctl_init()
     ctl_setup_pmsm_servo_framework(
         // link PMSM servo and encoder
         // PMSM servo object, position encoder, speed encoder, control law frequency
-        &pmsm_servo, CTL_POSITION_IF(&const_f), CTL_SPEED_IF(&spd_enc), CONTROLLER_FREQUENCY,
+ //       &pmsm_servo, CTL_POSITION_IF(&const_f), CTL_SPEED_IF(&spd_enc), CONTROLLER_FREQUENCY,
+        &pmsm_servo, CTL_POSITION_IF(&pos_enc), CTL_SPEED_IF(&spd_enc), CONTROLLER_FREQUENCY,
         // current controller PID parameter
         // P, I, D, sat_min, sat_max
         float2ctrl(0.8), float2ctrl(0.01), 0, float2ctrl(-0.5), float2ctrl(0.5),
         // speed controller PID parameter
         // P, I, D, sat_min, sat_max
-        float2ctrl(2.0), float2ctrl(0.01), 0, float2ctrl(-0.5), float2ctrl(0.5),
+        float2ctrl(1.5), float2ctrl(0.001), 0, float2ctrl(-0.5), float2ctrl(0.5),
         // acceleration
         // negative acceleration, positive acceleration, speed controller division
         float2ctrl(-0.05), float2ctrl(0.05), 5,
@@ -78,13 +81,25 @@ void ctl_init()
 
     ctl_setup_default_ctl_nano_obj(&pmsm_servo.base);
 
-    ctl_set_pmsm_servo_voltage_mode(&pmsm_servo);
-
     ctl_fm_force_online(&pmsm_servo.base);
 
-    ctl_vector2_t vdq_set = {float2ctrl(0.2), float2ctrl(0.2)};
+#if BUILD_LEVEL == 1
 
+    ctl_vector2_t vdq_set = {float2ctrl(0.2), float2ctrl(0.2)};
+    ctl_set_pmsm_servo_voltage_mode(&pmsm_servo);
     ctl_set_pmsm_servo_ff_voltage(&pmsm_servo, &vdq_set);
+
+#elif BUILD_LEVEL == 2
+
+    ctl_vector2_t idq_set = {float2ctrl(0.0), float2ctrl(0.2)};
+    ctl_set_pmsm_servo_current_mode(&pmsm_servo);
+    ctl_set_pmsm_servo_ff_current(&pmsm_servo, &idq_set);
+
+#elif BUILD_LEVEL == 3
+    ctl_set_pmsm_servo_spd_mode(&pmsm_servo);
+    ctl_set_pmsm_servo_spd(&pmsm_servo, float2ctrl(0.5));
+
+#endif // BUILD_LEVEL
 
     // ctl_fm_init_nano_header(&ctl_obj);
     // ctl_fm_setup_nano_header(&ctl_obj, (uint32_t)10e3);
@@ -133,8 +148,8 @@ void ctl_fmif_output_stage_routine(ctl_object_nano_t *pctl_obj)
     gmp_csp_sl_get_tx_buffer()->tabc[phase_V] = ctl_get_pmsm_servo_modulation(&pmsm_servo, phase_V);
     gmp_csp_sl_get_tx_buffer()->tabc[phase_W] = ctl_get_pmsm_servo_modulation(&pmsm_servo, phase_W);
 
-//     gmp_csp_sl_get_tx_buffer()->monitor_port[0] = pmsm_servo.current_ctrl.Tabc.dat[0];
-//     gmp_csp_sl_get_tx_buffer()->monitor_port[1] = pmsm_servo.current_ctrl.Tabc.dat[1];
+    //     gmp_csp_sl_get_tx_buffer()->monitor_port[0] = pmsm_servo.current_ctrl.Tabc.dat[0];
+    //     gmp_csp_sl_get_tx_buffer()->monitor_port[1] = pmsm_servo.current_ctrl.Tabc.dat[1];
 
     // gmp_csp_sl_get_tx_buffer()->monitor_port[2] = gmp_csp_sl_get_rx_buffer()->encoder;
     gmp_csp_sl_get_tx_buffer()->monitor_port[0] = spd_enc.encif.speed;

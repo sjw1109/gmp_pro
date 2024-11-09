@@ -22,6 +22,10 @@ ec_gt ctl_init_pmsm_servo_framework(pmsm_servo_fm_t *pmsm)
     // enable current controller
     ctl_enable_motor_current_controller(&pmsm->current_ctrl);
 
+    // set current feed forward
+    pmsm->idq_ff.dat[0] = 0;
+    pmsm->idq_ff.dat[1] = 0;
+
     return GMP_EC_OK;
 }
 

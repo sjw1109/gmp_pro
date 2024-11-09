@@ -62,6 +62,7 @@ extern "C"
         fast_gt flag_enable_spd_ctrl;
         ctrl_gt spd_target;
         ctl_track_pid_t spd_ctrl;
+        ctl_vector2_t idq_ff;
 
         // ADC input
         adc_tri_channel_t iabc_input;
@@ -139,6 +140,10 @@ extern "C"
             ctl_step_track_pid(&pmsm->spd_ctrl, pmsm->spd_target, speed_fbk);
         }
 
+        // set idq ref
+        ctl_set_motor_current_ctrl_idq_ref(&pmsm->current_ctrl, pmsm->idq_ff.dat[phase_d],
+                                           pmsm->idq_ff.dat[phase_q] + ctl_get_track_pid_output(&pmsm->spd_ctrl));
+
         // current controller & current transform
         ctl_step_motor_current_ctrl(&pmsm->current_ctrl, position_fbk);
 
@@ -149,7 +154,7 @@ extern "C"
     // phase : Phase_U. Phase_V, Phase_W
     // This function should be called in output stage
     GMP_STATIC_INLINE
-    pwm_gt ctl_get_pmsm_servo_modulation(pmsm_servo_fm_t* pmsm, uint32_t phase)
+    pwm_gt ctl_get_pmsm_servo_modulation(pmsm_servo_fm_t *pmsm, uint32_t phase)
     {
         return pmsm->uabc.value[phase];
     }
@@ -184,6 +189,22 @@ extern "C"
     {
         pmsm->current_ctrl.vdq_ff.dat[0] = vdq->dat[0];
         pmsm->current_ctrl.vdq_ff.dat[1] = vdq->dat[1];
+    }
+
+    // set current target
+    GMP_STATIC_INLINE
+    void ctl_set_pmsm_servo_ff_current(pmsm_servo_fm_t *pmsm, ctl_vector2_t *idq)
+    {
+        pmsm->idq_ff.dat[phase_d] = idq->dat[phase_d];
+        pmsm->idq_ff.dat[phase_q] = idq->dat[phase_q];
+    }
+
+    // Set speed target
+    GMP_STATIC_INLINE
+        void ctl_set_pmsm_servo_spd(pmsm_servo_fm_t* pmsm, ctrl_gt spd)
+    {
+
+            pmsm->spd_target = spd;
     }
 
 #ifdef __cplusplus

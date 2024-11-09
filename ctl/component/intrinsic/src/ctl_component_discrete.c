@@ -265,6 +265,8 @@ ec_gt ctl_init_slope_limit(ctl_slope_lim_t *obj)
     obj->slope_min = float2ctrl(-1.0f);
     obj->slope_max = float2ctrl(1.0f);
 
+    obj->out = float2ctrl(0);
+
     return GMP_EC_OK;
 }
 
