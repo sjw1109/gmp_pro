@@ -17,7 +17,7 @@
 #include <stdio.h>
 
 // Core 
-#include <core/gmp_core.hpp>
+#include <gmp_core.hpp>
 #include <core/util/ds/data_ring_buffer.h>
 
 // extensions

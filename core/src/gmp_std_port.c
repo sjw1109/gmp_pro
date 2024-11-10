@@ -283,7 +283,7 @@ void gmp_defualt_msvc_ctl_dispatch(void)
 // User should implement all the initialization code in this function.
 //
 GMP_WEAK_FUNC_PREFIX
-void init(void) GMP_WEAK_FUNC_SUFFIX
+void init(void) //GMP_WEAK_FUNC_SUFFIX
 {
     // not implement
 }

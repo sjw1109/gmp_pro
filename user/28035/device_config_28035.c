@@ -1,4 +1,4 @@
-#include <core/gmp_core.h>
+#include <gmp_core.h>
 
 // Change this function to config peripherals
 void ConfigPeripheralClock(void)

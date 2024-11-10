@@ -44,9 +44,9 @@
 // Step III library support macro
 
 // + weak function Modifier
-//#define GMP_WEAK_FUNC_PREFIX __attribute__((weak))
-#define GMP_WEAK_FUNC_PREFIX _Pragma("weak")
-#define GMP_WEAK_FUNC_SUFFIX
+#define GMP_WEAK_FUNC_PREFIX __attribute__((weak))
+#define GMP_WEAK_FUNC_PREFIX //_Pragma("weak")
+#define GMP_WEAK_FUNC_SUFFIX //__attribute__((weak))
 
 // + disable optimization
 #define GMP_NO_OPT_PREFIX _Pragma("FUNCTION_OPTIONS(\"--opt_level=0\")")

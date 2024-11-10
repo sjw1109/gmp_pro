@@ -106,11 +106,13 @@ extern "C"
     //
     void gmp_base_entry(void);
 
+#ifdef SPECIFY_ENABLE_GMP_CTL
 #ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
     // extern controller nano object
     extern ctl_object_nano_t *ctl_nano_handle;
 
 #endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+#endif // SPECIFY_ENABLE_GMP_CTL
 
     // This function would be called by main ISR function, by user.
     // User should call this function, in your ctl_main.cpp or just ignore it.

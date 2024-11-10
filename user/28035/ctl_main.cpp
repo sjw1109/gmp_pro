@@ -9,7 +9,7 @@
  *
  */
 
-#include <core/gmp_core.hpp>
+#include <gmp_core.hpp>
 #include <ctl/ctl_core.h>
 
 void ctl_init()
