@@ -194,8 +194,8 @@ extern "C"
     GMP_STATIC_INLINE
     void ctl_step_spd_calc(ctl_spd_calculator_t *sc)
     {
-        ctrl_gt CTRL_PI = GMP_CONST_PI;
-        ctrl_gt CTRL_2PI = GMP_CONST_2_PI;
+//        ctrl_gt CTRL_PI = GMP_CONST_PI;
+//        ctrl_gt CTRL_2PI = GMP_CONST_2_PI;
 
         if (ctl_step_divider(&sc->div))
         {
@@ -296,8 +296,10 @@ extern "C"
     //
     // }gmp_tamagawa_encoder_t;
 
-#endif // _FILE_ENCODER_H_
-
-#ifdef __cplusplus
+    #ifdef __cplusplus
 }
 #endif // __cplusplus
+
+#endif // _FILE_ENCODER_H_
+
+

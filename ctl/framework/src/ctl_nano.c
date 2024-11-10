@@ -14,6 +14,9 @@
 
 #include <ctl/framework/ctl_nano.h>
 
+// controller nano object handle entity
+ctl_object_nano_t *ctl_nano_handle = NULL;
+
 //////////////////////////////////////////////////////////////////////////
 // WEAK FUNCTION DEFINITION
 
@@ -128,6 +131,9 @@ void default_ctl_fmif_output_disable(ctl_object_nano_t *pctl_obj)
     // not implement
 }
 
+#elif defined __TI_COMPILER_VERSION__
+// Unsupport weak function
+
 #else // Other Compiler support WEAK function
 
 // ....................................................................//
@@ -209,15 +215,17 @@ fast_gt ctl_fmif_sm_runup_routine(ctl_object_nano_t *pctl_obj) GMP_WEAK_FUNC_SUF
 }
 
 GMP_WEAK_FUNC_PREFIX
-void ctl_fmif_sm_online_routine(ctl_object_nano_t *pctl_obj) GMP_WEAK_FUNC_SUFFIX
+fast_gt ctl_fmif_sm_online_routine(ctl_object_nano_t *pctl_obj) GMP_WEAK_FUNC_SUFFIX
 {
     // not implement
+    return 0;
 }
 
 GMP_WEAK_FUNC_PREFIX
-void ctl_fmif_sm_fault_routine(ctl_object_nano_t *pctl_obj) GMP_WEAK_FUNC_SUFFIX
+fast_gt ctl_fmif_sm_fault_routine(ctl_object_nano_t *pctl_obj) GMP_WEAK_FUNC_SUFFIX
 {
     // not implement
+    return 0;
 }
 
 // ....................................................................//
@@ -460,8 +468,7 @@ void ctl_fm_force_calibrate(ctl_object_nano_t* ctl_obj)
     ctl_obj->state_machine = CTL_SM_CALIBRATE;
 }
 
-// controller nano object handle entity
-ctl_object_nano_t *ctl_nano_handle = NULL;
+
 
 ec_gt ctl_setup_default_ctl_nano_obj(ctl_object_nano_t *ctl_obj)
 {

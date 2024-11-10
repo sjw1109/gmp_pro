@@ -141,7 +141,7 @@ extern "C"
                 // calibrating current sensor
                 if (ctl_is_adc_calibration_cmpt(&pmsm->calibrator) && (ctl_is_adc_calibration_cmpt(&pmsm->calibrator)))
                 {
-                    if (pmsm->iabc_input.gain < 0)
+                    if (pmsm->iabc_input.gain[pmsm->calibrate_progress] < 0)
                     {
                         // save result and restart the calibrate controller
                         ctl_set_adc_tri_channel_bias(

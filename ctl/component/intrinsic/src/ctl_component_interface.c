@@ -259,7 +259,9 @@ pwm_gt ctl_calc_pwm_channel_inv(pwm_channel_t *pwm_obj, ctrl_gt raw)
 // init funciton for dual channel PWM channel
 ec_gt ctl_init_pwm_dual_channel(pwm_dual_channel_t *pwm_obj)
 {
-    for (int i = 0; i < 2; ++i)
+    int i;
+
+    for (i = 0; i < 2; ++i)
     {
         pwm_obj->raw[i] = 0;
         pwm_obj->value[i] = 0;
@@ -280,7 +282,9 @@ ec_gt ctl_setup_pwm_dual_channel(pwm_dual_channel_t *pwm_obj, pwm_gt phase, pwm_
 // calculate function
 void ctl_calc_pwm_dual_channel(pwm_dual_channel_t *pwm_obj, ctl_vector2_t *raw)
 {
-    for (int i = 0; i < 2; ++i)
+    int i;
+
+    for (i = 0; i < 2; ++i)
     {
         pwm_obj->raw[i] = raw->dat[i];
 
@@ -291,7 +295,9 @@ void ctl_calc_pwm_dual_channel(pwm_dual_channel_t *pwm_obj, ctl_vector2_t *raw)
 
 void ctl_calc_pwm_dual_channel_warp(pwm_dual_channel_t *pwm_obj, ctl_vector2_t *raw)
 {
-    for (int i = 0; i < 2; ++i)
+    int i;
+
+    for (i = 0; i < 2; ++i)
     {
         pwm_obj->raw[i] = raw->dat[i];
 
@@ -302,7 +308,9 @@ void ctl_calc_pwm_dual_channel_warp(pwm_dual_channel_t *pwm_obj, ctl_vector2_t *
 
 void ctl_calc_pwm_dual_channel_inv(pwm_dual_channel_t *pwm_obj, ctl_vector2_t *raw)
 {
-    for (int i = 0; i < 2; ++i)
+    int i;
+
+    for (i = 0; i < 2; ++i)
     {
         pwm_obj->raw[i] = raw->dat[i];
 
@@ -317,7 +325,9 @@ void ctl_calc_pwm_dual_channel_inv(pwm_dual_channel_t *pwm_obj, ctl_vector2_t *r
 // init funciton for tri-channel PWM channel
 ec_gt ctl_init_pwm_tri_channel(pwm_tri_channel_t *pwm_obj)
 {
-    for (int i = 0; i < 3; ++i)
+    int i;
+
+    for (i = 0; i < 3; ++i)
     {
         pwm_obj->raw[i] = 0;
         pwm_obj->value[i] = 0;
@@ -338,7 +348,9 @@ ec_gt ctl_setup_pwm_tri_channel(pwm_tri_channel_t *pwm_obj, pwm_gt phase, pwm_gt
 // calculate function
 void ctl_calc_pwm_tri_channel(pwm_tri_channel_t *pwm_obj, ctl_vector3_t *raw)
 {
-    for (int i = 0; i < 3; ++i)
+    int i;
+
+    for (i = 0; i < 3; ++i)
     {
         pwm_obj->raw[i] = raw->dat[i];
 
@@ -349,7 +361,9 @@ void ctl_calc_pwm_tri_channel(pwm_tri_channel_t *pwm_obj, ctl_vector3_t *raw)
 
 void ctl_calc_pwm_tri_channel_warp(pwm_tri_channel_t *pwm_obj, ctl_vector3_t *raw)
 {
-    for (int i = 0; i < 3; ++i)
+    int i;
+
+    for (i = 0; i < 3; ++i)
     {
         pwm_obj->raw[i] = raw->dat[i];
 
@@ -360,7 +374,9 @@ void ctl_calc_pwm_tri_channel_warp(pwm_tri_channel_t *pwm_obj, ctl_vector3_t *ra
 
 void ctl_calc_pwm_tri_channel_inv(pwm_tri_channel_t *pwm_obj, ctl_vector3_t *raw)
 {
-    for (int i = 0; i < 3; ++i)
+    int i;
+
+    for (i = 0; i < 3; ++i)
     {
         pwm_obj->raw[i] = raw->dat[i];
 

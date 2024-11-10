@@ -13,6 +13,9 @@
 
 #include <gmp_core.h>
 
+// Used for running BackGround in flash, and ISR in RAM
+extern Uint16 *RamfuncsLoadStart, *RamfuncsLoadEnd, *RamfuncsRunStart;
+
 // User should invoke this function to get time (system tick).
 time_gt gmp_port_system_tick(void)
 {
@@ -54,6 +57,17 @@ void gmp_csp_startup(void)
 
     // Assign GPIO MUX
     ConfigGPIOMUX();
+
+#ifdef FLASH
+// Copy time critical code and Flash setup code to RAM
+// The  RamfuncsLoadStart, RamfuncsLoadEnd, and RamfuncsRunStart
+// symbols are created by the linker. Refer to the linker files.
+    MemCopy(&RamfuncsLoadStart, &RamfuncsLoadEnd, &RamfuncsRunStart);
+
+// Call Flash Initialization to setup flash waitstates
+// This function must reside in RAM
+    InitFlash();    // Call the flash wrapper init function
+#endif //(FLASH)
 }
 
 // This function would be called when fatal error occurred.

@@ -173,7 +173,7 @@
     <ClCompile Include="..\..\third_party\iqmath\src\_IQNversion.c" />
     <ClCompile Include="ctl_main.c" />
     <ClCompile Include="pc_simulation_visualstudio.cpp" />
-    <ClCompile Include="peripheral_mapping.cpp" />
+    <ClCompile Include="peripheral.cpp" />
     <ClCompile Include="user_main.cpp" />
   </ItemGroup>
   <ItemGroup>

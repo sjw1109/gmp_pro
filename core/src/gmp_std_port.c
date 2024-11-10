@@ -277,13 +277,15 @@ void gmp_defualt_msvc_ctl_dispatch(void)
     // not implement
 }
 
+#elif defined __TI_COMPILER_VERSION__
+
 #else // other compiler support weak symbol
 
 // This function would execute only once.
 // User should implement all the initialization code in this function.
 //
-GMP_WEAK_FUNC_PREFIX
-void init(void) //GMP_WEAK_FUNC_SUFFIX
+//GMP_WEAK_FUNC_PREFIX
+void init(void) GMP_WEAK_FUNC_SUFFIX
 {
     // not implement
 }

@@ -1,6 +1,10 @@
 #include <stdint.h>
 
+#include "../support.h"
+
 #include "_IQNtables.h"
+
+
 
 /* 
  *  Coefficients, parameters and lookup tables used for CPU approximations

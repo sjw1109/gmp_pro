@@ -106,10 +106,10 @@ PAGE 0:    /* Program Memory */
    RAML0       : origin = 0x008000, length = 0x000800     /* on-chip RAM block L0 */
    RAML1       : origin = 0x008800, length = 0x000400     /* on-chip RAM block L1 */
    OTP         : origin = 0x3D7800, length = 0x000400     /* on-chip OTP */
-   FLASHH      : origin = 0x3E8000, length = 0x002000     /* on-chip FLASH */
-   FLASHG      : origin = 0x3EA000, length = 0x002000     /* on-chip FLASH */
-   FLASHF      : origin = 0x3EC000, length = 0x002000     /* on-chip FLASH */
-   FLASHE      : origin = 0x3EE000, length = 0x002000     /* on-chip FLASH */
+   FLASHH      : origin = 0x3E8000, length = 0x008000     /* on-chip FLASH */
+//   FLASHG      : origin = 0x3EA000, length = 0x002000     /* on-chip FLASH */
+//   FLASHF      : origin = 0x3EC000, length = 0x002000     /* on-chip FLASH */
+//   FLASHE      : origin = 0x3EE000, length = 0x002000     /* on-chip FLASH */
    FLASHD      : origin = 0x3F0000, length = 0x002000     /* on-chip FLASH */
    FLASHC      : origin = 0x3F2000, length = 0x002000     /* on-chip FLASH */
    FLASHA      : origin = 0x3F6000, length = 0x001F80     /* on-chip FLASH */
@@ -150,14 +150,21 @@ SECTIONS
    /* Allocate program areas: */
    .cinit              : > FLASHA      PAGE = 0
    .pinit              : > FLASHA,     PAGE = 0
-   .text               : > FLASHA      PAGE = 0
+   .text               : > FLASHH      PAGE = 0
    codestart           : > BEGIN       PAGE = 0
-   ramfuncs            : LOAD = FLASHD,
-                         RUN = RAML0,
-                         LOAD_START(_RamfuncsLoadStart),
-                         LOAD_SIZE(_RamfuncsLoadSize),
-                         RUN_START(_RamfuncsRunStart),
-                         PAGE = 0
+//   ramfuncs            : LOAD = FLASHD,
+//                         RUN = RAML0,
+//                         LOAD_START(_RamfuncsLoadStart),
+//                         LOAD_SIZE(_RamfuncsLoadSize),
+//                         RUN_START(_RamfuncsRunStart),
+//                         PAGE = 0
+
+   ramfuncs          : LOAD = FLASHD,
+                       RUN = RAML0,
+                       LOAD_START(_RamfuncsLoadStart),
+                       LOAD_END(_RamfuncsLoadEnd),
+                       RUN_START(_RamfuncsRunStart),
+                       PAGE = 0
 
    csmpasswds          : > CSM_PWL_P0  PAGE = 0
    csm_rsvd            : > CSM_RSVD    PAGE = 0

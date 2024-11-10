@@ -46,4 +46,12 @@
     #include "RTS_support.h"
 //#endif
 
+#ifndef int8_t
+typedef int16_t int8_t;
+#endif // int8_t
+
+#ifndef uint8_t
+typedef int16_t uint8_t;
+#endif // uint8_t
+
 #endif //__SUPPORTH__

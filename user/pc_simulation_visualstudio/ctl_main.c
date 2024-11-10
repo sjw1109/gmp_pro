@@ -9,8 +9,11 @@
  *
  */
 
-#include <ctl/ctl_core.h>
+
 #include <gmp_core.h>
+
+#include <ctl/ctl_core.h>
+
 #include <math.h>
 
 #include <ctl/suite/motor_control/pmsm_servo/pmsm_servo.h>
@@ -146,29 +149,19 @@ void ctl_dispatch(void)
 
 #ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
+// State machine callback function
 fast_gt ctl_fmif_sm_calibrate_routine(ctl_object_nano_t* pctl_obj)
 {
     return ctl_cb_pmsm_servo_frmework_current_calibrate(&pmsm_servo);
 }
 
+// State machine callback function
 fast_gt ctl_fmif_sm_ready_routine(ctl_object_nano_t* pctl_obj)
 {
     return 1;
 }
 
-void ctl_fmif_input_stage_routine(ctl_object_nano_t *pctl_obj)
-{
-    // current sensor
-    ctl_input_pmsm_servo_framework(&pmsm_servo,
-                                   // current input
-                                   gmp_csp_sl_get_rx_buffer()->iabc[phase_U], gmp_csp_sl_get_rx_buffer()->iabc[phase_V],
-                                   gmp_csp_sl_get_rx_buffer()->iabc[phase_W]);
-
-    // position encoder
-    ctl_step_pos_encoder(&pos_enc, gmp_csp_sl_get_rx_buffer()->encoder);
-    ctl_step_spd_calc(&spd_enc);
-}
-
+// controller core
 void ctl_fmif_core_stage_routine(ctl_object_nano_t *pctl_obj)
 {
     // constant frequency generator
@@ -176,44 +169,6 @@ void ctl_fmif_core_stage_routine(ctl_object_nano_t *pctl_obj)
 
     // run pmsm servo framework ISR function
     ctl_step_pmsm_servo_framework(&pmsm_servo);
-}
-
-//ctl_vector2_t phasor;
-
-void ctl_fmif_output_stage_routine(ctl_object_nano_t *pctl_obj)
-{
-    //    ctl_fmif_output_enable(pctl_obj);
-
-    gmp_csp_sl_get_tx_buffer()->tabc[phase_U] = ctl_get_pmsm_servo_modulation(&pmsm_servo, phase_U);
-    gmp_csp_sl_get_tx_buffer()->tabc[phase_V] = ctl_get_pmsm_servo_modulation(&pmsm_servo, phase_V);
-    gmp_csp_sl_get_tx_buffer()->tabc[phase_W] = ctl_get_pmsm_servo_modulation(&pmsm_servo, phase_W);
-
-    //     gmp_csp_sl_get_tx_buffer()->monitor_port[0] = pmsm_servo.current_ctrl.Tabc.dat[0];
-    //     gmp_csp_sl_get_tx_buffer()->monitor_port[1] = pmsm_servo.current_ctrl.Tabc.dat[1];
-
-    // gmp_csp_sl_get_tx_buffer()->monitor_port[2] = gmp_csp_sl_get_rx_buffer()->encoder;
-    gmp_csp_sl_get_tx_buffer()->monitor_port[0] = spd_enc.encif.speed;
-    gmp_csp_sl_get_tx_buffer()->monitor_port[1] = pos_enc.encif.elec_position;
-
-    gmp_csp_sl_get_tx_buffer()->monitor_port[2] = ctl_get_motor_current_controller_id(&pmsm_servo.current_ctrl);
-    gmp_csp_sl_get_tx_buffer()->monitor_port[3] = ctl_get_motor_current_controller_iq(&pmsm_servo.current_ctrl);
-
-    // gmp_csp_sl_get_tx_buffer()->monitor_port[0] = phasor.dat[0];
-    // gmp_csp_sl_get_tx_buffer()->monitor_port[1] = phasor.dat[1];
-}
-
-void ctl_fmif_request_stage_routine(ctl_object_nano_t *pctl_obj)
-{
-}
-
-void ctl_fmif_output_enable(ctl_object_nano_t *pctl_obj)
-{
-    csp_sl_enable_output();
-}
-
-void ctl_fmif_output_disable(ctl_object_nano_t *pctl_obj)
-{
-    csp_sl_disable_output();
 }
 
 #endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
