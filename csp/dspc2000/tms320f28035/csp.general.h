@@ -139,6 +139,10 @@ extern "C"
     void ConfigPeripheralClock(void);
     void ConfigGPIOMUX(void);
 
+    // Syetem Tick
+    void SetupSystemTickTimer(void);
+    void StepSystemTickTimer(void);
+
 
 #ifdef __cplusplus
 }

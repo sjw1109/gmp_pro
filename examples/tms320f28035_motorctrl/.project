@@ -28,17 +28,17 @@
 		<link>
 			<name>DLOG4CHC.asm</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/csp/dspc2000/tms320f28035/DLOG4CHC.asm</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/csp/dspc2000/tms320f28035/src/DLOG4CHC.asm</locationURI>
 		</link>
 		<link>
 			<name>DSP2803x_CodeStartBranch.asm</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/csp/dspc2000/tms320f28035/DSP2803x_CodeStartBranch.asm</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/csp/dspc2000/tms320f28035/src/DSP2803x_CodeStartBranch.asm</locationURI>
 		</link>
 		<link>
 			<name>DSP2803x_GlobalVariableDefs.c</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/csp/dspc2000/tms320f28035/DSP2803x_GlobalVariableDefs.c</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/csp/dspc2000/tms320f28035/src/DSP2803x_GlobalVariableDefs.c</locationURI>
 		</link>
 		<link>
 			<name>DSP2803x_Headers_nonBIOS.cmd</name>
@@ -48,7 +48,7 @@
 		<link>
 			<name>DSP2803x_usDelay.asm</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/csp/dspc2000/tms320f28035/DSP2803x_usDelay.asm</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/csp/dspc2000/tms320f28035/src/DSP2803x_usDelay.asm</locationURI>
 		</link>
 		<link>
 			<name>F28035.cmd</name>
@@ -233,7 +233,7 @@
 		<link>
 			<name>tms322f28035_common.c</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/csp/dspc2000/tms320f28035/tms322f28035_common.c</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/csp/dspc2000/tms320f28035/src/tms322f28035_common.c</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

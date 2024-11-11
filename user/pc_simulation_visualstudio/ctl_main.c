@@ -149,17 +149,6 @@ void ctl_dispatch(void)
 
 #ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
-// State machine callback function
-fast_gt ctl_fmif_sm_calibrate_routine(ctl_object_nano_t* pctl_obj)
-{
-    return ctl_cb_pmsm_servo_frmework_current_calibrate(&pmsm_servo);
-}
-
-// State machine callback function
-fast_gt ctl_fmif_sm_ready_routine(ctl_object_nano_t* pctl_obj)
-{
-    return 1;
-}
 
 // controller core
 void ctl_fmif_core_stage_routine(ctl_object_nano_t *pctl_obj)
@@ -170,5 +159,53 @@ void ctl_fmif_core_stage_routine(ctl_object_nano_t *pctl_obj)
     // run pmsm servo framework ISR function
     ctl_step_pmsm_servo_framework(&pmsm_servo);
 }
+
+void ctl_fmif_monitor_routine(ctl_object_nano_t *pctl_obj)
+{
+    // not implement
+}
+
+// return value:
+// 1 change to next progress
+// 0 keep the same state
+fast_gt ctl_fmif_sm_pending_routine(ctl_object_nano_t *pctl_obj)
+{
+    // not implement
+    return 0;
+}
+
+// return value:
+// 1 change to next progress
+// 0 keep the same state
+fast_gt ctl_fmif_sm_calibrate_routine(ctl_object_nano_t *pctl_obj)
+{
+    return ctl_cb_pmsm_servo_frmework_current_calibrate(&pmsm_servo);
+}
+
+fast_gt ctl_fmif_sm_ready_routine(ctl_object_nano_t *pctl_obj)
+{
+    // not implement
+    return 0;
+}
+
+// Main relay close, power on the main circuit
+fast_gt ctl_fmif_sm_runup_routine(ctl_object_nano_t *pctl_obj)
+{
+    // not implement
+    return 1;
+}
+
+fast_gt ctl_fmif_sm_online_routine(ctl_object_nano_t *pctl_obj)
+{
+    // not implement
+    return 0;
+}
+
+fast_gt ctl_fmif_sm_fault_routine(ctl_object_nano_t *pctl_obj)
+{
+    // not implement
+    return 0;
+}
+
 
 #endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO

@@ -154,7 +154,13 @@ void ctl_fmif_input_stage_routine(ctl_object_nano_t *pctl_obj)
 
 void ctl_fmif_output_stage_routine(ctl_object_nano_t *pctl_obj)
 {
+    uint32_t time = gmp_base_get_system_tick() % 10;
 
+
+    pwm1.MfuncC1 =_IQmpy( _IQ(time),_IQ(0.1))-_IQ(0.5);
+       pwm1.MfuncC2 = 0;
+       pwm1.MfuncC3 = _IQ(-0.5);
+       PWM_MACRO(1,2,3,pwm1);
 }
 
 void ctl_fmif_request_stage_routine(ctl_object_nano_t *pctl_obj)

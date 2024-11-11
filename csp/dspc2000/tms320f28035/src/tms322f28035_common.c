@@ -1,12 +1,12 @@
 /**
  * @file example.c
  * @author Javnson (javnson@zju.edu.cn)
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2024-09-30
- * 
+ *
  * @copyright Copyright GMP(c) 2024
- * 
+ *
  */
 
 // This file provide a set of function that CSP must defined.
@@ -16,13 +16,16 @@
 // Used for running BackGround in flash, and ISR in RAM
 extern Uint16 *RamfuncsLoadStart, *RamfuncsLoadEnd, *RamfuncsRunStart;
 
+// System Tick
+time_gt DSPC2000_SystemTick = 0;
+
 // User should invoke this function to get time (system tick).
-time_gt gmp_port_system_tick(void)
+time_gt gmp_base_get_system_tick(void)
 {
-    return 0;
+    return DSPC2000_SystemTick;
 }
 
-// This function may be called and used to initialize all the peripheral. 
+// This function may be called and used to initialize all the peripheral.
 void gmp_csp_startup(void)
 {
     WDogDisable(); // Disable the watchdog initially
@@ -59,20 +62,24 @@ void gmp_csp_startup(void)
     ConfigGPIOMUX();
 
 #ifdef FLASH
-// Copy time critical code and Flash setup code to RAM
-// The  RamfuncsLoadStart, RamfuncsLoadEnd, and RamfuncsRunStart
-// symbols are created by the linker. Refer to the linker files.
-    MemCopy(&RamfuncsLoadStart, &RamfuncsLoadEnd, &RamfuncsRunStart);
+    // Copy time critical code and Flash setup code to RAM
+    // The  RamfuncsLoadStart, RamfuncsLoadEnd, and RamfuncsRunStart
+    // symbols are created by the linker. Refer to the linker files.
+    MemCopy((Uint16*)&RamfuncsLoadStart, (Uint16*)&RamfuncsLoadEnd, (Uint16*)&RamfuncsRunStart);
 
-// Call Flash Initialization to setup flash waitstates
-// This function must reside in RAM
-    InitFlash();    // Call the flash wrapper init function
-#endif //(FLASH)
+    // Call Flash Initialization to setup flash waitstates
+    // This function must reside in RAM
+    InitFlash(); // Call the flash wrapper init function
+#endif           //(FLASH)
+
+    SetupSystemTickTimer();
+
 }
 
 // This function would be called when fatal error occurred.
 void gmp_port_system_stuck(void)
-{}
+{
+}
 
 // This function would be called when all the initialization process happened.
 void gmp_csp_post_process(void)
@@ -80,24 +87,25 @@ void gmp_csp_post_process(void)
     EALLOW;
 
     // Enable global Interrupts and higher priority real-time debug events:
-        EINT;   // Enable Global interrupt INTM
-        ERTM;   // Enable Global realtime interrupt DBGM
+    EINT; // Enable Global interrupt INTM
+    ERTM; // Enable Global realtime interrupt DBGM
 
     EDIS;
 }
-    
+
 // This function is unreachable.
 void gmp_exit_routine(void)
-{}
+{
+}
 
 // This function may invoke when main loop occurred.
 void gmp_csp_loop(void)
-{}
-
+{
+    StepSystemTickTimer();
+}
 
 //////////////////////////////////////////////////////////////////////////
 // TMS320F28035 utilities function
-
 
 // Functions that will be run from RAM need to be assigned to
 // a different section.  This section will then be mapped to a load and
@@ -146,10 +154,7 @@ void EnableInternalClock(void)
     SysCtrlRegs.CLKCTL.bit.XTALOSCOFF = 1;   // Turn off XTALOSC
     SysCtrlRegs.CLKCTL.bit.INTOSC2OFF = 1;   // Turn off INTOSC2
     EDIS;
-
-
 }
-
 
 // SYSTEM CLOCK speed based on internal oscillator = 10 MHz
 // 0xC =  60	MHz		(12)
@@ -289,12 +294,11 @@ void PieVectTableInit(void)
 }
 
 // Illegal operation TRAP
-interrupt void ISR_ILLEGAL(void) 
+interrupt void ISR_ILLEGAL(void)
 {
     // Insert ISR Code here
 
     // invoke GMP illegal function here
-
 
     // Next two lines for debug only to halt the processor here
     // Remove after inserting ISR Code
@@ -361,4 +365,30 @@ void MemCopy(Uint16 *SourceAddr, Uint16 *SourceEndAddr, Uint16 *DestAddr)
     }
     return;
 }
+//
+// interrupt void SystemTickISR(void)
+//{
+//
+//}
+//
+// Setup System Tick timer
+ void SetupSystemTickTimer(void)
+{
+     // Set CPU timer 2 as tick timer
+     CpuTimer2Regs.PRD.all = mSec1;
 
+         // Clear System Tick Variable
+     DSPC2000_SystemTick = 0;
+
+ }
+
+ void StepSystemTickTimer(void)
+ {
+     if (CpuTimer2Regs.TCR.bit.TIF == 1)
+     {
+         CpuTimer2Regs.TCR.bit.TIF = 1; // clear flag
+
+         DSPC2000_SystemTick += 1;
+     }
+
+ }
