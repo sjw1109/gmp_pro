@@ -185,7 +185,8 @@ fast_gt ctl_fmif_sm_calibrate_routine(ctl_object_nano_t *pctl_obj)
 fast_gt ctl_fmif_sm_ready_routine(ctl_object_nano_t *pctl_obj)
 {
     // not implement
-    return 0;
+    return 1;   // skip to online
+    //return 0; // stop here
 }
 
 // Main relay close, power on the main circuit
