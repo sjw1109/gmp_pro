@@ -26,15 +26,19 @@ extern "C"
 // Include all options for config
 #include <core/std/cfg/options.cfg.h>
 
+
+// invoke user config file
+//
+#include "user.config.h"
+
+
 #ifndef SPECIFY_DISABLE_CSP
 // invoke CSP default config
 //
 #include <csp.config.h>
 #endif // SPECIFY_DISABLE_CSP
 
-// invoke user config file
-//
-#include "user.config.h"
+
 
 // invoke system default config
 //

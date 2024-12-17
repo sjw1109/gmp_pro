@@ -192,6 +192,8 @@ extern "C"
                                   uint32_t ctrl_freq // the frequency of the control law, unit Hz
     );
 
+		extern ctl_object_nano_t *ctl_nano_handle;
+		
     //////////////////////////////////////////////////////////////////////////
     // Utilities
 

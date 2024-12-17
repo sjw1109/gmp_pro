@@ -339,8 +339,12 @@ ec_gt ctl_setup_ramp_gen_via_amp_freq(ctl_src_rg_t *rg, parameter_gt isr_freq, p
 {
     rg->maximum = float2ctrl(amp_pos);
     rg->minimum = float2ctrl(amp_neg);
+	
+	float a = isr_freq / target_freq;
+	float b = amp_pos - amp_neg;
 
-    rg->slope = float2ctrl((amp_pos - amp_neg) / (isr_freq / target_freq));
+    //rg->slope = float2ctrl((amp_pos - amp_neg) / (isr_freq / target_freq));
+	rg->slope = float2ctrl( b / a);
 
     return GMP_EC_OK;
 }

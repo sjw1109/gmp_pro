@@ -42,6 +42,9 @@ extern "C"
     {
         ctrl_gt sin_new = sg->ph_sin * sg->ph_cos_delta + sg->ph_cos * sg->ph_sin_delta;
         ctrl_gt cos_new = sg->ph_cos * sg->ph_cos_delta - sg->ph_sin * sg->ph_sin_delta;
+			
+				sg->ph_sin = sin_new;
+				sg->ph_cos = cos_new;
     }
 
     //////////////////////////////////////////////////////////////////////////

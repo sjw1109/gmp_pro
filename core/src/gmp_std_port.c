@@ -284,7 +284,7 @@ void gmp_defualt_msvc_ctl_dispatch(void)
 // This function would execute only once.
 // User should implement all the initialization code in this function.
 //
-//GMP_WEAK_FUNC_PREFIX
+GMP_WEAK_FUNC_PREFIX
 void init(void) GMP_WEAK_FUNC_SUFFIX
 {
     // not implement
@@ -339,5 +339,14 @@ void ctl_dispatch(void) GMP_WEAK_FUNC_SUFFIX
 {
     // not implement
 }
+
+#ifdef SPECIFY_DISABLE_CSP
+GMP_WEAK_FUNC_PREFIX
+ec_gt gmp_hal_uart_send(GMP_BASE_PRINT_DEFAULT_HANDLE_TYPE *placeholder1,half_duplex_ift*placeholder2) GMP_WEAK_FUNC_SUFFIX
+{
+	// not implement
+	return 0;
+}
+#endif
 
 #endif // other compiler support weak symbol
