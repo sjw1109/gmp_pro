@@ -42,7 +42,7 @@ set_param(gcs,'EnableLBRepository','on');
 sl_refresh_customizations
 
 matlab_version_str = extract(matlab_version.Release, digitsPattern);
-if(str2double(matlab_version_str) > 2023)
+if(str2double(matlab_version_str) >= 2023)
     close_system('peripheral_utilities', 1);
     close_system('fp_utilities', 1);
     close_system('gmp_simulink_utilities', 1);
