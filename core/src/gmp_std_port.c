@@ -344,8 +344,8 @@ void ctl_dispatch(void) GMP_WEAK_FUNC_SUFFIX
 GMP_WEAK_FUNC_PREFIX
 ec_gt gmp_hal_uart_send(GMP_BASE_PRINT_DEFAULT_HANDLE_TYPE *placeholder1,half_duplex_ift*placeholder2) GMP_WEAK_FUNC_SUFFIX
 {
-	// not implement
-	return 0;
+    // not implement
+    return 0;
 }
 #endif
 
