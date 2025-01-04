@@ -103,6 +103,7 @@ typedef GMP_PORT_FAST32_T fast32_gt;
 
 // ....................................................................//
 // basic element of timing containing
+// at least 32 bit
 //
 #ifndef GMP_PORT_TIME_T
 #define GMP_PORT_TIME_T                uint32_t

@@ -84,7 +84,7 @@ GMP CTL Components Root Directory.
 
 ### nonlinear Module
 
-非现象模块提供了三角函数、指数函数等的计算表达。
+非线性模块提供了三角函数、指数函数等的计算表达。
 
 下面给出了需要支持的非线性函数的类型：
 

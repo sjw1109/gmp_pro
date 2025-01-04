@@ -54,6 +54,7 @@ typedef struct _tag_motor_current_ctrl
     // flags
     fast_gt flag_enable_current_controller;
 
+    fast_gt flag_enable_svpwm;
 } ctl_motor_current_ctrl_t;
 
 ec_gt ctl_init_motor_current_ctrl(ctl_motor_current_ctrl_t *obj);
@@ -123,19 +124,23 @@ void ctl_step_motor_current_ctrl(ctl_motor_current_ctrl_t *obj, ctrl_gt theta)
         obj->vdq0.dat[phase_q] = 0;
     }
 
-    // vq = vq_ctrl + vq_ff;
-    obj->vdq0.dat[phase_d] += obj->vdq_ff.dat[phase_d];
+    if (flag_enable_svpwm)
+    {
+        // vq = vq_ctrl + vq_ff;
+        obj->vdq0.dat[phase_d] += obj->vdq_ff.dat[phase_d];
 
-    // vd = vd_ctrl + vd_ff;
-    obj->vdq0.dat[phase_q] += obj->vdq_ff.dat[phase_q];
+        // vd = vd_ctrl + vd_ff;
+        obj->vdq0.dat[phase_q] += obj->vdq_ff.dat[phase_q];
 
-    obj->vdq0.dat[phase_0] = 0;
+        obj->vdq0.dat[phase_0] = 0;
 
-    // vab = inv_park(vdq);
-    ctl_ct_ipark(&obj->vdq0, &phasor, &obj->vab0);
+        // vab = inv_park(vdq);
+        ctl_ct_ipark(&obj->vdq0, &phasor, &obj->vab0);
 
-    // Tabc = svpwm(vab) / udc;
-    ctl_ct_svpwm_calc(&obj->vab0, &obj->Tabc);
+        // Tabc = svpwm(vab) / udc;
+        ctl_ct_svpwm_calc(&obj->vab0, &obj->Tabc);
+    }
+
 }
 
 GMP_STATIC_INLINE

@@ -95,7 +95,7 @@ extern "C"
 
     } pwm_tri_channel_t;
 
-    // init funciton for dual channel PWM channel
+    // init function for dual channel PWM channel
     ec_gt ctl_init_pwm_tri_channel(pwm_tri_channel_t *pwm_obj);
 
     // setup pwm object
@@ -106,6 +106,9 @@ extern "C"
     void ctl_calc_pwm_tri_channel_warp(pwm_tri_channel_t *pwm_obj, ctl_vector3_t *raw);
     void ctl_calc_pwm_tri_channel_inv(pwm_tri_channel_t *pwm_obj, ctl_vector3_t *raw);
 
+    //// stop pwm output 
+    //void ctl_stop_pwm_tri_channel(pwm_tri_channel_t *pwm_obj);
+    //void ctl_start_pwm_tri_channel(pwm_tri_channel_t *pwm_obj);
 
 
 #ifdef __cplusplus
