@@ -21,7 +21,7 @@
 #include <ctl/component/motor_control/basic/encoder.h>
 
 // const F & VF controller
-#include <ctl/component/motor_control/basic/contant_vf.h>
+#include <ctl/component/motor_control/basic/vf_generator.h>
 
 // User may set (get handle) TX content via `gmp_csp_sl_get_tx_buffer`
 // User may get (get handle) RX content via `gmp_csp_sl_get_rx_buffer`

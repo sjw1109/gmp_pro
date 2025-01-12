@@ -20,7 +20,7 @@
 #include <ctl/component/motor_control/basic/encoder.h>
 
 // const F & VF controller
-#include <ctl/component/motor_control/basic/contant_vf.h>
+#include <ctl/component/motor_control/basic/vf_generator.h>
 
 extern "C"
 {

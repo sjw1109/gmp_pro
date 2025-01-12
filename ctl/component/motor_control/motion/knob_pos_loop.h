@@ -11,7 +11,7 @@
 
 // This is a position loop P controller
 
-#include <ctl/component/motion/basic_pos_loop_p.h>
+#include <ctl/component/motor_control/motion/basic_pos_loop_p.h>
 
 #ifndef _FILE_KNOB_POS_LOOP_H_
 #define _FILE_KNOB_POS_LOOP_H_
@@ -87,9 +87,9 @@ extern "C"
 			ctrl_gt position_error = GMP_CONST_2_PI * delta_pos
 				+ knob->target_ang - knob->actual_ang;
 
-			knob->speed_ref = ctrl_mpy(knob->kp, position_error);
+			knob->speed_ref = ctl_mul(knob->kp, position_error);
 
-			knob->speed_ref = ctrl_sat(knob->speed_ref,
+			knob->speed_ref = ctl_sat(knob->speed_ref,
 				knob->speed_limit, -knob->speed_limit);
 		}
 

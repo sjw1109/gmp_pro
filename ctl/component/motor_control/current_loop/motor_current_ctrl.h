@@ -8,6 +8,9 @@
 
 #include <ctl/math_block/coordinate/coord_trans.h>
 
+#ifndef _FILE_MOTOR_CURRENT_CTRL_H_
+#define _FILE_MOTOR_CURRENT_CTRL_H_
+
 // INPUT:
 //  + ctrl_gt: udc
 //  + vector3: iabc
@@ -124,7 +127,7 @@ void ctl_step_motor_current_ctrl(ctl_motor_current_ctrl_t *obj, ctrl_gt theta)
         obj->vdq0.dat[phase_q] = 0;
     }
 
-    if (flag_enable_svpwm)
+    if (obj->flag_enable_svpwm)
     {
         // vq = vq_ctrl + vq_ff;
         obj->vdq0.dat[phase_d] += obj->vdq_ff.dat[phase_d];
@@ -139,6 +142,10 @@ void ctl_step_motor_current_ctrl(ctl_motor_current_ctrl_t *obj, ctrl_gt theta)
 
         // Tabc = svpwm(vab) / udc;
         ctl_ct_svpwm_calc(&obj->vab0, &obj->Tabc);
+    }
+    else
+    {
+        ctl_clear_vector3(&obj->Tabc);
     }
 
 }
@@ -182,3 +189,5 @@ void ctl_set_motor_current_controller_zero_output(ctl_motor_current_ctrl_t *obj)
     obj->Tabc.dat[1] = float2ctrl(0.5);
     obj->Tabc.dat[2] = float2ctrl(0.5);
 }
+
+#endif // _FILE_MOTOR_CURRENT_CTRL_H_

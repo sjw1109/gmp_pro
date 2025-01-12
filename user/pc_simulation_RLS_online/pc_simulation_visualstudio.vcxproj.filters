@@ -135,6 +135,9 @@
     <ClCompile Include="..\..\third_party\iqmath\src\_IQNversion.c">
       <Filter>IQMATH</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\ctl\component\motor_control\src\ctl_mc_current_loop.c">
+      <Filter>GMP/CTL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="user.config.h">

@@ -124,3 +124,6 @@ GMP CTL Components Root Directory.
 ### matrix Module
 
 矩阵计算模块，matrix提供2维，3维，4维的矩阵计算模块
+
+
+用户可以通过阅读component文件夹下的几个头文件快速找到自己需要的功能模块。

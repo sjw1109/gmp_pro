@@ -11,7 +11,7 @@
  
 // This is a position loop P controller
 
-#include <ctl/component/common/divider.h>
+#include <ctl/component/intrinsic/discrete/divider.h>
 
 
 #ifndef _FILE_BASIC_SPEED_LOOP_P_H_
@@ -79,9 +79,9 @@ extern "C"
 				position_error = GMP_CONST_2_PI * delta_pos
 					+ pos_ctrl->target_ang - pos_ctrl->actual_ang;
 
-				pos_ctrl->speed_ref = ctrl_mpy(position_error, pos_ctrl->kp);
+				pos_ctrl->speed_ref = ctl_mul(position_error, pos_ctrl->kp);
 
-				pos_ctrl->speed_ref = ctrl_sat(pos_ctrl->speed_ref,
+				pos_ctrl->speed_ref = ctl_sat(pos_ctrl->speed_ref,
 					pos_ctrl->speed_limit, -pos_ctrl->speed_limit);
 			}
 

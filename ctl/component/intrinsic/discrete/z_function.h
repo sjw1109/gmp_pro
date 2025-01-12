@@ -19,7 +19,7 @@
  *
  */
 
-#include <emlib_setting.h>
+//#include <emlib_setting.h>
 
 #ifndef _FILE_DISCRETE_CONTROL_SYSTEM_H_
 #define _FILE_DISCRETE_CONTROL_SYSTEM_H_
@@ -191,7 +191,7 @@ typedef uint32_t dcs_difference_t;
 * You may notice the mean filter's result at the break point.
 */
 
-#include <discrete_control_system.h>
+//#include <discrete_control_system.h>
 
 #ifndef _FILE_Z_TRNASFER_FUNCTION_H_
 #define _FILE_Z_TRANSFER_FUCNTION_H_
@@ -362,9 +362,9 @@ extern "C"
  *
  */
 
-#include <discrete_control_system.h>
+//#include <discrete_control_system.h>
 #include <memory.h>
-#include <z_transfer_function.h>
+//#include <z_transfer_function.h>
 
 void _z_func_calc_default(pz_function obj)
 {

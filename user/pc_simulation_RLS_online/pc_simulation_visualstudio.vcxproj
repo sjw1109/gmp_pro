@@ -150,6 +150,7 @@
     <ClCompile Include="..\..\ctl\component\intrinsic\src\ctl_component_interface.c" />
     <ClCompile Include="..\..\ctl\component\intrinsic\src\ctl_component_protection.c" />
     <ClCompile Include="..\..\ctl\component\motor_control\src\ctl_mc_basic.c" />
+    <ClCompile Include="..\..\ctl\component\motor_control\src\ctl_mc_current_loop.c" />
     <ClCompile Include="..\..\ctl\component\motor_control\src\ctl_mc_motion.c" />
     <ClCompile Include="..\..\ctl\framework\src\ctl_nano.c" />
     <ClCompile Include="..\..\ctl\suite\motor_control\pmsm_servo\pmsm_servo.c" />

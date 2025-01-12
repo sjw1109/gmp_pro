@@ -2,7 +2,7 @@
 // This file provide a set of algorithm to calibrate encoders.
 
 #include <ctl/component/motor_control/basic/encoder_if.h>
-#include <ctl/component/motor_control/basic/motor_current_ctrl.h>
+#include <ctl/component/motor_control/current_loop/motor_current_ctrl.h>
 
 #ifndef _FILE_ENCODER_CALIBRATE_H_
 #define _FILE_ENCODER_CALIBRATE_H_
@@ -129,3 +129,5 @@ extern "C"
 #ifdef __cplusplus
 }
 #endif // __cplusplus
+
+#endif 

@@ -7,20 +7,25 @@
 // Controller framework
 #include <ctl/framework/ctl_nano.h>
 
-// motor controller
-#include <ctl/component/intrinsic/combo/track_pid.h>
-#include <ctl/component/motor_control/basic/motor_current_ctrl.h>
+#include <ctl/component/intrinsic.h>
 
-// input & output interface
-#include <ctl/component/intrinsic/interface/adc_channel.h>
-#include <ctl/component/intrinsic/interface/pwm_channel.h>
+#include <ctl/component/motor_control.h>
 
-// consultant objects
-#include <ctl/component/motor_control/consultant/motor_driver_consultant.h>
-#include <ctl/component/motor_control/consultant/pmsm_consultant.h>
 
-// controller encoder interface
-#include <ctl/component/motor_control/basic/encoder.h>
+//// motor controller
+//#include <ctl/component/intrinsic/combo/track_pid.h>
+//#include <ctl/component/motor_control/basic/motor_current_ctrl.h>
+//
+//// input & output interface
+//#include <ctl/component/intrinsic/interface/adc_channel.h>
+//#include <ctl/component/intrinsic/interface/pwm_channel.h>
+//
+//// consultant objects
+//#include <ctl/component/motor_control/consultant/motor_driver_consultant.h>
+//#include <ctl/component/motor_control/consultant/pmsm_consultant.h>
+//
+//// controller encoder interface
+//#include <ctl/component/motor_control/basic/encoder.h>
 
 #ifndef _FILE_PMSM_SERVO_H_
 #define _FILE_PMSM_SERVO_H_

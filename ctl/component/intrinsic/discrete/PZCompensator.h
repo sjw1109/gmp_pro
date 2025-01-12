@@ -60,7 +60,7 @@ extern "C"
     GMP_STATIC_INLINE
     ctrl_gt ctl_step_1p1z(ctrl_1p1z_t *c, ctrl_gt input)
     {
-        c->output = ctl_mpy(c->coef_a, c->resp) + ctl_mpy(coef_b[1], c->exct) + ctl_mpy(coef[0], input);
+        c->output = ctl_mul(c->coef_a, c->resp) + ctl_mul(c->coef_b[1], c->exct) + ctl_mul(c->coef_b[0], input);
 
         c->exct = input;
         c->resp = ctl_sat(c->output, c->out_sto_min, c->out_max);
@@ -118,9 +118,9 @@ extern "C"
         c->exct[0] = input;
 
         c->resp[1] = c->resp[0];
-        c->resp[0] = gmp_math_sat(c->output, c->out_sto_min, c->out_max);
+        c->resp[0] = ctl_sat(c->output, c->out_sto_min, c->out_max);
 
-        c->output = gmp_math_sat(c->output, c->out_min, c->out_max);
+        c->output = ctl_sat(c->output, c->out_min, c->out_max);
 
         return c->output;
     }
@@ -176,9 +176,9 @@ extern "C"
 
         c->resp[2] = c->resp[1];
         c->resp[1] = c->resp[0];
-        c->resp[0] = gmp_math_sat(c->output, c->out_sto_min, c->out_max);
+        c->resp[0] = ctl_sat(c->output, c->out_sto_min, c->out_max);
 
-        c->output = gmp_math_sat(c->output, c->out_min, c->out_max);
+        c->output = ctl_sat(c->output, c->out_min, c->out_max);
 
         return c->output;
     }
