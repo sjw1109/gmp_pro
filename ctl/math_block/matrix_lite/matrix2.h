@@ -84,7 +84,7 @@ void ctl_matrix2_gain(ctl_matrix2_t *result, ctl_matrix2_t *a, ctrl_gt b)
 // $$ a_0p_0^2+a_0p_0p_2+a_1p_0p_1+a_3p_1p_2,\; a_0p_0p_2+a_1p_2^2+a_1p_0p_3+a_3p_2p_3 \\
 //    a_0p_0p_1+a_2p_0p_3+a_1p_1^2+a_3p_1p_3,\; a_0p_1p_2+a_2p_2p_3+a_1p_1p_3+a_3p_3^2
 // $$
-void ctl_matrix2_congruent_trans(ctl_matrix2_t *result, ctl_matrix2_t *a, ctl_matrix2_t *p)
+void ctl_matrix2_congruent(ctl_matrix2_t *result, ctl_matrix2_t *a, ctl_matrix2_t *p)
 {
     ctrl_gt p0p0 = ctl_mul(p->dat[0], p->dat[0]);
     ctrl_gt p0p1 = ctl_mul(p->dat[0], p->dat[1]);
