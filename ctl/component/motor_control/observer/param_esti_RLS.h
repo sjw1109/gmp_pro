@@ -149,17 +149,17 @@ typedef struct _tag_RLS_data
 } RLS_data_t;
 
 
-// matrix 和 vector 支持2，3，4维
+// matrix �?vector 支持2�?�?�?
 // 加法，点乘，数乘
 // matrix-vector：左乘、右乘，
 // matrix: 逆。乘法，加法，转置，行列式，数乘
-// 清零，赋值
-// 定义和常数的加法加常数乘以单位矩阵
+// 清零，赋�?
+// 定义和常数的加法加常数乘以单位矩�?
 
 
 typedef struct _tag_RLS
 {
-    // 电机场景其实是Ldq，
+    // 电机场景其实是Ldq�?
     // model: Y(i) = X(i)^T * W(i)
     // U = L * I
 
