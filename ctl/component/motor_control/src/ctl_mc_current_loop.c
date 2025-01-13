@@ -11,16 +11,16 @@
 ec_gt ctl_init_motor_current_ctrl(ctl_motor_current_ctrl_t *obj)
 {
     obj->udc = float2ctrl(1.0);
-    ctl_clear_vector3(&obj->iabc);
-    ctl_clear_vector2(&obj->idq_ref);
-    ctl_clear_vector2(&obj->vdq_ff);
+    ctl_vector3_clear(&obj->iabc);
+    ctl_vector2_clear(&obj->idq_ref);
+    ctl_vector2_clear(&obj->vdq_ff);
     obj->theta = 0;
 
-    ctl_clear_vector3(&obj->Tabc);
-    ctl_clear_vector3(&obj->idq0);
-    ctl_clear_vector3(&obj->iab0);
-    ctl_clear_vector3(&obj->vdq0);
-    ctl_clear_vector3(&obj->vab0);
+    ctl_vector3_clear(&obj->Tabc);
+    ctl_vector3_clear(&obj->idq0);
+    ctl_vector3_clear(&obj->iab0);
+    ctl_vector3_clear(&obj->vdq0);
+    ctl_vector3_clear(&obj->vab0);
 
     ctl_init_pid(&obj->idq_ctrl[phase_d]);
     ctl_init_pid(&obj->idq_ctrl[phase_q]);

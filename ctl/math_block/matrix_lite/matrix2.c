@@ -5,6 +5,24 @@
 
 #include <ctl/math_block/matrix_lite/matrix2.h>
 
+void ctl_matrix2_clear(ctl_matrix2_t* matrix)
+{
+    matrix->dat[0] = 0;
+    matrix->dat[1] = 0;
+    matrix->dat[2] = 0;
+    matrix->dat[3] = 0;
+}
+
+// copy src to dup matrix
+void ctl_matrix2_copy(ctl_matrix2_t* dup, ctl_matrix2_t* src)
+{
+    dup->dat[0] = src->dat[0];
+    dup->dat[1] = src->dat[1];
+    dup->dat[2] = src->dat[2];
+    dup->dat[3] = src->dat[3];
+}
+
+// inv = src ^(-1)
 void ctl_matrix2_inv(ctl_matrix2_t *inv, ctl_matrix2_t *src)
 {
     ctrl_gt gain = ctl_div(ctrl2float(1.0), ctl_mul(src->dat[0], src->dat[3]) - ctl_mul(src->dat[1], src->dat[2]));

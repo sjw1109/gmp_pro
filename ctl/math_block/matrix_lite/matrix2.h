@@ -16,6 +16,12 @@ extern "C"
         ctrl_gt dat[4];
     } ctl_matrix2_t;
 
+    // set all element to 0
+    void ctl_matrix2_clear(ctl_matrix2_t *matrix);
+
+    // copy all element to another matrix
+    void ctl_matrix2_copy(ctl_matrix2_t *dup, ctl_matrix2_t *src);
+
     // inv = src^{-1}
     void ctl_matrix2_inv(ctl_matrix2_t *inv, ctl_matrix2_t *src);
 

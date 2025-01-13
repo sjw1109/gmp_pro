@@ -145,7 +145,7 @@ void ctl_step_motor_current_ctrl(ctl_motor_current_ctrl_t *obj, ctrl_gt theta)
     }
     else
     {
-        ctl_clear_vector3(&obj->Tabc);
+        ctl_vector3_clear(&obj->Tabc);
     }
 
 }
