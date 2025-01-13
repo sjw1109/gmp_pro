@@ -102,18 +102,27 @@ typedef GMP_PORT_CTRL_T ctrl_gt;
 // ....................................................................//
 // basic type of Controller parameters
 //
+
+#if (SPECIFY_CTRL_GT_TYPE == USING_DOUBLE_FPU)
+
+#ifndef GMP_PORT_PARAMETER_T
+#define GMP_PORT_PARAMETER_T              double
+#define GMP_PORT_PARAMETER_SIZE_PER_BITS  (64)
+#define GMP_PORT_PARAMETER_SIZE_PER_BYTES (8)
+#endif // GMP_PORT_PARAMETER_T
+
+#else // SPECIFY_CTRL_GT_TYPE
+
 #ifndef GMP_PORT_PARAMETER_T
 #define GMP_PORT_PARAMETER_T              float
 #define GMP_PORT_PARAMETER_SIZE_PER_BITS  (48)
 #define GMP_PORT_PARAMETER_SIZE_PER_BYTES (6)
 #endif // GMP_PORT_PARAMETER_T
 
+#endif // SPECIFY_CTRL_GT_TYPE
+
+
 typedef GMP_PORT_PARAMETER_T parameter_gt;
-
-
-
-
-
 
 
 //////////////////////////////////////////////////////////////////////////

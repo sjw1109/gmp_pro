@@ -4,6 +4,7 @@
 
 #ifdef __cplusplus
 extern "C"
+{
 #endif // __cplusplus
 
 typedef struct _tag_per_unit_consultant_t
@@ -19,10 +20,11 @@ typedef struct _tag_per_unit_consultant_t
     parameter_gt base_speed;      // omega: rad/s
     parameter_gt base_speed_krpm; // n: krpm
 
-    parameter_gt base_impedence;  // R: Ohm
-    parameter_gt base_inductance; // L: H
-    parameter_gt base_flux;       // phi: Wb
-    parameter_gt base_torque;     // T: N`m
+    parameter_gt base_impedence;   // R: Ohm
+    parameter_gt base_inductance;  // L: H
+    parameter_gt base_capacitance; // C: F
+    parameter_gt base_flux;        // phi: Wb
+    parameter_gt base_torque;      // T: N`m
 
     parameter_gt base_inst_current; // instantaneous current: A
 
@@ -39,6 +41,23 @@ void ctl_setup_per_unit_consultant_by_puf(ctl_per_unit_consultant_t *pu, uint32_
 
 // horsepower to SI power
 parameter_gt ctl_helper_hp2power(parameter_gt hp);
+
+// connected in wye, nominal voltage RMS line-to-line -> phase voltage
+GMP_STATIC_INLINE
+parameter_gt ctl_helper_wye_line_voltage_to_phase(parameter_gt wye_value)
+{
+    return wye_value / SQRT_3;
+}
+
+// connected in delta, nominal voltage RMS line to line -> phase voltage
+GMP_STATIC_INLINE
+parameter_gt ctl_helper_delta_line_voltage_to_phase(parameter_gt delta_value)
+{
+    return delta_value;
+}
+
+
+
 
 #ifdef __cplusplus
 }
