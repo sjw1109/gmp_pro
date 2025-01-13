@@ -48,7 +48,7 @@ extern "C"
 
     // result = p^T * A * p
     // for matrix2 is,
-    // tex:
+    //tex:
     // $$ a_0p_0^2+a_0p_0p_2+a_1p_0p_1+a_3p_1p_2,\; a_0p_0p_2+a_1p_2^2+a_1p_0p_3+a_3p_2p_3 \\
     //    a_0p_0p_1+a_2p_0p_3+a_1p_1^2+a_3p_1p_3,\; a_0p_1p_2+a_2p_2p_3+a_1p_1p_3+a_3p_3^2
     // $$
