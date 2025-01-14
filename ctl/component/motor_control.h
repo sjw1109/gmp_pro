@@ -27,6 +27,8 @@
 
 #include <ctl/component/motor_control/consultant/pmsm_consultant.h>
 
+#include <ctl/component/motor_control/consultant/motor_per_unit_consultant.h>
+
 #endif // GMP_CTL_DISABLE_COM_MC_CONSULTANT
 
 #ifndef GMP_CTL_DISABLE_COM_MC_CURRENT_LOOP

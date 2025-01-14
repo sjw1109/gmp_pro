@@ -23,13 +23,13 @@ typedef struct _tag_mtr_ctrl_framework
     pwm_tri_channel_t tabc;
 
     // Clark trans result
+    // alpha-beta axis value
     ctl_vector2_t iab;
     ctl_vector2_t vab;
 
     // Park trans result
     ctl_vector2_t idq;
     ctl_vector2_t vdq;
-
 
     // modulation
 
