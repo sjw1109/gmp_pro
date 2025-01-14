@@ -28,6 +28,9 @@ extern "C"
     // result = src1 * src2
     void ctl_matrix2_mul(ctl_matrix2_t *result, ctl_matrix2_t *src1, ctl_matrix2_t *src2);
 
+    // result = src1(i,j) * src2(i,j)
+    void ctl_matrix2_product(ctl_matrix2_t *result, ctl_matrix2_t *src1, ctl_matrix2_t *src2);
+
     // result = mat * vec
     void ctl_matrix2_mul_vector(ctl_vector2_t *result, ctl_matrix2_t *mat, ctl_vector2_t *vec);
 

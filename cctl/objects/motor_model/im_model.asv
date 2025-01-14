@@ -1,0 +1,24 @@
+syms a0 a1 a2 a3
+
+A = [a0, a1; a2, a3];
+
+inv(A)
+
+%% inductor motor
+
+% [R] matrix
+
+syms Rs Rr
+
+R = diag([Rs, Rs, Rr, Rr]);
+
+% [L] matrix
+syms Ls Lr Lm
+
+L = [Ls, 0, Lm, 0; 0, Ls, 0, Lm; Lm, 0, Lr, 0; 0, Lm, 0, Lr];
+
+% [omega] matrix
+syms omega_da omega_dA
+
+Omega = [0, -omega_da, 0, 0; omega_da, 0, 0, 0; 0,0,0,-omega_dA; 0,0,omega_dA,0];
+

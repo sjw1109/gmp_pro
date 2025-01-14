@@ -42,6 +42,15 @@ void ctl_matrix2_mul(ctl_matrix2_t *result, ctl_matrix2_t *src1, ctl_matrix2_t *
     result->dat[3] = ctl_mul(src1->dat[2], src2->dat[1]) + ctl_mul(src1->dat[3], src2->dat[3]);
 }
 
+// result = src1(i,j) * src2(i,j)
+void ctl_matrix2_product(ctl_matrix2_t* result, ctl_matrix2_t* src1, ctl_matrix2_t* src2)
+{
+    result->dat[0] = ctl_mul(src1->dat[0], src2->dat[0]);
+    result->dat[1] = ctl_mul(src1->dat[1], src2->dat[1]);
+    result->dat[2] = ctl_mul(src1->dat[2], src2->dat[2]);
+    result->dat[3] = ctl_mul(src1->dat[3], src2->dat[3]);
+}
+
 // result = mat * vec
 void ctl_matrix2_mul_vector(ctl_vector2_t *result, ctl_matrix2_t *mat, ctl_vector2_t *vec)
 {

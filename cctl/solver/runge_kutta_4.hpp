@@ -1,5 +1,9 @@
 // This file will implement a Runge-Kutta Solver.
 
+#ifndef _FILE_RUNGE_KUTTA_4_HPP_
+#define _FILE_RUNGE_KUTTA_4_HPP_
+
+
 // In order to solve a equation user should implement a class which
 // provide a `operator +=` to implement a integral and
 // a `operator()` to get diff item.
@@ -50,7 +54,7 @@ template <typename template_type> class diff_rlc_resonance
     typedef typename st_rlc_resonance<_T> _st;
 
   public:
-    _T U_in;
+    _T *U_in;
 
   public:
     // system parameters
@@ -59,11 +63,16 @@ template <typename template_type> class diff_rlc_resonance
     _T R;
 
   public:
-    _st operator()(const _st &st) const
+    void bind(_T *U_in)
+    {
+        this->U_in = U_in;
+    }
+
+    _st operator()(const _st &st)
     {
         _st diff;
         diff.uc = st.il / C;
-        diff.il = -st.uc / L - R / L * st.il + U_in / L;
+        diff.il = -st.uc / L - R / L * st.il + (*U_in) / L;
 
         return diff;
     }
@@ -100,3 +109,8 @@ template <typename _diff, typename _T = typename _diff::_T> class RungeKutta
         return st;
     }
 };
+
+
+
+
+#endif // _FILE_RUNGE_KUTTA_4_HPP_
