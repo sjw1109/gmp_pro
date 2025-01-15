@@ -2,7 +2,6 @@
 #ifndef _FILE_IM_MODEL_H_
 #define _FILE_IM_MODEL_H_
 
-
 // tex:
 //   $$
 //[                                           (Lr*Rs)/(Lm^2 - Lr*Ls),  (Lm^2*omega_dA)/(Lm^2 - Lr*Ls) -
@@ -64,7 +63,7 @@ template <typename template_type> class st_im_motor
     }
 };
 
-template <typename template_type> class diff_rlc_resonance
+template <typename template_type> class diff_im_motor
 {
   public:
     typedef typename template_type _T;
@@ -81,6 +80,10 @@ template <typename template_type> class diff_rlc_resonance
     _T Rs, Rr;
     _T Ls, Lr, Lm;
 
+    uint16_t pole_pair;
+    _T damping;
+    _T J;
+
     // A matrix for EM process
     _T A_em[16];
 
@@ -92,9 +95,6 @@ template <typename template_type> class diff_rlc_resonance
 
     // intermediate variables
     _T lmlm, lmlr, lmls, lrls;
-
-    uint16_t pole_pair;
-    _T damping;
 
     // output variables
     _T torque;
@@ -109,7 +109,13 @@ template <typename template_type> class diff_rlc_resonance
     const _T k_zeta = _T(sqrt(3) / 2.0);   // sqrt(3)/2
 
   public:
-    void bind(_T *usa, _T *usb, _T *usc, _T *ura, _T *urb, _T *urc)
+    // ctor:
+    diff_im_motor() : torque(0), isa(0), isb(0), isc(0), ira(0), irb(0), irc(0)
+    {
+    }
+
+  public:
+    void bind(_T *usa, _T *usb, _T *usc, _T *ura, _T *urb, _T *urc, _T *load)
     {
         this->usa = usa;
         this->usb = usb;
@@ -117,9 +123,10 @@ template <typename template_type> class diff_rlc_resonance
         this->ura = ura;
         this->urb = urb;
         this->urc = urc;
+        this->t_load = load;
     }
 
-    void set_param(_T Rs, _T Rr, _T Ls, _T Lr, _T Lm, _T damping, uint16_t p)
+    void set_param(_T Rs, _T Rr, _T Ls, _T Lr, _T Lm, _T J, _T damping, uint16_t p)
     {
         this->Rs = Rs;
         this->Rr = Rr;
@@ -127,6 +134,7 @@ template <typename template_type> class diff_rlc_resonance
         this->Lr = Lr;
         this->Lm = Lm;
 
+        this->J = J;
         this->damping = damping;
         this->pole_pair = p;
 
@@ -135,8 +143,9 @@ template <typename template_type> class diff_rlc_resonance
 
     void update_state_matrix()
     {
-        _T omega_da = 0;        // 定子固定不转
-        _T omega_dA = -omega_e; // 转子的速度
+        _T omega_da = 0; // 定子固定不转
+                         // _T omega_dA = -omega_e; // 转子的速度
+        _T omega_dA = 0; // 转子的速度
 
         sigma = 1 / (Lm * Lm - Lr * Ls);
 
@@ -249,7 +258,7 @@ template <typename template_type> class diff_rlc_resonance
         vrq = -vr_alpha * sin_theta + vr_beta * cos_theta;
 
         // update A matrix
-        _T omega_dA = -omega_e;
+        _T omega_dA = -st.omega_e;
 
         _T lmlm_omega = lmlm * omega_dA;
         _T lmlr_omega = lmlr * omega_dA;
@@ -285,7 +294,7 @@ template <typename template_type> class diff_rlc_resonance
         // mechanical equations
         // CHECK POINT: 恒幅值变换带来的影响只有此处
         torque = 3.0 / 2 * pole_pair * Lm * (st.isq * st.ird - st.isd * st.irq);
-        diff.omega_e = (torque - (*t_load) - damping * omega_e / pole_pair) / J * pole_pair;
+        diff.omega_e = (torque - (*t_load) - damping * st.omega_e / pole_pair) / J * pole_pair;
         diff.theta = st.omega_e / pole_pair;
 
         // iClarke iPark to get iabc
@@ -298,8 +307,8 @@ template <typename template_type> class diff_rlc_resonance
         // rotor current
         _T ira, irb, irc;
 
-        _T ir_alpha = ird * cos_theta - irq * sin_theta;
-        _T ir_beta = ird * sin_theta + irq * cos_theta;
+        _T ir_alpha = st.ird * cos_theta - st.irq * sin_theta;
+        _T ir_beta = st.ird * sin_theta + st.irq * cos_theta;
 
         // check point 这里丢掉了i0是否正确
         ira = ir_alpha;
@@ -309,6 +318,5 @@ template <typename template_type> class diff_rlc_resonance
         return diff;
     }
 };
-
 
 #endif // _FILE_IM_MODEL_H_

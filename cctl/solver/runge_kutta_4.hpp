@@ -95,7 +95,7 @@ template <typename _diff, typename _T = typename _diff::_T> class RungeKutta
     _st st;
 
   public:
-    RungeKutta(_T _dt) : dt(_dt), half_dt(_dt * 0.5), time(0){};
+    RungeKutta(_T _dt) : dt(_dt), half_dt(_dt * 0.5), time(0),diff(){};
 
     _st &operator()()
     {
