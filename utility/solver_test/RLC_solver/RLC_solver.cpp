@@ -24,9 +24,9 @@ int main()
 
     RungeKutta<diff_rlc_resonance<double>> rlc_model_rk(1e-7);
 
-    rlc_model_rk.diff.C = 1e-5;
+    rlc_model_rk.diff.C = 1e-4;
     rlc_model_rk.diff.L = 1e-3;
-    rlc_model_rk.diff.R = 100;
+    rlc_model_rk.diff.R = 1;
 
     double Uin = 10;
 
@@ -47,7 +47,7 @@ int main()
 
 #endif
 
-#if 0
+#if 1
 int main()
 {
     std::cout << "Hello World!\n";
@@ -60,7 +60,7 @@ int main()
 
     rlc_model_rk.diff.C = 1e-6;
     rlc_model_rk.diff.L = 1e-3;
-    rlc_model_rk.diff.R = 40;
+    rlc_model_rk.diff.R = 4;
 
     hb.R_on = 10;
     
@@ -75,13 +75,13 @@ int main()
 
     for (size_t i = 0; i < 100000; ++i)
     {
-        if (i % 1000 < 500)
+        if (i % 100 < 50)
             pwm = 0;
         else
             pwm = 1;
 
-        hb();
         rlc_model_rk();
+        hb();
 
         file << pwm << ", " << rlc_model_rk.time << ", " << rlc_model_rk.st.il << "," << rlc_model_rk.st.uc
              << std::endl;
@@ -92,6 +92,7 @@ int main()
 
 #endif
 
+#if 0
 int main()
 {
     std::cout << "Hello World!\n";
@@ -165,3 +166,5 @@ int main()
 
     file.close();
 }
+
+#endif 
