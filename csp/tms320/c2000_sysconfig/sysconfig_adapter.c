@@ -1,3 +1,14 @@
+/**
+ * @file sysconfig_adapter.c
+ * @author Javnson (javnson@zju.edu.cn)
+ * @brief
+ * @version 0.1
+ * @date 2025-01-18
+ *
+ * @copyright Copyright GMP(c) 2024
+ *
+ */
+
 
 // This file provide a set of function that CSP must defined.
 
@@ -53,6 +64,7 @@ void gmp_csp_startup(void)
     //
     Interrupt_initModule();
     Interrupt_initVectorTable();
+
 #endif // _C2000_DSP_DISABLE_DEVICE_SUPPORT_
 
     //
@@ -67,4 +79,13 @@ void gmp_csp_startup(void)
 #ifndef _C2000_CSP_DISABLE_C2000WARE_LIBRARY_
     C2000Ware_libraries_init();
 #endif // _C2000_CSP_DISABLE_C2000WARE_LIBRARY_
+
 }
+
+void gmp_csp_loop()
+{}
+
+void gmp_csp_post_process()
+{}
+
+

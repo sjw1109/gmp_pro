@@ -12,6 +12,10 @@
 #ifndef _FILE_CSP_GENERAL_H_
 #define _FILE_CSP_GENERAL_H_
 
+// Basement from C2000ware library.
+#include "device.h"
+#include "driverlib.h"
+
 //
 // ClockTree Tool
 //

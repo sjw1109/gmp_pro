@@ -29,7 +29,7 @@ void ctl_setup_per_unit_consultant_by_puf(ctl_per_unit_consultant_t *pu, uint32_
     pu->base_impedence = pu->base_voltage / pu->base_current;
     pu->base_inductance = pu->base_impedence / pu->base_omega;
     pu->base_capacitance = 1 / pu->base_impedence / pu->base_omega;
-    pu->base_flux = base_inst_voltage / pu->base_omega;
+    pu->base_flux = pu->base_inst_voltage / pu->base_omega;
     pu->base_torque = pu->base_power * pu->phases / pu->base_speed;
 }
 

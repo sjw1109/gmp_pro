@@ -13,6 +13,7 @@
 
 // include pll module
 //#include <ctl/component/common/pll.h>
+#include <ctl/component/intrinsic/discrete/pid.h>
 #include <ctl/component/motor_control/consultant/motor_driver_consultant.h>
 #include <ctl/component/motor_control/consultant/pmsm_consultant.h>
 

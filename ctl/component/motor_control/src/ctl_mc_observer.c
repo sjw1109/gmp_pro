@@ -3,6 +3,8 @@
 
 #include <ctl/ctl_core.h>
 
+#include <ctl/component/intrinsic/discrete/filter.h>
+
 //////////////////////////////////////////////////////////////////////////
 // pmsm smo
 

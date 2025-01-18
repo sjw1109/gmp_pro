@@ -51,7 +51,8 @@
 #define GMP_WEAK_FUNC_SUFFIX //__attribute__((weak))
 
 // + disable optimization
-#define GMP_NO_OPT_PREFIX _Pragma("FUNCTION_OPTIONS(\"--opt_level=0\")")
+//#define GMP_NO_OPT_PREFIX _Pragma("FUNCTION_OPTIONS(\"--opt_level=0\")")
+#define GMP_NO_OPT_PREFIX _Pragma("FUNC_OPTIMIZE_OPTLEVEL(\"0\")")
 #define GMP_NO_OPT_SUFFIX
 
 // + variables aligned
