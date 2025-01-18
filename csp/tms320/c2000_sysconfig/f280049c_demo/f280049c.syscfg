@@ -1,0 +1,86 @@
+/**
+ * These arguments were used when this file was generated. They will be automatically applied on subsequent loads
+ * via the GUI or CLI. Run CLI with '--help' for additional information on how to override these arguments.
+ * @cliArgs --board "/boards/LAUNCHXL_F280049C" --device "F28004x" --part "F28004x_100PZ" --package "F28004x_100PZ" --context "system" --product "C2000WARE@5.03.00.00"
+ * @v2CliArgs --board "/boards/LAUNCHXL_F280049C" --device "TMS320F280049C" --package "100PZ" --context "system" --product "C2000WARE@5.03.00.00"
+ * @versions {"tool":"1.22.0+3893"}
+ */
+
+/**
+ * Import the modules used in this configuration.
+ */
+const adc            = scripting.addModule("/driverlib/adc.js", {}, false);
+const adc1           = adc.addInstance();
+const fsi            = scripting.addModule("/driverlib/board_components/fsi", {}, false);
+const fsi1           = fsi.addInstance();
+const clb            = scripting.addModule("/driverlib/clb.js", {}, false);
+const clb1           = clb.addInstance();
+const device_support = scripting.addModule("/driverlib/device_support.js");
+const spi            = scripting.addModule("/driverlib/spi.js", {}, false);
+const spi1           = spi.addInstance();
+const IQmath         = scripting.addModule("/libraries/math/IQmath/IQmath.js", {}, false);
+const IQmath1        = IQmath.addInstance();
+const CMD            = scripting.addModule("/utilities/cmd_tool/cmd_syscfg/source/CMD", {}, false);
+const CMD1           = CMD.addInstance();
+const exporter       = scripting.addModule("/utilities/transfer/exporter.js", {}, false);
+const exporter1      = exporter.addInstance();
+
+/**
+ * Write custom configuration values to the imported modules.
+ */
+adc1.$name                   = "myADC0";
+adc1.adcClockPrescaler       = "ADC_CLK_DIV_8_0";
+adc1.registerInterrupts      = ["1"];
+adc1.adcInt1.enableInterrupt = true;
+
+fsi1.$name                   = "myBoardFSI0";
+fsi1.fsiRx.softwareFrameSize = "16";
+fsi1.fsiRx.$hardware         = system.deviceData.board.components.FSI_HEADER;
+fsi1.fsiRx.d0Qual.$name      = "myGPIOQUAL4";
+fsi1.fsiRx.d1Qual.$name      = "myGPIOQUAL5";
+fsi1.fsiRx.clkQual.$name     = "myGPIOQUAL6";
+fsi1.fsiTx.$hardware         = system.deviceData.board.components.FSI_HEADER;
+fsi1.fsiTx.d0Qual.$name      = "myGPIOQUAL7";
+fsi1.fsiTx.d1Qual.$name      = "myGPIOQUAL8";
+fsi1.fsiTx.clkQual.$name     = "myGPIOQUAL9";
+
+clb1.$name = "myCLB0";
+
+spi1.$name          = "mySPI0";
+spi1.$hardware      = system.deviceData.board.components.BP_SITE_1.subComponents.SPI;
+spi1.mode           = "SPI_MODE_CONTROLLER";
+spi1.dataWidth      = "8";
+spi1.picoQual.$name = "myGPIOQUAL0";
+spi1.pociQual.$name = "myGPIOQUAL1";
+spi1.clkQual.$name  = "myGPIOQUAL2";
+spi1.pteQual.$name  = "myGPIOQUAL3";
+
+IQmath1.$name = "myIQmath0";
+
+CMD1.$name = "CMD0";
+
+exporter1.$name                                = "myEXPORT0";
+exporter1.comsLinkModule.sci.sci_rxPin.$assign = "boosterpack1.3";
+exporter1.comsLinkModule.sci.sci_txPin.$assign = "boosterpack1.32";
+exporter1.comsLinkModule.rxQual.$name          = "myGPIOQUAL10";
+exporter1.comsLinkModule.txQual.$name          = "myGPIOQUAL11";
+
+/**
+ * Pinmux solution for unlocked pins/peripherals. This ensures that minor changes to the automatic solver in a future
+ * version of the tool will not impact the pinmux you originally saw.  These lines can be completely deleted in order to
+ * re-solve from scratch.
+ */
+fsi1.fsiRx.fsirx.$suggestSolution              = "FSIRXA";
+fsi1.fsiRx.fsirx.fsirx_d0Pin.$suggestSolution  = "boosterpack2.51";
+fsi1.fsiRx.fsirx.fsirx_d1Pin.$suggestSolution  = "boosterpack2.76";
+fsi1.fsiRx.fsirx.fsirx_clkPin.$suggestSolution = "boosterpack2.53";
+fsi1.fsiTx.fsitx.$suggestSolution              = "FSITXA";
+fsi1.fsiTx.fsitx.fsitx_d0Pin.$suggestSolution  = "boosterpack2.78";
+fsi1.fsiTx.fsitx.fsitx_d1Pin.$suggestSolution  = "boosterpack1.31";
+fsi1.fsiTx.fsitx.fsitx_clkPin.$suggestSolution = "boosterpack2.77";
+spi1.spi.$suggestSolution                      = "SPIA";
+spi1.spi.spi_picoPin.$suggestSolution          = "boosterpack1.15";
+spi1.spi.spi_pociPin.$suggestSolution          = "boosterpack1.14";
+spi1.spi.spi_clkPin.$suggestSolution           = "boosterpack1.7";
+spi1.spi.spi_ptePin.$suggestSolution           = "boosterpack1.19";
+exporter1.comsLinkModule.sci.$suggestSolution  = "SCIB";
