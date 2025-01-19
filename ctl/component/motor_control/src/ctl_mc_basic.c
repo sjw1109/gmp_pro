@@ -116,7 +116,7 @@ void ctl_setup_spd_calculator(
         maximum_div = speed_calc_div;
     }
 
-    sc->scale_factor = float2ctrl(60.0 * control_law_freq / maximum_div / pole_pairs / rated_speed_rpm);
+    sc->scale_factor = float2ctrl(60.0f * control_law_freq / maximum_div / pole_pairs / rated_speed_rpm);
     ctl_setup_lp_filter(&sc->spd_filter, control_law_freq / maximum_div, speed_filter_fc);
     ctl_setup_divider(&sc->div, maximum_div);
 

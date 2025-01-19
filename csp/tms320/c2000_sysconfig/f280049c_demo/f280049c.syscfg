@@ -9,21 +9,80 @@
 /**
  * Import the modules used in this configuration.
  */
+const adc            = scripting.addModule("/driverlib/adc.js", {}, false);
+const adc1           = adc.addInstance();
+const aio            = scripting.addModule("/driverlib/aio.js", {}, false);
+const aio1           = aio.addInstance();
+const aio2           = aio.addInstance();
+const aio3           = aio.addInstance();
+const aio4           = aio.addInstance();
+const aio5           = aio.addInstance();
+const aio6           = aio.addInstance();
+const aio7           = aio.addInstance();
+const aio8           = aio.addInstance();
 const fsi            = scripting.addModule("/driverlib/board_components/fsi", {}, false);
 const fsi1           = fsi.addInstance();
+const led            = scripting.addModule("/driverlib/board_components/led", {}, false);
+const led1           = led.addInstance();
+const led2           = led.addInstance();
 const clb            = scripting.addModule("/driverlib/clb.js", {}, false);
 const clb1           = clb.addInstance();
+const dac            = scripting.addModule("/driverlib/dac.js", {}, false);
+const dac1           = dac.addInstance();
 const device_support = scripting.addModule("/driverlib/device_support.js");
+const epwm           = scripting.addModule("/driverlib/epwm.js", {}, false);
+const epwm1          = epwm.addInstance();
+const epwm2          = epwm.addInstance();
+const epwm3          = epwm.addInstance();
 const spi            = scripting.addModule("/driverlib/spi.js", {}, false);
 const spi1           = spi.addInstance();
-const CMD            = scripting.addModule("/utilities/cmd_tool/cmd_syscfg/source/CMD", {}, false);
-const CMD1           = CMD.addInstance();
+const FPUfastRTS     = scripting.addModule("/libraries/math/FPUfastRTS/FPUfastRTS.js", {}, false);
+const FPUfastRTS1    = FPUfastRTS.addInstance();
+const IQmath         = scripting.addModule("/libraries/math/IQmath/IQmath.js", {}, false);
+const IQmath1        = IQmath.addInstance();
 const exporter       = scripting.addModule("/utilities/transfer/exporter.js", {}, false);
 const exporter1      = exporter.addInstance();
 
 /**
  * Write custom configuration values to the imported modules.
  */
+adc1.$name                = "myADC0";
+adc1.adcClockPrescaler    = "ADC_CLK_DIV_2_0";
+adc1.socHighPriorityMode  = "ADC_PRI_SOC0_HIPRI";
+adc1.enabledSOCs          = ["ADC_SOC_NUMBER8"];
+adc1.soc8SampleWindow     = 8;
+adc1.interruptPulseMode   = "ADC_PULSE_END_OF_CONV";
+adc1.enabledInts          = ["ADC_INT_NUMBER1"];
+adc1.interrupt1SOCSource  = "ADC_SOC_NUMBER8";
+adc1.enableInterrupt1     = true;
+adc1.soc8Trigger          = "ADC_TRIGGER_EPWM1_SOCA";
+adc1.soc8InterruptTrigger = "ADC_INT_SOC_TRIGGER_ADCINT1";
+
+aio1.$name          = "myAIO0";
+aio1.aioPin.$assign = "AIO234";
+
+aio2.$name          = "myAIO1";
+aio2.aioPin.$assign = "AIO241";
+
+aio3.$name          = "myAIO2";
+aio3.aioPin.$assign = "AIO244";
+
+aio4.$name          = "myAIO3";
+aio4.aioPin.$assign = "AIO230";
+
+aio5.$name          = "myAIO4";
+aio5.aioPin.$assign = "AIO226";
+
+aio6.$name          = "myAIO5";
+aio6.aioPin.$assign = "AIO237";
+
+aio7.$name          = "myAIO6";
+aio7.aioPin.$assign = "AIO236";
+
+aio8.$name                  = "myAIO7";
+aio8.aioPin.$assign         = "AIO232";
+aio8.aioPin["AIO#"].$assign = "boosterpack1.30";
+
 fsi1.$name                   = "myBoardFSI0";
 fsi1.fsiRx.softwareFrameSize = "16";
 fsi1.fsiRx.$hardware         = system.deviceData.board.components.FSI_HEADER;
@@ -35,7 +94,35 @@ fsi1.fsiTx.d0Qual.$name      = "myGPIOQUAL7";
 fsi1.fsiTx.d1Qual.$name      = "myGPIOQUAL8";
 fsi1.fsiTx.clkQual.$name     = "myGPIOQUAL9";
 
+led1.$name     = "myBoardLED0";
+led1.$hardware = system.deviceData.board.components.LED4;
+
+led2.$name     = "myBoardLED1";
+led2.$hardware = system.deviceData.board.components.LED5;
+
 clb1.$name = "myCLB0";
+
+dac1.$name        = "myDAC0";
+dac1.dacBase      = "DACB_BASE";
+dac1.enableOutput = true;
+
+epwm1.$hardware = system.deviceData.board.components.BP_SITE_1.subComponents.PWM_LOC1;
+epwm1.$name     = "EPWMU";
+
+epwm2.$hardware = system.deviceData.board.components.BP_SITE_1.subComponents.PWM_LOC2;
+epwm2.$name     = "EPWMV";
+
+epwm3.$hardware                         = system.deviceData.board.components.BP_SITE_1.subComponents.PWM_LOC3;
+epwm3.$name                             = "EPWMW";
+epwm3.epwmTimebase_emulationMode        = "EPWM_EMULATION_FREE_RUN";
+epwm3.epwmTimebase_hsClockDiv           = "EPWM_HSCLOCK_DIVIDER_1";
+epwm3.epwmTimebase_counterMode          = "EPWM_COUNTER_MODE_UP_DOWN";
+epwm3.epwmTimebase_counterModeAfterSync = "EPWM_COUNT_MODE_UP_AFTER_SYNC";
+epwm3.epwmTimebase_syncOutPulseMode     = "EPWM_SYNC_OUT_PULSE_ON_COUNTER_ZERO";
+epwm3.epwmCounterCompare_cmpC           = 5;
+epwm3.epwmCounterCompare_cmpD           = 5;
+scripting.suppress("CMP value is out of range of TBPRD\\. Refer to table, Behavior if CMPA/CMPB is Greater than the Period, within the TRM", epwm3, "epwmCounterCompare_cmpC");
+scripting.suppress("CMP value is out of range of TBPRD\\. Refer to table, Behavior if CMPA/CMPB is Greater than the Period, within the TRM", epwm3, "epwmCounterCompare_cmpD");
 
 spi1.$name          = "mySPI0";
 spi1.$hardware      = system.deviceData.board.components.BP_SITE_1.subComponents.SPI;
@@ -46,7 +133,9 @@ spi1.pociQual.$name = "myGPIOQUAL1";
 spi1.clkQual.$name  = "myGPIOQUAL2";
 spi1.pteQual.$name  = "myGPIOQUAL3";
 
-CMD1.$name = "CMD0";
+FPUfastRTS1.$name = "myFFR0";
+
+IQmath1.$name = "myIQmath0";
 
 exporter1.$name                                = "myEXPORT0";
 exporter1.comsLinkModule.sci.sci_rxPin.$assign = "boosterpack1.3";
@@ -60,6 +149,13 @@ scripting.suppress("Connected to hardware,@@@.+?@@@ is connected to SCIB BP on t
  * version of the tool will not impact the pinmux you originally saw.  These lines can be completely deleted in order to
  * re-solve from scratch.
  */
+aio1.aioPin["AIO#"].$suggestSolution           = "boosterpack1.23";
+aio2.aioPin["AIO#"].$suggestSolution           = "boosterpack1.24";
+aio3.aioPin["AIO#"].$suggestSolution           = "boosterpack1.25";
+aio4.aioPin["AIO#"].$suggestSolution           = "boosterpack1.26";
+aio5.aioPin["AIO#"].$suggestSolution           = "boosterpack1.27";
+aio6.aioPin["AIO#"].$suggestSolution           = "boosterpack1.28";
+aio7.aioPin["AIO#"].$suggestSolution           = "boosterpack1.29";
 fsi1.fsiRx.fsirx.$suggestSolution              = "FSIRXA";
 fsi1.fsiRx.fsirx.fsirx_d0Pin.$suggestSolution  = "boosterpack2.51";
 fsi1.fsiRx.fsirx.fsirx_d1Pin.$suggestSolution  = "boosterpack2.76";
@@ -68,6 +164,17 @@ fsi1.fsiTx.fsitx.$suggestSolution              = "FSITXA";
 fsi1.fsiTx.fsitx.fsitx_d0Pin.$suggestSolution  = "boosterpack2.78";
 fsi1.fsiTx.fsitx.fsitx_d1Pin.$suggestSolution  = "boosterpack1.31";
 fsi1.fsiTx.fsitx.fsitx_clkPin.$suggestSolution = "boosterpack2.77";
+led1.gpio.gpioPin.$suggestSolution             = "boosterpack1.12";
+led2.gpio.gpioPin.$suggestSolution             = "boosterpack2.52";
+epwm1.epwm.$suggestSolution                    = "EPWM6";
+epwm1.epwm.epwm_aPin.$suggestSolution          = "boosterpack1.40";
+epwm1.epwm.epwm_bPin.$suggestSolution          = "boosterpack1.39";
+epwm2.epwm.$suggestSolution                    = "EPWM5";
+epwm2.epwm.epwm_aPin.$suggestSolution          = "boosterpack1.38";
+epwm2.epwm.epwm_bPin.$suggestSolution          = "boosterpack1.37";
+epwm3.epwm.$suggestSolution                    = "EPWM3";
+epwm3.epwm.epwm_aPin.$suggestSolution          = "boosterpack1.36";
+epwm3.epwm.epwm_bPin.$suggestSolution          = "boosterpack1.35";
 spi1.spi.$suggestSolution                      = "SPIA";
 spi1.spi.spi_picoPin.$suggestSolution          = "boosterpack1.15";
 spi1.spi.spi_pociPin.$suggestSolution          = "boosterpack1.14";
