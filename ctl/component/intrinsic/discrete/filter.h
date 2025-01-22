@@ -147,6 +147,32 @@ extern "C"
     // Design a 2rd Order IIR filter based on center frequency and Q
     ec_gt ctl_setup_filter_iir2(ctl_filter_IIR2_t *obj, ctl_filter_IIR2_setup_t *setup_obj);
 
+
+    //////////////////////////////////////////////////////////////////////////
+    // FIR filter
+    //
+
+    typedef struct _tag_filter_FIR_t
+    {
+        // pointer to parameter  
+        ctrl_gt *parameters;
+
+        // pointer to data buffer
+        ctrl_gt *data_buffer;
+
+        // fir filter order
+        size_gt order;
+
+        // circular buffer index
+        size_gt cb_index;
+
+        // last input data
+        ctrl_gt input;
+
+        // filter output
+        ctrl_gt output;
+    };
+
 #ifdef __cplusplus
 }
 #endif //__cplusplus
