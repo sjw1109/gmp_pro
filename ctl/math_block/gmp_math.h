@@ -15,6 +15,17 @@
 #ifndef _FILE_GMP_CTL_MATH_H_
 #define _FILE_GMP_CTL_MATH_H_
 
+// Special Support for CLA module
+#if defined __TMS320C28XX_CLA__
+
+#undef SPECIFY_CTRL_GT_TYPE
+
+#define SPECIFY_CTRL_GT_TYPE USING_FLOAT_CLA_LIBRARY
+
+
+#endif // __TMS320C28XX_CLA__
+
+
 // FIX controller configuration
 #if SPECIFY_CTRL_GT_TYPE == USING_FIXED_TI_IQ_LIBRARY
 
@@ -25,6 +36,10 @@
 
 // This header has not implemented
 #include <ctl/math_block/ctrl_gt/arm_cmsis_macros.h>
+
+#elif (SPECIFY_CTRL_GT_TYPE == USING_FLOAT_TI_IQ_LIBRRARY)
+
+#include <ctl/math_block/ctrl_gt/float_macros.h>
 
 #elif SPECIFY_CTRL_GT_TYPE == USING_FLOAT_FPU
 
@@ -37,6 +52,10 @@
 #elif SPECIFY_CTRL_GT_TYPE == USING_QFPLIB_FLOAT
 
 #include <ctl/math_block/ctrl_gt/qfp_float_macros.h>
+
+#elif SPECIFY_CTRL_GT_TYPE == USING_FLOAT_CLA_LIBRARY
+
+#include <ctl/math_block/ctrl_gt/cla_macros.h>
 
 #else
 
@@ -59,6 +78,17 @@
 #define GMP_PORT_CTRL_SIZE_PER_BYTES (4)
 #define USING_FIXED_LIBRARY
 #define GLOBAL_Q 24
+#endif // GMP_PORT_CTRL_T
+
+#elif (SPECIFY_CTRL_GT_TYPE == USING_FLOAT_TI_IQ_LIBRRARY)
+
+#define MATH_TYPE FLOAT_MATH
+
+#ifndef GMP_PORT_CTRL_T
+#define GMP_PORT_CTRL_T              float32_t
+#define GMP_PORT_CTRL_SIZE_PER_BITS  (32)
+#define GMP_PORT_CTRL_SIZE_PER_BYTES (4)
+
 #endif // GMP_PORT_CTRL_T
 
 #elif (SPECIFY_CTRL_GT_TYPE == USING_FLOAT_FPU)
