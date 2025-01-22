@@ -376,6 +376,8 @@ FodyWeavers.xsd
 # Simulink Library Install path
 /tools/simulink_lib/install_path/*
 /tools/simulink_lib/slprj
+/ctl/component/intrinsic/advance/fuzzy_designer/slprj
+*.asv
 
 *.autosave
 
