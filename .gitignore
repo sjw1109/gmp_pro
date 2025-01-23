@@ -395,8 +395,23 @@ ext/comm/lr11xx_driver/.DS_Store
 /csp/tms320/c2000_sysconfig/f280049c_demo/CPU1_RAM/*.d
 /csp/tms320/c2000_sysconfig/f280049c_demo/CPU1_RAM/*.mk
 /csp/tms320/c2000_sysconfig/f280049c_demo/CPU1_RAM/syscfg/*.d
-
 /csp/tms320/c2000_sysconfig/f280049c_demo/CPU1_FLASH/*.d
 /csp/tms320/c2000_sysconfig/f280049c_demo/CPU1_FLASH/*.mk
 /csp/tms320/c2000_sysconfig/f280049c_demo/CPU1_FLASH/syscfg/*.d
+/csp/tms320/c2000_sysconfig/f280049c_demo/.launch
 
+/csp/tms320/c2000_sysconfig/f280039c_demo/CPU1_RAM/*.d
+/csp/tms320/c2000_sysconfig/f280039c_demo/CPU1_RAM/*.mk
+/csp/tms320/c2000_sysconfig/f280039c_demo/CPU1_RAM/syscfg/*.d
+/csp/tms320/c2000_sysconfig/f280039c_demo/CPU1_FLASH/*.d
+/csp/tms320/c2000_sysconfig/f280039c_demo/CPU1_FLASH/*.mk
+/csp/tms320/c2000_sysconfig/f280039c_demo/CPU1_FLASH/syscfg/*.d
+/csp/tms320/c2000_sysconfig/f280039c_demo/.launch
+
+/csp/tms320/c2000_sysconfig/f28p55_demo/CPU1_RAM/*.d
+/csp/tms320/c2000_sysconfig/f28p55_demo/CPU1_RAM/*.mk
+/csp/tms320/c2000_sysconfig/f28p55_demo/CPU1_RAM/syscfg/*.d
+/csp/tms320/c2000_sysconfig/f28p55_demo/CPU1_FLASH/*.d
+/csp/tms320/c2000_sysconfig/f28p55_demo/CPU1_FLASH/*.mk
+/csp/tms320/c2000_sysconfig/f28p55_demo/CPU1_FLASH/syscfg/*.d
+/csp/tms320/c2000_sysconfig/f28p55_demo/.launch
