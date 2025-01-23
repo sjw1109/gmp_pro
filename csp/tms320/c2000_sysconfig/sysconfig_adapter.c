@@ -92,3 +92,12 @@ void gmp_csp_loop()
 void gmp_csp_post_process()
 {
 }
+
+
+
+// main function, user no need for repeated definition.
+void main()
+{
+    gmp_base_entry();
+}
+
