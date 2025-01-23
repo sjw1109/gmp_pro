@@ -25,10 +25,10 @@ extern ctrl_gt fuzzy_matrix_segment2[21];
 GMP_STATIC_INLINE
 ctrl_gt ctl_step_fuzzy_matrix(ctrl_gt input1, ctrl_gt input2)
 {
-	size_gt i = 0, j = 0;
+    size_gt i = 0, j = 0;
 
-	for(i = 0; i < 21; ++i)
-	{
+    for(i = 0; i < 21; ++i)
+    {
         if(input2 < fuzzy_matrix_segment2[0])
         {
             

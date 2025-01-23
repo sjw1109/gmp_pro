@@ -171,7 +171,7 @@ extern "C"
 
         // filter output
         ctrl_gt output;
-    };
+    }filter_fir_t;
 
 #ifdef __cplusplus
 }

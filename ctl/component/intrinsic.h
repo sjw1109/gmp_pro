@@ -66,6 +66,8 @@
 
 #include <ctl/component/intrinsic/advance/fuzzy_pid.h>
 
+#include <ctl/component/intrinsic/advance/surf_search.h>
+
 #endif // GMP_CTL_DISABLE_COM_INTRINSIC_ADVANCE
 
 
