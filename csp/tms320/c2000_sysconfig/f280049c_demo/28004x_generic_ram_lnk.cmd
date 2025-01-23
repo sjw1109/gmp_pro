@@ -74,7 +74,8 @@ SECTIONS
 {
    codestart        : > BEGIN,     PAGE = 0
    .TI.ramfunc      : > RAMM0,      PAGE = 0
-   .text            : >> RAMLS0 | RAMLS1 | RAMLS2 | RAMLS3 | RAMLS4,   PAGE = 0
+   .text            : >> RAMGS1 | RAMGS2 | RAMGS3,   PAGE = 1
+//   .text            : >> RAMLS0 | RAMLS1 | RAMLS2 | RAMLS3 | RAMLS4,   PAGE = 0
    .cinit           : > RAMM0,     PAGE = 0
    .switch          : > RAMM0,     PAGE = 0
    .reset           : > RESET,     PAGE = 0, TYPE = DSECT /* not used, */
@@ -98,7 +99,7 @@ SECTIONS
 #endif
 
    ramgs0           : > RAMGS0,    PAGE = 1
-   ramgs1           : > RAMGS1,    PAGE = 1  
+//   ramgs1           : > RAMGS1,    PAGE = 1
 }
 
 /*

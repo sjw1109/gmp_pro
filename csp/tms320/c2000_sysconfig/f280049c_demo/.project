@@ -130,7 +130,7 @@
 		</variable>
 		<variable>
 			<name>GMP_PRO_DIR</name>
-			<value>file:/E:/lib/gmp_pro</value>
+			<value>$%7BPARENT-4-PROJECT_LOC%7D</value>
 		</variable>
 		<variable>
 			<name>SYSTEMC_INSTALL</name>
