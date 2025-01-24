@@ -53,6 +53,13 @@
 #endif
 
 
+//
+// Instert a software breakpoint right here
+// GMP library Debug Software Break Point Macro
+// This instruction is valid in Cotex-M kernel chip.
+//
+#define GMP_DBG_SWBP     __asm volatile ("BKPT #0")
+
 //////////////////////////////////////////////////////////////////////////
 // Step II: Invoke all the STM32 general headers.
 //

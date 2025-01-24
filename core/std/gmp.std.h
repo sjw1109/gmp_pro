@@ -50,12 +50,22 @@ extern "C"
 
 // ....................................................................//
 // invoke all the necessary system headers
+#if !defined(__TMS320C28XX_CLA__)
 #include <assert.h>
+#else
+// patch a null definition for assert function
+#define assert(_ignore) ((void)0)
+#endif // __TMS320C28XX_CLA__
+
+#if !defined(__TMS320C28XX_CLA__)
 #include <stdarg.h>
-#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#endif // __TMS320C28XX_CLA__
+
+#include <stdint.h>
+
 
 // ....................................................................//
 // invoke all the GMP STD (standard support)

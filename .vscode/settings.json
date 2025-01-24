@@ -13,5 +13,17 @@
         "--background-index",
         "-j=12",
         "--all-scopes-completion",
-    ]
+    ],
+    "files.associations": {
+        "*.tcc": "cpp",
+        "optional": "cpp",
+        "ratio": "cpp",
+        "system_error": "cpp",
+        "array": "cpp",
+        "functional": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp",
+        "format": "cpp"
+    }
 }

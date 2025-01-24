@@ -61,6 +61,42 @@ extern "C"
 {
 #endif // __cplusplus
 
+#ifndef __TMS320C28XX_CLA__
+//
+// Instert a software breakpoint right here
+// GMP library Debug Software Break Point Macro
+//
+#define GMP_DBG_SWBP     asm(" TRAP #0");
+
+#else 
+//
+// For CLA debug mode, only this instruction is counted.
+// GMP library Debug Software Break Point Macro for CLA debug
+//
+#define GMP_DBG_SWBP     __mdebugstop();
+
+#endif // __TMS320C28XX_CLA__
+
+//////////////////////////////////////////////////////////////////////////
+// GPIO definition
+#define GMP_PORT_GPIO_T uint32_t
+
+#define gmp_hal_gpio_write(pin_num, value)  GPIO_writePin((pin_num), (value))
+#define gmp_hal_gpio_read(pin_num)          GPIO_readPin((pin_num))
+#define gmp_hal_gpio_set(pin_num)           GPIO_writePin((pin_num), (1))
+#define gmp_hal_gpio_reset(pin_num)         GPIO_writePin((pin_num), (0))
+#define gmp_hal_gpio_toggle(pin_num)        GPIO_togglePin((pin_num))
+
+
+//////////////////////////////////////////////////////////////////////////
+// Watch Dog module
+GMP_STATIC_INLINE
+void gmp_hal_wd_feed(void)
+{}
+
+//////////////////////////////////////////////////////////////////////////
+// SPI module
+
 
 
 #ifdef __cplusplus

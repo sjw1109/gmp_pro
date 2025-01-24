@@ -9,6 +9,11 @@ extern "C"
 {
 #endif
 
+    // CLA variables
+    extern float CLAatan2Table[];
+    extern float fVal;
+    extern float fResult;
+
     //////////////////////////////////////////////////////////////////////////
     // Handle Type definition, copy from <main.c>
     // 

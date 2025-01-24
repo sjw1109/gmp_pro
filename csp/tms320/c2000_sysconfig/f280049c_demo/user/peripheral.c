@@ -11,6 +11,55 @@
 // invoke iqmath lib
 #include <third_party/iqmath/IQmathLib.h>
 
+
+//
+//Task 1 (C) Variables
+// NOTE: Do not initialize the Message RAM variables globally, they will be
+// reset during the message ram initialization phase in the CLA memory
+// configuration routine
+//
+#ifdef __cplusplus
+
+#pragma DATA_SECTION("CpuToCla1MsgRAM");
+float fVal;
+
+#pragma DATA_SECTION("Cla1ToCpuMsgRAM");
+float fResult;
+
+#else
+
+#pragma DATA_SECTION(fVal,"CpuToCla1MsgRAM");
+float fVal;
+
+#pragma DATA_SECTION(fResult,"Cla1ToCpuMsgRAM");
+float fResult;
+#endif //__cplusplus
+
+
+#ifdef __cplusplus
+#pragma DATA_SECTION("CLADataLS1")
+#else
+#pragma DATA_SECTION(CLAatan2Table,"CLADataLS1")
+#endif //__cplusplus
+float CLAatan2Table[]={
+    0.000000000000, 1.000040679675, -0.007811069750,
+    -0.000003807022, 1.000528067772, -0.023410345493
+};
+
+__interrupt void C28_CLA11_ISR(void)
+{
+    //
+    // Acknowledge the end-of-task interrupt for task 1
+    //
+    Interrupt_clearACKGroup(INTERRUPT_ACK_GROUP11);
+
+    //
+    // Uncomment to halt debugger and stop here
+    //
+    // asm(" ESTOP0");
+}
+
+
 // motor control headers, these driver header is from:
 // C:\ti\controlSUITE\libs\app_libs\motor_control\drivers\f2803x_v2.0
 // C:\ti\controlSUITE\development_kits\~SupportFiles\F2803x_headers

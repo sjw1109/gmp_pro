@@ -1,6 +1,6 @@
 // general AC motor controller
 
-#include <assert.h>
+//#include <assert.h>
 
 #include <ctrl/component/motor/encoder.h>
 #include <ctrl/component/commmon/pid.hpp>

@@ -2,7 +2,7 @@
 #ifndef _FILE_CLA_MACROS_H_
 #define _FILE_CLA_MACROS_H_
 
-#include <CLAmath.h>
+#include <libraries\math\CLAmath\c28\include\CLAmath.h>
 
 //
 // Here list all the functions that CLA math provided.
@@ -79,7 +79,7 @@ float multiple_static_inline(float A, float B)
 #define pwm_mul(A, B)        ((pwm_gt)((((float)(A)) * ((float)(B)))))
 #define pwm_sat(A, Pos, Neg) ((pwm_gt)saturation_macro(((float)(A)), ((float)(Pos)), ((float)(Neg))))
 #define ctl_mul(A, B)        ((float)((float)(A) * (B)))
-#define ctl_div(A, B)        ((float32_t)(__fracf32((A) , (B))))
+#define ctl_div(A, B)        ((float32_t)(__divf32((A) , (B))))
 #define ctl_sat(A, Pos, Neg) saturation_macro((A), (Pos), (Neg))
 
 // #define pwm_mpy(CTRL_RESULT, PWM_SAT) ()

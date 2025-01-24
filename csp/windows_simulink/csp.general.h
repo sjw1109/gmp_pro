@@ -22,6 +22,12 @@
 // invoke GMP Simulink Communication buffer type
 #include <csp/windows_simulink/simulink_buffer.h>
 
+//
+// Instert a software breakpoint right here
+// GMP library Debug Software Break Point Macro
+// This is a Microsoft intrinsic function to create a software BP here.
+//
+#define GMP_DBG_SWBP     __debugbreak()
 
 //////////////////////////////////////////////////////////////////////////
 // Step III: Invoke all the other CSP headers

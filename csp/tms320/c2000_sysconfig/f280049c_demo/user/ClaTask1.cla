@@ -1,0 +1,38 @@
+#include <gmp_core.h>
+#include <user_main.h>
+
+__interrupt void CLATaskCallback1 ( void )
+{
+    //
+    //Local Variables
+    //
+    float add_more = 12.0;
+
+    //
+    //Global Variables
+    //
+    float variable;
+
+
+    //
+    //Preprocessing
+    //
+    __mdebugstop();
+
+
+   //
+   //Post processing
+   //
+//   if(fabsf(fVal) > 1.0f)
+//   {
+//      result = PIBYTWO - result;
+//   }
+//
+//   if(fVal < 0.0f)
+//   {
+//      result = -result;
+//   }
+
+    fResult = 1.0f;
+}
+

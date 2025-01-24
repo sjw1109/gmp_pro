@@ -24,7 +24,9 @@ GMP_NO_OPT_PREFIX
 void init(void)
 GMP_NO_OPT_SUFFIX
 {
-
+    // light two LED
+    gmp_hal_gpio_write(LEDR, 0);
+    gmp_hal_gpio_write(LEDG, 0);
 
 }
 
@@ -33,6 +35,7 @@ GMP_NO_OPT_SUFFIX
 // endless loop function here
 void mainloop(void)
 {
+
 
 }
 
