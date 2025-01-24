@@ -11,13 +11,17 @@ __interrupt void CLATaskCallback1 ( void )
     //
     //Global Variables
     //
-    float variable;
+    float variable = fVal + add_more;
 
 
     //
     //Preprocessing
     //
-    __mdebugstop();
+
+    //
+    // Create a software breakpoint here
+    //
+//    GMP_DBG_SWBP;
 
 
    //
@@ -33,6 +37,8 @@ __interrupt void CLATaskCallback1 ( void )
 //      result = -result;
 //   }
 
-    fResult = 1.0f;
+    fResult = variable;
+
+//    __asm(" MSTOP");
 }
 

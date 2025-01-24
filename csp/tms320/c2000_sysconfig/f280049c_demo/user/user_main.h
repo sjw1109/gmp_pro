@@ -14,6 +14,9 @@ extern "C"
     extern float fVal;
     extern float fResult;
 
+    // CLA global symbol
+    __interrupt void CLATaskCallback1 ( void );
+
     //////////////////////////////////////////////////////////////////////////
     // Handle Type definition, copy from <main.c>
     // 

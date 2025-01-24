@@ -118,7 +118,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="device/driverlib|28004x_generic_flash_lnk.cmd|targetConfigs/TMS320F280049C_LaunchPad.ccxml" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="device/driverlib|targetConfigs/TMS320F280049C_LaunchPad.ccxml" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -248,7 +248,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="28004x_generic_flash_lnk.cmd|device/driverlib|28004x_generic_ram_lnk.cmd|targetConfigs/TMS320F280049C_LaunchPad.ccxml" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="cmd/28004x_generic_ram_lnk.cmd|cmd/28004x_generic_flash_lnk.cmd|cmd/28004x_cla_ram_lnk.cmd|device/driverlib|targetConfigs/TMS320F280049C_LaunchPad.ccxml" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -369,7 +369,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="device/driverlib|28004x_generic_flash_lnk.cmd|targetConfigs/TMS320F280049C.ccxml" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="device/driverlib|targetConfigs/TMS320F280049C.ccxml" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -494,7 +494,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="device/driverlib|28004x_generic_ram_lnk.cmd|targetConfigs/TMS320F280049C.ccxml" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="device/driverlib|targetConfigs/TMS320F280049C.ccxml" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

@@ -5,6 +5,7 @@
     <stringAttribute key="com.ti.ccstudio.debug.debugModel.ATTR_PROJECT.TMS320F280049C.ccxml.Texas Instruments XDS110 USB Debug Probe/C28xx_CPU1" value="f280049c_demo"/>
     <stringAttribute key="com.ti.ccstudio.debug.debugModel.ATTR_TARGET_CONFIG" value="${target_config_active_default:f280049c_demo}"/>
     <stringAttribute key="com.ti.ccstudio.debug.debugModel.MRU_PROGRAM.TMS320F280049C.ccxml.Texas Instruments XDS110 USB Debug Probe/C28xx_CPU1" value="${build_artifact:f280049c_demo}"/>
+    <stringAttribute key="com.ti.ccstudio.debug.debugModel.MRU_PROGRAM.TMS320F280049C.ccxml.Texas Instruments XDS110 USB Debug Probe/CLA1_0" value="D:\_Projects\gmp_pro\csp\tms320\c2000_sysconfig\f280049c_demo\CPU1_FLASH\f280049c_demo.out"/>
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
         <listEntry value="/f280049c_demo"/>
     </listAttribute>

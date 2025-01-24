@@ -1,6 +1,6 @@
 // single digital switching power controller
 
-#include <assert.h>
+//#include <assert.h>
 #include <math.h>
 
 #include <core/std/typedef.h>

@@ -46,12 +46,18 @@ float CLAatan2Table[]={
     -0.000003807022, 1.000528067772, -0.023410345493
 };
 
-__interrupt void C28_CLA11_ISR(void)
+__interrupt
+void C28_CLA11_ISR(void)
 {
     //
     // Acknowledge the end-of-task interrupt for task 1
     //
     Interrupt_clearACKGroup(INTERRUPT_ACK_GROUP11);
+
+    //
+    // Create a software breakpoint here
+    //
+    GMP_DBG_SWBP;
 
     //
     // Uncomment to halt debugger and stop here
@@ -124,6 +130,9 @@ __interrupt void C28_CLA11_ISR(void)
 //// User should setup all the peripheral in this function.
 void setup_peripheral(void)
 {
+
+
+
 //
 //    // Initialize PWMDAC module
 //        pwmdac1.PeriodMax=500;          // @60Mhz, 1500->20kHz, 1000-> 30kHz, 500->60kHz

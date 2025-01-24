@@ -66,14 +66,18 @@ extern "C"
 // Instert a software breakpoint right here
 // GMP library Debug Software Break Point Macro
 //
-#define GMP_DBG_SWBP     asm(" TRAP #0");
+// This instruction is shown in spru430f chapter 1.2.2
+// TMS320C28x CPU and Instruction Set Reference Guide
+// ref: https://www.ti.com.cn/cn/lit/ug/spru430f/spru430f.pdf
+//
+#define GMP_DBG_SWBP    asm(" ESTOP0")
 
 #else 
 //
 // For CLA debug mode, only this instruction is counted.
 // GMP library Debug Software Break Point Macro for CLA debug
 //
-#define GMP_DBG_SWBP     __mdebugstop();
+#define GMP_DBG_SWBP     __mdebugstop()
 
 #endif // __TMS320C28XX_CLA__
 

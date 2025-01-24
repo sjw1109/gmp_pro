@@ -26,8 +26,16 @@ GMP_NO_OPT_SUFFIX
 {
     // light two LED
     gmp_hal_gpio_write(LEDR, 0);
-    gmp_hal_gpio_write(LEDG, 0);
+    gmp_hal_gpio_write(LEDG, 1);
 
+    fVal = 10;
+    GMP_DBG_SWBP;
+
+    CLA_forceTasks(CLA1_BASE,CLA_TASKFLAG_1);
+
+    asm(" RPT #255 || NOP");
+
+    fVal = fResult;
 }
 
 
@@ -35,7 +43,14 @@ GMP_NO_OPT_SUFFIX
 // endless loop function here
 void mainloop(void)
 {
+    gmp_hal_gpio_toggle(LEDG);
 
+    CLA_forceTasks(CLA1_BASE,CLA_TASKFLAG_1);
+
+        asm(" RPT #255 || NOP");
+
+        fVal = fResult;
+    GMP_DBG_SWBP;
 
 }
 
