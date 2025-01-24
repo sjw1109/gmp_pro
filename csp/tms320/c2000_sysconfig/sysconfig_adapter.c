@@ -91,6 +91,12 @@ void gmp_csp_loop()
 
 void gmp_csp_post_process()
 {
+    //
+    // Enable Global Interrupts (INTM) and realtime interrupt (DGBM)
+    //
+    EINT;
+    ERTM;
+
 }
 
 

@@ -16,6 +16,7 @@ extern "C"
 
     // CLA global symbol
     __interrupt void CLATaskCallback1 ( void );
+    __interrupt void cla1Isr1 ();
 
     //////////////////////////////////////////////////////////////////////////
     // Handle Type definition, copy from <main.c>

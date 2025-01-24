@@ -31,7 +31,10 @@ GMP_NO_OPT_SUFFIX
     fVal = 10;
     GMP_DBG_SWBP;
 
-    CLA_forceTasks(CLA1_BASE,CLA_TASKFLAG_1);
+    // Clear Interrupt
+    Interrupt_clearACKGroup(INTERRUPT_ACK_GROUP11);
+
+    CLA_forceTasks(CLA1_BASE, CLA_TASKFLAG_1);
 
     asm(" RPT #255 || NOP");
 
@@ -45,12 +48,13 @@ void mainloop(void)
 {
     gmp_hal_gpio_toggle(LEDG);
 
-    CLA_forceTasks(CLA1_BASE,CLA_TASKFLAG_1);
+    CLA_forceTasks(CLA1_BASE, CLA_TASKFLAG_1);
 
-        asm(" RPT #255 || NOP");
+    asm(" RPT #255 || NOP");
 
-        fVal = fResult;
-    GMP_DBG_SWBP;
+    fVal = fResult;
+
+//    GMP_DBG_SWBP;
 
 }
 

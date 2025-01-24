@@ -36,7 +36,7 @@ cla1.cpuint_CLA_TASK_6                     = false;
 cla1.cpuint_CLA_TASK_7                     = false;
 cla1.cpuint_CLA_TASK_8                     = false;
 cla1.$name                                 = "myCLA1";
-cla1.intconfig_CLA_TASK_1.interruptHandler = "C28_CLA11_ISR";
+cla1.intconfig_CLA_TASK_1.interruptHandler = "cla1Isr1";
 
 gpio1.$name           = "LEDR";
 gpio1.direction       = "GPIO_DIR_MODE_OUT";
