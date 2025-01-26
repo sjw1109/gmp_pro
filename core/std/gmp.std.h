@@ -64,6 +64,7 @@ extern "C"
 #include <string.h>
 #endif // __TMS320C28XX_CLA__
 
+#include <stddef.h>
 #include <stdint.h>
 
 

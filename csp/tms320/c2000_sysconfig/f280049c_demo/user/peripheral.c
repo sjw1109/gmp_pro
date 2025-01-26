@@ -56,7 +56,7 @@ __interrupt void cla1Isr1 ()
     //
     // Uncomment to halt debugger and stop here
     //
-    asm(" ESTOP0");
+//    asm(" ESTOP0");
 }
 
 ////////////////////////////////////////////////////////////////////////////

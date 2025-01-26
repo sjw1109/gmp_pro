@@ -8,6 +8,7 @@ extern "C"
 #endif // __cplusplus
 
     // DAC8554 Message structure
+    // | 7  | 6  | 5   | 4   | 3 | 2        | 1        | 0   |
     // | 23 | 22 | 21  | 20  |19 | 18       | 17       |16   | 15 - 0 |
     // | A1 | A0 | LD1 | LD0 | X | DAC SEL1 | DAC SEL0 | PD0 |   SR   |
     //
@@ -44,8 +45,9 @@ extern "C"
     //    + DB15 DB14 = 10 output typically 100kOhm to GND
     //    + DB15 DB14 = 11 output high impedance
     //
-    // SPI bus requirement
+    // SPI bus requirement, mode 0
     // CPOL = 0 (negative edge is active),  
+    // CPHA = 0
     //
     // Chip physical joint
     // nSYNC serves as nCS in SPI bus.
@@ -56,15 +58,28 @@ extern "C"
     //
 
 
-#define DAC8554_LDCMD_SINGLE_CH_STORE     ((0))
-#define DAC8554_LDCMD_SINGLE_CH_UPDATE    ((1))
-#define DAC8554_LDCMD_SIMULTANEOUS_UPDATE ((2))
-#define DAC8554_LDCMD_BROADCAST_UPDATE    ((3))
+#define DAC8554_LDCMD_SINGLE_CH_STORE     ((0<<4))
+#define DAC8554_LDCMD_SINGLE_CH_UPDATE    ((1<<4))
+#define DAC8554_LDCMD_SIMULTANEOUS_UPDATE ((2<<4))
+#define DAC8554_LDCMD_BROADCAST_UPDATE    ((3<<4))
 
-#define DAC8554_CHANNEL_A                 ((0))
-#define DAC8554_CHANNEL_B                 ((1))
-#define DAC8554_CHANNEL_C                 ((2))
-#define DAC8554_CHANNEL_D                 ((3))
+#define DAC8554_CHANNEL_A                 ((0<<1))
+#define DAC8554_CHANNEL_B                 ((1<<1))
+#define DAC8554_CHANNEL_C                 ((2<<1))
+#define DAC8554_CHANNEL_D                 ((3<<1))
+
+#define DAC8554_DISABLE_POWERDOWN         ((0))
+#define DAC8554_ENABLE_POWERDOWN          ((1))
+
+#define DAC8554_PWMODE_HIGHIMPL           ((0))
+#define DAC8554_PWMODE_1KGND              ((1))
+#define DAC8554_PWMODE_100KGND            ((2))
+
+// ADDR in [0,3], phsical address for DAC
+// LD_MODE select from DAC8554_LDCMD
+// CHANNEL_SEL select form DAC8554_CHANNEL
+#define MAKE_DAC8554_CMD(ADDR, LD_MODE, CHANNEL_SEL, PD0) \
+        ((ADDR) | (LD_MODE) | (CHANNEL_SEL) | (PD0))
 
     typedef struct _tag_dac8554_t
     {

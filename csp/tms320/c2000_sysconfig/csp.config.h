@@ -24,3 +24,8 @@
 
 // Disable C2000 CLB Configuration Tool
 #define _C2000_CSP_DISABLE_CLB_CONFIG_TOOL_
+
+// SPI Peripheral config
+// For maximum extension device support, please use 8 instead of 16
+#define _C2000_SPI_INTERFACE_DATA_LENGTH ((8))
+
