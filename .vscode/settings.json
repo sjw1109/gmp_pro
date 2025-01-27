@@ -1,10 +1,10 @@
 {
     
     "clangd.fallbackFlags": [
-        "-I${workspaceFolder}",
-        "-I${workspaceFolder}/csp/example",
-        "-I${workspaceFolder}/third_party/iqmath",
-        "-I${workspaceFolder}/user/example"
+        "-I${env:GMP_PRO_LOCATION}",
+        "-I${env:GMP_PRO_LOCATION}/csp/example",
+        "-I${env:GMP_PRO_LOCATION}/third_party/iqmath",
+        "-I${env:GMP_PRO_LOCATION}/user/example"
     ],
 
     "clangd.enableCodeCompletion": true,
@@ -24,6 +24,16 @@
         "tuple": "cpp",
         "type_traits": "cpp",
         "utility": "cpp",
-        "format": "cpp"
+        "format": "cpp",
+        "gmp_core.h": "c",
+        "gmp.std.h": "c",
+        "options.cfg.h": "c",
+        "*.cla": "c",
+        "csp.general.h": "c"
+    },
+    "C_Cpp.default.customConfigurationVariables": {
+        "C2000WARE_ROOT": "C:/ti/c2000/C2000Ware_5_03_00_00",
+        "C2000WARE_DLIB_ROOT": "C/ti/c2000/C2000Ware_5_03_00_00/driverlib/f28004x/driverlib",
+        "CG_TOOL_ROOT": "C:/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS"
     }
 }

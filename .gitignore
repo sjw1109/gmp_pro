@@ -375,43 +375,26 @@ FodyWeavers.xsd
 
 # Simulink Library Install path
 /tools/simulink_lib/install_path/*
-/tools/simulink_lib/slprj
-/ctl/component/intrinsic/advance/fuzzy_designer/slprj
-*.asv
+**/slprj/
 
+*.asv
 *.autosave
 
-# Additional files
+# ignore C28x CCS projects
+/csp/tms320/**/*.d
+/csp/tms320/**/*.mk
+/csp/tms320/**/*.launch
 
+# Additional files
+**/.DS_Store/
 test/*
-/examples/gmp_windows_debug_plat_pmsm/slprj
+
+
 /examples/stm32f411ce_dev_test/Drivers
 /examples/stm32f411ce_dev_test/MDK-ARM/stm32f411ce_dev_test
 /examples/tms320f28035_motorctrl/.settings
 examples/stm32f411ce_dev_test/MDK-ARM/stm32f411ce_dev_test.uvguix.javnson
-ext/comm/lr11xx_driver/.DS_Store
 
-# ignore CCS projects
-/csp/tms320/c2000_sysconfig/f280049c_demo/CPU1_RAM/*.d
-/csp/tms320/c2000_sysconfig/f280049c_demo/CPU1_RAM/*.mk
-/csp/tms320/c2000_sysconfig/f280049c_demo/CPU1_RAM/syscfg/*.d
-/csp/tms320/c2000_sysconfig/f280049c_demo/CPU1_FLASH/*.d
-/csp/tms320/c2000_sysconfig/f280049c_demo/CPU1_FLASH/*.mk
-/csp/tms320/c2000_sysconfig/f280049c_demo/CPU1_FLASH/syscfg/*.d
-/csp/tms320/c2000_sysconfig/f280049c_demo/.launch
 
-/csp/tms320/c2000_sysconfig/f280039c_demo/CPU1_RAM/*.d
-/csp/tms320/c2000_sysconfig/f280039c_demo/CPU1_RAM/*.mk
-/csp/tms320/c2000_sysconfig/f280039c_demo/CPU1_RAM/syscfg/*.d
-/csp/tms320/c2000_sysconfig/f280039c_demo/CPU1_FLASH/*.d
-/csp/tms320/c2000_sysconfig/f280039c_demo/CPU1_FLASH/*.mk
-/csp/tms320/c2000_sysconfig/f280039c_demo/CPU1_FLASH/syscfg/*.d
-/csp/tms320/c2000_sysconfig/f280039c_demo/.launch
 
-/csp/tms320/c2000_sysconfig/f28p55_demo/CPU1_RAM/*.d
-/csp/tms320/c2000_sysconfig/f28p55_demo/CPU1_RAM/*.mk
-/csp/tms320/c2000_sysconfig/f28p55_demo/CPU1_RAM/syscfg/*.d
-/csp/tms320/c2000_sysconfig/f28p55_demo/CPU1_FLASH/*.d
-/csp/tms320/c2000_sysconfig/f28p55_demo/CPU1_FLASH/*.mk
-/csp/tms320/c2000_sysconfig/f28p55_demo/CPU1_FLASH/syscfg/*.d
-/csp/tms320/c2000_sysconfig/f28p55_demo/.launch
+
