@@ -385,6 +385,10 @@ FodyWeavers.xsd
 /csp/tms320/**/*.mk
 /csp/tms320/**/*.launch
 
+/csp/x28x_syscfg/**/*.d
+/csp/x28x_syscfg/**/*.mk
+/csp/x28x_syscfg/**/*.launch
+
 # ignore STM32 Cube MX project HAL Drivers
 /csp/stm32/**/Drivers/
 /csp/stm32/**/*.d
