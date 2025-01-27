@@ -66,11 +66,15 @@ extern "C"
     // This function would be called by user in entry function.
     // And this function would not return.
     //
+    // You may find definition of this function in `gmp_std_port.c`.
+    //
     //extern void gmp_base_entry(void);
 
     // This function would be called by main ISR function, by user.
     // User should call this function, in your ctl_main.cpp or just ignore it.
     // When you need to simulate your controller, this function would be invoked.
+    //
+    // You may find definition of this function in `gmp_cport.h`.
     //
     //extern void gmp_base_ctl_step(void);
 

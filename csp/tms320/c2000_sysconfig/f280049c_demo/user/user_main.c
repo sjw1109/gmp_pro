@@ -84,6 +84,21 @@ void mainloop(void)
 
     gmp_hal_gpio_write(SPIA_CS, 1);
 
+    cmd = DAC8554_LDCMD_SINGLE_CH_UPDATE|DAC8554_CHANNEL_A;
+
+    // Ch B
+
+    gmp_hal_gpio_write(SPIA_CS, 0);
+    asm(" RPT #2 || NOP");
+
+    SPI_writeDataBlockingNonFIFO(SPI0_BASE, cmd<<8);
+    SPI_writeDataBlockingNonFIFO(SPI0_BASE, (data & 0xFF00));
+    SPI_writeDataBlockingNonFIFO(SPI0_BASE, (data & 0xFF)<<8);
+
+    asm(" RPT #2 || NOP");
+
+    gmp_hal_gpio_write(SPIA_CS, 1);
+
 //    asm(" RPT #1000 || NOP");
 
 //    F28x_usDelay(1);
