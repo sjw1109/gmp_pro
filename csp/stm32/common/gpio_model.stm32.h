@@ -33,7 +33,7 @@ extern "C"
     } gpio_model_stm32_t;
 
 // specify the GPIO model to be STM32 model
-#define GMP_PORT_GPIO_T gpio_model_stm32_t
+#define GMP_PORT_GPIO_T gpio_model_stm32_t*
 
     /**
      * @brief Setup GPIO port and pin.
