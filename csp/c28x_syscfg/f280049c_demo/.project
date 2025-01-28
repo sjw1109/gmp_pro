@@ -48,7 +48,7 @@
 		<link>
 			<name>gmp_core/sysconfig_adapter.c</name>
 			<type>1</type>
-			<locationURI>GMP_PRO_DIR/csp/tms320/c2000_sysconfig/sysconfig_adapter.c</locationURI>
+			<locationURI>GMP_PRO_DIR/csp/c28x_syscfg/sysconfig_adapter.c</locationURI>
 		</link>
 		<link>
 			<name>gmp_ctl/ctl_component_advance.c</name>
@@ -130,7 +130,7 @@
 		</variable>
 		<variable>
 			<name>GMP_PRO_DIR</name>
-			<value>$%7BPARENT-4-PROJECT_LOC%7D</value>
+			<value>$%7BPARENT-3-PROJECT_LOC%7D</value>
 		</variable>
 		<variable>
 			<name>SYSTEMC_INSTALL</name>

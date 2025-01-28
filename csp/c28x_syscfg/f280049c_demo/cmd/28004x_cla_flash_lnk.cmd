@@ -77,7 +77,7 @@ PAGE 1 :
 SECTIONS
 {
    .cinit           : > FLASH_BANK0_SEC1,     PAGE = 0, ALIGN(4)
-   .text            : >>FLASH_BANK0_SEC2 | FLASH_BANK0_SEC3,   PAGE = 0, ALIGN(4)
+   .text            : >>FLASH_BANK0_SEC2 | FLASH_BANK0_SEC3 | FLASH_BANK0_SEC4 | FLASH_BANK0_SEC5 | FLASH_BANK0_SEC6,   PAGE = 0, ALIGN(4)
    codestart        : > BEGIN       PAGE = 0, ALIGN(4)
 
    .stack           : > RAMM1        PAGE = 1
@@ -90,13 +90,13 @@ SECTIONS
    .bss:cio         : > RAMLS5,       PAGE = 1
    .data            : > RAMLS6,       PAGE = 1
    .sysmem          : > RAMLS6,       PAGE = 1
-   .const           : > FLASH_BANK0_SEC4,       PAGE = 0,       ALIGN(4)
+   .const           : > FLASH_BANK0_SEC7,       PAGE = 0,       ALIGN(4)
 #else
    .pinit           : > FLASH_BANK0_SEC1,       PAGE = 0,       ALIGN(4)
    .ebss            : >>RAMLS5 | RAMLS6,       PAGE = 1
    .esysmem         : > RAMLS6,       PAGE = 1
    .cio             : > RAMLS5,       PAGE = 1
-   .econst          : > FLASH_BANK0_SEC4,    PAGE = 0, ALIGN(4)
+   .econst          : > FLASH_BANK0_SEC7,    PAGE = 0, ALIGN(4)
 #endif
 
    ramgs0           : > RAMGS0,    PAGE = 1
@@ -108,7 +108,7 @@ SECTIONS
 
 #if defined(__TI_EABI__)
     /* CLA specific sections */
-    Cla1Prog        : LOAD = FLASH_BANK0_SEC4,
+    Cla1Prog        : LOAD = FLASH_BANK0_SEC7,
                       RUN = RAMLS0,
                       LOAD_START(Cla1ProgLoadStart),
                       RUN_START(Cla1ProgRunStart),
@@ -116,7 +116,7 @@ SECTIONS
                       PAGE = 0, ALIGN(4)
 #else
     /* CLA specific sections */
-    Cla1Prog        : LOAD = FLASH_BANK0_SEC4,
+    Cla1Prog        : LOAD = FLASH_BANK0_SEC8,
                       RUN = RAMLS0,
                       LOAD_START(_Cla1ProgLoadStart),
                       RUN_START(_Cla1ProgRunStart),

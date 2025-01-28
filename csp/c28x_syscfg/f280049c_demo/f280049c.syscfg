@@ -16,6 +16,8 @@ const gpio           = scripting.addModule("/driverlib/gpio.js", {}, false);
 const gpio1          = gpio.addInstance();
 const gpio2          = gpio.addInstance();
 const gpio3          = gpio.addInstance();
+const i2c            = scripting.addModule("/driverlib/i2c.js", {}, false);
+const i2c1           = i2c.addInstance();
 const memcfg         = scripting.addModule("/driverlib/memcfg.js");
 const spi            = scripting.addModule("/driverlib/spi.js", {}, false);
 const spi1           = spi.addInstance();
@@ -52,6 +54,8 @@ gpio2.gpioPin.$assign = "GPIO34";
 gpio3.$name                         = "SPIA_CS";
 gpio3.gpioPin.$assignAllowConflicts = "GPIO57";
 
+i2c1.$name = "myI2C0";
+
 memcfg.config_MEMCFG_SECT_LS1        = "CLA_data";
 memcfg.init_MEMCFG_SECT_MSGCPUTOCLA1 = true;
 memcfg.init_MEMCFG_SECT_MSGCLA1TOCPU = true;
@@ -59,24 +63,28 @@ memcfg.config_MEMCFG_SECT_LS2        = "CLA_data";
 memcfg.config_MEMCFG_SECT_LS3        = "CLA_data";
 memcfg.config_MEMCFG_SECT_LS0        = "CLA_prog";
 
-spi1.dataWidth                            = "8";
-spi1.mode                                 = "SPI_MODE_CONTROLLER";
-spi1.$name                                = "SPI0";
-spi1.emulationMode                        = "SPI_EMULATION_FREE_RUN";
-spi1.transferProtocol                     = "SPI_PROT_POL1PHA0";
-spi1.bitRate                              = 7000000;
-spi1.spi.spi_picoPin.$assign              = "GPIO16";
-spi1.spi.spi_pociPin.$assign              = "GPIO17";
-spi1.spi.spi_clkPin.$assign               = "GPIO56";
-spi1.spi.spi_ptePin.$assignAllowConflicts = "GPIO57";
-spi1.picoQual.$name                       = "myGPIOQUAL0";
-spi1.pociQual.$name                       = "myGPIOQUAL1";
-spi1.clkQual.$name                        = "myGPIOQUAL2";
-spi1.pteQual.$name                        = "myGPIOQUAL3";
+spi1.dataWidth        = "8";
+spi1.mode             = "SPI_MODE_CONTROLLER";
+spi1.$name            = "SPI0";
+spi1.emulationMode    = "SPI_EMULATION_FREE_RUN";
+spi1.transferProtocol = "SPI_PROT_POL1PHA0";
+spi1.bitRate          = 7000000;
+spi1.useHSMode        = true;
+spi1.picoQual.$name   = "myGPIOQUAL0";
+spi1.pociQual.$name   = "myGPIOQUAL1";
+spi1.clkQual.$name    = "myGPIOQUAL2";
+spi1.pteQual.$name    = "myGPIOQUAL3";
 
 /**
  * Pinmux solution for unlocked pins/peripherals. This ensures that minor changes to the automatic solver in a future
  * version of the tool will not impact the pinmux you originally saw.  These lines can be completely deleted in order to
  * re-solve from scratch.
  */
-spi1.spi.$suggestSolution = "SPIA";
+i2c1.i2c.$suggestSolution             = "I2CA";
+i2c1.i2c.i2c_sdaPin.$suggestSolution  = "GPIO0";
+i2c1.i2c.i2c_sclPin.$suggestSolution  = "GPIO1";
+spi1.spi.$suggestSolution             = "SPIA";
+spi1.spi.spi_picoPin.$suggestSolution = "GPIO16";
+spi1.spi.spi_pociPin.$suggestSolution = "GPIO10";
+spi1.spi.spi_clkPin.$suggestSolution  = "GPIO18_X2";
+spi1.spi.spi_ptePin.$suggestSolution  = "GPIO11";
