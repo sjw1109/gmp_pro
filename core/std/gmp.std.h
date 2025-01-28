@@ -121,6 +121,12 @@ extern "C"
 #ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 #include <ctl/framework/ctl_nano.h>
 
+#include "ctl_main.h"
+#include "ctl_interface.h"
+
+#include <ctl/framework/ctl_dispatch.h>
+
+
 #endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 #endif // SPECIFY_ENABLE_GMP_CTL
 

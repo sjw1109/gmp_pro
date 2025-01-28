@@ -26,17 +26,19 @@
 // Invoke necessary CTL libraries
 #include <ctl/framework/ctl_nano.h>
 
-
 // This file is provided by user,
 // User should define controller related function in this header file
 #include <ctl_main.h>
+#include <ctl_interface.h>
+
+#include <ctl/framework/ctl_dispatch.h>
 
 #endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
 
 #endif // SPECIFY_ENABLE_GMP_CTL
 
-// °Ñ³£ÓÃµÄCTL¿âÔÚ´Ë´¦È«²¿ÒýÈë½øÀ´
+// ï¿½Ñ³ï¿½ï¿½Ãµï¿½CTLï¿½ï¿½ï¿½Ú´Ë´ï¿½È«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 
 

@@ -194,4 +194,6 @@ fast_gt ctl_fmif_sm_fault_routine(ctl_object_nano_t *pctl_obj)
 }
 
 
+
+
 #endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO

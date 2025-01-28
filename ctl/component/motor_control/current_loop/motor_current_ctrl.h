@@ -45,7 +45,7 @@ typedef struct _tag_motor_current_ctrl
     ctrl_gt theta;
 
     // output parameters
-    ctl_vector3_t Tabc;
+//    ctl_vector3_t Tabc;
     ctl_vector3_t idq0;
     ctl_vector3_t iab0;
     ctl_vector3_t vdq0;
@@ -166,13 +166,13 @@ void ctl_disable_motor_current_controller(ctl_motor_current_ctrl_t *obj)
     obj->flag_enable_current_controller = 0;
 }
 
-GMP_STATIC_INLINE
-void ctl_get_motor_current_controller_modulation(ctl_motor_current_ctrl_t *obj, ctl_vector3_t *tabc)
-{
-    tabc->dat[phase_A] = obj->Tabc.dat[phase_A];
-    tabc->dat[phase_B] = obj->Tabc.dat[phase_B];
-    tabc->dat[phase_C] = obj->Tabc.dat[phase_C];
-}
+//GMP_STATIC_INLINE
+//void ctl_get_motor_current_controller_modulation(ctl_motor_current_ctrl_t *obj, ctl_vector3_t *tabc)
+//{
+//    tabc->dat[phase_A] = obj->Tabc.dat[phase_A];
+//    tabc->dat[phase_B] = obj->Tabc.dat[phase_B];
+//    tabc->dat[phase_C] = obj->Tabc.dat[phase_C];
+//}
 
 GMP_STATIC_INLINE
 ctrl_gt ctl_get_motor_current_controller_id(ctl_motor_current_ctrl_t *obj)
@@ -186,12 +186,12 @@ ctrl_gt ctl_get_motor_current_controller_iq(ctl_motor_current_ctrl_t *obj)
     return obj->idq0.dat[phase_q];
 }
 
-GMP_STATIC_INLINE
-void ctl_set_motor_current_controller_zero_output(ctl_motor_current_ctrl_t *obj) 
-{
-    obj->Tabc.dat[0] = float2ctrl(0.5);
-    obj->Tabc.dat[1] = float2ctrl(0.5);
-    obj->Tabc.dat[2] = float2ctrl(0.5);
-}
+//GMP_STATIC_INLINE
+//void ctl_set_motor_current_controller_zero_output(ctl_motor_current_ctrl_t *obj)
+//{
+//    obj->Tabc.dat[0] = float2ctrl(0.5);
+//    obj->Tabc.dat[1] = float2ctrl(0.5);
+//    obj->Tabc.dat[2] = float2ctrl(0.5);
+//}
 
 #endif // _FILE_MOTOR_CURRENT_CTRL_H_

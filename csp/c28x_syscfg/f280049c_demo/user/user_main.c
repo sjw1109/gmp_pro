@@ -31,7 +31,7 @@ GMP_NO_OPT_SUFFIX
     gmp_hal_gpio_write(LEDR, 0);
     gmp_hal_gpio_write(LEDG, 1);
 
-    fVal = 10;
+//    fVal = 10;
 //    GMP_DBG_SWBP;
 
     // Clear Interrupt
@@ -41,7 +41,7 @@ GMP_NO_OPT_SUFFIX
 
     asm(" RPT #255 || NOP");
 
-    fVal = fResult;
+//    fVal = fResult;
 
     // communicate with SPI DAC
 //    SPI_writeDataBlockingNonFIFO(SPI0_BASE, DAC8554_LDCMD_SINGLE_CH_UPDATE|DAC8554_CHANNEL_A|DAC8554_DISABLE_POWERDOWN);
@@ -60,7 +60,7 @@ void mainloop(void)
 
     asm(" RPT #255 || NOP");
 
-    fVal = fResult;
+//    fVal = fResult;
 
 //    GMP_DBG_SWBP;
 

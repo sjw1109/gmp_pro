@@ -7,24 +7,12 @@
 // Controller framework
 #include <ctl/framework/ctl_nano.h>
 
+// GMP CTL intrinsic blocks
 #include <ctl/component/intrinsic.h>
 
+// Motor Controller related blocks
 #include <ctl/component/motor_control.h>
 
-//// motor controller
-// #include <ctl/component/intrinsic/combo/track_pid.h>
-// #include <ctl/component/motor_control/basic/motor_current_ctrl.h>
-//
-//// input & output interface
-// #include <ctl/component/intrinsic/interface/adc_channel.h>
-// #include <ctl/component/intrinsic/interface/pwm_channel.h>
-//
-//// consultant objects
-// #include <ctl/component/motor_control/consultant/motor_driver_consultant.h>
-// #include <ctl/component/motor_control/consultant/pmsm_consultant.h>
-//
-//// controller encoder interface
-// #include <ctl/component/motor_control/basic/encoder.h>
 
 #ifndef _FILE_PMSM_SERVO_H_
 #define _FILE_PMSM_SERVO_H_
@@ -235,7 +223,7 @@ extern "C"
         ctl_step_motor_current_ctrl(&pmsm->current_ctrl, position_fbk);
 
         // modulation
-        ctl_calc_pwm_tri_channel(&pmsm->uabc, &pmsm->current_ctrl.Tabc);
+        //ctl_calc_pwm_tri_channel(&pmsm->uabc, &pmsm->current_ctrl.Tabc);
     }
 
     GMP_STATIC_INLINE
@@ -247,8 +235,8 @@ extern "C"
         // position feedback
         ctrl_gt position_fbk = ctl_get_encoder_elec_postion(pmsm->pos_enc);
 
-        if (ctl_fm_is_online(&pmsm->base))
-        {
+//        if (ctl_fm_is_online(&pmsm->base))
+//        {
             // speed controller
             if (pmsm->flag_enable_spd_ctrl)
             {
@@ -261,50 +249,55 @@ extern "C"
 
             // current controller & current transform
             ctl_step_motor_current_ctrl(&pmsm->current_ctrl, position_fbk);
-        }
-        else if (ctl_fm_is_calibrate(&pmsm->base))
-        {
-            pmsm->current_ctrl.Tabc.dat[phase_U] = float2ctrl(0.5);
-            pmsm->current_ctrl.Tabc.dat[phase_V] = float2ctrl(0.5);
-            pmsm->current_ctrl.Tabc.dat[phase_W] = float2ctrl(0.5);
+//        }
 
-            if (pmsm->calibrate_progress <= 2)
-            {
-                // current calibrate routine
-                if ((!ctl_is_adc_calibration_cmpt(&pmsm->calibrator)) &&
-                    ctl_step_adc_bias_calibrator(&pmsm->calibrator, pmsm->base.isr_tick,
-                                                 pmsm->current_ctrl.iabc.dat[pmsm->calibrate_progress]))
-                {
-                    // calibrate is complete
-                    pmsm->calibrate_progress += 1;
 
-                    // pwm output disable
-                    ctl_fmif_output_disable(&pmsm->base);
-                }
-            }
-            else if (pmsm->calibrate_progress == 3)
-            {
-                if ((!ctl_is_adc_calibration_cmpt(&pmsm->calibrator)) &&
-                    ctl_step_adc_bias_calibrator(&pmsm->calibrator, pmsm->base.isr_tick, pmsm->current_ctrl.udc))
-                {
-                    // calibrate is complete
-                    pmsm->calibrate_progress += 1;
-
-                    // pwm output disable
-                    ctl_fmif_output_disable(&pmsm->base);
-                }
-            }
-        }
-        else if (ctl_fm_is_runup(&pmsm->base))
-        {
-        }
-        else
-        {
-            ctl_set_motor_current_controller_zero_output(&pmsm->current_ctrl);
-        }
+//        else if (ctl_fm_is_calibrate(&pmsm->base))
+//        {
+////            pmsm->current_ctrl.Tabc.dat[phase_U] = float2ctrl(0.5);
+////            pmsm->current_ctrl.Tabc.dat[phase_V] = float2ctrl(0.5);
+////            pmsm->current_ctrl.Tabc.dat[phase_W] = float2ctrl(0.5);
+//
+//            pmsm->current_ctrl.iab0.dat[phase_A]  = float2ctrl(0);
+//            pmsm->current_ctrl.iab0.dat[phase_B]  = float2ctrl(0);
+//
+//            if (pmsm->calibrate_progress <= 2)
+//            {
+//                // current calibrate routine
+//                if ((!ctl_is_adc_calibration_cmpt(&pmsm->calibrator)) &&
+//                    ctl_step_adc_bias_calibrator(&pmsm->calibrator, pmsm->base.isr_tick,
+//                                                 pmsm->current_ctrl.iabc.dat[pmsm->calibrate_progress]))
+//                {
+//                    // calibrate is complete
+//                    pmsm->calibrate_progress += 1;
+//
+//                    // pwm output disable
+//                    ctl_fmif_output_disable(&pmsm->base);
+//                }
+//            }
+//            else if (pmsm->calibrate_progress == 3)
+//            {
+//                if ((!ctl_is_adc_calibration_cmpt(&pmsm->calibrator)) &&
+//                    ctl_step_adc_bias_calibrator(&pmsm->calibrator, pmsm->base.isr_tick, pmsm->current_ctrl.udc))
+//                {
+//                    // calibrate is complete
+//                    pmsm->calibrate_progress += 1;
+//
+//                    // pwm output disable
+//                    ctl_fmif_output_disable(&pmsm->base);
+//                }
+//            }
+//        }
+//        else if (ctl_fm_is_runup(&pmsm->base))
+//        {
+//        }
+//        else
+//        {
+//            //ctl_set_motor_current_controller_zero_output(&pmsm->current_ctrl);
+//        }
 
         // modulation
-        ctl_calc_pwm_tri_channel(&pmsm->uabc, &pmsm->current_ctrl.Tabc);
+        //ctl_calc_pwm_tri_channel(&pmsm->uabc, &pmsm->current_ctrl.Tabc);
     }
 
     // phase : Phase_U. Phase_V, Phase_W

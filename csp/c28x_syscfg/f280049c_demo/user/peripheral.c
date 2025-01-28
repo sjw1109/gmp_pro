@@ -7,9 +7,9 @@
 // user main header
 #include "user_main.h"
 
-#define   MATH_TYPE      IQ_MATH
-// invoke iqmath lib
-#include <third_party/iqmath/IQmathLib.h>
+//#define   MATH_TYPE      IQ_MATH
+//// invoke iqmath lib
+//#include <third_party/iqmath/IQmathLib.h>
 
 
 //
@@ -18,36 +18,43 @@
 // reset during the message ram initialization phase in the CLA memory
 // configuration routine
 //
-#ifdef __cplusplus
 
-#pragma DATA_SECTION("CpuToCla1MsgRAM");
-float fVal;
+//#ifdef __cplusplus
+//
+//#pragma DATA_SECTION("CpuToCla1MsgRAM");
+//float fVal;
+//
+//#pragma DATA_SECTION("Cla1ToCpuMsgRAM");
+//float fResult;
+//
+//#else
+//
+//#pragma DATA_SECTION(fVal,"CpuToCla1MsgRAM");
+//adc_gt adc_data;
+//
+//#pragma DATA_SECTION(fResult,"Cla1ToCpuMsgRAM");
+//float fResult;
+//#endif //__cplusplus
+//
+//
+//#ifdef __cplusplus
+//#pragma DATA_SECTION("CLADataLS1")
+//#else
+//#pragma DATA_SECTION(CLAatan2Table,"CLADataLS1")
+//#endif //__cplusplus
+//float CLAatan2Table[]={
+//    0.000000000000, 1.000040679675, -0.007811069750,
+//    -0.000003807022, 1.000528067772, -0.023410345493
+//};
 
-#pragma DATA_SECTION("Cla1ToCpuMsgRAM");
-float fResult;
-
-#else
-
-#pragma DATA_SECTION(fVal,"CpuToCla1MsgRAM");
-float fVal;
-
-#pragma DATA_SECTION(fResult,"Cla1ToCpuMsgRAM");
-float fResult;
-#endif //__cplusplus
-
-
-#ifdef __cplusplus
-#pragma DATA_SECTION("CLADataLS1")
-#else
-#pragma DATA_SECTION(CLAatan2Table,"CLADataLS1")
-#endif //__cplusplus
-float CLAatan2Table[]={
-    0.000000000000, 1.000040679675, -0.007811069750,
-    -0.000003807022, 1.000528067772, -0.023410345493
-};
-
-__interrupt void cla1Isr1 ()
+__interrupt void cla1Isr1()
 {
+    // output routine
+    ctl_fmif_output_stage_routine(&pmsm_servo.base);
+
+    // request routine
+    ctl_fmif_request_stage_routine(&pmsm_servo.base);
+
     //
     // Acknowledge the end-of-task interrupt for task 1
     //
@@ -74,33 +81,6 @@ void setup_peripheral(void)
 //// device related functions
 //#ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 //
-void ctl_fmif_input_stage_routine(ctl_object_nano_t *pctl_obj)
-{
-//    // current sensor
-////    ctl_input_pmsm_servo_framework(&pmsm_servo,
-////                                   // current input
-////                                   AdcResult.ADCRESULT1, AdcResult.ADCRESULT2, AdcResult.ADCRESULT3);
-//
-//    // position encoder
-//    //ctl_step_pos_encoder(&pos_enc, gmp_csp_sl_get_rx_buffer()->encoder);
-//    //ctl_step_spd_calc(&spd_enc);
-}
-//
-void ctl_fmif_output_stage_routine(ctl_object_nano_t *pctl_obj)
-{
-//    uint32_t time = gmp_base_get_system_tick() % 10;
-//
-//
-//    pwm1.MfuncC1 =_IQmpy( _IQ(time),_IQ(0.1))-_IQ(0.5);
-//       pwm1.MfuncC2 = 0;
-//       pwm1.MfuncC3 = _IQ(-0.5);
-//       PWM_MACRO(1,2,3,pwm1);
-}
-//
-void ctl_fmif_request_stage_routine(ctl_object_nano_t *pctl_obj)
-{
-
-}
 
 void ctl_fmif_output_enable(ctl_object_nano_t *pctl_obj)
 {

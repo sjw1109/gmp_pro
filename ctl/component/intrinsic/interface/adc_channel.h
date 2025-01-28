@@ -254,6 +254,56 @@ extern "C"
             // Gain
             adc_obj->value[i] = ctl_mul(raw_without_bias, adc_obj->gain[i]);
         }
+
+// // NOTE: test if extend code is great choice, result no.
+
+// // Channel 0
+//         #if defined CTRL_GT_IS_FIXED
+//             // transfer ADC data to _IQ24
+//             raw_data = adc_obj->raw[0] << (adc_obj->iqn - adc_obj->resolution);
+// #elif defined CTRL_GT_IS_FLOAT
+//         // for float point number, transfer ADC data to p.u.
+//         raw_data = (ctrl_gt)adc_obj->raw[0] / (1 << adc_obj->resolution);
+// #endif // CTRL_GT_IS_XXX
+
+//             // remove bias
+//             raw_without_bias = raw_data - adc_obj->bias[0];
+
+//             // Gain
+//             adc_obj->value[0] = ctl_mul(raw_without_bias, adc_obj->gain[0]);
+
+// // Channel 1
+//             #if defined CTRL_GT_IS_FIXED
+//             // transfer ADC data to _IQ24
+//             raw_data = adc_obj->raw[1] << (adc_obj->iqn - adc_obj->resolution);
+// #elif defined CTRL_GT_IS_FLOAT
+//         // for float point number, transfer ADC data to p.u.
+//         raw_data = (ctrl_gt)adc_obj->raw[1] / (1 << adc_obj->resolution);
+// #endif // CTRL_GT_IS_XXX
+
+//             // remove bias
+//             raw_without_bias = raw_data - adc_obj->bias[1];
+
+//             // Gain
+//             adc_obj->value[1] = ctl_mul(raw_without_bias, adc_obj->gain[1]);
+
+
+// // Channel 2
+//             #if defined CTRL_GT_IS_FIXED
+//             // transfer ADC data to _IQ24
+//             raw_data = adc_obj->raw[2] << (adc_obj->iqn - adc_obj->resolution);
+// #elif defined CTRL_GT_IS_FLOAT
+//         // for float point number, transfer ADC data to p.u.
+//         raw_data = (ctrl_gt)adc_obj->raw[2] / (1 << adc_obj->resolution);
+// #endif // CTRL_GT_IS_XXX
+
+//             // remove bias
+//             raw_without_bias = raw_data - adc_obj->bias[2];
+
+//             // Gain
+//             adc_obj->value[2] = ctl_mul(raw_without_bias, adc_obj->gain[2]);
+
+
         return;
     }
 

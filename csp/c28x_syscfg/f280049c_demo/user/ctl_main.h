@@ -12,6 +12,11 @@
 #ifndef _FILE_CTL_MAIN_H_
 #define _FILE_CTL_MAIN_H_
 
+#ifdef __cplusplus
+extern "C"{
+#endif // __cplusplus
+
+
 //
 //#include <gmp_core.h>
 //
@@ -44,9 +49,7 @@ extern ctl_const_f_controller const_f;
 
 #define CONTROLLER_FREQUENCY (10000)
 
-
 #ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
-
 
 // controller core
 GMP_STATIC_INLINE
@@ -59,7 +62,12 @@ void ctl_fmif_core_stage_routine(ctl_object_nano_t *pctl_obj)
     ctl_step_pmsm_servo_framework(&pmsm_servo);
 }
 
+
 #endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+
+#ifdef __cplusplus
+}
+#endif // _cplusplus
 
 #endif // _FILE_CTL_MAIN_H_
 

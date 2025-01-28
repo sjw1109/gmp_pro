@@ -118,22 +118,9 @@ extern "C"
     // User should call this function, in your ctl_main.cpp or just ignore it.
     // When you need to simulate your controller, this function would be invoked.
     //
-    GMP_STATIC_INLINE
-    void gmp_base_ctl_step(void)
-    {
-#ifdef SPECIFY_ENABLE_GMP_CTL
-#ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+    // GMP_STATIC_INLINE
+    //void gmp_base_ctl_step(void);
 
-        // Call periodic dispatch
-        ctl_fm_periodic_dispatch(ctl_nano_handle);
-
-#endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
-
-        // call user controller user defined ISR
-        ctl_dispatch();
-
-#endif // SPECIFY_ENABLE_GMP_CTL
-    }
 
     //////////////////////////////////////////////////////////////////////////
     // Step II: These function have implemented by GMP

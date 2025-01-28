@@ -16,7 +16,7 @@ ec_gt ctl_init_motor_current_ctrl(ctl_motor_current_ctrl_t *obj)
     ctl_vector2_clear(&obj->vdq_ff);
     obj->theta = 0;
 
-    ctl_vector3_clear(&obj->Tabc);
+    //ctl_vector3_clear(&obj->Tabc);
     ctl_vector3_clear(&obj->idq0);
     ctl_vector3_clear(&obj->iab0);
     ctl_vector3_clear(&obj->vdq0);
