@@ -1,8 +1,8 @@
 
 
-#include <gmp_core.h>
+// #include <gmp_core.h>
 
-#include <ctl/ctl_core.h>
+// #include <ctl/ctl_core.h>
 
 // Controller framework
 #include <ctl/framework/ctl_nano.h>
@@ -11,21 +11,20 @@
 
 #include <ctl/component/motor_control.h>
 
-
 //// motor controller
-//#include <ctl/component/intrinsic/combo/track_pid.h>
-//#include <ctl/component/motor_control/basic/motor_current_ctrl.h>
+// #include <ctl/component/intrinsic/combo/track_pid.h>
+// #include <ctl/component/motor_control/basic/motor_current_ctrl.h>
 //
 //// input & output interface
-//#include <ctl/component/intrinsic/interface/adc_channel.h>
-//#include <ctl/component/intrinsic/interface/pwm_channel.h>
+// #include <ctl/component/intrinsic/interface/adc_channel.h>
+// #include <ctl/component/intrinsic/interface/pwm_channel.h>
 //
 //// consultant objects
-//#include <ctl/component/motor_control/consultant/motor_driver_consultant.h>
-//#include <ctl/component/motor_control/consultant/pmsm_consultant.h>
+// #include <ctl/component/motor_control/consultant/motor_driver_consultant.h>
+// #include <ctl/component/motor_control/consultant/pmsm_consultant.h>
 //
 //// controller encoder interface
-//#include <ctl/component/motor_control/basic/encoder.h>
+// #include <ctl/component/motor_control/basic/encoder.h>
 
 #ifndef _FILE_PMSM_SERVO_H_
 #define _FILE_PMSM_SERVO_H_
@@ -210,6 +209,33 @@ extern "C"
     {
         ctl_step_adc_tri_channel(&pmsm->iabc_input, raw1, raw2, raw3);
         ctl_input_motor_current_ctrl(&pmsm->current_ctrl, &pmsm->iabc_input);
+    }
+
+    // ctl_fm_is_online(&pmsm->base) == 1
+    GMP_STATIC_INLINE
+    void ctl_step_pmsm_servo_framework_online(pmsm_servo_fm_t *pmsm)
+    {
+        // speed feedback
+        ctrl_gt speed_fbk = ctl_get_encoder_speed(pmsm->spd_enc);
+
+        // position feedback
+        ctrl_gt position_fbk = ctl_get_encoder_elec_postion(pmsm->pos_enc);
+
+        // speed controller
+        if (pmsm->flag_enable_spd_ctrl)
+        {
+            ctl_step_track_pid(&pmsm->spd_ctrl, pmsm->spd_target, speed_fbk);
+        }
+
+        // set idq ref
+        ctl_set_motor_current_ctrl_idq_ref(&pmsm->current_ctrl, pmsm->idq_ff.dat[phase_d],
+                                           pmsm->idq_ff.dat[phase_q] + ctl_get_track_pid_output(&pmsm->spd_ctrl));
+
+        // current controller & current transform
+        ctl_step_motor_current_ctrl(&pmsm->current_ctrl, position_fbk);
+
+        // modulation
+        ctl_calc_pwm_tri_channel(&pmsm->uabc, &pmsm->current_ctrl.Tabc);
     }
 
     GMP_STATIC_INLINE

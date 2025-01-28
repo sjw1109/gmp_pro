@@ -54,34 +54,17 @@
 #define DEFAULT_ADC_IQN ((12))
 #endif // DEFAULT_ADC_IQN
 
-// FIX controller configuration
-#ifdef USING_FIXED_LIBRARY
+// User should call this function by yourself.
+// Or this function may not be called.
+#define GMP_SPECIFY_DISABLE_PRESET_INPUT_ROUTINE
 
-#define float2ctrl(x) _IQ(x)
-#define ctrl_mpy(A, B) _IQmpy(A, B)
-#define ctrl_sat(A, Pos, Neg) _IQsat(A, Pos, Neg) 
-#define ctrl2float(x) _IQ24toF(x)
+// User should call this function by yourself.
+// Or this function may not be called.
+#define GMP_SPECIFY_DISABLE_PRESET_OUTPUT_ROUTINE
 
-#define pwm_mpy(A, B) _IQmpy(A, B)
-#define ctrl_div(A, B) _IQdiv(A, B)
-#define pwm_sat(A, Pos, Neg) _IQsat(A, Pos, Neg) 
-
-#define ctrl_div2(A) _IQdiv2(A)
-#define ctrl_div4(A) _IQdiv4(A)
-
-#define ctrl_sin(A) _IQsin(A)
-#define ctrl_cos(A) _IQcos(A)
-
-#define ctrl_mod_1(A) ((A & ((1<<GLOBAL_Q)-1)))
-
-
-#else
-// FPU controller configuration 
-
-
-
-#endif
-
+// User should call this function by yourself.
+// Or this function may not be called.
+#define GMP_SPECIFY_DISABLE_PRESET_REQUEST_ROUTINE
 
 
 

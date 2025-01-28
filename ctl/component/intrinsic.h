@@ -5,7 +5,7 @@
 
 // basic includes
 
-#include <ctl/ctl_core.h>
+//#include <ctl/ctl_core.h>
 
 
 #ifndef GMP_CTL_DISABLE_COM_INTRINSIC

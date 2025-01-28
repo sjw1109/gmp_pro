@@ -49,8 +49,12 @@ ec_gt ctl_init_const_f_controller(ctl_const_f_controller *ctrl);
 
 ec_gt ctl_setup_const_f_controller(ctl_const_f_controller *ctrl, parameter_gt frequency, parameter_gt isr_freq);
 
-void ctl_step_const_f_controller(ctl_const_f_controller *ctrl);
-
+GMP_STATIC_INLINE
+void ctl_step_const_f_controller(ctl_const_f_controller *ctrl)
+{
+    ctrl->enc.elec_position = ctl_step_ramp_gen(&ctrl->rg);
+    ctrl->enc.position = ctrl->enc.elec_position;
+}
 
 #ifdef _cplusplus
 }

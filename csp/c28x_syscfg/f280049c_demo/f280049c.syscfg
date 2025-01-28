@@ -51,8 +51,8 @@ gpio2.$name           = "LEDG";
 gpio2.direction       = "GPIO_DIR_MODE_OUT";
 gpio2.gpioPin.$assign = "GPIO34";
 
-gpio3.$name                         = "SPIA_CS";
-gpio3.gpioPin.$assignAllowConflicts = "GPIO57";
+gpio3.$name           = "SPIA_CS";
+gpio3.gpioPin.$assign = "GPIO59";
 
 i2c1.$name = "myI2C0";
 
@@ -69,7 +69,6 @@ spi1.$name            = "SPI0";
 spi1.emulationMode    = "SPI_EMULATION_FREE_RUN";
 spi1.transferProtocol = "SPI_PROT_POL1PHA0";
 spi1.bitRate          = 7000000;
-spi1.useHSMode        = true;
 spi1.picoQual.$name   = "myGPIOQUAL0";
 spi1.pociQual.$name   = "myGPIOQUAL1";
 spi1.clkQual.$name    = "myGPIOQUAL2";

@@ -59,9 +59,9 @@ PAGE 1 :
 
    RAMLS1           : origin = 0x008800, length = 0x000800
    RAMLS2           : origin = 0x009000, length = 0x000800
-   RAMLS5           : origin = 0x00A800, length = 0x000800
-   RAMLS6           : origin = 0x00B000, length = 0x000800
-   RAMLS7           : origin = 0x00B800, length = 0x000800
+   RAMLS567           : origin = 0x00A800, length = 0x001800
+//   RAMLS6           : origin = 0x00B000, length = 0x000800
+//   RAMLS7           : origin = 0x00B800, length = 0x000800
 
    RAMGS0           : origin = 0x00C000, length = 0x002000
    RAMGS1           : origin = 0x00E000, length = 0x002000
@@ -77,7 +77,7 @@ PAGE 1 :
 SECTIONS
 {
    .cinit           : > FLASH_BANK0_SEC1,     PAGE = 0, ALIGN(4)
-   .text            : >>FLASH_BANK0_SEC2 | FLASH_BANK0_SEC3 | FLASH_BANK0_SEC4 | FLASH_BANK0_SEC5 | FLASH_BANK0_SEC6,   PAGE = 0, ALIGN(4)
+   .text            : >>FLASH_BANK0_SEC2 | FLASH_BANK0_SEC3  | FLASH_BANK0_SEC6,   PAGE = 0, ALIGN(4)
    codestart        : > BEGIN       PAGE = 0, ALIGN(4)
 
    .stack           : > RAMM1        PAGE = 1
@@ -85,18 +85,18 @@ SECTIONS
 
 #if defined(__TI_EABI__)
    .init_array      : > FLASH_BANK0_SEC1,       PAGE = 0,       ALIGN(4)
-   .bss             : > RAMLS5,       PAGE = 1
-   .bss:output      : > RAMLS5,       PAGE = 1
-   .bss:cio         : > RAMLS5,       PAGE = 1
-   .data            : > RAMLS6,       PAGE = 1
-   .sysmem          : > RAMLS6,       PAGE = 1
-   .const           : > FLASH_BANK0_SEC7,       PAGE = 0,       ALIGN(4)
+   .bss             : > RAMLS567,       PAGE = 1
+   .bss:output      : > RAMLS567,       PAGE = 1
+   .bss:cio         : > RAMLS567,       PAGE = 1
+   .data            : > RAMLS567,       PAGE = 1
+   .sysmem          : > RAMLS567,       PAGE = 1
+   .const           : > FLASH_BANK0_SEC4 | FLASH_BANK0_SEC5,       PAGE = 0,       ALIGN(4)
 #else
    .pinit           : > FLASH_BANK0_SEC1,       PAGE = 0,       ALIGN(4)
    .ebss            : >>RAMLS5 | RAMLS6,       PAGE = 1
    .esysmem         : > RAMLS6,       PAGE = 1
    .cio             : > RAMLS5,       PAGE = 1
-   .econst          : > FLASH_BANK0_SEC7,    PAGE = 0, ALIGN(4)
+   .econst          : > FLASH_BANK0_SEC4,    PAGE = 0, ALIGN(4)
 #endif
 
    ramgs0           : > RAMGS0,    PAGE = 1
@@ -108,15 +108,15 @@ SECTIONS
 
 #if defined(__TI_EABI__)
     /* CLA specific sections */
-    Cla1Prog        : LOAD = FLASH_BANK0_SEC7,
-                      RUN = RAMLS0,
+    Cla1Prog        : LOAD = FLASH_BANK0_SEC4 | FLASH_BANK0_SEC5,
+                      RUN = RAMLS0 ,
                       LOAD_START(Cla1ProgLoadStart),
                       RUN_START(Cla1ProgRunStart),
                       LOAD_SIZE(Cla1ProgLoadSize),
                       PAGE = 0, ALIGN(4)
 #else
     /* CLA specific sections */
-    Cla1Prog        : LOAD = FLASH_BANK0_SEC8,
+    Cla1Prog        : LOAD = FLASH_BANK0_SEC4,
                       RUN = RAMLS0,
                       LOAD_START(_Cla1ProgLoadStart),
                       RUN_START(_Cla1ProgRunStart),

@@ -26,6 +26,11 @@
 // Invoke necessary CTL libraries
 #include <ctl/framework/ctl_nano.h>
 
+
+// This file is provided by user,
+// User should define controller related function in this header file
+#include <ctl_main.h>
+
 #endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
 

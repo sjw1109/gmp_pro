@@ -74,8 +74,8 @@ void setup_peripheral(void)
 //// device related functions
 //#ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 //
-//void ctl_fmif_input_stage_routine(ctl_object_nano_t *pctl_obj)
-//{
+void ctl_fmif_input_stage_routine(ctl_object_nano_t *pctl_obj)
+{
 //    // current sensor
 ////    ctl_input_pmsm_servo_framework(&pmsm_servo,
 ////                                   // current input
@@ -84,10 +84,10 @@ void setup_peripheral(void)
 //    // position encoder
 //    //ctl_step_pos_encoder(&pos_enc, gmp_csp_sl_get_rx_buffer()->encoder);
 //    //ctl_step_spd_calc(&spd_enc);
-//}
+}
 //
-//void ctl_fmif_output_stage_routine(ctl_object_nano_t *pctl_obj)
-//{
+void ctl_fmif_output_stage_routine(ctl_object_nano_t *pctl_obj)
+{
 //    uint32_t time = gmp_base_get_system_tick() % 10;
 //
 //
@@ -95,13 +95,13 @@ void setup_peripheral(void)
 //       pwm1.MfuncC2 = 0;
 //       pwm1.MfuncC3 = _IQ(-0.5);
 //       PWM_MACRO(1,2,3,pwm1);
-//}
+}
 //
-//void ctl_fmif_request_stage_routine(ctl_object_nano_t *pctl_obj)
-//{
-//
-//}
-//
+void ctl_fmif_request_stage_routine(ctl_object_nano_t *pctl_obj)
+{
+
+}
+
 void ctl_fmif_output_enable(ctl_object_nano_t *pctl_obj)
 {
 

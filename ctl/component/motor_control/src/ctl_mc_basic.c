@@ -305,10 +305,6 @@ ec_gt ctl_setup_const_f_controller(ctl_const_f_controller *ctrl, parameter_gt fr
     return GMP_EC_OK;
 }
 
-void ctl_step_const_f_controller(ctl_const_f_controller *ctrl)
-{
-    ctrl->enc.elec_position = ctl_step_ramp_gen(&ctrl->rg);
-    ctrl->enc.position = ctrl->enc.elec_position;
-}
+
 
 

@@ -9,19 +9,12 @@
  *
  */
 
-
 #include <gmp_core.h>
 
 #include <ctl/ctl_core.h>
 
-#include <math.h>
 
-#include <ctl/suite/motor_control/pmsm_servo/pmsm_servo.h>
-
-#include <ctl/component/motor_control/basic/encoder.h>
-
-// const F & VF controller
-#include <ctl/component/motor_control/basic/vf_generator.h>
+#include "ctl_main.h"
 
 // User may set (get handle) TX content via `gmp_csp_sl_get_tx_buffer`
 // User may get (get handle) RX content via `gmp_csp_sl_get_rx_buffer`
@@ -135,12 +128,6 @@ void ctl_init()
 
 void ctl_mainloop(void)
 {
-    return;
-}
-
-// CTL loop routine
-void ctl_dispatch(void)
-{
     // User Controller logic here.
     if (gmp_base_get_system_tick() > 2000)
     {
@@ -152,21 +139,12 @@ void ctl_dispatch(void)
         ctl_set_pmsm_servo_spd(&pmsm_servo, float2ctrl(0.1));
     }
 
-    // Just for test IQmath
-    gmp_base_ctl_step();
+    return;
 }
+
 
 #ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
-// controller core
-void ctl_fmif_core_stage_routine(ctl_object_nano_t *pctl_obj)
-{
-    // constant frequency generator
-    ctl_step_const_f_controller(&const_f);
-
-    // run pmsm servo framework ISR function
-    ctl_step_pmsm_servo_framework(&pmsm_servo);
-}
 
 void ctl_fmif_monitor_routine(ctl_object_nano_t *pctl_obj)
 {

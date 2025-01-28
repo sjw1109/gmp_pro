@@ -173,7 +173,54 @@ extern "C"
     // The following function should be called by user on time.
 
     // In Main ISR
-    void ctl_fm_periodic_dispatch(ctl_object_nano_t *pctl_obj);
+    //void ctl_fm_periodic_dispatch(ctl_object_nano_t *pctl_obj);
+
+    // Controller core
+    // This function should be called in your controller Main ISR.
+    // This function may invoke all the other functions related to the controller.
+    GMP_STATIC_INLINE
+    void ctl_fm_periodic_dispatch(ctl_object_nano_t *pctl_obj)
+    {
+        // Step 0: ISR tick update
+        pctl_obj->isr_tick = pctl_obj->isr_tick + 1;
+
+    #ifndef GMP_DISABLE_CTL_OBJ_ENDORSE_CHECK
+        if (pctl_obj->security_endorse == GMP_CTL_ENDORSE)
+        {
+    #endif // GMP_DISABLE_CTL_OBJ_ENDORSE_CHECK
+
+            // Step I: input stage
+            // All the analog input and digital input and peripheral input should be processed here.
+            // + Analog ADC input
+            // + digital GPIO input
+            // + peripheral input, such as, encoder, and etc.
+            ctl_fmif_input_stage_routine(pctl_obj);
+
+            if (pctl_obj->state_machine >= CTL_SM_CALIBRATE)
+            {
+
+                // Step II: controller core stage
+                // All the control law should be implemented here.
+                ctl_fmif_core_stage_routine(pctl_obj);
+
+                // Step III: output stage
+                // All the output routine should be implemented here.
+                // + PWM output
+                // + analog output
+                // + GPIO output
+                // + peripheral request, such as, request encoder routine.
+                ctl_fmif_output_stage_routine(pctl_obj);
+            }
+
+    #ifndef GMP_DISABLE_CTL_OBJ_ENDORSE_CHECK
+        }
+    #endif // GMP_DISABLE_CTL_OBJ_ENDORSE_CHECK
+
+        // Step IV: request stage
+        // All the real time request stage.
+        ctl_fmif_request_stage_routine(pctl_obj);
+    }
+
 
     // In Main Loop
     void ctl_fm_state_dispatch(ctl_object_nano_t *pctl_obj);

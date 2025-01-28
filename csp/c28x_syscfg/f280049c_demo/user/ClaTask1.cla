@@ -1,6 +1,8 @@
 #include <gmp_core.h>
 #include <user_main.h>
 
+#include <ctl_main.h>
+
 __interrupt void CLATaskCallback1 ( void )
 {
     //
@@ -13,6 +15,7 @@ __interrupt void CLATaskCallback1 ( void )
     //
     float variable = fVal + add_more;
 
+    ctl_step_pmsm_servo_framework_online(&pmsm_servo);
 
     //
     //Preprocessing
@@ -38,6 +41,5 @@ __interrupt void CLATaskCallback1 ( void )
 //   }
 
     fResult = variable;
-    __asm(" MSTOP");
 }
 

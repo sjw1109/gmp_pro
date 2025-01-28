@@ -1,4 +1,8 @@
 
+#include <gmp_core.h>
+
+#include <ctl/ctl_core.h>
+
 #include <ctl/suite/motor_control/pmsm_servo/pmsm_servo.h>
 
 ec_gt ctl_init_pmsm_servo_framework(pmsm_servo_fm_t *pmsm)

@@ -85,8 +85,8 @@ float multiple_static_inline(float A, float B)
 // #define pwm_mpy(CTRL_RESULT, PWM_SAT) ()
 
 // Extension Calculation
-#define ctl_div2(A) ((float32_t)((float32_t)(A) / 2))
-#define ctl_div4(A) ((float32_t)((float32_t)(A) / 4))
+#define ctl_div2(A) ((float32_t)(__divf32((float32_t)(A), 2)))
+#define ctl_div4(A) ((float32_t)(__divf32((float32_t)(A), 4)))
 
 // Add and sub
 #define ctl_add(A, B) ((float32_t)((float32_t)(A) + (B)))
