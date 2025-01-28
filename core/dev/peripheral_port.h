@@ -89,7 +89,7 @@ extern "C"
                                  data_gt *data, size_gt length);
 
     //ssize_gt gmp_hal_iic_read_mem_async(iic_halt iic, fast16_gt dev_addr, fast32_gt mem_addr, fast_gt mem_length,
-                                       data_gt *data, size_gt length);
+    //                                   data_gt *data, size_gt length);
 
     //////////////////////////////////////////////////////////////////////////
 

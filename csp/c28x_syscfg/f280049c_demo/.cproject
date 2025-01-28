@@ -53,6 +53,7 @@
 									<listOptionValue builtIn="false" value="${PROJECT_ROOT}"/>
 									<listOptionValue builtIn="false" value="${C2000WARE_ROOT}"/>
 									<listOptionValue builtIn="false" value="${C2000WARE_DLIB_ROOT}"/>
+									<listOptionValue builtIn="false" value="${C2000WARE_ROOT}/libraries/math/CLAmath/c28/include"/>
 									<listOptionValue builtIn="false" value="${CG_TOOL_ROOT}/include"/>
 									<listOptionValue builtIn="false" value="${GMP_PRO_LOCATION}"/>
 									<listOptionValue builtIn="false" value="${GMP_PRO_LOCATION}\csp\c28x_syscfg"/>

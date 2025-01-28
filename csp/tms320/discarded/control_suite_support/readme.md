@@ -1,1 +1,0 @@
-C:\ti\controlSUITE\libs\app_libs\motor_control\drivers
