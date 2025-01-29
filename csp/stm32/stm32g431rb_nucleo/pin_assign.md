@@ -37,7 +37,7 @@ QEP resource
 | QEP-A | C7-17     | PA15      | TIM2 Encoder Mode         |
 | QEP-B | C10-31    | PB3       | TIM2 Encoder Mode         |
 | QEP-C | C10-25    | PB10      | GPIO input with interrupt |
-| QEP-Z | C10-12    | PA12      |                           |
+| QEP-Z | C10-12    | PA12      | TIM1 (Conflict with PWM)  |
 
 
 
