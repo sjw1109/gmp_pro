@@ -83,3 +83,37 @@ extern "C"
 #endif // __cplusplus
 
 #endif // _FILE_GMP_CORE_HEADER_H_
+
+
+
+
+//                     ..';;;;,
+//               .,ooKWMXxKMMN.
+//            'lKMMW:cMNk,:ddl
+//          cXMlckWk;   .',. ..
+//        lWMMMW;  .:d0NN'X: ,d
+//      .KOcxNd. cONNNNNN.0: ,d      ;o,
+//     cWMM0:  lNk;:XNNNN.O: ,d    ;xkkkx;
+//    lWxXKd ,XNNc..0NNNXKX: ,kdockkkkkko'
+//   ,MMKO' :NNNNNNNNNX0l,.    .,okkkkl.
+//   XWXWX .XXXNNNNNXK,  .,...,.  .dkx.                'cNdoodl
+//  ,WxOc, 0occcccONK  .c.  .. .c.  oko.......       ..xdll:lll,
+//  oMMMM' ,,,,,,,,,.  o         x   '''''''''      .'.,0WK,lMMk
+//  xMMMM' ddclodddd,  o         x  ,dddddoood.    lXMx;OMWoKMMX'
+//  cWd:,, WX''''lMMN.  c.     .c. .X0o;.'',dN  .xcxxMM0dol:llll.
+//  .MMMMX lWllxKWMMMN:  .'''',.  lk.';,,;;;0o ,WMMXXd.
+//   xMXo;, kMNx:..XMMMXd;.   .;ox'Ok;,';c:ok .o0XMX.
+//    KWOKMd kK. :XMKoKMMMM: oNNo'd.c:;c;;ck lMX0X0
+//    .NMM0O..;NWMNc  0Mo:M: oNd.x.x.d.;0Xc.'xKMMX.
+//     .ONkKXWo.lX0'.oMo  M' oX 0.d.d;lKc.lNKxdWO
+//       lWMMMM0.''o0WM:.;M. oO X'Kokl'..kMMMMN:
+//        .oWMKdOWWk..;:ldk' :xol:;' dNMx;XMNo
+//           ;OMMMMockMNx.:xxxx.cNMKooMMMWx:
+//             .:xKXMMMMOdKMMMMxoMMMMXKx;
+//                  ':oxOOXXXXXKxxo:'
+// 
+//               ____     __  __     ____  
+//              / ___|   |  \/  |   |  _ \ 
+//             | |  _    | |\/| |   | |_) |
+//             | |_| |   | |  | |   |  __/ 
+//              \____|   |_|  |_|   |_|
