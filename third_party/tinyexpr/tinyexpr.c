@@ -232,7 +232,7 @@ void next_token(state *s) {
     s->type = TOK_NULL;
 
     do {
-
+ 
         if (!*s->next){
             s->type = TOK_END;
             return;
