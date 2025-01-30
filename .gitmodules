@@ -2,45 +2,24 @@
 [submodule "third_party/asio"]
 	path = third_party/asio
 	url = https://github.com/boostorg/asio.git
-
 [submodule "third_party/lwip"]
 	path = third_party/lwip
 	url = https://github.com/lwip-tcpip/lwip.git
-
-# Math Submodule
-[submodule "third_party/Eigen"]
-	path = third_party/Eigen
+[submodule "third_party/eigen"]
+	path = third_party/eigen
 	url = https://github.com/PX4/eigen.git
-
-# File system submodule
 [submodule "third_party/fatfs"]
 	path = third_party/fatfs
 	url = https://github.com/abbrev/fatfs.git
-
+[submodule "third_party/openocd"]
+	path = third_party/openocd
+	url = https://github.com/openocd-org/openocd.git
+[submodule "third_party/DAPLink"]
+	path = third_party/DAPLink
+	url = https://github.com/ARMmbed/DAPLink.git
+[submodule "third_party/tinyxml2"]
+	path = third_party/tinyxml2
+	url = https://github.com/leethomason/tinyxml2
 [submodule "third_party/littlefs"]
 	path = third_party/littlefs
 	url = https://github.com/littlefs-project/littlefs.git
-
-# Debugger
-[submodule "third_party/openocd"]
-    path = third_party/openocd
-    url = https://github.com/openocd-org/openocd.git
-
-[submodule "third_party/DAPLink"]
-    path = third_party/DAPLink
-    url = https://github.com/ARMmbed/DAPLink.git
-
-# parser submodule
-[submodule "third_party/tinyXML"]
-    path = third_party/tinyXML
-    url = https://github.com/leethomason/tinyxml2
-
-[submodule "third_party/nlohmann"]
-    path = third_party/json
-    url = https://github.com/nlohmann/json.git
-
-[submodule "third_party/getopt"]
-    path = third_party/getopt
-    url = https://github.com/r-lyeh-archived/getopt
-
-    
