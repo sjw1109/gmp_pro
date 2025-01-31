@@ -164,7 +164,7 @@ void gmp_base_show_label(void)
     gmp_base_print("           cXMlckWk;   ..,. oo                                    ");
     gmp_base_print("         lWMMMW;  .:d0NN'X: od                                    ");
     gmp_base_print("       .KOcxNd. cONNNNNN.0: od      ;o,                           ");
-    gmp_base_print("      cWMM0:  lNk;:XNNNN.O: od    ;xkkkx;                         ");
+    gmp_base_print("      cWMM0:  lNk..XNNNN.O: od    ;xkkkx;                         ");
     gmp_base_print("     lWxXKd ,XNNc..0NNNXKX: okdockkkkkko'                         ");
     gmp_base_print("    ,MMKO' :NNNNNNNNNX0l,.    .,okkkkl.                           ");
     gmp_base_print("    XWXWX .XXXNNNNNXK,  .,...,.  .dkx.                ,cNdoodl    ");
