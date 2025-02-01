@@ -10,7 +10,7 @@
  */
 
 // gmp header
-#include <core/gmp_core.hpp>
+#include <gmp_core.hpp>
 
 #include <core/pm/workflow/workflow.hpp>
 

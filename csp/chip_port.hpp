@@ -10,8 +10,9 @@
  */
  
 // This file contains all the C++ interface of chips
-
+#ifndef SPECIFY_DISABLE_CSP
 #include <csp.general.hpp>
+#endif // SPECIFY_DISABLE_CSP
 
 //////////////////////////////////////////////////////////////////////////
 // Step I import all C ports

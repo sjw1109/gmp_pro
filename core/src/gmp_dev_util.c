@@ -12,6 +12,20 @@
 #include <gmp_core.h>
 
 /**
+ * @brief initialize a ring buffer 
+ * @param buf handle of ring buffer
+ * @param content a array to save resource
+ * @param capacity size of the array
+ */
+void gmp_init_ringbuf(ringbuf_t *buf, data_gt *content, size_gt size)
+{
+    buf->buf = content;
+    buf->size = size;
+    buf->iget = 0;
+    buf->iset = 0;
+}
+
+/**
  * @brief initialize a half duplex channel
  * @param channel half_duplex_ift handle
  * @param buf

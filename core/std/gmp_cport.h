@@ -88,7 +88,20 @@ extern "C"
 
     // System debug print function
     //
-    size_gt gmp_base_print(const char *msg, ...);
+    // size_gt gmp_base_print(const char *msg, ...);
+
+#if defined USER_SPECIFIED_PRINT_FUNCTION
+
+#if defined SPECIFY_BASE_PRINT_NOT_IMPL
+#define gmp_base_print(x)
+#else // SPECIFY_BASE_PRINT_NOT_IMPL
+#define gmp_base_print USER_SPECIFIED_PRINT_FUNCTION
+#endif // SPECIFY_BASE_PRINT_NOT_IMPL
+
+#else // USER_SPECIFIED_PRINT_FUNCTION
+// define GMP base function print
+#define gmp_base_print gmp_base_print_internal
+#endif // USER_SPECIFIED_PRINT_FUNCTION
 
     // Show GMP setup label
     // This function contain a label show of GMP.
@@ -119,8 +132,7 @@ extern "C"
     // When you need to simulate your controller, this function would be invoked.
     //
     // GMP_STATIC_INLINE
-    //void gmp_base_ctl_step(void);
-
+    // void gmp_base_ctl_step(void);
 
     //////////////////////////////////////////////////////////////////////////
     // Step II: These function have implemented by GMP

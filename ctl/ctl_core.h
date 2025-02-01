@@ -29,6 +29,7 @@
 // This file is provided by user,
 // User should define controller related function in this header file
 #include <ctl_main.h>
+
 #include <ctl_interface.h>
 
 #include <ctl/framework/ctl_dispatch.h>
@@ -38,7 +39,6 @@
 
 #endif // SPECIFY_ENABLE_GMP_CTL
 
-// �ѳ��õ�CTL���ڴ˴�ȫ���������
 
 
 

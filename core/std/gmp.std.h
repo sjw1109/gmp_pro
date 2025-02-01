@@ -115,7 +115,7 @@ extern "C"
 
 // ....................................................................//
 // memory controller
-#ifdef SPECIFY_ENABLE_GMP_CTL
+#ifndef SPECIFY_DISABLE_GMP_CTL
 #include <ctl/ctl_core.h>
 
 #ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
@@ -140,6 +140,12 @@ extern "C"
 // GMP CSP port function
 //
 #include <core/std/cfg/csp.cfg.h>
+
+    // ....................................................................//
+    // GMP device function 
+
+    // ring buffer for device  
+#include <core/dev/ring_buf.h>
 
 #ifdef __cplusplus
 }

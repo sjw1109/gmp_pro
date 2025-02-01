@@ -9,7 +9,7 @@
  * 
  */
  
-#include <core/gmp_core.h>
+#include <gmp_core.h>
 #include <core/util/ds/data_ring_buffer.h>
 
 

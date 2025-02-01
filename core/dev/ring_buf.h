@@ -9,10 +9,37 @@ extern "C"
 #endif // __cplusplus
 
 #ifndef RINGBUF_NULL_RET
-#define RINGBUF_NULL_RET((-1))
+#define RINGBUF_NULL_RET ((-1))
 #endif // RINGBUF_NULL_RET
 
-#define JUDGE_IF_RINGBUF_IS_FULL                                                                                       \
+    // 
+    // main function summary
+    // + init create a ringbuffer object
+    // + peek get the current buffer item, -1 if no object in this buffer
+    // + put  push a item in this buffer, -1 if the array is full, 0 if operation done completely
+    // + get_spare_size get ring buffer spare size
+    // + get_valid size get ring buffer valid size
+    //
+
+    // basic memory topology
+    // 0 | 1 | 2 | 3 | 4 | 5
+    //     ^ i get: read number here
+    //                 ^ i set: set number here
+
+    // Ring Buffer
+    typedef struct _tag_ringbuf_t
+    {
+        data_gt *buf;
+        size_gt size;
+
+        size_gt iget;
+        size_gt iset;
+    } ringbuf_t;
+
+    void gmp_init_ringbuf(ringbuf_t *buf, data_gt *content, size_gt size);
+
+// Internal functions
+#define JUDGE_IF_RINGBUF_IS_NULL                                                                                       \
     if (buf->iget == buf->iset)                                                                                        \
         return RINGBUF_NULL_RET;
 
@@ -24,20 +51,11 @@ extern "C"
     if (buf->iget >= buf->size)                                                                                        \
         buf->iset = 0;
 
-    typedef struct _tag_ringbuf_t
-    {
-        data_gt *buf;
-        size_gt size;
-
-        size_gt iget;
-        size_gt iset;
-    } ringbuf_t;
-
     GMP_STATIC_INLINE
     int32_t ringbuf_get_item(ringbuf_t *buf)
     {
         // buffer is null
-        JUDGE_IF_RINGBUF_IS_FULL;
+        JUDGE_IF_RINGBUF_IS_NULL;
 
         // get target
 #if GMP_PORT_DATA_SIZE_PER_BYTES == 1
@@ -56,13 +74,31 @@ extern "C"
     GMP_STATIC_INLINE
     int32_t ringbuf_peek_item(ringbuf_t *buf)
     {
-        JUDGE_IF_RINGBUF_IS_FULL;
+        JUDGE_IF_RINGBUF_IS_NULL;
 
         return buf->buf[buf->iget];
     }
 
     GMP_STATIC_INLINE
-    fast16_t ringbuf_put_item(ringbuf_t *buf, data_gt v)
+    int32_t ringbuf_peek_last_item(ringbuf_t *buf)
+    {
+        JUDGE_IF_RINGBUF_IS_NULL;
+
+        size_gt iset_true;
+
+        if (buf->iset == 0)
+            iset_true = buf->size - 1;
+        else
+            iset_true = buf->iset - 1;
+
+        return buf->buf[iset_true];
+    }
+
+    
+    // push an item into the buffer
+    // if the buffer is full, discard the lastest data.
+    GMP_STATIC_INLINE
+    fast16_gt ringbuf_put_item(ringbuf_t *buf, data_gt v)
     {
         size_gt iset_new = buf->iset + 1;
         if (iset_new >= buf->size)
@@ -79,6 +115,29 @@ extern "C"
         return 0;
     }
 
+    // push an item.
+    // if the ring buffer is full discard the oldest data.
+    GMP_STATIC_INLINE
+    fast16_gt ringbuf_put_item_warp(ringbuf_t *buf, data_gt v)
+    {
+        fast16_gt ret = 0;
+        size_gt iset_new = buf->iset + 1;
+        if (iset_new >= buf->size)
+        {
+            iset_new = 0;
+        }
+        // buffer has full
+        if (iset_new == buf->iget)
+        {
+            buf->iget += 1;
+            buf->iget = buf->iget % buf->size;
+            ret = 0;
+        }
+        buf->buf[buf->iset] = v;
+        buf->iset = iset_new;
+        return 0;
+    }
+
     GMP_STATIC_INLINE
     size_gt ringbuf_get_spare_size(ringbuf_t *buf)
     {
@@ -86,7 +145,7 @@ extern "C"
     }
 
     GMP_STATIC_INLINE
-    size_gt ringbuf_get_avail_size(ringbuf_t *buf)
+    size_gt ringbuf_get_valid_size(ringbuf_t *buf)
     {
         return (buf->size + buf->iset - buf->iget) % buf->size;
     }
@@ -115,9 +174,9 @@ extern "C"
     //   -1: Not enough data available to complete read (try again later)
     //   -2: Requested read is larger than buffer - will never succeed
     GMP_STATIC_INLINE
-    fast16_t ringbuf_get_array(ringbuf_t *buf, data_gt *data, size_gt data_len)
+    fast16_gt ringbuf_get_array(ringbuf_t *buf, data_gt *data, size_gt data_len)
     {
-        if (ringbuf_get_avail_size(buf) < data_len)
+        if (ringbuf_get_valid_size(buf) < data_len)
         {
             return (buf->size <= data_len) ? -2 : -1;
         }
@@ -147,14 +206,14 @@ extern "C"
 
     // Returns:
     //    0: Success
-    //   -1: Not enough data available to complete read (try again later)
-    //   -2: Requested read is larger than buffer - will never succeed
+    //    1: Not enough data available to complete read (try again later)
+    //    2: Requested read is larger than buffer - will never succeed
     GMP_STATIC_INLINE
-    void ringbuf_put_array(ringbuf_t *buf, data_gt *data, size_gt data_len)
+    fast_gt ringbuf_put_array(ringbuf_t *buf, data_gt *data, size_gt data_len)
     {
         if (ringbuf_get_spare_size(buf) < data_len)
         {
-            return (buf->size <= data_len) ? -2 : -1;
+            return (buf->size <= data_len) ? 2 : 1;
         }
         ringbuf_memcpy_put_internal(buf, data, data_len);
         return 0;
@@ -164,7 +223,7 @@ extern "C"
     int32_t ringbuf_peek16(ringbuf_t *buf)
     {
         // buffer is null
-        JUDGE_IF_RINGBUF_IS_FULL;
+        JUDGE_IF_RINGBUF_IS_NULL;
 
 #if GMP_PORT_DATA_SIZE_PER_BYTES == 1
         uint32_t iget_a = buf->iget + 1;
@@ -189,7 +248,7 @@ extern "C"
     int32_t ringbuf_get16(ringbuf_t *buf)
     {
         // get the target value
-        int v = ringbuf_peek16(r);
+        int v = ringbuf_peek16(buf);
 
         if (v == -1)
         {
@@ -212,7 +271,7 @@ extern "C"
     }
 
     GMP_STATIC_INLINE
-    int32_t ringbuf_put16(ringbuf_t *r, uint16_t v)
+    int32_t ringbuf_put16(ringbuf_t *buf, uint16_t v)
     {
         size_gt iput_a = buf->iset + 1;
 
