@@ -12,7 +12,7 @@ extern "C"
 #define RINGBUF_NULL_RET ((-1))
 #endif // RINGBUF_NULL_RET
 
-    // 
+    //
     // main function summary
     // + init create a ringbuffer object
     // + peek get the current buffer item, -1 if no object in this buffer
@@ -29,10 +29,14 @@ extern "C"
     // Ring Buffer
     typedef struct _tag_ringbuf_t
     {
+        // buffer
         data_gt *buf;
+        // length of buffer, the maximum length is `size - 1`
         size_gt size;
 
+        // the position to read
         size_gt iget;
+        // the write position
         size_gt iset;
     } ringbuf_t;
 
@@ -94,7 +98,6 @@ extern "C"
         return buf->buf[iset_true];
     }
 
-    
     // push an item into the buffer
     // if the buffer is full, discard the lastest data.
     GMP_STATIC_INLINE
@@ -176,6 +179,10 @@ extern "C"
     GMP_STATIC_INLINE
     fast16_gt ringbuf_get_array(ringbuf_t *buf, data_gt *data, size_gt data_len)
     {
+        // special case
+        if (data_len == 0)
+            return 0;
+
         if (ringbuf_get_valid_size(buf) < data_len)
         {
             return (buf->size <= data_len) ? -2 : -1;
@@ -211,6 +218,10 @@ extern "C"
     GMP_STATIC_INLINE
     fast_gt ringbuf_put_array(ringbuf_t *buf, data_gt *data, size_gt data_len)
     {
+        // special case
+        if (data_len == 0)
+            return 0;
+
         if (ringbuf_get_spare_size(buf) < data_len)
         {
             return (buf->size <= data_len) ? 2 : 1;

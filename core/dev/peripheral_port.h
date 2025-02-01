@@ -7,21 +7,23 @@ extern "C"
 {
 #endif // __cplusplus
 
-    typedef struct _tag_ring_buffer_t
-    {
-        // buffer
-        data_gt *buffer;
+    // typedef struct _tag_ring_buffer_t
+    //{
+    //     // buffer
+    //     data_gt *buffer;
 
-        // 
-        size_gt read_pos;
+    //    // the position to read
+    //    size_gt read_pos;
 
-        size_gt write_pos;
+    //    // the write position
+    //    size_gt write_pos;
 
-        size_gt length;
+    //    // length of buffer, the maximum length is `length - 1`
+    //    size_gt length;
 
-        fast_gt full;
+    //    fast_gt full;
 
-    } ring_buffer_t;
+    //} ring_buffer_t;
 
     //////////////////////////////////////////////////////////////////////////
     // Virtual Port
@@ -31,11 +33,24 @@ extern "C"
     //////////////////////////////////////////////////////////////////////////
     // Virtual Port ring buffer
 
-    //
-    void gmp_hal_buffer_write(ring_buffer_t *ring, const data_gt *data, size_gt length);
+    // Write data to the ring buffer
+    GMP_STATIC_INLINE
+    void gmp_hal_buffer_write(ringbuf_t *ring, const data_gt *data, size_gt length)
+    {
+        ringbuf_put_array(ring, data, length);
+    }
 
-    //
-    void gmp_hal_buffer_read(ring_buffer_t *ring, data_gt *data, size_gt length);
+    // Read data from the ring buffer
+    GMP_STATIC_INLINE
+    size_gt gmp_hal_buffer_read(ringbuf_t *ring, data_gt *data, size_gt length)
+    {
+        size_gt max_length = ringbuf_get_valid_size(ring);
+        if (max_length == 0)
+            return 0;
+
+        ringbuf_get_array(ring, data, max_length);
+        return max_length
+    }
 
     // General Peripheral Prototype functions
     // These functions may implement by CSP.
@@ -52,7 +67,7 @@ extern "C"
     size_gt gmp_hal_spi_read(spi_halt spi, data_gt *data, size_gt length);
 
     // This is a asynchronize function
-    //size_gt gmp_hal_spi_read_async(spi_halt spi, data_gt *data, size_gt length);
+    // size_gt gmp_hal_spi_read_async(spi_halt spi, data_gt *data, size_gt length);
 
     // Wait till transimit/receive complete
     fast_gt gmp_hal_spi_wait(spi_halt spi);
@@ -65,7 +80,7 @@ extern "C"
 
     size_gt gmp_hal_uart_read(uart_halt uart, data_gt *data, size_gt length);
 
-    //size_gt gmp_hal_uart_read_async(uart_halt uart, data_gt *data, size_gt length);
+    // size_gt gmp_hal_uart_read_async(uart_halt uart, data_gt *data, size_gt length);
 
     fast_gt gmp_hal_uart_wait(uart_halt uart);
 
@@ -83,13 +98,13 @@ extern "C"
 
     size_gt gmp_hal_iic_read(iic_halt iic, fast16_gt dev_addr, data_gt *data, size_gt length);
 
-    //size_gt gmp_hal_iic_read_async(iic_halt iic, fast16_gt dev_addr, data_gt *data, size_gt length);
+    // size_gt gmp_hal_iic_read_async(iic_halt iic, fast16_gt dev_addr, data_gt *data, size_gt length);
 
     size_gt gmp_hal_iic_read_mem(iic_halt iic, fast16_gt dev_addr, fast32_gt mem_addr, fast_gt mem_length,
                                  data_gt *data, size_gt length);
 
-    //ssize_gt gmp_hal_iic_read_mem_async(iic_halt iic, fast16_gt dev_addr, fast32_gt mem_addr, fast_gt mem_length,
-    //                                   data_gt *data, size_gt length);
+    // ssize_gt gmp_hal_iic_read_mem_async(iic_halt iic, fast16_gt dev_addr, fast32_gt mem_addr, fast_gt mem_length,
+    //                                    data_gt *data, size_gt length);
 
     //////////////////////////////////////////////////////////////////////////
 
