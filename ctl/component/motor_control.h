@@ -19,6 +19,8 @@
 
 #include <ctl/component/motor_control/basic/vf_generator.h>
 
+#include <ctl/component/motor_control/basic/decouple.h>
+
 #endif // GMP_CTL_DISABLE_COM_MC_BASIC
 
 #ifndef GMP_CTL_DISABLE_COM_MC_CONSULTANT

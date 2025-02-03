@@ -116,8 +116,9 @@ extern "C"
     // This function would be called by user in entry function.
     // And this function would not return.
     // This function should be called only once.
+    // This is a inline function, defined in gmp_core_func.h
     //
-    void gmp_base_entry(void);
+    //void gmp_base_entry(void);
 
 #ifdef SPECIFY_ENABLE_GMP_CTL
 #ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO

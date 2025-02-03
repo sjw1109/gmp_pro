@@ -29,3 +29,6 @@
 // For maximum extension device support, please use 8 instead of 16
 #define _C2000_SPI_INTERFACE_DATA_LENGTH ((8))
 
+
+// SPECIFY disable endless loop exit function
+#define SPECIFY_DISABLE_CSP_EXIT

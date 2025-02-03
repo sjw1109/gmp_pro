@@ -97,8 +97,10 @@ extern "C"
         }
 
 #if !defined SPECIFY_DISABLE_CSP
+#if !defined SPECIFY_DISABLE_CSP_EXIT
         // This function is unreachable.
         gmp_csp_exit();
+#endif // SPECIFY_DISABLE_CSP_EXIT
 #endif // SPECIFY_DISABLE_CSP
     }
 

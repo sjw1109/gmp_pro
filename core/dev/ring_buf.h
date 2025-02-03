@@ -134,11 +134,11 @@ extern "C"
         {
             buf->iget += 1;
             buf->iget = buf->iget % buf->size;
-            ret = 0;
+            ret = 1;
         }
         buf->buf[buf->iset] = v;
         buf->iset = iset_new;
-        return 0;
+        return ret;
     }
 
     GMP_STATIC_INLINE
