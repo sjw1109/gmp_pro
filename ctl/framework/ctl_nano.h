@@ -11,8 +11,8 @@
 
 // Basic headers
 #include <ctl/component/intrinsic/discrete/divider.h>
-#include <gmp_core.h>
 #include <ctl_main.h>
+#include <gmp_core.h>
 
 #ifndef _FILE_CTL_NANO_H_
 #define _FILE_CTL_NANO_H_
@@ -116,17 +116,17 @@ extern "C"
     // The following functions may running in Main ISR
 
     // deal with all the adc and other input messages
-    //void ctl_fmif_input_stage_routine(ctl_object_nano_t *pctl_obj);
+    // void ctl_fmif_input_stage_routine(ctl_object_nano_t *pctl_obj);
 
     // implement all the controller routine
     // this is a inline function implemented by user.
-    //void ctl_fmif_core_stage_routine(ctl_object_nano_t *pctl_obj);
+    // void ctl_fmif_core_stage_routine(ctl_object_nano_t *pctl_obj);
 
     // output all the PWM and other digital or analog signal
-    //void ctl_fmif_output_stage_routine(ctl_object_nano_t *pctl_obj);
+    // void ctl_fmif_output_stage_routine(ctl_object_nano_t *pctl_obj);
 
     // request other information via peripheral, for instance SPI.
-    //void ctl_fmif_request_stage_routine(ctl_object_nano_t *pctl_obj);
+    // void ctl_fmif_request_stage_routine(ctl_object_nano_t *pctl_obj);
 
     // ....................................................................//
     // The following functions may running in Main Loop
@@ -175,7 +175,7 @@ extern "C"
     // The following function should be called by user on time.
 
     // In Main ISR
-    //void ctl_fm_periodic_dispatch(ctl_object_nano_t *pctl_obj);
+    // void ctl_fm_periodic_dispatch(ctl_object_nano_t *pctl_obj);
 
     // Controller core
     // This function should be called in your controller Main ISR.
@@ -200,8 +200,8 @@ extern "C"
                                   uint32_t ctrl_freq // the frequency of the control law, unit Hz
     );
 
-        extern ctl_object_nano_t *ctl_nano_handle;
-        
+    extern ctl_object_nano_t *ctl_nano_handle;
+
     //////////////////////////////////////////////////////////////////////////
     // Utilities
 

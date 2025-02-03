@@ -24,7 +24,7 @@ void ctl_setup_per_unit_consultant_by_puf(ctl_per_unit_consultant_t *pu, uint32_
     pu->base_freq = rated_freq;
     pu->base_omega = rated_freq * 2 * PI;
     pu->base_speed = pu->base_omega / pole_pairs;
-    pu->base_speed_krpm = 60.0 * rated_freq / pole_pairs;
+    pu->base_speed_krpm = (parameter_gt)60.0 * rated_freq / pole_pairs;
 
     pu->base_impedence = pu->base_voltage / pu->base_current;
     pu->base_inductance = pu->base_impedence / pu->base_omega;
@@ -36,5 +36,5 @@ void ctl_setup_per_unit_consultant_by_puf(ctl_per_unit_consultant_t *pu, uint32_
 // horsepower to SI power
 parameter_gt ctl_helper_hp2power(parameter_gt hp)
 {
-    return 746.0 * hp * 1000;
+    return (parameter_gt)746.0 * hp * 1000;
 }

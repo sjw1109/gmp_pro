@@ -14,10 +14,10 @@
 #define _FILE_CSP_TYPE_DEF_H_
 
 
-// This file is for STM32 series micro controller
+// This file is for C28x series micro controller
 
 
-// STM32 BASIC DATA TYPE
+// C28x BASIC DATA TYPE
 #define GMP_PORT_DATA_T				    int16_t
 #define GMP_PORT_DATA_SIZE_PER_BITS		(16)
 #define GMP_PORT_DATA_SIZE_PER_BYTES    (2)
@@ -61,6 +61,23 @@
 #define GMP_PORT_PWM_SIZE_PER_BITS  (16)
 #define GMP_PORT_PWM_SIZE_PER_BYTES (2)
 #endif // GMP_PORT_PWM_T
+
+// C28x device peripheral 
+#ifndef GMP_PORT_UART_T
+#define GMP_PORT_UART_T uint32_t
+#endif // GMP_PORT_UART_T 
+
+#ifndef GMP_PORT_I2C_T
+#define GMP_PORT_I2C_T uint32_t 
+#endif // GMP_PORT_I2C_T
+
+#ifndef GMP_PORT_SPI_T
+#define GMP_PORT_SPI_T uint32_t
+#endif // GMP_PORT_SPI_T
+
+#ifndef GMP_PORT_CAN_T
+#define GMP_PORT_CAN_T uint32_t
+#endif // GMP_PORT_CAN_T
 
 #endif 
 

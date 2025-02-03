@@ -22,11 +22,11 @@ typedef GMP_PORT_UART_T uart_halt;
 // ....................................................................//
 // handle of USART (Universal Synchronous/Asynchronous Receiver/Transmitter)
 //
-#ifndef GMP_PORT_USART_T
-#define GMP_PORT_USART_T void *
-#endif // GMP_PORT_USART_T
-
-typedef GMP_PORT_USART_T usart_halt;
+//#ifndef GMP_PORT_USART_T
+//#define GMP_PORT_USART_T void *
+//#endif // GMP_PORT_USART_T
+//
+//typedef GMP_PORT_USART_T usart_halt;
 
 // ....................................................................//
 // handle of IIC (Inter-Integrated Circuit)
@@ -54,6 +54,15 @@ typedef GMP_PORT_IIS_T iis_halt;
 #endif // GMP_PORT_SPI_T
 
 typedef GMP_PORT_SPI_T spi_halt;
+
+// ....................................................................//
+// handle of CAN (Controller Area Network)
+//
+#ifndef GMP_PORT_CAN_T
+#define GMP_PORT_CAN_T void *
+#endif // GMP_PORT_CAN_T
+
+typedef GMP_PORT_CAN_T can_halt;
 
 // ....................................................................//
 // handle of GPIO (General-purpose input/output)

@@ -127,7 +127,7 @@ extern "C"
         if (index <= -1)
             return float2ctrl(1.0f);
 
-        if (index >= lut->lut_size - 1)
+        if ((size_gt)index >= lut->lut_size - 1)
             return 0;
 
         // get left node and right node
@@ -179,11 +179,11 @@ extern "C"
 
         if (dim1_index < 0)
             dim1_index = 0;
-        if (dim1_index > lut->dim1_lut.lut_size - 1)
+        if ((size_gt)dim1_index > lut->dim1_lut.lut_size - 1)
             dim1_index = lut->dim1_lut.lut_size - 1;
         if (dim2_index <= 0)
             dim2_index = 0;
-        if (dim2_index > lut->dim2_lut.lut_size - 1)
+        if ((size_gt)dim2_index > lut->dim2_lut.lut_size - 1)
             dim2_index = lut->dim2_lut.lut_size - 1;
 
         return lut->surface[dim1_index][dim2_index];
@@ -324,12 +324,12 @@ extern "C"
         diff_gt index_x = (size_gt)ctl_mul(lut->x_sub_coef, (coord_x - lut->x_inf));
         diff_gt index_y = (size_gt)ctl_mul(lut->y_sub_coef, (coord_y - lut->y_inf));
 
-        if (index_x > lut->x_sub)
+        if ((size_gt)index_x > lut->x_sub)
             index_x = lut->x_sub;
         else if (index_x < 0)
             index_x = 0;
 
-        if (index_y > lut->y_sub)
+        if ((size_gt)index_y > lut->y_sub)
             index_y = lut->y_sub;
         else if (index_y < 0)
             index_y = 0;
@@ -383,7 +383,7 @@ extern "C"
     //     assert(!lut->dim2);
     // }
 
-#ifdef __cpluspluss
+#ifdef __cplusplus
 }
 #endif // __cplusplus
 

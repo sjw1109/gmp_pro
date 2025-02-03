@@ -20,10 +20,12 @@ using json = nlohmann::json;
 #include <SDKDDKVer.h>
 
 // ASIO library
-#define ASIO_STANDALONE
-#include <asio/asio.hpp>
+// #define ASIO_STANDALONE
+#include <boost/asio.hpp>
 
-using udp = asio::ip::udp;
+//using asio = boost::asio;
+
+using udp = boost::asio::ip::udp;
 
 // Other Windows functions
 #include <Windows.h>
@@ -33,13 +35,13 @@ using udp = asio::ip::udp;
 class asio_udp_helper
 {
   public:
-    asio::error_code ecVAR;
+    //boost::asio::error_code ecVAR;
     udp::endpoint recv_terminal;
     udp::endpoint tran_terminal;
     udp::endpoint cmd_recv_terminal;
     udp::endpoint cmd_tran_terminal;
-    asio::io_context recv_context, tran_context;
-    asio::io_context cmd_recv_context, cmd_tran_context;
+    boost::asio::io_context recv_context, tran_context;
+    boost::asio::io_context cmd_recv_context, cmd_tran_context;
     udp::socket recv_socket, tran_socket;
     udp::socket cmd_recv_socket, cmd_tran_socket;
     uint32_t recv_port;
@@ -60,10 +62,10 @@ class asio_udp_helper
   public:
     asio_udp_helper(const std::string ip_addr, uint32_t recv_port, uint32_t trans_port, uint32_t cmd_recv_port,
                     uint32_t cmd_trans_port)
-        : ecVAR(), recv_terminal(asio::ip::make_address(ip_addr), recv_port),
-          tran_terminal(asio::ip::make_address(ip_addr), trans_port),
-          cmd_recv_terminal(asio::ip::make_address(ip_addr), cmd_recv_port),
-          cmd_tran_terminal(asio::ip::make_address(ip_addr), cmd_trans_port), recv_context(), tran_context(),
+        : /*ecVAR(),*/ recv_terminal(boost::asio::ip::make_address(ip_addr), recv_port),
+          tran_terminal(boost::asio::ip::make_address(ip_addr), trans_port),
+          cmd_recv_terminal(boost::asio::ip::make_address(ip_addr), cmd_recv_port),
+          cmd_tran_terminal(boost::asio::ip::make_address(ip_addr), cmd_trans_port), recv_context(), tran_context(),
           cmd_recv_context(), cmd_tran_context(), recv_socket(recv_context), tran_socket(tran_context),
           cmd_recv_socket(cmd_recv_context), cmd_tran_socket(cmd_tran_context), recv_port(recv_port),
           trans_port(trans_port), cmd_recv_port(cmd_recv_port), cmd_trans_port(cmd_trans_port), ip_addr(ip_addr),
@@ -76,12 +78,12 @@ class asio_udp_helper
     {
         tran_socket.connect(tran_terminal);
 
-        recv_socket.open(asio::ip::udp::v4());
+        recv_socket.open(boost::asio::ip::udp::v4());
         recv_socket.bind(recv_terminal);
 
         cmd_tran_socket.connect(cmd_tran_terminal);
 
-        cmd_recv_socket.open(asio::ip::udp::v4());
+        cmd_recv_socket.open(boost::asio::ip::udp::v4());
         cmd_recv_socket.bind(cmd_recv_terminal);
 
         stop_cmd_received = 0;
@@ -111,7 +113,7 @@ class asio_udp_helper
     {
         try
         {
-            tran_socket.send(asio::buffer(msg, len));
+            tran_socket.send(boost::asio::buffer(msg, len));
 
             tran_counter += len;
         }
@@ -126,15 +128,15 @@ class asio_udp_helper
     {
         tran_counter += len;
 
-        cmd_tran_socket.send(asio::buffer(msg, len));
+        cmd_tran_socket.send(boost::asio::buffer(msg, len));
     }
 
     int recv_msg(char *msg, uint32_t len)
     {
         try
         {
-            // recv_socket.receive(asio::buffer((char *)&data_t, sizeof(double)));
-            recv_socket.receive_from(asio::buffer(msg, len), recv_terminal);
+            // recv_socket.receive(boost::asio::buffer((char *)&data_t, sizeof(double)));
+            recv_socket.receive_from(boost::asio::buffer(msg, len), recv_terminal);
 
             recv_counter += len;
         }
@@ -148,11 +150,11 @@ class asio_udp_helper
 
     void server_ack_cmd()
     {
-        // recv_socket.receive(asio::buffer((char *)&data_t, sizeof(double)));
-        // cmd_recv_socket.receive_from(asio::buffer(msg, len), cmd_recv_terminal);
+        // recv_socket.receive(boost::asio::buffer((char *)&data_t, sizeof(double)));
+        // cmd_recv_socket.receive_from(boost::asio::buffer(msg, len), cmd_recv_terminal);
 
         cmd_recv_socket.async_receive_from(
-            asio::buffer(cmd_recv_buf), cmd_recv_terminal, [this](std::error_code ec, std::size_t bytes_recvd) {
+            boost::asio::buffer(cmd_recv_buf), cmd_recv_terminal, [this](std::error_code ec, std::size_t bytes_recvd) {
                 // std::cout << "this function is reached, byte received:" << bytes_recvd << ".\r\n";
                 // std::cout << "content:" << cmd_recv_buf << std::endl;
                 // std::cout << "error code:" << ec.message() << std::endl;

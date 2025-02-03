@@ -1,5 +1,7 @@
 
-#include <core/std/gmp.std.h>
+//#include <core/std/gmp.std.h>
+
+#include <gmp_core.h>
 
 // This function should be called when System fatal error happened.
 void gmp_base_system_stuck(void)

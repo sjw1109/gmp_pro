@@ -12,8 +12,9 @@
 // This file provide a set of function that CSP must defined.
 
 #include <gmp_core.h>
+#include <tools/gmp_sil/udp_helper/asio_udp_helper.hpp>
 
-#include <utility/udp_helper/asio_udp_helper.hpp>
+#include <simulink_buffer.h>
 
 #include <iostream>
 #include <stdlib.h>
@@ -50,9 +51,9 @@ time_gt gmp_port_system_tick(void)
 // This function may be called and used to initialize all the peripheral.
 void gmp_csp_startup(void)
 {
-    static uint32_t default_debug_dev_place_holder = 0;
+    //static uint32_t default_debug_dev_place_holder = 0;
     // Specify a non-zero value to enable print.
-    default_debug_dev = &default_debug_dev_place_holder;
+    //default_debug_dev = &default_debug_dev_place_holder;
 
     // Setup ASIO helper
     helper = asio_udp_helper::parse_network_config(GMP_ASIO_CONFIG_JSON);
@@ -109,7 +110,7 @@ void gmp_csp_loop(void)
     //
     static size_gt controller_loop_tick = 0;
 
-    if (++controller_loop_tick >= GMP_PC_CONTROLLER_DIV_PER_MAINLOOP)
+    if (++controller_loop_tick >= PC_ENV_MAX_ITERATION)
     {
         // Clear division
         controller_loop_tick = 0;

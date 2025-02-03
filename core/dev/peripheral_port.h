@@ -28,10 +28,10 @@ extern "C"
     //////////////////////////////////////////////////////////////////////////
     // Virtual Port
 
-    void gmp_hal_make_half_duplex_if(half_duplex_ift *if, data_gt *data, size_gt length);
+    //void gmp_hal_make_half_duplex_if(half_duplex_ift *if, data_gt *data, size_gt length);
 
     //////////////////////////////////////////////////////////////////////////
-    // Virtual Port ring buffer
+    // Async Port
 
     // Write data to the ring buffer
     GMP_STATIC_INLINE
@@ -56,6 +56,7 @@ extern "C"
     // These functions may implement by CSP.
 
     //////////////////////////////////////////////////////////////////////////
+    // SPI interface
 
     // This is a synchronize function
     void gmp_hal_spi_write(spi_halt spi, const data_gt *data, size_gt length);
@@ -69,10 +70,11 @@ extern "C"
     // This is a asynchronize function
     // size_gt gmp_hal_spi_read_async(spi_halt spi, data_gt *data, size_gt length);
 
-    // Wait till transimit/receive complete
-    fast_gt gmp_hal_spi_wait(spi_halt spi);
+    // Wait till transmit/receive complete
+    fast_gt gmp_hal_spi_is_busy(spi_halt spi);
 
     //////////////////////////////////////////////////////////////////////////
+    // UART interface
 
     void gmp_hal_uart_write(uart_halt uart, const data_gt *data, size_gt length);
 
@@ -82,9 +84,11 @@ extern "C"
 
     // size_gt gmp_hal_uart_read_async(uart_halt uart, data_gt *data, size_gt length);
 
-    fast_gt gmp_hal_uart_wait(uart_halt uart);
+    // wait till transmit/receive complete.
+    fast_gt gmp_hal_uart_is_busy(uart_halt uart);
 
     //////////////////////////////////////////////////////////////////////////
+    // IIC interface
 
     void gmp_hal_iic_write(iic_halt iic, fast16_gt dev_addr, const data_gt *data, size_gt length);
 
@@ -106,7 +110,13 @@ extern "C"
     // ssize_gt gmp_hal_iic_read_mem_async(iic_halt iic, fast16_gt dev_addr, fast32_gt mem_addr, fast_gt mem_length,
     //                                    data_gt *data, size_gt length);
 
+    // wait till transmit/receive complete
+    fast_gt gmp_hal_iic_is_busy(iic_halt iic);
+
     //////////////////////////////////////////////////////////////////////////
+    // CAN interface
+
+    //void gmp_hal_can_write(can_halt can);
 
 #ifdef __cplusplus
 }

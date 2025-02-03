@@ -43,3 +43,21 @@
 [submodule "third_party/fmt"]
 	path = third_party/fmt
 	url = https://github.com/fmtlib/fmt.git
+[submodule "third_party/json"]
+	path = third_party/json
+	url = https://github.com/nlohmann/json.git
+[submodule "third_party/system"]
+	path = third_party/system
+	url = https://github.com/boostorg/system
+[submodule "third_party/config"]
+	path = third_party/config
+	url = https://github.com/boostorg/config
+[submodule "third_party/winapi"]
+	path = third_party/winapi
+	url = https://github.com/boostorg/winapi.git
+[submodule "third_party/predef"]
+	path = third_party/predef
+	url = https://github.com/boostorg/predef.git
+[submodule "third_party/assert"]
+	path = third_party/assert
+	url = https://github.com/boostorg/assert.git

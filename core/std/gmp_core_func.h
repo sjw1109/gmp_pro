@@ -7,6 +7,8 @@ extern "C"
 {
 #endif // __cplusplus
 
+    //extern ctl_object_nano_t *ctl_nano_handle;
+
     // This function should be called when Chip setup is completed.
     GMP_STATIC_INLINE
     void gmp_base_entry(void)
