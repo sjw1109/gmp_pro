@@ -92,6 +92,15 @@ disp('Compiling MEX_UDP_Helper.');
 
 % compile_cmd = sprintf('mex ''-I"E:\lib\gmp_pro\core\util\udp_helper"''')
 
+%% Copy 3D Models for SIL 
+
+% copy all m files
+if (~exist(append(simulink_lib_path,'/avatars')))
+    mkdir(append(simulink_lib_path,'/avatars'));
+end
+
+copyfile('simulink_lib_src/avatars', append(simulink_lib_path,'/avatars'));
+
 
 %% Copy other files
 
