@@ -224,6 +224,11 @@ template <typename template_type> class diff_im_motor
         _T vr_alpha, vr_beta;
         _T vrd, vrq;
 
+        // stator & rotor clarke and park
+        // make transformation for rotor and stator.
+        _T sin_theta = sin(st.theta);
+        _T cos_theta = cos(st.theta);
+
         // stator clark and park
         // tex:
         //   $$i_\alpha = 2/3\times i_a - 1/3 \times i_b - 1/3 \times i_c $$
@@ -234,14 +239,11 @@ template <typename template_type> class diff_im_motor
 
         // tex:
         //  $$i_d = i_\alpha \times cos\;(\theta) + i_\beta \times sin\;(\theta) $$
-        vsd = vs_alpha;
+        vsd = vs_alpha * cos_theta + vs_beta * sin_theta;
+
         // tex:
         //$$i_q = - i_\alpha \times sin\;(\theta) + i_\beta \times cos\;(\theta)$$
-        vsq = vs_beta;
-
-        // rotor clarke and park
-        _T sin_theta = sin(st.theta);
-        _T cos_theta = cos(st.theta);
+        vsq = -vs_alpha * sin_theta + vs_beta * cos_theta;
 
         // tex:
         //   $$i_\alpha = 2/3\times i_a - 1/3 \times i_b - 1/3 \times i_c $$
@@ -292,7 +294,7 @@ template <typename template_type> class diff_im_motor
         diff.irq += B_em[12 + 0] * vsd + B_em[12 + 1] * vsq + B_em[12 + 2] * vrd + B_em[12 + 3] * vrq;
 
         // mechanical equations
-        // CHECK POINT: 恒幅值变换带来的影响只有此处
+        // CHECK POINT: constant amplitude transformation has an effort here.
         torque = 3.0 / 2 * pole_pair * Lm * (st.isq * st.ird - st.isd * st.irq);
         diff.omega_e = (torque - (*t_load) - damping * st.omega_e / pole_pair) / J * pole_pair;
         diff.theta = st.omega_e / pole_pair;
@@ -310,7 +312,7 @@ template <typename template_type> class diff_im_motor
         _T ir_alpha = st.ird * cos_theta - st.irq * sin_theta;
         _T ir_beta = st.ird * sin_theta + st.irq * cos_theta;
 
-        // check point remove i0 is correct, because common mode resistence is infinity.
+        // check point remove i0 is correct, because common mode resistance is infinity.
         ira = ir_alpha;
         irb = -ir_alpha / 2 + ir_beta * k_zeta;
         irc = -ir_alpha / 2 - ir_beta * k_zeta;
