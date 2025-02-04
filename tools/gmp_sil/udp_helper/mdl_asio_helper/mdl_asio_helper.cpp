@@ -55,15 +55,15 @@
 
 // ASIO library
 #define ASIO_STANDALONE
-#include <asio/asio.hpp>
+#include <boost/asio.hpp>
 
-using udp = asio::ip::udp;
+using udp = boost::asio::ip::udp;
 
 // json library
 #include <nlohmann/json.hpp>
 
 // udp helper
-#include <utility/udp_helper/asio_udp_helper.hpp>
+#include <tools/gmp_sil/udp_helper/asio_udp_helper.hpp>
 
 using json = nlohmann::json;
 
@@ -923,7 +923,7 @@ static void mdlStart(SimStruct *S)
         // Create connection
         udp_helper->connect_to_target();
     }
-    catch (asio::system_error &e)
+    catch (boost::system::system_error &e)
     {
         udp_helper->release_connect();
 
@@ -983,7 +983,7 @@ static void mdlOutputs(SimStruct *S, int_T tid)
     {
         udp_helper->send_msg((char *)tranBuffer, desired_packed_width);
     }
-    catch (asio::system_error &e)
+    catch (boost::system::system_error &e)
     {
         udp_helper->release_connect();
 
@@ -1004,7 +1004,7 @@ static void mdlOutputs(SimStruct *S, int_T tid)
     {
         udp_helper->recv_msg((char *)recvBuffer, desired_unpacked_width);
     }
-    catch (asio::system_error &e)
+    catch (boost::system::system_error &e)
     {
         udp_helper->release_connect();
 
