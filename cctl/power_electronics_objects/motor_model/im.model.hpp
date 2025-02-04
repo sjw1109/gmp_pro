@@ -310,7 +310,7 @@ template <typename template_type> class diff_im_motor
         _T ir_alpha = st.ird * cos_theta - st.irq * sin_theta;
         _T ir_beta = st.ird * sin_theta + st.irq * cos_theta;
 
-        // check point 这里丢掉了i0是否正确
+        // check point remove i0 is correct, because common mode resistence is infinity.
         ira = ir_alpha;
         irb = -ir_alpha / 2 + ir_beta * k_zeta;
         irc = -ir_alpha / 2 - ir_beta * k_zeta;
