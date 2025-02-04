@@ -4,6 +4,7 @@ function install_gmp_simulink_lib()
 
 matlab_version = matlabRelease; %matlab_version.Release => R2022b
 matlab_path = fileparts(mfilename('fullpath'));
+%matlab_path = '%GMP_PRO_LOCATION%\slib';
 simulink_lib_path = append(fullfile(matlab_path), '\install_path\', matlab_version.Release);
 
 upgrade_gmp_simulink_lib();
