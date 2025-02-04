@@ -14,3 +14,11 @@
 > Simulink GMP SIL Core模块完成。
 > 更新Simulink安装脚本
 
+## Version 1.0 Pre-Release
+
++ 2025.02.04 
+
+> 重新梳理GMP整个仓库，将引用的库文件全部转换位submodule；
+> 重新梳理csp，让C28x系列的CPU适配Sysconfig
+> 重新定义core/dev设备框架
+> 实现cctl的求解器和异步电机的模型
