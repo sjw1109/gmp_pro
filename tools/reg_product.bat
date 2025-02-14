@@ -5,12 +5,13 @@ setlocal enabledelayedexpansion
 :: Get current path 
 set "SCRIPT_DIR=%~dp0"
 set "SCRIPT_DIR=%SCRIPT_DIR:~0,-1%"
+for /f "delims=\" %%i in ("%SCRIPT_DIR%") do set "GMP_DIR=%%~dpi"
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Current path compliance check
 set "HAS_SPACE=0"
 
-if "%SCRIPT_DIR%" neq "%SCRIPT_DIR: =%" (
+if "%GMP_DIR%" neq "%GMP_DIR: =%" (
     set "HAS_SPACE=1"
 )
 
@@ -28,7 +29,7 @@ if %HAS_SPACE% equ 1 (
 set "HAS_CHINESE=0"
 
 for /l %%i in (0,1,%~z0-1) do (
-    set "CHAR=!SCRIPT_DIR:~%%i,1!"
+    set "CHAR=!GMP_DIR:~%%i,1!"
     if defined CHAR (
         set "ASCII=0"
         for /f "delims=" %%c in ("!CHAR!") do (
@@ -68,13 +69,13 @@ for /f "tokens=2 delims==" %%a in ('set GMP_PRO_LOCATION 2^>nul') do (
 :: or change it to current dir.
 if defined ENV_VAR (
     echo Environment variable GMP_PRO_LOCATION already exists.
-    echo Updating its value to: %SCRIPT_DIR%
-    setx GMP_PRO_LOCATION "%SCRIPT_DIR%"
+    echo Updating its value to: %GMP_DIR%
+    setx GMP_PRO_LOCATION "%GMP_DIR%"
 ) else (
     echo Environment variable GMP_PRO_LOCATION does not exist.
-    echo Creating it with value: %SCRIPT_DIR%
-    setx GMP_PRO_LOCATION "%SCRIPT_DIR%"
+    echo Creating it with value: %GMP_DIR%
+    setx GMP_PRO_LOCATION "%GMP_DIR%"
 )
 
-echo Environment variable GMP_PRO_LOCATION has been set to: %SCRIPT_DIR%
+echo Environment variable GMP_PRO_LOCATION has been set to: %GMP_DIR%
 pause

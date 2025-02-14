@@ -1,6 +1,4 @@
 {
-//    "size" : 3,
-
     "facilities": [
         "GMP_C28x_Sysconfig",
         "GMP_pure_core",
@@ -9,28 +7,36 @@
     ],
 
     "GMP_C28x_Sysconfig": {
-        "name": "GMP-Core-Pure",
-        "displayName": "GMP Core without CSP support",
+        "name": "GMP-Core-C28x",
+        "rootMacroName": "COM_GMP_CORE_C28X_SDK_INSTALL_DIR",
+        "displayName": "GMP Core for C28x series devices",
         "productDir": "csp/c28x_syscfg/",
+        "description": "This is the GMP Core with C28x Sysconfig CSP support.",
         "sourceDir": [
             "core/",
-            "csp/c28x_syscfg"
+            "csp/c28x_syscfg/"
         ]
     },
 
     "GMP_pure_core": {
         "name": "GMP-Core-Pure",
+        "rootMacroName": "COM_GMP_CORE_PURE_SDK_INSTALL_DIR",
         "displayName": "GMP Core without CSP support",
         "productDir": "core/",
-        "sourceDir": [ "core/" ]
+        "description": "This is the GMP Core without any CSP support.",
+        "sourceDir": [
+            "core/"
+        ]
     },
 
     "motor_control": {
         "name": "GMP-CTL-MC",
+        "rootMacroName": "COM_GMP_CTL_MC_SDK_INSTALL_DIR",
         "displayName": "GMP CTL Motor Controller SDK.",
         "productDir": "ctl/component/motor_control/",
+        "description": "This GMP CTL with Motor Control support.",
         "sourceDir": [
-            "ctl/framework",
+            "ctl/framework/",
             "ctl/component/intrinsic/",
             "ctl/component/motor_control/"
         ]
@@ -38,10 +44,12 @@
 
     "power_control": {
         "name": "GMP-CTL-DPC",
+        "rootMacroName": "COM_GMP_CTL_DPC_SDK_INSTALL_DIR",
         "displayName": "GMP CTL Digital Power COntroller SDK",
         "productDir": "ctl/component/digital_power/",
+        "description": "This GMP CTL with Digital Power Control support.",
         "sourceDir": [
-            "ctl/framework",
+            "ctl/framework/",
             "ctl/component/intrinsic/",
             "ctl/component/digital_power/"
         ]
