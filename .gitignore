@@ -408,6 +408,10 @@ slib/install_path/*
 /csp/stm32/**/*.lst
 /csp/stm32/**/*.javnson
 
+# facilities tool generated files
+/tools/facilities_generator/gmp_src/**
+/tools/facilities_generator/include_paths.txt
+
 # Additional files
 **/.DS_Store/
 **/.DS_Store
