@@ -389,6 +389,10 @@ slib/install_path/*
 /csp/x28x_syscfg/**/*.mk
 /csp/x28x_syscfg/**/*.launch
 
+# ignore meta folder
+**/.meta
+**/.metadata
+
 # ignore STM32 Cube MX project HAL Drivers
 /csp/stm32/**/Drivers/
 /csp/stm32/**/*.d
