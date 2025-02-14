@@ -17,6 +17,8 @@ uint32_t gmp_l2b32(uint32_t data)
 }
 
 #ifdef SPECIFY_ENABLE_INTEGER64
+// This function cannot run in CLA
+#ifndef __TMS320C28XX_CLA__
 GMP_STATIC_INLINE
 uint64_t gmp_l2b64(uint64_t data)
 {
@@ -24,6 +26,7 @@ uint64_t gmp_l2b64(uint64_t data)
            ((data & 0xFF00000000) >> 8) | ((data & 0xFF000000) << 8) | ((data & 0xFF0000) << 24) |
            ((data & 0xFF00) << 40) | ((data & 0xFF) << 56);
 }
+#endif // __TMS320C28XX_CLA__
 #endif // SPECIFY_ENABLE_INTEGER64
 
 // Give Big-endian and little-endian an alias

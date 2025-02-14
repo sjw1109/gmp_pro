@@ -1,0 +1,49 @@
+{
+//    "size" : 3,
+
+    "facilities": [
+        "GMP_C28x_Sysconfig",
+        "GMP_pure_core",
+        "motor_control",
+        "power_control"
+    ],
+
+    "GMP_C28x_Sysconfig": {
+        "name": "GMP-Core-Pure",
+        "displayName": "GMP Core without CSP support",
+        "productDir": "csp/c28x_syscfg/",
+        "sourceDir": [
+            "core/",
+            "csp/c28x_syscfg"
+        ]
+    },
+
+    "GMP_pure_core": {
+        "name": "GMP-Core-Pure",
+        "displayName": "GMP Core without CSP support",
+        "productDir": "core/",
+        "sourceDir": [ "core/" ]
+    },
+
+    "motor_control": {
+        "name": "GMP-CTL-MC",
+        "displayName": "GMP CTL Motor Controller SDK.",
+        "productDir": "ctl/component/motor_control/",
+        "sourceDir": [
+            "ctl/framework",
+            "ctl/component/intrinsic/",
+            "ctl/component/motor_control/"
+        ]
+    },
+
+    "power_control": {
+        "name": "GMP-CTL-DPC",
+        "displayName": "GMP CTL Digital Power COntroller SDK",
+        "productDir": "ctl/component/digital_power/",
+        "sourceDir": [
+            "ctl/framework",
+            "ctl/component/intrinsic/",
+            "ctl/component/digital_power/"
+        ]
+    }
+}

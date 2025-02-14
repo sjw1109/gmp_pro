@@ -1,8 +1,6 @@
 eclipse.preferences.version=1
 encoding//CPU1_FLASH/gmp_core/subdir_rules.mk=UTF-8
 encoding//CPU1_FLASH/gmp_core/subdir_vars.mk=UTF-8
-encoding//CPU1_FLASH/gmp_ctl/subdir_rules.mk=UTF-8
-encoding//CPU1_FLASH/gmp_ctl/subdir_vars.mk=UTF-8
 encoding//CPU1_FLASH/makefile=UTF-8
 encoding//CPU1_FLASH/objects.mk=UTF-8
 encoding//CPU1_FLASH/sources.mk=UTF-8

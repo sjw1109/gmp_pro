@@ -62,39 +62,8 @@ size_gt gmp_base_print_internal(const char *p_fmt, ...)
 // This function would print a GMP label
 void gmp_base_show_label(void)
 {
-    gmp_base_print("                      ..,;;;;,                                    \r\n");
-    gmp_base_print("                .,ooKWMXxKMMN.                                    \r\n");
-    gmp_base_print("             ,lKMMW:cMNk,:ddl                                     \r\n");
-    gmp_base_print("           cXMlckWk;   ..,. oo                                    \r\n");
-    gmp_base_print("         lWMMMW;  .:d0NN'X: od                                    \r\n");
-    gmp_base_print("       .KOcxNd. cONNNNNN.0: od      ;o,                           \r\n");
-    gmp_base_print("      cWMM0:  lNk..XNNNN.O: od    ;xkkkx;                         \r\n");
-    gmp_base_print("     lWxXKd ,XNNc..0NNNXKX: okdockkkkkko'                         \r\n");
-    gmp_base_print("    ,MMKO' :NNNNNNNNNX0l,.    .,okkkkl.                           \r\n");
-    gmp_base_print("    XWXWX .XXXNNNNNXK,  .,...,.  .dkx.                ,cNdoodl    \r\n");
-    gmp_base_print("   ,WxOc, 0occcccONK  .c.  .. .c.  oko.......       ..xdll:lll,   \r\n");
-    gmp_base_print("   oMMMM' ``````````  o         x   `````````      .'.,0WK,lMMk   \r\n");
-    gmp_base_print("   xMMMM' ddclodddd,  o         x  ,dddddoood.    lXMx;OMWoKMMX'  \r\n");
-    gmp_base_print("   cWd:,, WX''''lMMN.  c.     .c. .X0o;.'',dN  .xcxxMM0dol:llll.  \r\n");
-    gmp_base_print("   .MMMMX lWllxKWMMMN:  .'''',.  lk.';,,;;;0o ,WMMXXd.            \r\n");
-    gmp_base_print("    xMXo;, kMNx:..XMMMXd;.   .;ox'Ok;,';c:ok .o0XMX.              \r\n");
-    gmp_base_print("     KWOKMd kK. :XMKoKMMMM: oNNo'd.c:;c;;ck lMX0X0                \r\n");
-    gmp_base_print("     .NMM0O..;NWMNc  0Mo:M: oNd.x.x.d.;0Xc.'xKMMX.                \r\n");
-    gmp_base_print("      .ONkKXWo.lX0'.oMo  M: oX 0.d.d;lKc.lNKxdWO                  \r\n");
-    gmp_base_print("        lWMMMM0.''o0WM:.;M: oO X'Kokl'..kMMMMN:                   \r\n");
-    gmp_base_print("         .oWMKdOWWk..;:ldk: oxol:;' dNMx;XMNo                     \r\n");
-    gmp_base_print("            ;OMMMMockMNx.:xxxx.cNMKooMMMWx:                       \r\n");
-    gmp_base_print("              .:xKXMMMMOdKMMMMxoMMMMXKx;                          \r\n");
-    gmp_base_print("                   ':oxOOXXXXXKxxo:'                              \r\n");
-    gmp_base_print("                                                                  \r\n");
-    gmp_base_print("             ________________________________                     \r\n");
-    gmp_base_print("            |    ____     __  __     ____    |                    \r\n");
-    gmp_base_print("            |   / ___|   |  \\/  |   |  _ \\   |                    \r\n");
-    gmp_base_print("            |  | |  _    | |\\/| |   | |_) |  |                    \r\n");
-    gmp_base_print("            |  | |_| |   | |  | |   |  __/   |                    \r\n");
-    gmp_base_print("            |   \\____|   |_|  |_|   |_|      |                    \r\n");
-    gmp_base_print("            |________________________________|                    \r\n");
-    gmp_base_print("                                                                  \r\n");
+
+#include <core/std/gmp_logo.inl>
 
     gmp_base_print("[okay] General motor platform ready.\r\n");
 }
@@ -209,7 +178,7 @@ void gmp_defualt_msvc_ctl_mainloop(void)
 
 // This function would be implemented in ctl_main.c
 // This function would be called in every controller loop
-// This function would be called by `gmp_base_ctl_step`
+// This function would be called by @gmp_base_ctl_step
 //
 #pragma comment(linker, "/alternatename:ctl_dispatch=gmp_defualt_msvc_ctl_dispatch")
 void gmp_defualt_msvc_ctl_dispatch(void)
@@ -272,7 +241,7 @@ void ctl_mainloop(void) GMP_WEAK_FUNC_SUFFIX
 
 // This function would be implemented in ctl_main.c
 // This function would be called in every controller loop
-// This function would be called by `gmp_base_ctl_step`
+// This function would be called by @gmp_base_ctl_step
 //
 GMP_WEAK_FUNC_PREFIX
 void ctl_dispatch(void) GMP_WEAK_FUNC_SUFFIX

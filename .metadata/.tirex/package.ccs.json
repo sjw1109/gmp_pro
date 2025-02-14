@@ -1,0 +1,10 @@
+[{
+    "rootMacroName": "COM_GMP_PRO_SDK_INSTALL_DIR",
+    "compilerIncludePath": [
+        "COM_TI_COM_GMP_PRO_SDK_INSTALL_DIR",
+        "COM_TI_COM_GMP_PRO_SDK_INSTALL_DIR/csp/c28x_syscfg/",
+        "SYSCONFIG_TOOL_OUTPUT_DIR"
+    ],
+    "compilerSymbols": [],
+    "linkerSearchPath": []
+}]

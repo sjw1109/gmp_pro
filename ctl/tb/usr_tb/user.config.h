@@ -4,7 +4,7 @@
 //#define MASTERCHIP GMP_AUTO_STM32
 
 // Disable CSP
-#define SPECIFY_DISABLE_CSP
+//#define SPECIFY_DISABLE_CSP
 
 // Disable Base print function
 //#define SPECIFY_BASE_PRINT_NOT_IMPL

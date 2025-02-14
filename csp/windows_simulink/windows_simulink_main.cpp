@@ -72,6 +72,9 @@ void gmp_csp_startup(void)
     helper->server_ack_cmd();
 #endif // GMP_ASIO_ENABLE_STOP_CMD
 
+    gmp_base_print("[INFO] Simulink RX buffer size: %llu\r\n", sizeof(simulink_rx_buffer));
+    gmp_base_print("[INFO] Simulink TX buffer size: %llu\r\n", sizeof(simulink_tx_buffer));
+
     // Config send & recv buffer
     gmp_dev_init_half_duplex_channel(&simulink_rx, (data_gt *)&simulink_rx_buffer, sizeof(simulink_rx_buffer),
                                      sizeof(simulink_rx_buffer));

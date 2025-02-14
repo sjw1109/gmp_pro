@@ -9,6 +9,7 @@
 // Default type name is tx_buf_t
 typedef struct _tag_tx_buf_t
 {
+    // time
 
     // Compare register
     uint32_t tabc[3];
@@ -25,11 +26,16 @@ typedef struct _tag_tx_buf_t
 // Default type name is rx_buf_t
 typedef struct _tag_rx_buf_t
 {
-    // DC bus voltage
-    uint32_t udc;
-    
+    // enable
+
     // current feedback
     uint32_t iabc[3];
+
+    // voltage feedback
+    uint32_t uabc[3];
+
+    // DC bus voltage
+    uint32_t udc;
 
     // encoder feedback
     uint32_t encoder;

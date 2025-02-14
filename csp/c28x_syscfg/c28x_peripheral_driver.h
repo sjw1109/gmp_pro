@@ -36,6 +36,18 @@ extern "C"
         return length;
     }
 
+    GMP_STATIC_INLINE
+        size_gt gmp_hal_spi_read_write(spi_halt spi, data_gt* data_in, data_gt* data_out, size_gt length)
+    {
+            for (size_gt i = 0; i < length; ++i)
+            {
+                SPI_writeDataBlockingFIFO(spi, data_in[i]);
+                data_out[i] = SPI_readDataBlockingFIFO(spi);
+            }
+            return length;
+
+    }
+
     // This is a asynchronize function
     // size_gt gmp_hal_spi_read_async(spi_halt spi, data_gt *data, size_gt length);
 

@@ -15,7 +15,9 @@
 #define SPECIFY_PC_ENVIRONMENT
 
 // Max iteration
+#ifndef PC_ENV_MAX_ITERATION 
 #define PC_ENV_MAX_ITERATION ((1000000))
+#endif
 
 // Controller tick per main loop tick
 // controller routine would be called when every N mainloop tick happened.

@@ -1,0 +1,44 @@
+{
+    "name": "gmp_pro",
+    "displayName": "General Motor PlatformGMP CTL Digital Power COntroller SDK",
+    "version": "1.00.00.05",
+    "documentationPath": "../manual",
+    "includePaths": [
+        "../"
+    ],
+    "devices": [
+        "F28004x",
+        "F2837xD",
+        "F2837xS",
+        "F2807x",
+        "F2838x",
+        "F28002x",
+        "F28003x",
+        "F28P65x",
+        "F28P55x",
+        "GMP_NULL_DEVICE"
+    ],
+    "minToolVersion": "1.21.0",
+    "templates": [
+        {
+            "name": "ctl/component/digital_power/combo_boost.xdt",
+            "outputPath": "combo_boost.c",
+            "alwaysRun": true
+        },
+        {
+            "name": "ctl/component/digital_power/combo_buck.xdt",
+            "outputPath": "combo_buck.c",
+            "alwaysRun": true
+        },
+        {
+            "name": "ctl/component/digital_power/combo_llc.xdt",
+            "outputPath": "combo_llc.c",
+            "alwaysRun": true
+        },
+        {
+            "name": "ctl/component/digital_power/combo_pfc.xdt",
+            "outputPath": "combo_pfc.c",
+            "alwaysRun": true
+        }
+    ]
+}

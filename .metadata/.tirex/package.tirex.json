@@ -1,0 +1,27 @@
+[
+    {
+        "id": "GMP-PRO-SDK",
+        "name": "General Motor Platform",
+        "version": "1.00.00.05",
+        "type": "software",
+        "image": "../manual/icon/GMP_LOGO.png",
+        "license": "../LICENSE.txt",
+        "description": "This is the GMP Pro software",
+        "tags": [ "C2000", "DPSDK", "GMP" ],
+        "devices": [ "C2000" ],
+
+        "dependencies": [
+            {
+                "packageId": "C2000WARE",
+                "version": "5.03.00.00",
+                "require": "mandatory"
+            },
+            {
+                "packageId": "sysconfig",
+                "version": "1.21.0",
+                "require": "mandatory"
+            }
+        ],
+        "metadataVersion": "3.1.0"
+    }
+]

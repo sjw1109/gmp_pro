@@ -1,4 +1,3 @@
-// 把所有的电机控制相关的头文件全部引入
 
 // basic includes
 
@@ -20,6 +19,8 @@
 #include <ctl/component/motor_control/basic/vf_generator.h>
 
 #include <ctl/component/motor_control/basic/decouple.h>
+
+#include <ctl/component/motor_control/basic/motor_unit_calculator.h>
 
 #endif // GMP_CTL_DISABLE_COM_MC_BASIC
 

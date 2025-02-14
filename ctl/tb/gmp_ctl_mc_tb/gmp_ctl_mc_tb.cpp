@@ -8,4 +8,5 @@
 int main()
 {
     std::cout << "Hello World!\n";
+    gmp_base_entry();
 }
