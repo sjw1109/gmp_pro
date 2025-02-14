@@ -1,0 +1,1 @@
+python ./gmp_fac_generate_srcs.py facility_cfg.json .

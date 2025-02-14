@@ -114,6 +114,6 @@ echo Environment variable GMP_PRO_LOCATION has been set to: %SCRIPT_DIR%
 :: Call facilities generator
 cd tools/facilities_generator
 
-python ./facilities_data_generator.py
+python ./gmp_fac_install.py
 
 pause

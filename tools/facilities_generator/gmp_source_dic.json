@@ -8,7 +8,7 @@
         "include_path": [
             "."
         ],
-        "description":"Such a long message. Say something. Say something. Say something. Say something. Say something. Say something. Say something. Say something. Say something. Say something. Say something. Say something. Say something. Say something. Say something. Say something.  Say something. Say something. Say something. Say something. Say something. Say something. Say something. Say something. Say something. Say something. Say something. Say something. Say something. Say something. Say something. Say something."
+        "description":"GMP Core module."
     },
     {
         "name": "gmp_ctl_core",
@@ -20,7 +20,7 @@
         "include_path": [
             "."
         ],
-        "description" : "Say another thing."
+        "description" : "GMP CTL Basic module"
     },
     {
         "name": "gmp_ctl_motor_control",
@@ -31,7 +31,7 @@
         "include_path": [
             "."
         ],
-        "description":"Say something."
+        "description":"GMP CTL Motor Control SDK module"
     },
     {
         "name": "gmp_ctl_digital_power",
@@ -42,7 +42,7 @@
         "include_path":[
             "."
         ],
-        "description":"Say something."
+        "description":"GMP CTL Digital Power SDK module."
     },
     {
         "name": "gmp_csp_windows",
@@ -58,7 +58,7 @@
             "third_party/fmt/include/fmt",
             "csp/windows_simulink"
         ],
-        "description":"Say something."
+        "description":"GMP Chip Support Package for Windows Simulink Platform."
     },
     {
         "name": "gmp_csp_c28x",
@@ -70,7 +70,7 @@
             ".",
             "csp/c28x_sys_cfg"
         ],
-        "description":"Say something."
+        "description":"GMP Chip Support Package for C28x SysConfig Platform."
     },
     {
         "name": "gmp_csp_stm32",
@@ -82,7 +82,7 @@
             ".",
             "csp/stm32"
         ],
-        "description":"Say something."
+        "description":"GMP Chip Support Package for STM32 CubeMX Platform."
     }
 
 ]

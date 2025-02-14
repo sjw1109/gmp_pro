@@ -1,0 +1,1 @@
+python ./gmp_fac_generate_cfg_json.py

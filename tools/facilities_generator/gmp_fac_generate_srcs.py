@@ -59,15 +59,23 @@ def main():
         os.makedirs(dest_dir)
 
     # Copy Source Files
+    print('Related source files:')
     for path in src_paths:
         src_dir = Path(gmp_location_dir) / path / "src"
         print(src_dir)
         copy_files(src_dir, dest_dir)
 
     # Generate a list of include_path
-    include_paths = gmp_location_dir;
-    if not inc_paths:
-        include_paths = "\n".join([Path(gmp_location_dir) / p for p in inc_paths])
+    include_paths = ""
+    print('\r\nRelated header files:')
+    for itor in inc_paths:
+        print(itor)
+        if itor == '.':
+            include_paths += gmp_location_dir;
+        else:
+            include_paths += os.path.join(gmp_location_dir, itor);
+        include_paths += '\r\n'
+
     with open("include_paths.txt", "w") as f:
         f.write(include_paths)
 
