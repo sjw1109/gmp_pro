@@ -427,3 +427,4 @@ examples/stm32f411ce_dev_test/MDK-ARM/stm32f411ce_dev_test.uvguix.javnson
 
 
 
+tools/facilities_generator/gmp_make_tool.cmake

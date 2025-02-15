@@ -1,7 +1,7 @@
 [
     {
         "name": "gmp_core",
-	"tag" : "GMP CORE",
+        "tag" : "GMP CORE",
         "source_path" : [
             "core/"
         ],
@@ -12,7 +12,7 @@
     },
     {
         "name": "gmp_ctl_core",
-	"tag" : "GMP CTL",
+        "tag" : "GMP CTL",
         "source_path" :[
             "ctl/framework/",
             "ctl/component/intrinsic/"
@@ -24,7 +24,7 @@
     },
     {
         "name": "gmp_ctl_motor_control",
-	"tag" : "GMP CTL",
+        "tag" : "GMP CTL",
         "source_path" :[
             "ctl/component/motor_control/"
         ],
@@ -35,7 +35,7 @@
     },
     {
         "name": "gmp_ctl_digital_power",
-	"tag" : "GMP CTL",
+        "tag" : "GMP CTL",
         "source_path" :[
             "ctl/component/digital_power"
         ],
@@ -46,7 +46,7 @@
     },
     {
         "name": "gmp_csp_windows",
-	"tag" : "GMP CSP",
+        "tag" : "GMP CSP",
         "source_path" :[
             "csp/windows_simulink"
         ],
@@ -62,7 +62,7 @@
     },
     {
         "name": "gmp_csp_c28x",
-	"tag" : "GMP CSP",
+        "tag" : "GMP CSP",
         "source_path":[
             "csp/c28x_syscfg"
         ],
@@ -74,7 +74,7 @@
     },
     {
         "name": "gmp_csp_stm32",
-	"tag" : "GMP CSP",
+        "tag" : "GMP CSP",
         "source_path":[
             "csp/stm32"
         ],

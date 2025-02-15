@@ -1,4 +1,7 @@
+# Bug report user Simulink  Example cannot show window correctly. 
+
 import json
+import sys
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
@@ -39,16 +42,23 @@ class JSONConfigGUI:
 		self.inner_frame.bind("<Configure>", lambda event: self.canvas.configure(scrollregion=self.canvas.bbox("all")))
 
 		# this variable is to save json file path
-		self.file_path = {}
-		self.gmp_source_dic_file = {}
+		if len(sys.argv) < 2:
+			print("Usage: python script.py <config_file.json>")
+			self.file_path = {}
+			self.gmp_source_dic_file = {}	
+		else:
+			self.file_path = sys.argv[1]
+			print(sys.argv[1])
+			self.gmp_source_dic_file = {}
+			self.update_json()
+		
 
-	def load_json(self):
-		file_path = filedialog.askopenfilename(title="Select JSON file", filetypes=[("JSON files", "*.json")])
-		if file_path:
-			with open(file_path, 'r') as file:
+	def update_json(self):
+		if self.file_path:
+			with open(self.file_path, 'r') as file:
 				data = json.load(file)
 	   
-			self.file_path = file_path
+			#self.file_path = file_path
 
 			# Clear the inner frame
 			for widget in self.inner_frame.winfo_children():
@@ -87,6 +97,13 @@ class JSONConfigGUI:
 						label = tk.Label(self.inner_frame, text=description, wraplength=self.root.winfo_width())
 						label.pack(side=tk.TOP, anchor='w', fill=tk.X, expand=True)
 
+	def load_json(self):
+		file_path = filedialog.askopenfilename(title="Select JSON file", filetypes=[("JSON files", "*.json")])
+		if file_path:
+			self.file_path = file_path
+
+		self.update_json()
+
 	def load_descriptions(self, file_path):
 		try:
 			with open(file_path, 'r') as file:
@@ -107,8 +124,9 @@ class JSONConfigGUI:
 				messagebox.showinfo("Success", "JSON file saved successfully.")
 
 	def on_exit(self):
-		if messagebox.askokcancel("Exit", "Do you want to save the changes before exiting?"):
-			self.save_json()
+		if self.file_path:
+			if messagebox.askokcancel("Exit", "Do you want to save the changes before exiting?"):
+				self.save_json()
 		self.root.destroy()
 
 def main():

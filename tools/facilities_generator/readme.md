@@ -86,3 +86,10 @@ gmp_fac_generate_cfg_json.bat 利用gmp_source_dic.json生成facility_cfg.json�
 gmp_fac_config_gui.bat提供了一个图形化的界面用来编辑facility_cfg.json。
 
 gmp_fac_generate_srcs_example.bat文件提供了一个示例，用来利用facility_cfg.json生成需要的头文件目录：include_paths.txt和需要的所有源文件，放在gmp_src文件夹中。
+
+gmp_fac_generate_cmake_example.bat文件提供了一个示例，可以在提供facility_cfg.json的基础上生成camke文件。
+
+gmp_fac_config_gui_example.bat文件提供了一个示例，可以自动打开facility_cfg.json文件。
+
+> 综合以上两条，可以在创建目标工程时将gmp_fac_config_gui_example.bat，gmp_fac_generate_cmake_example.bat，facility_cfg.json三个文件生成工程需要的cmake文件，并且可以用gmp_fac_config_gui_example.bat文件编辑配置文件。
+
