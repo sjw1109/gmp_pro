@@ -12,8 +12,6 @@
 // user main header
 #include "user_main.h"
 
-// GMP Core Testbench
-#include <core/tb/gmp_core_tb.h>
 
 //////////////////////////////////////////////////////////////////////////
 // global variables here
@@ -23,9 +21,10 @@
 //////////////////////////////////////////////////////////////////////////
 // initialize routine here
 GMP_NO_OPT_PREFIX
-void init(void) GMP_NO_OPT_SUFFIX
+void init(void)
+GMP_NO_OPT_SUFFIX
 {
-    //gmp_ringbuf_tb();
+
 }
 
 
@@ -33,7 +32,7 @@ void init(void) GMP_NO_OPT_SUFFIX
 // endless loop function here
 void mainloop(void)
 {
-
+    
 
 }
 

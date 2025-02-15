@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+environment/project/com.ti.ccstudio.buildDefinitions.C2000.Debug.1517386225/COM_TI_C2000WARE_INSTALL_DIR/delimiter=;
+environment/project/com.ti.ccstudio.buildDefinitions.C2000.Debug.1517386225/COM_TI_C2000WARE_INSTALL_DIR/operation=replace
+environment/project/com.ti.ccstudio.buildDefinitions.C2000.Debug.1517386225/COM_TI_C2000WARE_INSTALL_DIR/value=C\:\\ti\\c2000\\C2000Ware_5_03_00_00
+environment/project/com.ti.ccstudio.buildDefinitions.C2000.Debug.1517386225/append=true
+environment/project/com.ti.ccstudio.buildDefinitions.C2000.Debug.1517386225/appendContributed=true

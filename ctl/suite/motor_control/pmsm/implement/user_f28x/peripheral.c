@@ -73,7 +73,27 @@ __interrupt void cla1Isr1()
 // This function has been completed by syscfg
 void setup_peripheral(void)
 {
+    // light two LED
+    gmp_hal_gpio_write(LEDR, 0);
+    gmp_hal_gpio_write(LEDG, 1);
 
+    //    fVal = 10;
+    //    GMP_DBG_SWBP;
+
+    // Clear Interrupt
+    Interrupt_clearACKGroup(INTERRUPT_ACK_GROUP11);
+
+    CLA_forceTasks(CLA1_BASE, CLA_TASKFLAG_1);
+
+    asm(" RPT #255 || NOP");
+
+    //    fVal = fResult;
+
+    // communicate with SPI DAC
+    //    SPI_writeDataBlockingNonFIFO(SPI0_BASE,
+    //    DAC8554_LDCMD_SINGLE_CH_UPDATE|DAC8554_CHANNEL_A|DAC8554_DISABLE_POWERDOWN);
+    //    SPI_writeDataBlockingNonFIFO(SPI0_BASE, 0x80);
+    //    SPI_writeDataBlockingNonFIFO(SPI0_BASE, 0x00);
 }
 
 
