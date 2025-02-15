@@ -22,7 +22,7 @@ extern "C"{
 //
 //#include <ctl/ctl_core.h>
 
-#include <ctl/suite/motor_control/pmsm_servo/pmsm_servo.h>
+#include <ctl/suite/motor_control/pmsm/pmsm_servo.h>
 
 #include <ctl/component/motor_control/basic/encoder.h>
 

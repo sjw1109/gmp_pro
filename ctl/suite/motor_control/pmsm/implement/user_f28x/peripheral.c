@@ -74,8 +74,8 @@ __interrupt void cla1Isr1()
 void setup_peripheral(void)
 {
     // light two LED
-    gmp_hal_gpio_write(LEDR, 0);
-    gmp_hal_gpio_write(LEDG, 1);
+//    gmp_hal_gpio_write(LEDR, 0);
+//    gmp_hal_gpio_write(LEDG, 1);
 
     //    fVal = 10;
     //    GMP_DBG_SWBP;

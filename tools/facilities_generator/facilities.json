@@ -1,31 +1,24 @@
 {
     "facilities": [
         "GMP_C28x_Sysconfig",
-        "GMP_pure_core",
         "motor_control",
-        "power_control"
+        "power_control",
+        "suite_pmsm_control"
     ],
 
     "GMP_C28x_Sysconfig": {
         "name": "GMP-Core-C28x",
         "rootMacroName": "COM_GMP_CORE_C28X_SDK_INSTALL_DIR",
         "displayName": "GMP Core for C28x series devices",
-        "productDir": "csp/c28x_syscfg/",
+        "productDir": "/",
         "description": "This is the GMP Core with C28x Sysconfig CSP support.",
         "sourceDir": [
             "core/",
             "csp/c28x_syscfg/"
-        ]
-    },
-
-    "GMP_pure_core": {
-        "name": "GMP-Core-Pure",
-        "rootMacroName": "COM_GMP_CORE_PURE_SDK_INSTALL_DIR",
-        "displayName": "GMP Core without CSP support",
-        "productDir": "core/",
-        "description": "This is the GMP Core without any CSP support.",
-        "sourceDir": [
-            "core/"
+        ],
+        "includeDir":[
+            ".",
+            "csp/c28x_syscfg/"
         ]
     },
 
@@ -39,19 +32,42 @@
             "ctl/framework/",
             "ctl/component/intrinsic/",
             "ctl/component/motor_control/"
+        ],
+        "includeDir":[
+            "."
         ]
     },
 
     "power_control": {
         "name": "GMP-CTL-DPC",
         "rootMacroName": "COM_GMP_CTL_DPC_SDK_INSTALL_DIR",
-        "displayName": "GMP CTL Digital Power COntroller SDK",
+        "displayName": "GMP CTL Digital Power Controller SDK",
         "productDir": "ctl/component/digital_power/",
         "description": "This GMP CTL with Digital Power Control support.",
         "sourceDir": [
             "ctl/framework/",
             "ctl/component/intrinsic/",
             "ctl/component/digital_power/"
+        ],
+        "includeDir":[
+            "."
+        ]
+    },
+    "suite_pmsm_control":{
+        "name": "GMP-CTL-PMSM-Suite",
+        "rootMacroName": "COM_GMP_PMSM_SUITE_SDK_INSTALL_DIR",
+        "displayName": "GMP CTL PMSM controller Suite Controller SDK",
+        "productDir": "ctl/suite/motor_control/pmsm/",
+        "description": "This GMP CTL with PMSM Motor Control support suite.",
+        "sourceDir": [
+            "ctl/framework/",
+            "ctl/component/intrinsic/",
+            "ctl/component/motor_control/",
+            "ctl/suite/motor_control/pmsm/"
+        ],
+        "includeDir":[
+            ".",
+            "csp/c28x_syscfg/"
         ]
     }
 }

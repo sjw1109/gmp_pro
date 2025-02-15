@@ -30,7 +30,8 @@ config_file_template = {
     "version": library_version,
     "documentationPath": gmp_pro_location + "/manual",
     "includePaths": [
-        gmp_pro_location
+        gmp_pro_location,
+        os.path.join(gmp_pro_location, 'csp/c28x_syscfg/')
     ],
     "devices": [
         "F28004x", "F2837xD", "F2837xS", "F2807x", "F2838x",
@@ -43,7 +44,8 @@ config_file_template = {
 tirex_package_template = [{
     "rootMacroName": "COM_GMP_PRO_SDK_INSTALL_DIR",
     "compilerIncludePath": [
-        gmp_pro_location
+        gmp_pro_location,
+        os.path.join(gmp_pro_location, 'csp/c28x_syscfg/')
     ],
     "compilerSymbols": [],
     "linkerSearchPath": []
