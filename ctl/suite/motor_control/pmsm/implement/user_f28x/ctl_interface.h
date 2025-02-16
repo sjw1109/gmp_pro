@@ -31,6 +31,8 @@ void ctl_fmif_input_stage_routine(ctl_object_nano_t *pctl_obj)
 ////                             ADC_readResult(ADC_C_RESULT_BASE, MOTOR_VV),
 ////                             ADC_readResult(ADC_A_RESULT_BASE, MOTOR_VW));
 //    ctl_step_adc_channel(&pmsm->udc_input, ADC_readResult(ADC_A_RESULT_BASE, MOTOR_VDC));
+
+
 }
 
 
@@ -50,6 +52,17 @@ void ctl_fmif_output_stage_routine(ctl_object_nano_t *pctl_obj)
 //                        Tabc.dat[phase_V]);
 //    EPWM_setCounterCompareValue(EPWMW_BASE, EPWM_COUNTER_COMPARE_A,
 //                        Tabc.dat[phase_W]);
+
+    EPWM_setCounterCompareValue(PHASE_U_PWM_BASE, EPWM_COUNTER_COMPARE_A,
+                        (uint16_t)((INV_PWM_HALF_TBPRD * pwm1.Vabc_pu[0]) +
+                                    INV_PWM_HALF_TBPRD));
+    EPWM_setCounterCompareValue(PHASE_V_PWM_BASE, EPWM_COUNTER_COMPARE_A,
+                        (uint16_t)((INV_PWM_HALF_TBPRD * pwm1.Vabc_pu[1]) +
+                                    INV_PWM_HALF_TBPRD));
+    EPWM_setCounterCompareValue(PHASE_W_PWM_BASE, EPWM_COUNTER_COMPARE_A,
+                        (uint16_t)((INV_PWM_HALF_TBPRD * pwm1.Vabc_pu[2]) +
+                                    INV_PWM_HALF_TBPRD));
+
 }
 
 

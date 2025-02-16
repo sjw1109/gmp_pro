@@ -94,7 +94,8 @@ class JSONConfigGUI:
 
 					# Display description if it exists
 					if description:
-						label = tk.Label(self.inner_frame, text=description, wraplength=self.root.winfo_width())
+						#label = tk.Label(self.inner_frame, text=description, wraplength=self.root.winfo_width())
+						label = tk.Label(self.inner_frame, text=description, wraplength=600)
 						label.pack(side=tk.TOP, anchor='w', fill=tk.X, expand=True)
 
 	def load_json(self):

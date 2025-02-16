@@ -106,6 +106,17 @@ print SCI port, baud rate 115200 bps
 | SCIA RX | SCIA       | GPIO28     |
 | SCIA TX | SCIA       | GPIO29     |
 
+EPWM channel, 10 kHz PWM 
+
+| Signal  | Peripheral | GPIO index |
+| ------- | ---------- | ---------- |
+| PWM U H | ePWM1      | GPIO0      |
+| PWM U L | ePWM1      | GPIO1      |
+| PWM V H | ePWM2      | GPIO2      |
+| PWM V L | ePWM2      | GPIO3      |
+| PWM W H | ePWM6      | GPIO10     |
+| PWM W L | ePWM6      | GPIO11     |
+
 
 
 
