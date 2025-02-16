@@ -153,6 +153,8 @@ class asio_udp_helper
         // recv_socket.receive(boost::asio::buffer((char *)&data_t, sizeof(double)));
         // cmd_recv_socket.receive_from(boost::asio::buffer(msg, len), cmd_recv_terminal);
 
+        // Bug fix this function may trigger exception
+
         cmd_recv_socket.async_receive_from(
             boost::asio::buffer(cmd_recv_buf), cmd_recv_terminal, [this](std::error_code ec, std::size_t bytes_recvd) {
                 // std::cout << "this function is reached, byte received:" << bytes_recvd << ".\r\n";

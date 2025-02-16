@@ -182,6 +182,7 @@
     <ClInclude Include="..\..\implement\user_common\ctl_main.h" />
     <ClInclude Include="..\..\implement\user_common\user_main.h" />
     <ClInclude Include="..\..\implement\user_simulink\ctl_interface.h" />
+    <ClInclude Include="..\..\implement\user_simulink\pc_simulate_buffer.h" />
     <ClInclude Include="..\..\implement\user_simulink\user.config.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

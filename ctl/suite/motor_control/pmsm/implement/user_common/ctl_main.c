@@ -16,14 +16,8 @@
 
 #include "ctl_main.h"
 
-// User may set (get handle) TX content via `gmp_csp_sl_get_tx_buffer`
-// User may get (get handle) RX content via `gmp_csp_sl_get_rx_buffer`
+#include <ctl/component/motor_control/preset_motor_param/GBM2804H_100T.h>
 
-// BUILD_LEVEL 1: Voltage Open loop
-// BUILD_LEVEL 2: Current Open loop
-// BUILD_LEVEL 3: Current Open loop with actual position
-// BUILD_LEVEL 4: Speed Close loop
-#define BUILD_LEVEL (4)
 
 // position encoder
 ctl_pos_encoder_t pos_enc;
@@ -36,8 +30,6 @@ pmsm_servo_fm_t pmsm_servo;
 
 // PMSM const frequency controller
 ctl_const_f_controller const_f;
-
-#define CONTROLLER_FREQUENCY (10000)
 
 // CTL initialize routine
 void ctl_init()
@@ -54,8 +46,9 @@ void ctl_init()
     ctl_setup_const_f_controller(&const_f, 5, CONTROLLER_FREQUENCY);
 
     // setup position encoder & speed encoder
-    ctl_setup_pos_encoder(&pos_enc, 1, ((uint32_t)1 << 17) - 1);
-    ctl_setup_spd_calculator(&spd_enc, CONTROLLER_FREQUENCY, 5, 3000, 1, 20, &pos_enc.encif);
+    ctl_setup_pos_encoder(&pos_enc, 1, ((uint32_t)1 << 14) - 1);
+    ctl_setup_spd_calculator(&spd_enc, CONTROLLER_FREQUENCY, 5, MOTOR_PARAM_MAX_SPEED, 1, 150,
+                             &pos_enc.encif);
 
     // setup PMSM servo controller framework
     ctl_setup_pmsm_servo_framework(
@@ -64,18 +57,18 @@ void ctl_init()
         &pmsm_servo, CTL_POSITION_IF(&const_f), CTL_SPEED_IF(&spd_enc), CONTROLLER_FREQUENCY,
         // current controller PID parameter
         // P, I, D, sat_min, sat_max
-        float2ctrl(0.8), float2ctrl(0.01), 0, float2ctrl(-0.5), float2ctrl(0.5),
+        float2ctrl(0.5), float2ctrl(0.1), 0, float2ctrl(-0.5), float2ctrl(0.5),
         // speed controller PID parameter
         // P, I, D, sat_min, sat_max
-        float2ctrl(1.5), float2ctrl(0.001), 0, float2ctrl(-0.5), float2ctrl(0.5),
+        float2ctrl(0.1), float2ctrl(0.001), 0, float2ctrl(-0.5), float2ctrl(0.5),
         // acceleration
         // negative acceleration, positive acceleration, speed controller division
-        float2ctrl(-0.05), float2ctrl(0.05), 5,
+        float2ctrl(-0.02), float2ctrl(0.02), 5,
         // ADC parameters
         // ADC resolution, iqn, current gain, current bias, voltage gain, voltage bias
         // NOTE iqn parameter is meaningless for float environment
         // NOTE gain is negative value means ADC result is negative
-        16, 24, float2ctrl(-2.0), float2ctrl(0.5), float2ctrl(0.1), float2ctrl(0.1),
+        12, 24, float2ctrl(10.0), float2ctrl(0.5), float2ctrl(0.1), float2ctrl(0),
         // PWM parameters
         10000);
 
@@ -96,7 +89,7 @@ void ctl_init()
     // Current open-loop
     ctl_set_pmm_servo_pos_enc(&pmsm_servo, CTL_POSITION_IF(&const_f));
 
-    ctl_vector2_t idq_set = {float2ctrl(0.0), float2ctrl(0.2)};
+    ctl_vector2_t idq_set = {float2ctrl(0.0), float2ctrl(0.22)};
     ctl_set_pmsm_servo_current_mode(&pmsm_servo);
     ctl_set_pmsm_servo_ff_current(&pmsm_servo, &idq_set);
 
@@ -118,9 +111,9 @@ void ctl_init()
 #endif // BUILD_LEVEL
 
     // Debug mode online the controller
-    //ctl_fm_force_online(&pmsm_servo.base);
+    ctl_fm_force_online(&pmsm_servo.base);
 
-    ctl_fm_force_calibrate(&pmsm_servo.base);
+    //ctl_fm_force_calibrate(&pmsm_servo.base);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -129,14 +122,19 @@ void ctl_init()
 void ctl_mainloop(void)
 {
     // User Controller logic here.
-    if (gmp_base_get_system_tick() > 2000)
+    if (gmp_base_get_system_tick() > 1500)
     {
         ctl_set_pmsm_servo_spd(&pmsm_servo, float2ctrl(-0.5));
     }
 
     else if (gmp_base_get_system_tick() > 1000)
     {
-        ctl_set_pmsm_servo_spd(&pmsm_servo, float2ctrl(0.1));
+        ctl_set_pmsm_servo_spd(&pmsm_servo, float2ctrl(0));
+    }
+
+    else if (gmp_base_get_system_tick() > 500)
+    {
+        ctl_set_pmsm_servo_spd(&pmsm_servo, float2ctrl(0.5));
     }
 
     return;

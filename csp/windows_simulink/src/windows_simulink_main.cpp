@@ -69,7 +69,8 @@ void gmp_csp_startup(void)
 
 #ifdef GMP_ASIO_ENABLE_STOP_CMD
     // enable this program acknowledge "Stop" Command from Simulink
-    helper->server_ack_cmd();
+    // BUG REPORT this function may cause exception
+    //helper->server_ack_cmd();
 #endif // GMP_ASIO_ENABLE_STOP_CMD
 
     gmp_base_print("[INFO] Simulink RX buffer size: %llu\r\n", sizeof(simulink_rx_buffer));
@@ -113,7 +114,7 @@ void gmp_csp_loop(void)
     //
     static size_gt controller_loop_tick = 0;
 
-    if (++controller_loop_tick >= PC_ENV_MAX_ITERATION)
+    if (++controller_loop_tick >= GMP_PC_CONTROLLER_DIV_PER_MAINLOOP)
     {
         // Clear division
         controller_loop_tick = 0;

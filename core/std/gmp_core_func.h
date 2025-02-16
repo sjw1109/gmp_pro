@@ -14,7 +14,7 @@ extern "C"
     void gmp_base_entry(void)
     {
 #ifdef SPECIFY_PC_ENVIRONMENT
-        uint32_t loop_tick;
+        size_t loop_tick;
 #endif // SPECIFY_PC_ENVIRONMENT
 
 #ifndef SPECIFY_DISABLE_CSP

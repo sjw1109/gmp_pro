@@ -48,7 +48,7 @@
 #define SPECIFY_PC_ENVIRONMENT
 
 // PC environment maximum loop counter
-#define PC_ENV_MAX_ITERATION ((10000))
+#define PC_ENV_MAX_ITERATION ((100000000))
 
 // specify ASIO config .json file
 #define GMP_ASIO_CONFIG_JSON "network.json"

@@ -57,7 +57,7 @@ typedef struct _tag_motor_current_ctrl
     // flags
     fast_gt flag_enable_current_controller;
 
-    fast_gt flag_enable_svpwm;
+    //fast_gt flag_enable_svpwm;
 } ctl_motor_current_ctrl_t;
 
 ec_gt ctl_init_motor_current_ctrl(ctl_motor_current_ctrl_t *obj);
@@ -140,10 +140,6 @@ void ctl_step_motor_current_ctrl(ctl_motor_current_ctrl_t *obj, ctrl_gt theta)
 
     // if (obj->flag_enable_svpwm)
     // {
-
-
-
-
     //     // Tabc = svpwm(vab) / udc;
     //     //ctl_ct_svpwm_calc(&obj->vab0, &obj->Tabc);
     // }

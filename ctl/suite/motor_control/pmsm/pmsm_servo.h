@@ -56,6 +56,9 @@ extern "C"
         ctl_track_pid_t spd_ctrl;
         ctl_vector2_t idq_ff;
 
+        // modulation
+        ctl_vector3_t Tabc;
+
         // ADC input
         adc_tri_channel_t iabc_input;
         adc_channel_t udc_input;

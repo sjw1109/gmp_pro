@@ -26,7 +26,7 @@ ec_gt ctl_init_motor_current_ctrl(ctl_motor_current_ctrl_t *obj)
     ctl_init_pid(&obj->idq_ctrl[phase_q]);
 
     obj->flag_enable_current_controller = 1;
-    obj->flag_enable_svpwm = 1;
+    //obj->flag_enable_svpwm = 1;
 
     return GMP_EC_OK;
 }

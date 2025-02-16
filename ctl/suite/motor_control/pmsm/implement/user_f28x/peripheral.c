@@ -7,6 +7,8 @@
 // user main header
 #include "user_main.h"
 
+#include <c28x_peripheral_driver.h>
+
 //#define   MATH_TYPE      IQ_MATH
 //// invoke iqmath lib
 //#include <third_party/iqmath/IQmathLib.h>
@@ -81,9 +83,11 @@ void setup_peripheral(void)
     //    GMP_DBG_SWBP;
 
     // Clear Interrupt
-    Interrupt_clearACKGroup(INTERRUPT_ACK_GROUP11);
+//    Interrupt_clearACKGroup(INTERRUPT_ACK_GROUP11);
+//
+//    CLA_forceTasks(CLA1_BASE, CLA_TASKFLAG_1);
 
-    CLA_forceTasks(CLA1_BASE, CLA_TASKFLAG_1);
+    gmp_hal_uart_write(debug_uart_BASE,"Hello World!",12);
 
     asm(" RPT #255 || NOP");
 

@@ -14,7 +14,9 @@ extern "C"
     GMP_STATIC_INLINE
     void gmp_hal_spi_write(spi_halt spi, const data_gt *data, size_gt length)
     {
-        for (size_gt i = 0; i < length; ++i)
+        size_gt i;
+
+        for (i = 0; i < length; ++i)
             SPI_writeDataBlockingFIFO(spi, data[i]);
     }
 
@@ -30,7 +32,9 @@ extern "C"
     GMP_STATIC_INLINE
     size_gt gmp_hal_spi_read(spi_halt spi, data_gt *data, size_gt length)
     {
-        for (size_gt i = 0; i < length; ++i)
+        size_gt i;
+
+        for (i = 0; i < length; ++i)
             data[i] = SPI_readDataBlockingFIFO(spi);
 
         return length;
@@ -39,7 +43,8 @@ extern "C"
     GMP_STATIC_INLINE
         size_gt gmp_hal_spi_read_write(spi_halt spi, data_gt* data_in, data_gt* data_out, size_gt length)
     {
-            for (size_gt i = 0; i < length; ++i)
+        size_gt i;
+            for (i = 0; i < length; ++i)
             {
                 SPI_writeDataBlockingFIFO(spi, data_in[i]);
                 data_out[i] = SPI_readDataBlockingFIFO(spi);
@@ -55,7 +60,7 @@ extern "C"
     GMP_STATIC_INLINE
     fast_gt gmp_hal_spi_is_busy(spi_halt spi)
     {
-        return SPI_isBusy();
+        return SPI_isBusy(spi);
     }
 
     //////////////////////////////////////////////////////////////////////////
@@ -63,7 +68,9 @@ extern "C"
 
     void gmp_hal_uart_write(uart_halt uart, const data_gt *data, size_gt length)
     {
-        for (size_gt i = 0; i < length; ++i)
+        size_gt i;
+
+        for (i = 0; i < length; ++i)
             SCI_writeCharBlockingFIFO(uart, data[i]);
     }
 
@@ -74,8 +81,12 @@ extern "C"
 
     size_gt gmp_hal_uart_read(uart_halt uart, data_gt *data, size_gt length)
     {
-        for (size_gt i = 0; i < length; ++i)
+        size_gt i;
+
+        for (i = 0; i < length; ++i)
             data[i] = SCI_readCharBlockingFIFO(uart);
+
+        return length;
     }
 
     // size_gt gmp_hal_uart_read_async(uart_halt uart, data_gt *data, size_gt length);

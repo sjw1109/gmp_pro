@@ -38,7 +38,7 @@ extern "C"
 #pragma pack(1)
     typedef struct _tag_pc_simulink_tx_buffer_t
     {
-        uint32_t enable;
+        double enable;
 
         GMP_PC_SIMULINK_TX_STRUCT tx_buf;
     } gmp_pc_simulink_tx_buffer_t;

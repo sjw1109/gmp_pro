@@ -38,7 +38,7 @@
 #define MOTOR_PARAM_FLUX ((MOTOR_PARAM_CALCULATE_FLUX_BY_KV(MOTOR_PARAM_KV)))
 
 // Back EMF Voltage, unit V/krpm
-#define MOTOR_PARAM_EMF((4.85))
+#define MOTOR_PARAM_EMF ((4.85))
 
 //////////////////////////////////////////////////////////////////////////
 // Rated parameters
@@ -57,12 +57,13 @@
 
 // Maximum Speed, unit rpm
 #define MOTOR_PARAM_MAX_SPEED ((2180))
+//#define MOTOR_PARAM_MAX_SPEED ((1000))
 
 // Maximum DC bus voltage, unit V
 #define MOTOR_PARAM_MAX_DC_VOLTAGE ((14.2))
 
 // Maximum Phase Current RMS, unit A
-#define MOTOR_PARAM_MAX_PH_CURRENT((5.0))
+#define MOTOR_PARAM_MAX_PH_CURRENT ((5.0))
 
 #endif // _FILE_MOTOR_PARAM_GBM2804H_100T_H_
 

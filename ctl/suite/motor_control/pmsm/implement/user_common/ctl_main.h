@@ -33,7 +33,7 @@ extern "C"{
 // BUILD_LEVEL 2: Current Open loop
 // BUILD_LEVEL 3: Current Open loop with actual position
 // BUILD_LEVEL 4: Speed Close loop
-#define BUILD_LEVEL (4)
+#define BUILD_LEVEL (2)
 
 // position encoder
 extern ctl_pos_encoder_t pos_enc;
@@ -47,19 +47,34 @@ extern pmsm_servo_fm_t pmsm_servo;
 // PMSM const frequency controller
 extern ctl_const_f_controller const_f;
 
+// Controller Frequency
 #define CONTROLLER_FREQUENCY (10000)
 
+
 #ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+
 
 // controller core
 GMP_STATIC_INLINE
 void ctl_fmif_core_stage_routine(ctl_object_nano_t *pctl_obj)
 {
+    // input stage
+    ctl_input_motor_current_ctrl(&pmsm_servo.current_ctrl, &pmsm_servo.iabc_input);
+    
+    ctl_step_spd_calc(&spd_enc);
+
     // constant frequency generator
     ctl_step_const_f_controller(&const_f);
 
-    // run pmsm servo framework ISR function
+    // run PMSM servo framework ISR function
     ctl_step_pmsm_servo_framework(&pmsm_servo);
+
+    // Modulation
+    // Tabc = svpwm(vab) / udc;
+    ctl_ct_svpwm_calc(&pmsm_servo.current_ctrl.vab0, &pmsm_servo.Tabc);
+
+    // Prepare PWM data
+    ctl_calc_pwm_tri_channel(&pmsm_servo.uabc, &pmsm_servo.Tabc);
 }
 
 
