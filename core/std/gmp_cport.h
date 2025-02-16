@@ -93,14 +93,14 @@ extern "C"
 #if defined USER_SPECIFIED_PRINT_FUNCTION
 
 #if defined SPECIFY_BASE_PRINT_NOT_IMPL
-#define gmp_base_print(x)
+#define gmp_base_print(x,...)
 #else // SPECIFY_BASE_PRINT_NOT_IMPL
 #define gmp_base_print USER_SPECIFIED_PRINT_FUNCTION
 #endif // SPECIFY_BASE_PRINT_NOT_IMPL
 
 #else // USER_SPECIFIED_PRINT_FUNCTION
 // define GMP base function print
-#define gmp_base_print gmp_base_print_internal
+#define gmp_base_print(A, ...) gmp_base_print_internal(A, ##__VA_ARGS__)
 #endif // USER_SPECIFIED_PRINT_FUNCTION
 
     // Show GMP setup label

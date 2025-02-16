@@ -72,10 +72,7 @@ void ctl_init()
         // PWM parameters
         10000);
 
-    // BUG TI cannot print out sizeof() result if no type is specified.
-    gmp_base_print(TEXT_STRING("PMSM SERVO struct has been inited, size :%d\r\n"), (int)sizeof(pmsm_servo));
-    gmp_base_print(TEXT_STRING("ctl_object_nano_t size: %d\r\n"), (int)sizeof(ctl_object_nano_t));
-    gmp_base_print(TEXT_STRING("ctl_motor_current_ctrl_t size: %d\r\n"), (int)sizeof(ctl_motor_current_ctrl_t));
+    gmp_base_print(TEXT_STRING("PMSM SERVO struct has been inited, size :%d\r\n"), sizeof(pmsm_servo_fm_t));
 
     // Specify ctl nanao object
     ctl_setup_default_ctl_nano_obj(&pmsm_servo.base);

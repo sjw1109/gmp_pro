@@ -87,7 +87,9 @@ void setup_peripheral(void)
 //
 //    CLA_forceTasks(CLA1_BASE, CLA_TASKFLAG_1);
 
-    gmp_hal_uart_write(debug_uart_BASE,"Hello World!",12);
+    debug_uart = debug_uart_BASE;
+
+    gmp_base_print(TEXT_STRING("Hello World!\r\n"));
 
     asm(" RPT #255 || NOP");
 

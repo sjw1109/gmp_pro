@@ -12,6 +12,10 @@
 // This file provide a set of function that CSP must defined.
 
 #include <gmp_core.h>
+#include <c28x_peripheral_driver.h>
+#include <string.h>
+#include <stdio.h>
+
 
 // System Tick
 time_gt DSPC2000_SystemTick = 0;
@@ -99,6 +103,33 @@ void gmp_csp_post_process()
 
 }
 
+uart_halt debug_uart;
+
+// implement the gmp_debug_print routine.
+size_gt gmp_base_print_c28xsyscfg(const char *p_fmt, ...)
+{
+    // if no one was specified to output, just ignore the request.
+    if (debug_uart == NULL)
+    {
+        return 0;
+    }
+
+    //size_gt size = (size_gt)strlen(p_fmt);
+
+    static data_gt str[GMP_BASE_PRINT_CHAR_EXT];
+    memset(str, 0, GMP_BASE_PRINT_CHAR_EXT);
+
+    va_list vArgs;
+    va_start(vArgs, p_fmt);
+    vsprintf((char *)str, (char const *)p_fmt, vArgs);
+    va_end(vArgs);
+
+    size_gt length = (size_gt)strlen((char *)str);
+
+    gmp_hal_uart_write(debug_uart, str, length);
+
+    return length;
+}
 
 
 // main function, user no need for repeated definition.

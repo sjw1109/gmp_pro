@@ -7,6 +7,9 @@ extern "C"
 {
 #endif // __cplusplus
 
+    // debug port
+    extern uart_halt debug_uart;
+
     //////////////////////////////////////////////////////////////////////////
     // SPI interface
 
@@ -65,7 +68,7 @@ extern "C"
 
     //////////////////////////////////////////////////////////////////////////
     // UART interface
-
+    GMP_STATIC_INLINE
     void gmp_hal_uart_write(uart_halt uart, const data_gt *data, size_gt length)
     {
         size_gt i;
@@ -78,7 +81,7 @@ extern "C"
     //{
 
     //}
-
+    GMP_STATIC_INLINE
     size_gt gmp_hal_uart_read(uart_halt uart, data_gt *data, size_gt length)
     {
         size_gt i;
@@ -92,6 +95,7 @@ extern "C"
     // size_gt gmp_hal_uart_read_async(uart_halt uart, data_gt *data, size_gt length);
 
     // wait till transmit/receive complete.
+    GMP_STATIC_INLINE
     fast_gt gmp_hal_uart_is_busy(uart_halt uart)
     {
         return SCI_isTransmitterBusy(uart);
@@ -99,7 +103,7 @@ extern "C"
 
     //////////////////////////////////////////////////////////////////////////
     // IIC interface
-
+    GMP_STATIC_INLINE
     void gmp_hal_iic_write(iic_halt iic, fast16_gt dev_addr, const data_gt* data, size_gt length)
     {
 
@@ -124,6 +128,7 @@ extern "C"
     //                                    data_gt *data, size_gt length);
 
     // wait till transmit/receive complete
+    GMP_STATIC_INLINE
     fast_gt gmp_hal_iic_is_busy(iic_halt iic)
     {
         return I2C_isBusBusy(iic);

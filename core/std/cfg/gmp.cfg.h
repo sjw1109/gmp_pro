@@ -239,7 +239,7 @@
 // #define SPECIFY_BASE_PRINT_NOT_IMPL
 
 #ifndef GMP_BASE_PRINT_CHAR_EXT
-#define GMP_BASE_PRINT_CHAR_EXT ((48))
+#define GMP_BASE_PRINT_CHAR_EXT ((128))
 #endif // _GMP_CHAR_EXT
 
 // Default handle of GMP base print function
@@ -324,3 +324,8 @@
 #define SPECIFY_CTRL_GT_TYPE USING_FLOAT_FPU
 //#define SPECIFY_CTRL_GT_TYPE USING_FIXED_TI_IQ_LIBRARY
 #endif // SPECIFY_CTRL_GT_TYPE
+
+// The default macro to define a string.
+#ifndef TEXT_STRING
+#define TEXT_STRING(A) (A)
+#endif // TEXT_STRING

@@ -7,7 +7,7 @@
 #define MASTERCHIP GMP_AUTO_STM32
 
 // Disable Base print function
-#define SPECIFY_BASE_PRINT_NOT_IMPL
+//#define SPECIFY_BASE_PRINT_NOT_IMPL
 
 
 ////////////////////////////////////////////////
@@ -33,6 +33,5 @@
 // #define SPECIFY_CTRL_GT_TYPE USING_DOUBLE_FPU
  #define SPECIFY_CTRL_GT_TYPE USING_FLOAT_FPU
 //#define SPECIFY_CTRL_GT_TYPE USING_FIXED_TI_IQ_LIBRARY
-
 
 

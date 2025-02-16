@@ -91,6 +91,9 @@ extern "C"
 #define gmp_hal_gpio_reset(pin_num)         GPIO_writePin((pin_num), (0))
 #define gmp_hal_gpio_toggle(pin_num)        GPIO_togglePin((pin_num))
 
+
+	// dbg_print function bind to this uart
+
 //#define GMP_PORT_SPI_T uint32_t
 
 
@@ -122,6 +125,11 @@ void gmp_hal_wd_feed(void)
 // SPI module
 
 
+// Debug Print function
+size_gt gmp_base_print_c28xsyscfg(const char *p_fmt, ...);
+
+// TI String will not add a '\0' automatically, so use the following macro.
+#define TEXT_STRING(str) str##"\0"
 
 #ifdef __cplusplus
 }

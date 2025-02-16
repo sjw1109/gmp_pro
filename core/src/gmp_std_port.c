@@ -10,7 +10,7 @@ void gmp_base_system_stuck(void)
 
 #if !defined USER_SPECIFIED_PRINT_FUNCTION
 
-GMP_BASE_PRINT_DEFAULT_HANDLE_TYPE *default_debug_dev = NULL;
+GMP_BASE_PRINT_DEFAULT_HANDLE_TYPE default_debug_dev = NULL;
 
 // implement the gmp_debug_print routine.
 size_gt gmp_base_print_internal(const char *p_fmt, ...)
@@ -65,7 +65,7 @@ void gmp_base_show_label(void)
 
 #include <core/std/gmp_logo.inl>
 
-    gmp_base_print("[okay] General motor platform ready.\r\n");
+    gmp_base_print(TEXT_STRING ("[okay] General motor platform ready.\r\n"));
 }
 #endif // SPECIFY_DISABLE_GMP_LOGO
 
@@ -77,7 +77,7 @@ void gmp_base_not_impl(const char *file, uint32_t line)
 
 #if defined SPECIFY_ENABLE_UNIMPL_FUNC_WARNING
     // print the error information
-    gmp_dbg_prt("[Erro] invoke unimplemented function: [%s, %d].\r\n", file, line);
+    gmp_dbg_prt(TEXT_STRING ("[Erro] invoke unimplemented function: [%s, %d].\r\n"), file, line);
 #endif // SPECIFY_ENABLE_UNIMPL_FUNC_WARNING
 
 #if defined SPECIFY_STUCK_WHEN_UNIMPL_FUNC
