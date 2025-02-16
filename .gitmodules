@@ -82,3 +82,6 @@
 [submodule "third_party/static_assert"]
 	path = third_party/static_assert
 	url = https://github.com/boostorg/static_assert
+[submodule "third_party/gsl"]
+	path = third_party/gsl
+	url = https://github.com/ampl/gsl
