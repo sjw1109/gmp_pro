@@ -412,6 +412,18 @@ slib/install_path/*
 /tools/facilities_generator/gmp_src/**
 /tools/facilities_generator/include_paths.txt
 
+/ctl/**/gmp_src
+/ctl/**/include_paths.txt
+
+/cctl/**/gmp_src
+/cctl/**/include_paths.txt
+
+
+/csp/**/gmp_src
+/csp/**/include_paths.txt
+
+
+
 # Additional files
 **/.DS_Store/
 **/.DS_Store

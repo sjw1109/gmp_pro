@@ -18,4 +18,3 @@ python "%GMP_PRO_LOCATION%/tools/facilities_generator/gmp_fac_config_gui.py" %SC
 
 echo config script done.
 
-

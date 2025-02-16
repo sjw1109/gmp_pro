@@ -26,9 +26,19 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>ctl_interface.h</name>
+			<type>1</type>
+			<locationURI>COM_TI_COM_GMP_PMSM_SUITE_SDK_INSTALL_DIR/implement/user_f28x/ctl_interface.h</locationURI>
+		</link>
+		<link>
 			<name>ctl_main.c</name>
 			<type>1</type>
 			<locationURI>COM_TI_COM_GMP_PMSM_SUITE_SDK_INSTALL_DIR/implement/user_common/ctl_main.c</locationURI>
+		</link>
+		<link>
+			<name>ctl_main.h</name>
+			<type>1</type>
+			<locationURI>COM_TI_COM_GMP_PMSM_SUITE_SDK_INSTALL_DIR/implement/user_common/ctl_main.h</locationURI>
 		</link>
 		<link>
 			<name>peripheral.c</name>
@@ -36,9 +46,19 @@
 			<locationURI>COM_TI_COM_GMP_PMSM_SUITE_SDK_INSTALL_DIR/implement/user_f28x/peripheral.c</locationURI>
 		</link>
 		<link>
+			<name>user.config.h</name>
+			<type>1</type>
+			<locationURI>COM_TI_COM_GMP_PMSM_SUITE_SDK_INSTALL_DIR/implement/user_f28x/user.config.h</locationURI>
+		</link>
+		<link>
 			<name>user_main.c</name>
 			<type>1</type>
 			<locationURI>COM_TI_COM_GMP_PMSM_SUITE_SDK_INSTALL_DIR/implement/user_common/user_main.c</locationURI>
+		</link>
+		<link>
+			<name>user_main.h</name>
+			<type>1</type>
+			<locationURI>COM_TI_COM_GMP_PMSM_SUITE_SDK_INSTALL_DIR/implement/user_common/user_main.h</locationURI>
 		</link>
 		<link>
 			<name>device_support/28003x_cla_flash_lnk.cmd</name>

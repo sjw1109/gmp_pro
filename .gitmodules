@@ -61,3 +61,24 @@
 [submodule "third_party/assert"]
 	path = third_party/assert
 	url = https://github.com/boostorg/assert.git
+[submodule "third_party/throw_exception"]
+	path = third_party/throw_exception
+	url = https://github.com/boostorg/throw_exception
+[submodule "third_party/align"]
+	path = third_party/align
+	url = https://github.com/boostorg/align
+[submodule "third_party/date_time"]
+	path = third_party/date_time
+	url = https://github.com/boostorg/date_time
+[submodule "third_party/smart_ptr"]
+	path = third_party/smart_ptr
+	url = https://github.com/boostorg/smart_ptr
+[submodule "third_party/core"]
+	path = third_party/core
+	url = https://github.com/boostorg/core
+[submodule "third_party/utility"]
+	path = third_party/utility
+	url = https://github.com/boostorg/utility
+[submodule "third_party/static_assert"]
+	path = third_party/static_assert
+	url = https://github.com/boostorg/static_assert

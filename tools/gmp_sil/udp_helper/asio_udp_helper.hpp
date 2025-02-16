@@ -20,7 +20,7 @@ using json = nlohmann::json;
 #include <SDKDDKVer.h>
 
 // ASIO library
-// #define ASIO_STANDALONE
+//#define ASIO_STANDALONE
 #include <boost/asio.hpp>
 
 //using asio = boost::asio;
