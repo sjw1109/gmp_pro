@@ -53,15 +53,12 @@ void ctl_fmif_output_stage_routine(ctl_object_nano_t *pctl_obj)
 //    EPWM_setCounterCompareValue(EPWMW_BASE, EPWM_COUNTER_COMPARE_A,
 //                        Tabc.dat[phase_W]);
 
-    EPWM_setCounterCompareValue(PHASE_U_PWM_BASE, EPWM_COUNTER_COMPARE_A,
-                        (uint16_t)((INV_PWM_HALF_TBPRD * pwm1.Vabc_pu[0]) +
-                                    INV_PWM_HALF_TBPRD));
-    EPWM_setCounterCompareValue(PHASE_V_PWM_BASE, EPWM_COUNTER_COMPARE_A,
-                        (uint16_t)((INV_PWM_HALF_TBPRD * pwm1.Vabc_pu[1]) +
-                                    INV_PWM_HALF_TBPRD));
-    EPWM_setCounterCompareValue(PHASE_W_PWM_BASE, EPWM_COUNTER_COMPARE_A,
-                        (uint16_t)((INV_PWM_HALF_TBPRD * pwm1.Vabc_pu[2]) +
-                                    INV_PWM_HALF_TBPRD));
+    EPWM_setCounterCompareValue(EPWMU_BASE, EPWM_COUNTER_COMPARE_A,
+                        (uint16_t)(pmsm->uabc.value[phase_A]));
+    EPWM_setCounterCompareValue(EPWMV_BASE, EPWM_COUNTER_COMPARE_A,
+                        (uint16_t)(pmsm->uabc.value[phase_B]));
+    EPWM_setCounterCompareValue(EPWMW_BASE, EPWM_COUNTER_COMPARE_A,
+                        (uint16_t)(pmsm->uabc.value[phase_C]));
 
 }
 

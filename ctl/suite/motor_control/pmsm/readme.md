@@ -106,7 +106,7 @@ print SCI port, baud rate 115200 bps
 | SCIA RX | SCIA       | GPIO28     |
 | SCIA TX | SCIA       | GPIO29     |
 
-EPWM channel, 10 kHz PWM 
+EPWM channel, 10 kHz PWM
 
 | Signal  | Peripheral | GPIO index |
 | ------- | ---------- | ---------- |
@@ -117,6 +117,10 @@ EPWM channel, 10 kHz PWM
 | PWM W H | ePWM6      | GPIO10     |
 | PWM W L | ePWM6      | GPIO11     |
 
+Calculate Time Base period
+$$
+Period = \frac{120 \,MHz}{10\,kHz\times 2}=6000
+$$
 
 
 
