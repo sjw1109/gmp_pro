@@ -439,5 +439,7 @@ examples/stm32f411ce_dev_test/MDK-ARM/stm32f411ce_dev_test.uvguix.javnson
 ctl/suite/motor_control/pmsm/projects/motor_control_stm32g474_hrtim/Drivers/**
 ctl/suite/motor_control/pmsm/projects/motor_control_stm32g474_hrtim/MDK-ARM/motor_control_stm32g474_hrtim/**
 
+ctl/suite/motor_control/pmsm/projects/motor_control_stm32g431_tim/Drivers/**
+ctl/suite/motor_control/pmsm/projects/motor_control_stm32g431_tim/MDK-ARM/motor_control_stm32g431_tim/**
 
 tools/facilities_generator/gmp_make_tool.cmake
