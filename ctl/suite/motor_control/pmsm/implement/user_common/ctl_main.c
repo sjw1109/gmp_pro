@@ -84,7 +84,7 @@ void ctl_init()
     // VF Control, voltage Open-loop
     ctl_set_pmm_servo_pos_enc(&pmsm_servo, CTL_POSITION_IF(&const_f));
 
-    ctl_vector2_t vdq_set = {float2ctrl(0.15), float2ctrl(0.15)};
+    ctl_vector2_t vdq_set = {float2ctrl(0.12), float2ctrl(0.12};
     ctl_set_pmsm_servo_voltage_mode(&pmsm_servo);
     ctl_set_pmsm_servo_ff_voltage(&pmsm_servo, &vdq_set);
 
