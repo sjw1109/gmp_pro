@@ -190,11 +190,11 @@ User interface
 
 
 
+## STM32G431 Motor Control Environment
 
 
 
-
-
+project path: `gmp_pro\ctl\suite\motor_control\pmsm\projects\motor_control_stm32g431_tim`
 
 
 

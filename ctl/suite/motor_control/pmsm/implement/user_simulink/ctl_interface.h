@@ -11,6 +11,8 @@
 // PWM depth
 #define GONTROLLER_PWM_CMP_MAX (6000)
 
+
+
 // User may set (get handle) TX content via `gmp_csp_sl_get_tx_buffer`
 // User may get (get handle) RX content via `gmp_csp_sl_get_rx_buffer`
 
