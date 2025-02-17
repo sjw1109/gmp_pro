@@ -61,26 +61,6 @@
 			<locationURI>COM_TI_COM_GMP_PMSM_SUITE_SDK_INSTALL_DIR/implement/user_common/user_main.h</locationURI>
 		</link>
 		<link>
-			<name>device_support/28003x_cla_flash_lnk.cmd</name>
-			<type>1</type>
-			<locationURI>COM_TI_C2000WARE_INSTALL_DIR/device_support/f28003x/common/cmd/28003x_cla_flash_lnk.cmd</locationURI>
-		</link>
-		<link>
-			<name>device_support/28003x_cla_ram_lnk.cmd</name>
-			<type>1</type>
-			<locationURI>COM_TI_C2000WARE_INSTALL_DIR/device_support/f28003x/common/cmd/28003x_cla_ram_lnk.cmd</locationURI>
-		</link>
-		<link>
-			<name>device_support/28003x_generic_flash_lnk.cmd</name>
-			<type>1</type>
-			<locationURI>COM_TI_C2000WARE_INSTALL_DIR/device_support/f28003x/common/cmd/28003x_generic_flash_lnk.cmd</locationURI>
-		</link>
-		<link>
-			<name>device_support/28003x_generic_ram_lnk.cmd</name>
-			<type>1</type>
-			<locationURI>COM_TI_C2000WARE_INSTALL_DIR/device_support/f28003x/common/cmd/28003x_generic_ram_lnk.cmd</locationURI>
-		</link>
-		<link>
 			<name>device_support/driverlib.lib</name>
 			<type>1</type>
 			<locationURI>COM_TI_C2000WARE_INSTALL_DIR/driverlib/f28003x/driverlib/ccs/Debug/driverlib.lib</locationURI>

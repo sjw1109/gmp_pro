@@ -121,7 +121,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="device_support/f28003x_usdelay.asm|device_support/f28003x_tempsensorconv.c|device_support/f28003x_sysctrl.c|device_support/f28003x_spi.c|device_support/f28003x_pievect.c|device_support/f28003x_piectrl.c|device_support/f28003x_gpio.c|device_support/f28003x_epwm.c|device_support/f28003x_dma.c|device_support/f28003x_defaultisr.c|device_support/f28003x_dbgier.asm|device_support/f28003x_cputimers.c|device_support/f28003x_adc.c|device_support/F280039_ram_lnk.cmd|device_support/28003x_generic_ram_lnk.cmd|device_support/28003x_cla_ram_lnk.cmd|device_support/28003x_cla_flash_lnk.cmd" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="targetConfigs/28003x_cla_ram_lnk.cmd|targetConfigs/28003x_cla_flash_lnk.cmd|targetConfigs/28003x_generic_ram_lnk.cmd|device_support/f28003x_usdelay.asm|device_support/f28003x_tempsensorconv.c|device_support/f28003x_sysctrl.c|device_support/f28003x_spi.c|device_support/f28003x_pievect.c|device_support/f28003x_piectrl.c|device_support/f28003x_gpio.c|device_support/f28003x_epwm.c|device_support/f28003x_dma.c|device_support/f28003x_defaultisr.c|device_support/f28003x_dbgier.asm|device_support/f28003x_cputimers.c|device_support/f28003x_adc.c|device_support/F280039_ram_lnk.cmd" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
