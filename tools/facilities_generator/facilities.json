@@ -10,7 +10,7 @@
         "name": "GMP-Core-C28x",
         "rootMacroName": "COM_GMP_CORE_C28X_SDK_INSTALL_DIR",
         "displayName": "GMP Core for C28x series devices",
-        "productDir": "/",
+        "productDir": "./",
         "description": "This is the GMP Core with C28x Sysconfig CSP support.",
         "sourceDir": [
             "core/",
