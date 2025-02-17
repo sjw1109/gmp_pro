@@ -7,8 +7,8 @@ extern "C"
 {
 #endif // __cplusplus
 
-    // If only one interrupt will complete the control task, 
-    // This function should be called by 
+    // If only one interrupt will complete the control task,
+    // This function should be called by
     GMP_STATIC_INLINE
     void ctl_fm_periodic_dispatch(ctl_object_nano_t *pctl_obj)
     {
@@ -20,17 +20,22 @@ extern "C"
         {
 #endif // GMP_DISABLE_CTL_OBJ_ENDORSE_CHECK
 
+#ifndef GMP_CTL_FRM_NANO_INPUT_STANDALONE
             // Step I: input stage
             // All the analog input and digital input and peripheral input should be processed here.
             // + Analog ADC input
             // + digital GPIO input
             // + peripheral input, such as, encoder, and etc.
             ctl_fmif_input_stage_routine(pctl_obj);
+#endif // GMP_CTL_FRM_NANO_INPUT_STANDALONE
 
+#ifndef GMP_CTL_FRM_NANO_CORE_STANDALONE
             // Step II: controller core stage
             // All the control law should be implemented here.
             ctl_fmif_core_stage_routine(pctl_obj);
+#endif // GMP_CTL_FRM_NANO_CORE_STANDALONE
 
+#ifndef GMP_CTL_FRM_NANO_OUTPUT_STANDALONE
             // Step III: output stage
             // All the output routine should be implemented here.
             // + PWM output
@@ -38,14 +43,17 @@ extern "C"
             // + GPIO output
             // + peripheral request, such as, request encoder routine.
             ctl_fmif_output_stage_routine(pctl_obj);
+#endif // GMP_CTL_FRM_NANO_OUTPUT_STANDALONE
 
 #ifndef GMP_DISABLE_CTL_OBJ_ENDORSE_CHECK
         }
 #endif // GMP_DISABLE_CTL_OBJ_ENDORSE_CHECK
 
+#ifndef GMP_CTL_FRM_NANO_REQUEST_STANDALONE
         // Step IV: request stage
         // All the real time request stage.
         ctl_fmif_request_stage_routine(pctl_obj);
+#endif // GMP_CTL_FRM_NANO_REQUEST_STANDALONE
     }
 
     //

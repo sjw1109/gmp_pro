@@ -155,10 +155,6 @@
     <ClCompile Include="..\..\implement\user_common\user_main.c" />
     <ClCompile Include="..\..\implement\user_simulink\peripheral.c" />
     <ClCompile Include="..\..\src\pmsm_servo.c" />
-    <ClCompile Include="gmp_src\combo_boost.c" />
-    <ClCompile Include="gmp_src\combo_buck.c" />
-    <ClCompile Include="gmp_src\combo_llc.c" />
-    <ClCompile Include="gmp_src\combo_pfc.c" />
     <ClCompile Include="gmp_src\ctl_component_advance.c" />
     <ClCompile Include="gmp_src\ctl_component_combo.c" />
     <ClCompile Include="gmp_src\ctl_component_discrete.c" />

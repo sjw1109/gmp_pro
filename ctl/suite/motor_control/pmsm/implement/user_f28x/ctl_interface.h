@@ -19,18 +19,19 @@ extern "C"{
 GMP_STATIC_INLINE
 void ctl_fmif_input_stage_routine(ctl_object_nano_t *pctl_obj)
 {
-//    pmsm_servo_fm_t* pmsm = (pmsm_servo_fm_t*) pctl_obj;
-//
-//    ctl_step_adc_tri_channel(&pmsm->iabc_input,
-//                             ADC_readResult(ADC_B_RESULT_BASE, MOTOR_IU),
-//                             ADC_readResult(ADC_C_RESULT_BASE, MOTOR_IV),
-//                             ADC_readResult(ADC_A_RESULT_BASE, MOTOR_IW));
-//
-////    ctl_step_adc_tri_channel(&pmsm->vabc_input,
-////                             ADC_readResult(ADC_B_RESULT_BASE, MOTOR_VU),
-////                             ADC_readResult(ADC_C_RESULT_BASE, MOTOR_VV),
-////                             ADC_readResult(ADC_A_RESULT_BASE, MOTOR_VW));
-//    ctl_step_adc_channel(&pmsm->udc_input, ADC_readResult(ADC_A_RESULT_BASE, MOTOR_VDC));
+    pmsm_servo_fm_t* pmsm = (pmsm_servo_fm_t*) pctl_obj;
+
+    ctl_step_adc_tri_channel(&pmsm->iabc_input,
+                             ADC_readResult(ADCU_RESULT_BASE, MOTOR_IU),
+                             ADC_readResult(ADCV_RESULT_BASE, MOTOR_IV),
+                             ADC_readResult(ADCW_RESULT_BASE, MOTOR_IW));
+
+    ctl_step_adc_tri_channel(&pmsm->vabc_input,
+                             ADC_readResult(ADCU_RESULT_BASE, MOTOR_VU),
+                             ADC_readResult(ADCV_RESULT_BASE, MOTOR_VV),
+                             ADC_readResult(ADCW_RESULT_BASE, MOTOR_VW));
+
+    ctl_step_adc_channel(&pmsm->udc_input, ADC_readResult(ADCU_RESULT_BASE, MOTOR_VDC));
 
 
 }

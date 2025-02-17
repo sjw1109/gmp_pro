@@ -61,6 +61,7 @@ extern "C"
 
         // ADC input
         adc_tri_channel_t iabc_input;
+        adc_tri_channel_t vabc_input;
         adc_channel_t udc_input;
 
         // PWM output

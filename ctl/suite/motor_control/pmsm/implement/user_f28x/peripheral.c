@@ -93,6 +93,8 @@ void setup_peripheral(void)
 
     asm(" RPT #255 || NOP");
 
+    EPWM_clearEventTriggerInterruptFlag(ADCU_BASE);
+
     //    fVal = fResult;
 
     // communicate with SPI DAC
@@ -134,25 +136,26 @@ fast_gt ctl_fmif_security_routine(ctl_object_nano_t *pctl_obj)
 //// This function should be called in Main ISR
 //void gmp_base_ctl_step(void);
 //
-//interrupt void MainISR(void)
-//{
-//    // Calculate the new PWM compare values
-//
-//    pwm1.MfuncC1 = _IQ(0);
-//    pwm1.MfuncC2 = _IQ(0);
-//    pwm1.MfuncC3 = _IQ(0);
-//    PWM_MACRO(1, 2, 3, pwm1)
-////    (*ePWM[1]).CMPA.half.CMPA =1375;
-////         (*ePWM[2]).CMPA.half.CMPA = 1875;
-////         (*ePWM[2]).CMPA.half.CMPA = 1375;
-//
-//    // call GMP ISR callback function
-//    gmp_base_ctl_step();
-//
-//    // Enable more interrupts from this timer
-//    AdcRegs.ADCINTFLG.bit.ADCINT1 = 1;
-//
-//    // Acknowledge interrupt to recieve more interrupts from PIE group 3
-//    PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
-//}
+
+interrupt void MainISR(void)
+{
+
+    //
+    // call GMP ISR  Controller operation callback function
+    //
+    gmp_base_ctl_step();
+
+    //
+    // clear ADCINT1 INT and ack PIE INT
+    //
+    ADC_clearInterruptStatus(ADCU_BASE, ADC_INT_NUMBER1);
+
+    //
+    // ACK the PWM interrupts
+    //
+    Interrupt_clearACKGroup(INTERRUPT_ACK_GROUP3);
+
+
+}
+
 

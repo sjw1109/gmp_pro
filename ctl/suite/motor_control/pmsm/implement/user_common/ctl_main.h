@@ -33,7 +33,7 @@ extern "C"{
 // BUILD_LEVEL 2: Current Open loop
 // BUILD_LEVEL 3: Current Open loop with actual position
 // BUILD_LEVEL 4: Speed Close loop
-#define BUILD_LEVEL (2)
+#define BUILD_LEVEL (1)
 
 // position encoder
 extern ctl_pos_encoder_t pos_enc;
@@ -50,9 +50,18 @@ extern ctl_const_f_controller const_f;
 // Controller Frequency
 #define CONTROLLER_FREQUENCY (10000)
 
+// PWM depth
+#define GONTROLLER_PWM_CMP_MAX (6000)
+
 
 #ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
+// other periodic things.
+GMP_STATIC_INLINE
+void ctl_dispatch(void)
+{
+
+}
 
 // controller core
 GMP_STATIC_INLINE

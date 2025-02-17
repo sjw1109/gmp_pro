@@ -122,6 +122,23 @@ $$
 Period = \frac{120 \,MHz}{10\,kHz\times 2}=6000
 $$
 
+ADC Channel, ADCA for U phase, ADCB for V phase, ADCC for W phase
+
+| Signal | Peripheral | ADC Channel |
+| ------ | ---------- | ----------- |
+| VDC    | ADC A      | ADC A6      |
+| VA     | ADC A      | ADC A2      |
+| VB     | ADC B      | ADC B9      |
+| VC     | ADC C      | ADC C4      |
+| IA     | ADC A      | ADC A11     |
+| IB     | ADC B      | ADC B12     |
+| IC     | ADC C      | ADC C3      |
+
+
+
+
+
+
 
 
 

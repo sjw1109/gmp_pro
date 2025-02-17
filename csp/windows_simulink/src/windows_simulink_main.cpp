@@ -155,10 +155,6 @@ void gmp_csp_loop(void)
         // Controller operation here
         gmp_base_ctl_step();
 
-#ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
-        ctl_fm_periodic_dispatch(ctl_nano_handle);
-#endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
-
         // Send message to Simulink
         helper->send_msg((char *)simulink_tx.buf, simulink_tx.length);
     }

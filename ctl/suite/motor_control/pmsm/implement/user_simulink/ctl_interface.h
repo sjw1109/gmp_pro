@@ -25,6 +25,9 @@ extern "C"
         ctl_step_adc_tri_channel(&pmsm->iabc_input, gmp_csp_sl_get_rx_buffer()->iabc[phase_A],
                                  gmp_csp_sl_get_rx_buffer()->iabc[phase_B], gmp_csp_sl_get_rx_buffer()->iabc[phase_C]);
 
+        ctl_step_adc_tri_channel(&pmsm->vabc_input, gmp_csp_sl_get_rx_buffer()->uabc[phase_A],
+                                 gmp_csp_sl_get_rx_buffer()->uabc[phase_B], gmp_csp_sl_get_rx_buffer()->uabc[phase_C]);
+
         ctl_step_pos_encoder(&pos_enc, gmp_csp_sl_get_rx_buffer()->encoder);
     }
 

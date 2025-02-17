@@ -70,7 +70,7 @@ void ctl_init()
         // NOTE gain is negative value means ADC result is negative
         12, 24, float2ctrl(10.0), float2ctrl(0.5), float2ctrl(0.1), float2ctrl(0),
         // PWM parameters
-        10000);
+        GONTROLLER_PWM_CMP_MAX);
 
     // BUG TI cannot print out sizeof() result if no type is specified.
     gmp_base_print(TEXT_STRING("PMSM SERVO struct has been inited, size :%d\r\n"), (int)sizeof(pmsm_servo));
@@ -140,8 +140,16 @@ void ctl_mainloop(void)
         ctl_set_pmsm_servo_spd(&pmsm_servo, float2ctrl(0.5));
     }
 
+    //EPWM_setCounterCompareValue(EPWMU_BASE, EPWM_COUNTER_COMPARE_A,
+    //                       (uint16_t)(1000));
+    //EPWM_setCounterCompareValue(EPWMV_BASE, EPWM_COUNTER_COMPARE_A,
+    //                       (uint16_t)(1000));
+    //EPWM_setCounterCompareValue(EPWMW_BASE, EPWM_COUNTER_COMPARE_A,
+    //                       (uint16_t)(1000));
+
     return;
 }
+
 
 
 #ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
