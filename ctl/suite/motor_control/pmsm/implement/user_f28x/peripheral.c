@@ -99,7 +99,11 @@ void setup_peripheral(void)
 //    Interrupt_enable(INT_EPWM1);
 //    Interrupt_enable(INT_EPWM2);
 //    Interrupt_enable(INT_EPWM3);
+
+    // Start up ADC A & B & C
     Interrupt_enable(INT_ADCA1);
+    Interrupt_enable(INT_ADCB1);
+    Interrupt_enable(INT_ADCC1);
 
     //    fVal = fResult;
 

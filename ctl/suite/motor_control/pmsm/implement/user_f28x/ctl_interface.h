@@ -10,6 +10,15 @@
 #ifndef _FILE_CTL_INTERFACE_H_
 #define _FILE_CTL_INTERFACE_H_
 
+// Internal 2.5V voltage reference
+#define ADC_REFERENCE ((2.5))
+
+// Controller Frequency
+#define CONTROLLER_FREQUENCY (10000)
+
+// PWM depth
+#define GONTROLLER_PWM_CMP_MAX (6000)
+
 #ifdef __cplusplus
 extern "C"{
 #endif // __cplusplus

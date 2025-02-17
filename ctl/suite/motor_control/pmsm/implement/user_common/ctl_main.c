@@ -68,7 +68,7 @@ void ctl_init()
         // ADC resolution, iqn, current gain, current bias, voltage gain, voltage bias
         // NOTE iqn parameter is meaningless for float environment
         // NOTE gain is negative value means ADC result is negative
-        12, 24, float2ctrl(10.0), float2ctrl(1.65/2.5), float2ctrl(0.1), float2ctrl(0),
+        12, 24, float2ctrl(10.0), float2ctrl(1.65 / ADC_REFERENCE), float2ctrl(0.1), float2ctrl(0),
         // PWM parameters
         GONTROLLER_PWM_CMP_MAX);
 
@@ -84,7 +84,7 @@ void ctl_init()
     // VF Control, voltage Open-loop
     ctl_set_pmm_servo_pos_enc(&pmsm_servo, CTL_POSITION_IF(&const_f));
 
-    ctl_vector2_t vdq_set = {float2ctrl(0.12), float2ctrl(0.12};
+    ctl_vector2_t vdq_set = {float2ctrl(0.12), float2ctrl(0.12)};
     ctl_set_pmsm_servo_voltage_mode(&pmsm_servo);
     ctl_set_pmsm_servo_ff_voltage(&pmsm_servo, &vdq_set);
 
@@ -140,12 +140,6 @@ void ctl_mainloop(void)
         ctl_set_pmsm_servo_spd(&pmsm_servo, float2ctrl(0.5));
     }
 
-    //EPWM_setCounterCompareValue(EPWMU_BASE, EPWM_COUNTER_COMPARE_A,
-    //                       (uint16_t)(1000));
-    //EPWM_setCounterCompareValue(EPWMV_BASE, EPWM_COUNTER_COMPARE_A,
-    //                       (uint16_t)(1000));
-    //EPWM_setCounterCompareValue(EPWMW_BASE, EPWM_COUNTER_COMPARE_A,
-    //                       (uint16_t)(1000));
 
     return;
 }

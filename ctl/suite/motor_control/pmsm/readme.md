@@ -122,7 +122,7 @@ $$
 Period = \frac{120 \,MHz}{10\,kHz\times 2}=6000
 $$
 
-ADC Channel, ADCA for U phase, ADCB for V phase, ADCC for W phase
+ADC Channel, ADCA for U phase, ADCB for V phase, ADCC for W phase, all of them is high priority.
 
 | Signal | Peripheral | ADC Channel |
 | ------ | ---------- | ----------- |
@@ -133,6 +133,70 @@ ADC Channel, ADCA for U phase, ADCB for V phase, ADCC for W phase
 | IA     | ADC A      | ADC A11     |
 | IB     | ADC B      | ADC B12     |
 | IC     | ADC C      | ADC C3      |
+
+
+
+## STM32G474 Motor Control Environment
+
+Project Location: `gmp_pro\ctl\suite\motor_control\pmsm\projects\motor_control_stm32g474_hrtim`
+
+You may edit this project with STM32 CubeMX and Open the project using Keil. Keil will generate GMP files every compiling time.
+
+Encoder SPI Interface
+
+| Signal   | Peripheral | GPIO     |
+| -------- | ---------- | -------- |
+| SPI CS   | SPI2       | GPIO B10 |
+| SPI SIMO | SPI2       | GPIO B15 |
+| SPI SOMI | SPI2       | GPIO B14 |
+| SPI CLK  | SPI2       | GPIO B13 |
+
+print USART interface, connected by Debugger.
+
+| Signal    | Peripheral | GPIO |
+| --------- | ---------- | ---- |
+| USART1 TX | USART1     | PA2  |
+| USART1 RX | USART1     | PA3  |
+
+HRTIM PWM channel
+
+| Signal       | Peripheral     | Application  | GPIO |
+| ------------ | -------------- | ------------ | ---- |
+| PWM Phase UH | HRTIM Timer E1 | PWM Phase UH | PC8  |
+| PWM Phase UL | HRTIM Timer E2 | PWM Phase UL | PC9  |
+| PWM Phase VH | HRTIM Timer A1 | PWM Phase VH | PA8  |
+| PWM Phase VL | HRTIM Timer A2 | PWM Phase VL | PA9  |
+| PWM Phase WH | HRTIM Timer B1 | PWM Phase WH | PA10 |
+| PWM Phase WL | HRTIM Timer B2 | PWM Phase WL | PA11 |
+
+ADC Resources
+
+| Signal | Peripheral      | GPIO |
+| ------ | --------------- | ---- |
+| IA     | ADC1 Channel 1  | PA0  |
+| VA     | ADC1 Channel 2  | PA1  |
+| IB     | ADC2 Channel 3  | PA6  |
+| VB     | ADC2 Channel 3  | PA7  |
+| VDC    | ADC2 Channel 12 | PB2  |
+| IC     | ADC3 Channel 12 | PB0  |
+| VC     | ADC3 Channel 1  | PB1  |
+
+User interface 
+
+| Signal      | Usage       | GPIO |
+| ----------- | ----------- | ---- |
+| User Button | GPIO Input  | PC13 |
+| User LED    | GPIO Output | PA5  |
+
+
+
+
+
+
+
+
+
+
 
 
 
