@@ -93,7 +93,13 @@ void setup_peripheral(void)
 
     asm(" RPT #255 || NOP");
 
-    EPWM_clearEventTriggerInterruptFlag(ADCU_BASE);
+    //
+    // Enable ePWM interrupts
+    //
+//    Interrupt_enable(INT_EPWM1);
+//    Interrupt_enable(INT_EPWM2);
+//    Interrupt_enable(INT_EPWM3);
+    Interrupt_enable(INT_ADCA1);
 
     //    fVal = fResult;
 
@@ -110,15 +116,6 @@ void setup_peripheral(void)
 //#ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 //
 
-void ctl_fmif_output_enable(ctl_object_nano_t *pctl_obj)
-{
-
-}
-
-void ctl_fmif_output_disable(ctl_object_nano_t *pctl_obj)
-{
-
-}
 
 fast_gt ctl_fmif_security_routine(ctl_object_nano_t *pctl_obj)
 {
@@ -146,15 +143,23 @@ interrupt void MainISR(void)
     gmp_base_ctl_step();
 
     //
-    // clear ADCINT1 INT and ack PIE INT
+    // Clear the interrupt flag
     //
-    ADC_clearInterruptStatus(ADCU_BASE, ADC_INT_NUMBER1);
+    ADC_clearInterruptStatus(ADC_PHASE_U_BASE, ADC_INT_NUMBER1);
 
     //
-    // ACK the PWM interrupts
+    // Check if overflow has occurred
     //
-    Interrupt_clearACKGroup(INTERRUPT_ACK_GROUP3);
+    if(true == ADC_getInterruptOverflowStatus(ADC_PHASE_U_BASE, ADC_INT_NUMBER1))
+    {
+        ADC_clearInterruptOverflowStatus(ADC_PHASE_U_BASE, ADC_INT_NUMBER1);
+        ADC_clearInterruptStatus(ADC_PHASE_U_BASE, ADC_INT_NUMBER1);
+    }
 
+    //
+    // Acknowledge the interrupt
+    //
+    Interrupt_clearACKGroup(INTERRUPT_ACK_GROUP1);
 
 }
 

@@ -51,7 +51,7 @@ void ctl_init()
 
     // constant frequency virtual encoder
     ctl_init_const_f_controller(&const_f);
-    ctl_setup_const_f_controller(&const_f, 5, CONTROLLER_FREQUENCY);
+    ctl_setup_const_f_controller(&const_f, 50, CONTROLLER_FREQUENCY);
 
     // setup position encoder & speed encoder
     ctl_setup_pos_encoder(&pos_enc, 1, ((uint32_t)1 << 17) - 1);

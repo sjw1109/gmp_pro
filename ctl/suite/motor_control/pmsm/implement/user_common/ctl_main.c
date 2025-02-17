@@ -43,7 +43,7 @@ void ctl_init()
 
     // constant frequency virtual encoder
     ctl_init_const_f_controller(&const_f);
-    ctl_setup_const_f_controller(&const_f, 5, CONTROLLER_FREQUENCY);
+    ctl_setup_const_f_controller(&const_f, 49, CONTROLLER_FREQUENCY);
 
     // setup position encoder & speed encoder
     ctl_setup_pos_encoder(&pos_enc, 1, ((uint32_t)1 << 14) - 1);
@@ -84,7 +84,7 @@ void ctl_init()
     // VF Control, voltage Open-loop
     ctl_set_pmm_servo_pos_enc(&pmsm_servo, CTL_POSITION_IF(&const_f));
 
-    ctl_vector2_t vdq_set = {float2ctrl(0.2), float2ctrl(0.2)};
+    ctl_vector2_t vdq_set = {float2ctrl(0.15), float2ctrl(0.15)};
     ctl_set_pmsm_servo_voltage_mode(&pmsm_servo);
     ctl_set_pmsm_servo_ff_voltage(&pmsm_servo, &vdq_set);
 
@@ -92,7 +92,7 @@ void ctl_init()
     // Current open-loop
     ctl_set_pmm_servo_pos_enc(&pmsm_servo, CTL_POSITION_IF(&const_f));
 
-    ctl_vector2_t idq_set = {float2ctrl(0.0), float2ctrl(0.22)};
+    ctl_vector2_t idq_set = {float2ctrl(0.0), float2ctrl(0.12)};
     ctl_set_pmsm_servo_current_mode(&pmsm_servo);
     ctl_set_pmsm_servo_ff_current(&pmsm_servo, &idq_set);
 

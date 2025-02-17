@@ -21,17 +21,17 @@ void ctl_fmif_input_stage_routine(ctl_object_nano_t *pctl_obj)
 {
     pmsm_servo_fm_t* pmsm = (pmsm_servo_fm_t*) pctl_obj;
 
-    ctl_step_adc_tri_channel(&pmsm->iabc_input,
-                             ADC_readResult(ADCU_RESULT_BASE, MOTOR_IU),
-                             ADC_readResult(ADCV_RESULT_BASE, MOTOR_IV),
-                             ADC_readResult(ADCW_RESULT_BASE, MOTOR_IW));
-
-    ctl_step_adc_tri_channel(&pmsm->vabc_input,
-                             ADC_readResult(ADCU_RESULT_BASE, MOTOR_VU),
-                             ADC_readResult(ADCV_RESULT_BASE, MOTOR_VV),
-                             ADC_readResult(ADCW_RESULT_BASE, MOTOR_VW));
-
-    ctl_step_adc_channel(&pmsm->udc_input, ADC_readResult(ADCU_RESULT_BASE, MOTOR_VDC));
+//    ctl_step_adc_tri_channel(&pmsm->iabc_input,
+//                             ADC_readResult(ADCU_RESULT_BASE, MOTOR_IU),
+//                             ADC_readResult(ADCV_RESULT_BASE, MOTOR_IV),
+//                             ADC_readResult(ADCW_RESULT_BASE, MOTOR_IW));
+//
+//    ctl_step_adc_tri_channel(&pmsm->vabc_input,
+//                             ADC_readResult(ADCU_RESULT_BASE, MOTOR_VU),
+//                             ADC_readResult(ADCV_RESULT_BASE, MOTOR_VV),
+//                             ADC_readResult(ADCW_RESULT_BASE, MOTOR_VW));
+//
+//    ctl_step_adc_channel(&pmsm->udc_input, ADC_readResult(ADCU_RESULT_BASE, MOTOR_VDC));
 
 
 }
@@ -46,20 +46,14 @@ void ctl_fmif_output_stage_routine(ctl_object_nano_t *pctl_obj)
 //    ctl_vector3_t Tabc;
 //
 //    ctl_ct_svpwm_calc(&pmsm->current_ctrl.iab0, &Tabc);
-//
-//    EPWM_setCounterCompareValue(EPWMU_BASE, EPWM_COUNTER_COMPARE_A,
-//                        Tabc.dat[phase_U]);
-//    EPWM_setCounterCompareValue(EPWMV_BASE, EPWM_COUNTER_COMPARE_A,
-//                        Tabc.dat[phase_V]);
-//    EPWM_setCounterCompareValue(EPWMW_BASE, EPWM_COUNTER_COMPARE_A,
-//                        Tabc.dat[phase_W]);
 
     EPWM_setCounterCompareValue(EPWMU_BASE, EPWM_COUNTER_COMPARE_A,
-                        (uint16_t)(pmsm->uabc.value[phase_A]));
+                                pmsm->uabc.value[phase_A]);
     EPWM_setCounterCompareValue(EPWMV_BASE, EPWM_COUNTER_COMPARE_A,
-                        (uint16_t)(pmsm->uabc.value[phase_B]));
+                                pmsm->uabc.value[phase_B]);
     EPWM_setCounterCompareValue(EPWMW_BASE, EPWM_COUNTER_COMPARE_A,
-                        (uint16_t)(pmsm->uabc.value[phase_C]));
+                                pmsm->uabc.value[phase_C]);
+
 
 }
 
@@ -69,6 +63,19 @@ GMP_STATIC_INLINE
 void ctl_fmif_request_stage_routine(ctl_object_nano_t *pctl_obj)
 {
 }
+
+GMP_STATIC_INLINE
+void ctl_fmif_output_enable(ctl_object_nano_t *pctl_obj)
+{
+    gmp_hal_gpio_write(MTR_ENABLE, 0);
+}
+
+GMP_STATIC_INLINE
+void ctl_fmif_output_disable(ctl_object_nano_t *pctl_obj)
+{
+    gmp_hal_gpio_write(MTR_ENABLE, 1);
+}
+
 
 
 

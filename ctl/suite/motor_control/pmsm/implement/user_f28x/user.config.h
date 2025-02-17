@@ -28,7 +28,7 @@
 // + ctl_fmif_output_stage_routine(ctl_object_nano_t*)
 // + ctl_fmif_request_stage_routine(ctl_object_nano_t*)
 //
-#define SPECIFY_CALL_PERIODIC_DISPATCH_MANUALLY
+//#define SPECIFY_CALL_PERIODIC_DISPATCH_MANUALLY
 
 // #define SPECIFY_CTRL_GT_TYPE USING_DOUBLE_FPU
  #define SPECIFY_CTRL_GT_TYPE USING_FLOAT_FPU
