@@ -75,7 +75,7 @@ void ctl_init()
         // ADC resolution, iqn, current gain, current bias, voltage gain, voltage bias
         // NOTE iqn parameter is meaningless for float environment
         // NOTE gain is negative value means ADC result is negative
-        16, 24, float2ctrl(-2.0), float2ctrl(0.5), float2ctrl(0.1), float2ctrl(0.1),
+        16, 24, float2ctrl(2.0), float2ctrl(1.65/2.5), float2ctrl(0.1), float2ctrl(0.1),
         // PWM parameters
         10000);
 

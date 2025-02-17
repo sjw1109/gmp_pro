@@ -13,6 +13,7 @@ const adc            = scripting.addModule("/driverlib/adc.js", {}, false);
 const adc1           = adc.addInstance();
 const adc2           = adc.addInstance();
 const adc3           = adc.addInstance();
+const asysctl        = scripting.addModule("/driverlib/asysctl.js");
 const device_support = scripting.addModule("/driverlib/device_support.js");
 const epwm           = scripting.addModule("/driverlib/epwm.js", {}, false);
 const epwm1          = epwm.addInstance();
@@ -91,6 +92,8 @@ analog1.$name = "myANALOGPinMux0";
 adc1.analog   = analog1;
 adc2.analog   = analog1;
 adc3.analog   = analog1;
+
+asysctl.analogReference = "INTERNAL";
 
 epwm1.epwmTimebase_counterMode                                   = "EPWM_COUNTER_MODE_UP_DOWN";
 epwm1.epwmCounterCompare_cmpB                                    = 1950;

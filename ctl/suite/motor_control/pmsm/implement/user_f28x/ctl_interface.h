@@ -21,17 +21,17 @@ void ctl_fmif_input_stage_routine(ctl_object_nano_t *pctl_obj)
 {
     pmsm_servo_fm_t* pmsm = (pmsm_servo_fm_t*) pctl_obj;
 
-//    ctl_step_adc_tri_channel(&pmsm->iabc_input,
-//                             ADC_readResult(ADCU_RESULT_BASE, MOTOR_IU),
-//                             ADC_readResult(ADCV_RESULT_BASE, MOTOR_IV),
-//                             ADC_readResult(ADCW_RESULT_BASE, MOTOR_IW));
-//
-//    ctl_step_adc_tri_channel(&pmsm->vabc_input,
-//                             ADC_readResult(ADCU_RESULT_BASE, MOTOR_VU),
-//                             ADC_readResult(ADCV_RESULT_BASE, MOTOR_VV),
-//                             ADC_readResult(ADCW_RESULT_BASE, MOTOR_VW));
-//
-//    ctl_step_adc_channel(&pmsm->udc_input, ADC_readResult(ADCU_RESULT_BASE, MOTOR_VDC));
+    ctl_input_pmsm_servo_framework(pmsm,
+          ADC_readResult(ADC_PHASE_U_RESULT_BASE, ADC_IU),
+          ADC_readResult(ADC_PHASE_V_BASE, ADC_IV),
+          ADC_readResult(ADC_PHASE_W_BASE, ADC_IW));
+
+    ctl_step_adc_tri_channel(&pmsm->vabc_input,
+                             ADC_readResult(ADC_PHASE_U_RESULT_BASE, ADC_UU),
+                             ADC_readResult(ADC_PHASE_V_RESULT_BASE, ADC_UV),
+                             ADC_readResult(ADC_PHASE_W_RESULT_BASE, ADC_UW));
+
+    ctl_step_adc_channel(&pmsm->udc_input, ADC_readResult(ADC_PHASE_U_RESULT_BASE, ADC_UDC));
 
 
 }
@@ -48,11 +48,11 @@ void ctl_fmif_output_stage_routine(ctl_object_nano_t *pctl_obj)
 //    ctl_ct_svpwm_calc(&pmsm->current_ctrl.iab0, &Tabc);
 
     EPWM_setCounterCompareValue(EPWMU_BASE, EPWM_COUNTER_COMPARE_A,
-                                pmsm->uabc.value[phase_A]);
+                                ctl_get_pmsm_servo_modulation(pmsm, phase_A));
     EPWM_setCounterCompareValue(EPWMV_BASE, EPWM_COUNTER_COMPARE_A,
-                                pmsm->uabc.value[phase_B]);
+                                ctl_get_pmsm_servo_modulation(pmsm, phase_B));
     EPWM_setCounterCompareValue(EPWMW_BASE, EPWM_COUNTER_COMPARE_A,
-                                pmsm->uabc.value[phase_C]);
+                                ctl_get_pmsm_servo_modulation(pmsm, phase_C));
 
 
 }
