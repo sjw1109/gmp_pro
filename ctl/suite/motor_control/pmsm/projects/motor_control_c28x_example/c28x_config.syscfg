@@ -102,7 +102,6 @@ mux3.inputSelect = "X1_XTAL";
 
 epwm1.$name                                                      = "EPWMU";
 epwm1.epwmTimebase_hsClockDiv                                    = "EPWM_HSCLOCK_DIVIDER_1";
-epwm1.epwmTimebase_period                                        = 6000;
 epwm1.epwmTimebase_counterMode                                   = "EPWM_COUNTER_MODE_UP_DOWN";
 epwm1.epwmTimebase_counterModeAfterSync                          = "EPWM_COUNT_MODE_UP_AFTER_SYNC";
 epwm1.epwmTimebase_phaseEnable                                   = true;
@@ -122,6 +121,9 @@ epwm1.epwmDeadband_enableFED                                     = true;
 epwm1.epwmEventTrigger_enableInterrupt                           = true;
 epwm1.epwmEventTrigger_interruptSource                           = "EPWM_INT_TBCTR_PERIOD";
 epwm1.epwmEventTrigger_interruptEventCount                       = "1";
+epwm1.generateCodeTemplate                                       = true;
+epwm1.epwmTimebase_syncInPulseSource                             = "EPWM_SYNC_IN_PULSE_SRC_DISABLE";
+epwm1.epwmTimebase_period                                        = 6000;
 epwm1.epwm.$assign                                               = "EPWM1";
 epwm1.epwm.epwm_aPin.$assign                                     = "GPIO0";
 epwm1.epwm.epwm_bPin.$assign                                     = "GPIO1";

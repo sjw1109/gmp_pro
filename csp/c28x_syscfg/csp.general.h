@@ -128,8 +128,7 @@ void gmp_hal_wd_feed(void)
 // Debug Print function
 size_gt gmp_base_print_c28xsyscfg(const char *p_fmt, ...);
 
-// TI String will not add a '\0' automatically, so use the following macro.
-#define TEXT_STRING(str) str##"\0"
+
 
 #ifdef __cplusplus
 }
