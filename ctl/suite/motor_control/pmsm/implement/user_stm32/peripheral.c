@@ -7,7 +7,7 @@
 // user main header
 #include "user_main.h"
 
-#include <c28x_peripheral_driver.h>
+//#include <c28x_peripheral_driver.h>
 
 //#define   MATH_TYPE      IQ_MATH
 //// invoke iqmath lib
@@ -89,9 +89,9 @@ void setup_peripheral(void)
 
 //    debug_uart = debug_uart_BASE;
 
-    gmp_base_print(TEXT_STRING("Hello World!\r\n"));
+//    gmp_base_print(TEXT_STRING("Hello World!\r\n"));
 
-    asm(" RPT #255 || NOP");
+//    asm(" RPT #255 || NOP");
 
     //
     // Enable ePWM interrupts

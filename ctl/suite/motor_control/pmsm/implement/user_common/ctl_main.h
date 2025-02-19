@@ -47,11 +47,9 @@ extern pmsm_servo_fm_t pmsm_servo;
 // PMSM const frequency controller
 extern ctl_const_f_controller const_f;
 
-// Controller Frequency
-#define CONTROLLER_FREQUENCY (10000)
-
 // PWM depth
 #define GONTROLLER_PWM_CMP_MAX (8500)
+
 
 
 #ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO

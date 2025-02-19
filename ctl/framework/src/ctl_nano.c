@@ -139,29 +139,29 @@ void default_ctl_fmif_output_disable(ctl_object_nano_t *pctl_obj)
 // ....................................................................//
 // The following functions may running in Main ISR
 
-GMP_WEAK_FUNC_PREFIX
-void ctl_fmif_input_stage_routine(ctl_object_nano_t *pctl_obj) GMP_WEAK_FUNC_SUFFIX
-{
-    // not implement
-}
+// GMP_WEAK_FUNC_PREFIX
+// void ctl_fmif_input_stage_routine(ctl_object_nano_t *pctl_obj) GMP_WEAK_FUNC_SUFFIX
+//{
+//     // not implement
+// }
 
-GMP_WEAK_FUNC_PREFIX
-void ctl_fmif_core_stage_routine(ctl_object_nano_t *pctl_obj) GMP_WEAK_FUNC_SUFFIX
-{
-    // not implement
-}
+// GMP_WEAK_FUNC_PREFIX
+// void ctl_fmif_core_stage_routine(ctl_object_nano_t *pctl_obj) GMP_WEAK_FUNC_SUFFIX
+//{
+//     // not implement
+// }
 
-GMP_WEAK_FUNC_PREFIX
-void ctl_fmif_output_stage_routine(ctl_object_nano_t *pctl_obj) GMP_WEAK_FUNC_SUFFIX
-{
-    // not implement
-}
+// GMP_WEAK_FUNC_PREFIX
+// void ctl_fmif_output_stage_routine(ctl_object_nano_t *pctl_obj) GMP_WEAK_FUNC_SUFFIX
+//{
+//     // not implement
+// }
 
-GMP_WEAK_FUNC_PREFIX
-void ctl_fmif_request_stage_routine(ctl_object_nano_t *pctl_obj) GMP_WEAK_FUNC_SUFFIX
-{
-    // not implement
-}
+// GMP_WEAK_FUNC_PREFIX
+// void ctl_fmif_request_stage_routine(ctl_object_nano_t *pctl_obj) GMP_WEAK_FUNC_SUFFIX
+//{
+//     // not implement
+// }
 
 // ....................................................................//
 // The following functions may running in Main Loop
@@ -231,23 +231,22 @@ fast_gt ctl_fmif_sm_fault_routine(ctl_object_nano_t *pctl_obj) GMP_WEAK_FUNC_SUF
 // ....................................................................//
 // The following functions may called in Main ISR and Main Loop
 
-GMP_WEAK_FUNC_PREFIX
-void ctl_fmif_output_enable(ctl_object_nano_t *pctl_obj) GMP_WEAK_FUNC_SUFFIX
-{
-    // not implement
-}
+// GMP_WEAK_FUNC_PREFIX
+// void ctl_fmif_output_enable(ctl_object_nano_t *pctl_obj) GMP_WEAK_FUNC_SUFFIX
+//{
+//     // not implement
+// }
 
-GMP_WEAK_FUNC_PREFIX
-void ctl_fmif_output_disable(ctl_object_nano_t *pctl_obj) GMP_WEAK_FUNC_SUFFIX
-{
-    // not implement
-}
+// GMP_WEAK_FUNC_PREFIX
+// void ctl_fmif_output_disable(ctl_object_nano_t *pctl_obj) GMP_WEAK_FUNC_SUFFIX
+//{
+//     // not implement
+// }
 
 #endif // _MSC_VER
 
 //////////////////////////////////////////////////////////////////////////
 // Kernal functions
-
 
 // Controller state machine
 // This function should be called in your controller main loop routine.
@@ -362,7 +361,7 @@ uint32_t ctl_fm_controller_inspection(ctl_object_nano_t *pctl_obj)
 {
     if (ctl_nano_handle == NULL)
     {
-        // fatal error default controller nano handle has not specified 
+        // fatal error default controller nano handle has not specified
         gmp_base_print("Error: User must specify the default controller nano header.\r\n");
 
         while (1)
@@ -419,12 +418,10 @@ void ctl_fm_force_online(ctl_object_nano_t *ctl_obj)
     ctl_obj->state_machine = CTL_SM_ONLINE;
 }
 
-void ctl_fm_force_calibrate(ctl_object_nano_t* ctl_obj)
+void ctl_fm_force_calibrate(ctl_object_nano_t *ctl_obj)
 {
     ctl_obj->state_machine = CTL_SM_CALIBRATE;
 }
-
-
 
 ec_gt ctl_setup_default_ctl_nano_obj(ctl_object_nano_t *ctl_obj)
 {

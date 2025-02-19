@@ -1,5 +1,5 @@
 
-//#include <core/std/gmp.std.h>
+// #include <core/std/gmp.std.h>
 
 #include <gmp_core.h>
 
@@ -50,7 +50,6 @@ size_gt gmp_base_print_internal(const char *p_fmt, ...)
     return ret;
 
 #endif // SPECIFY_BASE_PRINT_NOT_IMPL
-
 }
 
 // define GMP base function print
@@ -65,7 +64,7 @@ void gmp_base_show_label(void)
 
 #include <core/std/gmp_logo.inl>
 
-    gmp_base_print(TEXT_STRING ("[okay] General motor platform ready.\r\n"));
+    gmp_base_print(TEXT_STRING("[okay] General motor platform ready.\r\n"));
 }
 #endif // SPECIFY_DISABLE_GMP_LOGO
 
@@ -77,7 +76,7 @@ void gmp_base_not_impl(const char *file, uint32_t line)
 
 #if defined SPECIFY_ENABLE_UNIMPL_FUNC_WARNING
     // print the error information
-    gmp_dbg_prt(TEXT_STRING ("[Erro] invoke unimplemented function: [%s, %d].\r\n"), file, line);
+    gmp_dbg_prt(TEXT_STRING("[Erro] invoke unimplemented function: [%s, %d].\r\n"), file, line);
 #endif // SPECIFY_ENABLE_UNIMPL_FUNC_WARNING
 
 #if defined SPECIFY_STUCK_WHEN_UNIMPL_FUNC
@@ -243,11 +242,11 @@ void ctl_mainloop(void) GMP_WEAK_FUNC_SUFFIX
 // This function would be called in every controller loop
 // This function would be called by @gmp_base_ctl_step
 //
-GMP_WEAK_FUNC_PREFIX
-void ctl_dispatch(void) GMP_WEAK_FUNC_SUFFIX
-{
-    // not implement
-}
+// GMP_WEAK_FUNC_PREFIX
+// void ctl_dispatch(void) GMP_WEAK_FUNC_SUFFIX
+//{
+//    // not implement
+//}
 
 #ifdef SPECIFY_DISABLE_CSP
 GMP_WEAK_FUNC_PREFIX
