@@ -13,6 +13,8 @@
 // Internal 2.5V voltage reference
 #define ADC_REFERENCE ((3.3))
 
+#define CONTROLLER_FREQUENCY ((10000))
+
 
 #ifdef __cplusplus
 extern "C"{

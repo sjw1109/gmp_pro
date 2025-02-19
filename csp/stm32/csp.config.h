@@ -17,5 +17,7 @@
 
 #define USER_SPECIFIED_PRINT_FUNCTION(A, ...) 
 
+#define SPECIFY_DISABLE_CSP_EXIT
+
 
 
