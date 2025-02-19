@@ -1,35 +1,5 @@
 @echo off
 
-
-:: Check if Git has installed correctly.
-git --version >nul 2>&1
-if %errorlevel% neq 0 (
-    echo Git is not installed correctly.
-    echo You may find the installer of Git from the official website：
-    echo https://git-scm.com/downloads
-    exit /b
-) else (
-    echo Git has installed, 
-    git --version
-)
-
-:: Check if Python has installed correctly.
-where python >nul 2>&1
-if %ERRORLEVEL% neq 0 (
-    echo Python is not installed.
-    echo You can find Python from the official website: https://www.python.org/downloads/
-    exit /b
-) else (
-    echo Python is installed.
-    echo Python Version:
-    python --version
-)
-
-:: upgrade all submodules
-git submodule update --progress --init --recursive --force
-
-echo All the necessary git submodule has installed.
-
 setlocal enabledelayedexpansion
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -108,6 +78,38 @@ if defined ENV_VAR (
 )
 
 echo Environment variable GMP_PRO_LOCATION has been set to: %SCRIPT_DIR%
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+:: Check if Git has installed correctly.
+git --version >nul 2>&1
+if %errorlevel% neq 0 (
+    echo Git is not installed correctly.
+    echo You may find the installer of Git from the official website:
+    echo https://git-scm.com/downloads
+    exit /b
+) else (
+    echo Git has installed, 
+    git --version
+)
+
+:: Check if Python has installed correctly.
+where python >nul 2>&1
+if %ERRORLEVEL% neq 0 (
+    echo Python is not installed.
+    echo You can find Python from the official website: https://www.python.org/downloads/
+    exit /b
+) else (
+    echo Python is installed.
+    echo Python Version:
+    python --version
+)
+
+:: upgrade all submodules
+git submodule update --progress --init --recursive --force
+
+echo All the necessary git submodule has installed.
 
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
