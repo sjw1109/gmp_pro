@@ -51,7 +51,7 @@ extern ctl_const_f_controller const_f;
 #define CONTROLLER_FREQUENCY (10000)
 
 // PWM depth
-#define GONTROLLER_PWM_CMP_MAX (6000)
+#define GONTROLLER_PWM_CMP_MAX (8500)
 
 
 #ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO

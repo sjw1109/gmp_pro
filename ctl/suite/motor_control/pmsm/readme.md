@@ -196,13 +196,53 @@ User interface
 
 project path: `gmp_pro\ctl\suite\motor_control\pmsm\projects\motor_control_stm32g431_tim`
 
+Encoder SPI Interface
+
+| Signal   | Peripheral | GPIO |
+| -------- | ---------- | ---- |
+| SPI CS   | SPI2       | PB1  |
+| SPI MOSI | SPI2       | PB15 |
+| SPI MISO | SPI2       | PB14 |
+| SPI CLK  | SPI2       | PB13 |
+
+print USART interface, connected by Debugger.
 
 
 
+| Signal    | Peripheral | GPIO |
+| --------- | ---------- | ---- |
+| USART2 TX | USART2     | PA2  |
+| USART2 RX | USART2     | PA3  |
+
+TIM PWM channel
 
 
 
+| Signal       | Peripheral | Application  | GPIO |
+| ------------ | ---------- | ------------ | ---- |
+| PWM Phase UH | TIM1 CH1   | PWM Phase UH | PA8  |
+| PWM Phase UL | TIM1 CH1   | PWM Phase UL | PA11 |
+| PWM Phase VH | TIM1 CH2   | PWM Phase VH | PC1  |
+| PWM Phase VL | TIM1 CH2   | PWM Phase VL | PB0  |
+| PWM Phase WH | TIM1 CH3   | PWM Phase WH | PC2  |
+| PWM Phase WL | TIM1 CH3   | PWM Phase WL | PB9  |
 
+ADC Resources ???
 
+| Signal | Peripheral | GPIO |
+| ------ | ---------- | ---- |
+| IB     | ADC1 IN1   | PA0  |
+| UC     | ADC1 IN2   | PA1  |
+| UB     | ADC1 IN9   | PC3  |
+| IA     | ADC2 IN3   | PA6  |
+| IC     | ADC2 IN4   | PA7  |
+| UA     | ADC2 IN5   | PC4  |
+| VDC    | ADC2 IN6   | PC0  |
 
+User interface
+
+| Signal      | Usage       | GPIO |
+| ----------- | ----------- | ---- |
+| User Button | GPIO Input  | PC13 |
+| User LED    | GPIO Output | PA5  |
 

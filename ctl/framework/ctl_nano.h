@@ -166,10 +166,10 @@ extern "C"
     // The following functions may called in Main ISR and Main Loop
 
     // enable PWM output
-    void ctl_fmif_output_enable(ctl_object_nano_t *pctl_obj);
+    inline void ctl_fmif_output_enable(ctl_object_nano_t *pctl_obj);
 
     // disable PWM output
-    void ctl_fmif_output_disable(ctl_object_nano_t *pctl_obj);
+    inline void ctl_fmif_output_disable(ctl_object_nano_t *pctl_obj);
 
     //////////////////////////////////////////////////////////////////////////
     // The following function should be called by user on time.
