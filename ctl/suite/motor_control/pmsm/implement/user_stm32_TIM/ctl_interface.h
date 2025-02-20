@@ -95,8 +95,10 @@ void ctl_fmif_request_stage_routine(ctl_object_nano_t *pctl_obj)
 
 		uint8_t enc_req[2] = { 0xFF, 0xFF };
 		uint16_t enc_res = 0;
+		HAL_GPIO_WritePin(SPI2_CS_GPIO_Port, SPI2_CS_Pin, GPIO_PIN_RESET);
 		HAL_SPI_TransmitReceive(&hspi2, enc_req, (uint8_t*)&enc_res, 2, 10);
-		ctl_step_pos_encoder(&pos_enc, enc_res);
+		HAL_GPIO_WritePin(SPI2_CS_GPIO_Port, SPI2_CS_Pin, GPIO_PIN_SET);
+		ctl_step_pos_encoder(&pos_enc, 0x3FFF - (gmp_l2b16(enc_res) & 0x3FFF));
 
 }
 
@@ -104,12 +106,14 @@ GMP_STATIC_INLINE
 void ctl_fmif_output_enable(ctl_object_nano_t *pctl_obj)
 {
 //    gmp_hal_gpio_write(MTR_ENABLE, 0);
+		HAL_GPIO_WritePin(PWM_EN_GPIO_Port, PWM_EN_Pin, GPIO_PIN_RESET);
 }
 
 GMP_STATIC_INLINE
 void ctl_fmif_output_disable(ctl_object_nano_t *pctl_obj)
 {
 //    gmp_hal_gpio_write(MTR_ENABLE, 1);
+		HAL_GPIO_WritePin(PWM_EN_GPIO_Port, PWM_EN_Pin, GPIO_PIN_SET);
 }
 
 

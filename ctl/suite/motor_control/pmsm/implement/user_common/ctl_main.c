@@ -46,7 +46,7 @@ void ctl_init()
     ctl_setup_const_f_controller(&const_f, 49, CONTROLLER_FREQUENCY);
 
     // setup position encoder & speed encoder
-    ctl_setup_pos_encoder(&pos_enc, 1, ((uint32_t)1 << 14) - 1);
+    ctl_setup_pos_encoder(&pos_enc, MOTOR_PARAM_POLE_PAIRS, ((uint32_t)1 << 14) - 1);
     ctl_setup_spd_calculator(&spd_enc, CONTROLLER_FREQUENCY, 5, MOTOR_PARAM_MAX_SPEED, 1, 150,
                              &pos_enc.encif);
 
@@ -68,7 +68,7 @@ void ctl_init()
         // ADC resolution, iqn, current gain, current bias, voltage gain, voltage bias
         // NOTE iqn parameter is meaningless for float environment
         // NOTE gain is negative value means ADC result is negative
-        12, 24, float2ctrl(10.0), float2ctrl(1.65 / ADC_REFERENCE), float2ctrl(0.1), float2ctrl(0),
+        12, 24, float2ctrl(10.0), float2ctrl(1.6 / ADC_REFERENCE), float2ctrl(0.1), float2ctrl(0),
         // PWM parameters
         GONTROLLER_PWM_CMP_MAX);
 

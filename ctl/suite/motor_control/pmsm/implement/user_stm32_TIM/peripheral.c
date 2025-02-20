@@ -94,7 +94,12 @@ void setup_peripheral(void)
     HAL_ADC_Start_DMA(&hadc1, adc1_res, ADC1_SEQ_SIZE);
 		HAL_ADC_Start_DMA(&hadc2, adc2_res, ADC2_SEQ_SIZE);
 	
-		
+		HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+		HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+		HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
+		HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
+		HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
+		HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
 
     //
     // Enable ePWM interrupts
@@ -169,5 +174,13 @@ fast_gt ctl_fmif_security_routine(ctl_object_nano_t *pctl_obj)
 //    Interrupt_clearACKGroup(INTERRUPT_ACK_GROUP1);
 
 //}
+
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
+{
+	if(hadc == &hadc2)
+	{
+		gmp_base_ctl_step();
+	}
+}
 
 
