@@ -113,6 +113,7 @@ class asio_udp_helper
     {
         try
         {
+
             tran_socket.send(boost::asio::buffer(msg, len));
 
             tran_counter += len;
@@ -135,6 +136,10 @@ class asio_udp_helper
     {
         try
         {
+            // somewhere in your headers to be used everywhere you need it
+            typedef boost::asio::detail::socket_option::integer<SOL_SOCKET, SO_RCVTIMEO> rcv_timeout_option;
+            recv_socket.set_option(rcv_timeout_option{2000});
+
             // recv_socket.receive(boost::asio::buffer((char *)&data_t, sizeof(double)));
             recv_socket.receive_from(boost::asio::buffer(msg, len), recv_terminal);
 

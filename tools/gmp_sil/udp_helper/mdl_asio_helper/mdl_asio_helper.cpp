@@ -3,28 +3,28 @@
 // Source code for GMP_SIL_Core
 
 // Sfunction Parameters:
-// NumberUnpackedPorts, UnpackedDataTypes, UnpackedDataSizes, NumberPackedPorts, PackedDataTypes, PackedDataSizes, Alignment, HostAddr, TargetPort
+// NumberUnpackedPorts, UnpackedDataTypes, UnpackedDataSizes, NumberPackedPorts, PackedDataTypes, PackedDataSizes,
+// Alignment, HostAddr, TargetPort
 
 // Driver function:
-// 
-//% source : MaskUnpackedDataTypes, MaskUnpackedDataSizes 
-//% source : MaskPackedDataTypes, MaskUnpackedDataSizes 
-//% source: 
-//MaskAlignment[NumberUnpackedPorts, UnpackedDataTypes, UnpackedDataSizes, ... 
-//    NumberPackedPorts, PackedDataTypes, PackedDataSizes, ... 
-//    Alignment] = mdl_gmp_simulink_core(... 
-//    MaskUnpackedDataTypes, MaskUnpackedDataSizes, ... 
-//    MaskPackedDataTypes, MaskPackedDataSizes, ... 
+//
+//% source : MaskUnpackedDataTypes, MaskUnpackedDataSizes
+//% source : MaskPackedDataTypes, MaskUnpackedDataSizes
+//% source:
+// MaskAlignment[NumberUnpackedPorts, UnpackedDataTypes, UnpackedDataSizes, ...
+//    NumberPackedPorts, PackedDataTypes, PackedDataSizes, ...
+//    Alignment] = mdl_gmp_simulink_core(...
+//    MaskUnpackedDataTypes, MaskUnpackedDataSizes, ...
+//    MaskPackedDataTypes, MaskPackedDataSizes, ...
 //    MaskAlignment);
 
-//% source : MaskHostAddr 
-//% source : MaskMsgTxPort, MaskMsgRxPort 
+//% source : MaskHostAddr
+//% source : MaskMsgTxPort, MaskMsgRxPort
 //% source : MaskCmdTxPort,
-//MaskCmdRxPort[HostAddr, TargetPort] =
-//    mdl_gmp_simulink_connection(MaskHostAddr, ... 
-//    MaskMsgTxPort, MaskMsgRxPort, ... 
+// MaskCmdRxPort[HostAddr, TargetPort] =
+//    mdl_gmp_simulink_connection(MaskHostAddr, ...
+//    MaskMsgTxPort, MaskMsgRxPort, ...
 //    MaskCmdTxPort, MaskCmdRxPort);
-
 
 // S function basic informations.
 #define S_FUNCTION_LEVEL 2
@@ -33,7 +33,6 @@
 #define S_FUNCTION_NAME GMP_SIL_Core
 
 #define DRIVER          "GMP_SIL_Core"
-
 
 // Headers
 #include "fixedpoint.h"
@@ -69,8 +68,6 @@ using json = nlohmann::json;
 
 #include "mex.h"
 
-
-
 // Level-2 MATLAB® S-functions must implement the following callback methods:
 // + setup
 //     Specifies the sizes of various parameters in the SimStruct,
@@ -80,7 +77,6 @@ using json = nlohmann::json;
 // + Terminate
 //     Performs any actions required at the termination of the simulation.
 //   If no actions are required, this function can be implemented as a stub.
-
 
 // Module Parameter List
 enum
@@ -93,12 +89,11 @@ enum
     S_PACKED_DATA_TYPES,   // Data types of packed data [pack only]
     S_PACKED_DATA_SIZES,   // Data size of packed data
 
-    S_ALIGNMENT, // Byte alignment
+    S_ALIGNMENT,           // Byte alignment
     S_NETWORK_HOST,        // NETWORK param
     S_NETWORK_TARGET_PORT, // NETWORK port parameter
     NUM_S_PARAMS           // Number of parameters passed from the mask
 };
-
 
 static char_T msg[256];                         // Generic message buffer
 static int_T j;                                 // Generic counter
@@ -679,10 +674,10 @@ static void mdlSetDefaultPortDataTypes(SimStruct *S)
 #define MDL_START
 static void mdlStart(SimStruct *S)
 {
-    int_T desired_packed_width;   // Calculated width of packed port including pad
-    //int_T actual_packed_width;    // Actual width of packed port including pad
+    int_T desired_packed_width; // Calculated width of packed port including pad
+    // int_T actual_packed_width;    // Actual width of packed port including pad
     int_T desired_unpacked_width; // Calculated width of packed port including pad
-    //int_T actual_unpacked_width;  // Actual width of packed port including pad
+    // int_T actual_unpacked_width;  // Actual width of packed port including pad
     uint_T alignment = (uint_T)GetScalarParam(S_ALIGNMENT);
     int_T unpacked_ports = (int_T)GetScalarParam(S_NUMBER_UNPACKED_PORTS);
     int_T packed_ports = (int_T)GetScalarParam(S_NUMBER_PACKED_PORTS);
@@ -838,6 +833,8 @@ static void mdlStart(SimStruct *S)
 
     // udp_helper = new asio_udp_helper(target_ip, recv_port, trans_port, cmd_recv_port, cmd_trans_port);
     udp_helper = new asio_udp_helper(ipaddr.str(), recv_port, trans_port, cmd_recv_port, cmd_trans_port);
+
+
 
     if (udp_helper == nullptr)
     {
@@ -1002,7 +999,11 @@ static void mdlOutputs(SimStruct *S, int_T tid)
 
     try
     {
-        udp_helper->recv_msg((char *)recvBuffer, desired_unpacked_width);
+        if (udp_helper->recv_msg((char*)recvBuffer, desired_unpacked_width))
+        {
+            sprintf(msg, "%s: ASIO helper, Receive timeout, please start SIL Controller first!", DRIVER);
+            ssSetErrorStatus(S, msg);
+        }
     }
     catch (boost::system::system_error &e)
     {

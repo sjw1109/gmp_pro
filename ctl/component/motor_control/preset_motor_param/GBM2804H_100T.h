@@ -12,6 +12,17 @@
 // https://zhuanlan.zhihu.com/p/545688192
 //
 
+//
+// Standard Encoder Interface
+// SPI Encoder
+// CS black
+// clk blue
+// MISO green
+// MOSI yellow
+// GND white
+// +5V red
+//
+
 
 //////////////////////////////////////////////////////////////////////////
 // Basic parameters

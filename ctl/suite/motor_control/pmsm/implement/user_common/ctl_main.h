@@ -47,8 +47,7 @@ extern pmsm_servo_fm_t pmsm_servo;
 // PMSM const frequency controller
 extern ctl_const_f_controller const_f;
 
-// PWM depth
-#define GONTROLLER_PWM_CMP_MAX (8500)
+
 
 
 

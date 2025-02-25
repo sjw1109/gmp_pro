@@ -1,16 +1,12 @@
 
-// Using this header may avoid redefine controller variables.
-#include <ctl_main.h>
-
-
-
-// This file is platform related
-
-#define CONTROLLER_FREQUENCY ((10000))
-
-
 #ifndef _FILE_CTL_INTERFACE_H_
 #define _FILE_CTL_INTERFACE_H_
+
+// PWM depth
+#define GONTROLLER_PWM_CMP_MAX ((0x84D0))
+
+// This file is platform related
+#define CONTROLLER_FREQUENCY ((10000))
 
 // Internal 2.5V voltage reference
 #define ADC_REFERENCE ((3.3))

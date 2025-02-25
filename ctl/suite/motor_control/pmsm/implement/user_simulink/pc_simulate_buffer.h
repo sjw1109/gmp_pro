@@ -9,7 +9,7 @@
 // Default type name is tx_buf_t
 typedef struct _tag_tx_buf_t
 {
-    // time
+    // enable
 
     // Compare register
     uint32_t tabc[3];
@@ -26,7 +26,7 @@ typedef struct _tag_tx_buf_t
 // Default type name is rx_buf_t
 typedef struct _tag_rx_buf_t
 {
-    // enable
+    // time
 
     // current feedback
     uint32_t iabc[3];

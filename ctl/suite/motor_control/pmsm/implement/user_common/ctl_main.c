@@ -18,7 +18,6 @@
 
 #include <ctl/component/motor_control/preset_motor_param/GBM2804H_100T.h>
 
-
 // position encoder
 ctl_pos_encoder_t pos_enc;
 
