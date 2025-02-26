@@ -6,5 +6,5 @@
     "gmp_csp_windows": false,
     "gmp_csp_c28x": false,
     "gmp_csp_stm32": true,
-    "gmp_source_dic_file": "S:\\GMP\\gmp_pro\\tools\\facilities_generator\\gmp_source_dic.json"
+    "gmp_source_dic_file": "E:\\lib\\gmp_pro\\tools\\facilities_generator\\json\\gmp_source_dic.json"
 }

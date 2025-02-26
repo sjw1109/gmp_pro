@@ -23,12 +23,20 @@ def main():
         print("Usage: python script.py <config_file.json> <destination_dir>")
         sys.exit(1)
 
+    # Get Environment variables GMP_PRO_LOCATION
+    gmp_location_dir = os.getenv('GMP_PRO_LOCATION')
+    if not gmp_location_dir:
+        print("Environment variable GMP_PRO_LOCATION is not set.")
+        sys.exit(1)
+
     config_file_path = sys.argv[1]
     destination_dir = sys.argv[2]
 
     config_data = read_json_file(config_file_path)
 
-    gmp_source_dic_file = config_data.get("gmp_source_dic_file")
+    # gmp_source_dic_file = config_data.get("gmp_source_dic_file")
+    gmp_source_dic_file = os.path.join(gmp_location_dir, 'tools', 'facilities_generator', 'json', config_data.get("gmp_source_dic_file"))
+
     if not gmp_source_dic_file:
         print("gmp_source_dic_file not found in the config file.")
         sys.exit(1)
@@ -45,13 +53,6 @@ def main():
     for item in gmp_source_dic_data:
         if config_data.get(item["name"]):
             inc_paths.update(item["include_path"])
-
-
-    # Get Environment variables GMP_PRO_LOCATION
-    gmp_location_dir = os.getenv('GMP_PRO_LOCATION')
-    if not gmp_location_dir:
-        print("Environment variable GMP_PRO_LOCATION is not set.")
-        sys.exit(1)
 
     dest_dir = Path(destination_dir) / "gmp_src" 
     print(dest_dir)

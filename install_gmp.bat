@@ -117,7 +117,7 @@ echo All the necessary git submodule has installed.
 cd tools/facilities_generator
 
 :: install fac for CCS
-python ./gmp_fac_install.py
+python ./gmp_fac_install_ccs_product.py
 
 :: generate facility_cfg.json
 python ./gmp_fac_generate_cfg_json.py

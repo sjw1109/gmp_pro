@@ -8,8 +8,6 @@ library_version = "1.00.00.05"
 # suffix for source code template 
 suffix = '.xdt'
 
-# Container of facilities
-facilities_json = 'facilities.json'
 
 # Get GMP installation path
 gmp_pro_location = os.getenv('GMP_PRO_LOCATION')
@@ -19,6 +17,11 @@ if gmp_pro_location is not None:
     print(f"Environment variable GMP_PRO_LOCATION is: {gmp_pro_location}")
 else:
     print("Environment variable GMP_PRO_LOCATION unknown. Reinstall this software may solve this problem.")
+
+# Container of facilities
+facilities_json = os.path.join(gmp_pro_location, 'tools', 'facilities_generator', 'json','facilities.json')
+
+
 
 # GMP path
 gmp_installed_path = gmp_pro_location

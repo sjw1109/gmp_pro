@@ -14,7 +14,7 @@ if "%GMP_PRO_LOCATION%"=="" (
 )
 
 :: call cmake generator
-python "%GMP_PRO_LOCATION%/tools/facilities_generator/gmp_fac_generate_cmake.py" %SCRIPT_DIR%/facility_cfg.json
+python "%GMP_PRO_LOCATION%/tools/facilities_generator/gmp_fac_generate_cmake.py" %SCRIPT_DIR%/json/facility_cfg.json
 
 echo generate script done.
 

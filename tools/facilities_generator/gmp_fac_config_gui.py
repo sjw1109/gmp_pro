@@ -1,5 +1,6 @@
 # Bug report user Simulink  Example cannot show window correctly. 
 
+import os
 import json
 import sys
 import tkinter as tk
@@ -65,8 +66,16 @@ class JSONConfigGUI:
 				widget.destroy()
 
 			# Load descriptions from gmp_source_dic_file
-			gmp_source_dic_file = data.get("gmp_source_dic_file")
-			if gmp_source_dic_file:
+			gmp_source_dic_file_name = data.get("gmp_source_dic_file")
+
+			# Get Environment variables GMP_PRO_LOCATION
+			gmp_location_dir = os.getenv('GMP_PRO_LOCATION')
+			if not gmp_location_dir:
+				print("Environment variable GMP_PRO_LOCATION is not set.")
+				sys.exit(1)
+
+			gmp_source_dic_file = gmp_source_dic_file = os.path.join(gmp_location_dir, 'tools', 'facilities_generator', 'json', gmp_source_dic_file_name)
+			if gmp_source_dic_file_name:
 				self.load_descriptions(gmp_source_dic_file)
 
 			# save source dictionary
