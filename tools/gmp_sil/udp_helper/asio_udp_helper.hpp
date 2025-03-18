@@ -20,10 +20,10 @@ using json = nlohmann::json;
 #include <SDKDDKVer.h>
 
 // ASIO library
-//#define ASIO_STANDALONE
+// #define ASIO_STANDALONE
 #include <boost/asio.hpp>
 
-//using asio = boost::asio;
+// using asio = boost::asio;
 
 using udp = boost::asio::ip::udp;
 
@@ -35,7 +35,7 @@ using udp = boost::asio::ip::udp;
 class asio_udp_helper
 {
   public:
-    //boost::asio::error_code ecVAR;
+    // boost::asio::error_code ecVAR;
     udp::endpoint recv_terminal;
     udp::endpoint tran_terminal;
     udp::endpoint cmd_recv_terminal;
@@ -136,9 +136,11 @@ class asio_udp_helper
     {
         try
         {
+#ifndef DISABLE_ASIO_HELPER_TIMEOUT_OPTION
             // somewhere in your headers to be used everywhere you need it
             typedef boost::asio::detail::socket_option::integer<SOL_SOCKET, SO_RCVTIMEO> rcv_timeout_option;
             recv_socket.set_option(rcv_timeout_option{2000});
+#endif // DISABLE_ASIO_HELPER_TIMEOUT_OPTION
 
             // recv_socket.receive(boost::asio::buffer((char *)&data_t, sizeof(double)));
             recv_socket.receive_from(boost::asio::buffer(msg, len), recv_terminal);
