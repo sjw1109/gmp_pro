@@ -39,7 +39,6 @@ extern "C"
 #endif // SPECIFY_DISABLE_CSP
 
 
-
 // invoke system default config
 //
 #include <core/std/cfg/gmp.cfg.h>

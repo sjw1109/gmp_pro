@@ -137,9 +137,49 @@ class asio_udp_helper
         try
         {
 #ifndef DISABLE_ASIO_HELPER_TIMEOUT_OPTION
+            // if use this macro will wait permanently.
+
+#ifdef ASIO_PLAIN_TIMEOUT
+            // Fixed timeout mode
             // somewhere in your headers to be used everywhere you need it
             typedef boost::asio::detail::socket_option::integer<SOL_SOCKET, SO_RCVTIMEO> rcv_timeout_option;
             recv_socket.set_option(rcv_timeout_option{2000});
+
+#else
+
+#ifdef PC_SIMULATE_STOP_CONDITION
+            // Server mode
+
+            // if receive has setup, start timeout
+            if (this->recv_counter > 100)
+            {
+                // somewhere in your headers to be used everywhere you need it
+                typedef boost::asio::detail::socket_option::integer<SOL_SOCKET, SO_RCVTIMEO> rcv_timeout_option;
+                recv_socket.set_option(rcv_timeout_option{2000}); // 2000 s \approx 33 min
+            }
+#else 
+            // Default Mode: Clent mode
+
+            // if receive has setup, stop timeout
+            if (this->recv_counter > 100)
+            {
+                // somewhere in your headers to be used everywhere you need it
+                typedef boost::asio::detail::socket_option::integer<SOL_SOCKET, SO_RCVTIMEO> rcv_timeout_option;
+                recv_socket.set_option(rcv_timeout_option{2000000}); // 2000 s \approx 33 min
+            }
+            else
+            {
+                // somewhere in your headers to be used everywhere you need it
+                typedef boost::asio::detail::socket_option::integer<SOL_SOCKET, SO_RCVTIMEO> rcv_timeout_option;
+                recv_socket.set_option(rcv_timeout_option{2000});
+            }
+
+#endif // PC_SIMULATE_STOP_CONDITION
+
+#endif // ASIO_PLAIN_TIMEOUT
+
+            // Disable timeout mode
+
 #endif // DISABLE_ASIO_HELPER_TIMEOUT_OPTION
 
             // recv_socket.receive(boost::asio::buffer((char *)&data_t, sizeof(double)));

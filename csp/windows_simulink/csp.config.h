@@ -61,7 +61,13 @@
 #define SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 #endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
-// Disable ASIO timeout option
-#ifndef DISABLE_ASIO_HELPER_TIMEOUT_OPTION
-#define DISABLE_ASIO_HELPER_TIMEOUT_OPTION
-#endif // DISABLE_ASIO_HELPER_TIMEOUT_OPTION
+// Simulation condition stop
+// if connection is setup but no message comes in 2 sec, 
+// stop simulation.
+#ifndef PC_SIMULATE_STOP_CONDITION
+#define PC_SIMULATE_STOP_CONDITION
+#endif // PC_SIMULATE_STOP_CONDITION
+
+// Simulation will not stop automatically.
+//#define DISABLE_ASIO_HELPER_TIMEOUT_OPTION
+
