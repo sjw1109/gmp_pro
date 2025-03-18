@@ -79,7 +79,7 @@ class JSONConfigGUI:
 				self.load_descriptions(gmp_source_dic_file)
 
 			# save source dictionary
-			self.gmp_source_dic_file = gmp_source_dic_file
+			self.gmp_source_dic_file = gmp_source_dic_file_name
 
 			# Create checkboxes for each config item
 			current_tag = None
