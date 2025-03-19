@@ -31,6 +31,7 @@
         "sourceDir": [
             "ctl/framework/",
             "ctl/component/intrinsic/",
+            "ctl/component/interface/",
             "ctl/component/motor_control/"
         ],
         "includeDir":[
@@ -47,6 +48,7 @@
         "sourceDir": [
             "ctl/framework/",
             "ctl/component/intrinsic/",
+            "ctl/component/interface/",
             "ctl/component/digital_power/"
         ],
         "includeDir":[
@@ -62,6 +64,7 @@
         "sourceDir": [
             "ctl/framework/",
             "ctl/component/intrinsic/",
+            "ctl/component/interface/",
             "ctl/component/motor_control/",
             "ctl/suite/motor_control/pmsm/"
         ],

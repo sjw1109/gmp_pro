@@ -39,7 +39,11 @@ extern "C"
 
     ec_gt ctl_setup_saturation(saturation_t *obj, ctrl_gt out_min, ctrl_gt out_max);
 
-    void ctl_set_saturation(saturation_t *obj, ctrl_gt out_min, ctrl_gt out_max);
+    void ctl_set_saturation(saturation_t *obj, ctrl_gt out_min, ctrl_gt out_max)
+    {
+        obj->out_min = out_min;
+        obj->out_max = out_max;
+    }
 
 
 #ifdef __cplusplus

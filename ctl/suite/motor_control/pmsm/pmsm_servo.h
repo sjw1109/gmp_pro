@@ -28,15 +28,15 @@ extern "C"
     //    a struct that is derived from `ctl_rotation_encif_t` to calculate position
     //      meanwhile provide electrical position
     // + initialize the PMSM servo framework,
-    //    call function `ctl_init_pmsm_servo_framework`
+    //    call function `ctl_init_pmsm_framework`
     // + setup PMSM servo framework object
-    //    call function `ctl_setup_pmsm_servo_framework`
+    //    call function `ctl_setup_pmsm_framework`
     // + before start running the motor, call clear function to clear all the old informations.
     //    call function ``
     // + controller routine
     //    call function `ctl_input_motor_current_ctrl()` to set current sensor result
 
-    typedef struct _tag_pmsm_servo_framework
+    typedef struct _tag_pmsm_framework
     {
         // Controller Framework
         ctl_object_nano_t base;
@@ -80,13 +80,13 @@ extern "C"
         // calibrator is running
         // fast_gt flag_calibrate_running;
 
-    } pmsm_servo_fm_t;
+    } pmsm_fm_t;
 
-    ec_gt ctl_init_pmsm_servo_framework(pmsm_servo_fm_t *pmsm);
+    ec_gt ctl_init_pmsm_framework(pmsm_fm_t *pmsm);
 
-    ec_gt ctl_setup_pmsm_servo_framework(
+    ec_gt ctl_setup_pmsm_framework(
         // handle of pmsm servo objects
-        pmsm_servo_fm_t *pmsm,
+        pmsm_fm_t *pmsm,
         // target motor position encoder
         ctl_rotation_encif_t *pos_enc,
         // target motor speed encoder
@@ -114,11 +114,11 @@ extern "C"
         // PWM modulator full scale
         pwm_gt pwm_full_scale);
 
-    void ctl_clear_pmsm_servo_framework(pmsm_servo_fm_t *pmsm);
+    void ctl_clear_pmsm_framework(pmsm_fm_t *pmsm);
 
     // This function should be called in CLIBRATE state
     GMP_STATIC_INLINE
-    ec_gt ctl_cb_pmsm_servo_frmework_current_calibrate(pmsm_servo_fm_t *pmsm)
+    ec_gt ctl_cb_pmsm_frmework_current_calibrate(pmsm_fm_t *pmsm)
     {
         if (ctl_fm_is_calibrate(&pmsm->base))
         {
@@ -197,7 +197,7 @@ extern "C"
     }
 
     GMP_STATIC_INLINE
-    void ctl_input_pmsm_servo_framework(pmsm_servo_fm_t *pmsm, adc_gt raw1, adc_gt raw2, adc_gt raw3)
+    void ctl_input_pmsm_framework(pmsm_fm_t *pmsm, adc_gt raw1, adc_gt raw2, adc_gt raw3)
     {
         ctl_step_adc_tri_channel(&pmsm->iabc_input, raw1, raw2, raw3);
         ctl_input_motor_current_ctrl(&pmsm->current_ctrl, &pmsm->iabc_input);
@@ -205,7 +205,7 @@ extern "C"
 
     // ctl_fm_is_online(&pmsm->base) == 1
     GMP_STATIC_INLINE
-    void ctl_step_pmsm_servo_framework_online(pmsm_servo_fm_t *pmsm)
+    void ctl_step_pmsm_framework_online(pmsm_fm_t *pmsm)
     {
         // speed feedback
         ctrl_gt speed_fbk = ctl_get_encoder_speed(pmsm->spd_enc);
@@ -231,7 +231,7 @@ extern "C"
     }
 
     GMP_STATIC_INLINE
-    void ctl_step_pmsm_servo_framework(pmsm_servo_fm_t *pmsm)
+    void ctl_step_pmsm_framework(pmsm_fm_t *pmsm)
     {
         // speed feedback
         ctrl_gt speed_fbk = ctl_get_encoder_speed(pmsm->spd_enc);
@@ -307,14 +307,14 @@ extern "C"
     // phase : Phase_U. Phase_V, Phase_W
     // This function should be called in output stage
     GMP_STATIC_INLINE
-    pwm_gt ctl_get_pmsm_servo_modulation(pmsm_servo_fm_t *pmsm, uint32_t phase)
+    pwm_gt ctl_get_pmsm_modulation(pmsm_fm_t *pmsm, uint32_t phase)
     {
         return pmsm->uabc.value[phase];
     }
 
     // speed target mode
     GMP_STATIC_INLINE
-    void ctl_set_pmsm_servo_spd_mode(pmsm_servo_fm_t *pmsm)
+    void ctl_set_pmsm_spd_mode(pmsm_fm_t *pmsm)
     {
         pmsm->flag_enable_spd_ctrl = 1;
         ctl_enable_motor_current_controller(&pmsm->current_ctrl);
@@ -322,7 +322,7 @@ extern "C"
 
     // current target mode
     GMP_STATIC_INLINE
-    void ctl_set_pmsm_servo_current_mode(pmsm_servo_fm_t *pmsm)
+    void ctl_set_pmsm_current_mode(pmsm_fm_t *pmsm)
     {
         pmsm->flag_enable_spd_ctrl = 0;
         ctl_enable_motor_current_controller(&pmsm->current_ctrl);
@@ -330,7 +330,7 @@ extern "C"
 
     // voltage target mode
     GMP_STATIC_INLINE
-    void ctl_set_pmsm_servo_voltage_mode(pmsm_servo_fm_t *pmsm)
+    void ctl_set_pmsm_voltage_mode(pmsm_fm_t *pmsm)
     {
         pmsm->flag_enable_spd_ctrl = 0;
         ctl_disable_motor_current_controller(&pmsm->current_ctrl);
@@ -338,7 +338,7 @@ extern "C"
 
     // set voltage target
     GMP_STATIC_INLINE
-    void ctl_set_pmsm_servo_ff_voltage(pmsm_servo_fm_t *pmsm, ctl_vector2_t *vdq)
+    void ctl_set_pmsm_ff_voltage(pmsm_fm_t *pmsm, ctl_vector2_t *vdq)
     {
         pmsm->current_ctrl.vdq_ff.dat[0] = vdq->dat[0];
         pmsm->current_ctrl.vdq_ff.dat[1] = vdq->dat[1];
@@ -346,7 +346,7 @@ extern "C"
 
     // set current target
     GMP_STATIC_INLINE
-    void ctl_set_pmsm_servo_ff_current(pmsm_servo_fm_t *pmsm, ctl_vector2_t *idq)
+    void ctl_set_pmsm_ff_current(pmsm_fm_t *pmsm, ctl_vector2_t *idq)
     {
         pmsm->idq_ff.dat[phase_d] = idq->dat[phase_d];
         pmsm->idq_ff.dat[phase_q] = idq->dat[phase_q];
@@ -354,7 +354,7 @@ extern "C"
 
     // Set speed target
     GMP_STATIC_INLINE
-    void ctl_set_pmsm_servo_spd(pmsm_servo_fm_t *pmsm, ctrl_gt spd)
+    void ctl_set_pmsm_spd(pmsm_fm_t *pmsm, ctrl_gt spd)
     {
 
         pmsm->spd_target = spd;
@@ -362,21 +362,21 @@ extern "C"
 
     // Get motor mechanical position
     GMP_STATIC_INLINE
-    ctrl_gt ctl_get_pmsm_servo_rotor_pos(pmsm_servo_fm_t *pmsm)
+    ctrl_gt ctl_get_pmsm_rotor_pos(pmsm_fm_t *pmsm)
     {
         return pmsm->pos_enc->position;
     }
 
     // get motor speed
     GMP_STATIC_INLINE
-    ctrl_gt ctl_get_pmsm_servo_speed(pmsm_servo_fm_t *pmsm)
+    ctrl_gt ctl_get_pmsm_speed(pmsm_fm_t *pmsm)
     {
         return pmsm->spd_enc->speed;
     }
 
     // Set position signal source interface for PMSM servo object
     GMP_STATIC_INLINE
-    void ctl_set_pmm_servo_pos_enc(pmsm_servo_fm_t *pmsm, ctl_rotation_encif_t *enc)
+    void ctl_set_pmm_servo_pos_enc(pmsm_fm_t *pmsm, ctl_rotation_encif_t *enc)
     {
         pmsm->pos_enc = enc;
     }

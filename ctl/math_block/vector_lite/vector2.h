@@ -10,7 +10,7 @@ extern "C"
     typedef struct _tag_ctl_vector2_t
     {
         ctrl_gt dat[2];
-    } ctl_vector2_t;
+    } ctl_vector2_t, vector2_gt;
 
     GMP_STATIC_INLINE
     void ctl_vector2_clear(ctl_vector2_t *vec)

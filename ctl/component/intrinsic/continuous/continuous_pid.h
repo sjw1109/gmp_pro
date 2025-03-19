@@ -3,16 +3,18 @@
  * @author Javnson (javnson@zju.edu.cn)
  * @brief
  * @version 0.1
- * @date 2024-09-30
+ * @date 2025-03-19
  *
  * @copyright Copyright GMP(c) 2024
  *
  */
 
+// continuous PID controller
+
 #include <ctl/math_block/gmp_math.h>
 
-#ifndef _FILE_PI_H_
-#define _FILE_PI_H_
+#ifdef _FILE_CONTINUOUS_PID_H_
+#define _FILE_CONTINUOUS_PID_H_
 
 #ifdef __cplusplus
 extern "C"
@@ -82,13 +84,28 @@ extern "C"
     }
 
     // initialize function
-    ec_gt ctl_init_pid(pid_regular_t *hpid);
+    //ec_gt ctl_init_pid(pid_regular_t *hpid);
 
-    ec_gt ctl_setup_pid(pid_regular_t *hpid, ctrl_gt kp, ctrl_gt ki, ctrl_gt kd, ctrl_gt out_min, ctrl_gt out_max);
+    //ec_gt ctl_setup_pid(pid_regular_t *hpid, ctrl_gt kp, ctrl_gt ki, ctrl_gt kd, ctrl_gt out_min, ctrl_gt out_max);
 
-    void ctl_set_pid_parameter(pid_regular_t *hpid, ctrl_gt kp, ctrl_gt ki, ctrl_gt kd);
+    //void ctl_set_pid_parameter(pid_regular_t *hpid, ctrl_gt kp, ctrl_gt ki, ctrl_gt kd);
 
-    void ctl_set_pid_limit(pid_regular_t *hpid, ctrl_gt out_min, ctrl_gt out_max);
+    //void ctl_set_pid_limit(pid_regular_t *hpid, ctrl_gt out_min, ctrl_gt out_max);
+
+    void ctl_init_pid(pid_regular_t *hpid, ctrl_gt kp, ctrl_gt ki, ctrl_gt kd, ctrl_gt out_min, ctrl_gt out_max);
+
+    void ctl_set_pid_parameter(pid_regular_t *hpid, ctrl_gt kp, ctrl_gt ki, ctrl_gt kd)
+    {
+        hpid->kp = kp;
+        hpid->ki = ki;
+        hpid->kd = kd;
+    }
+
+    void ctl_set_pid_limit(pid_regular_t *hpid, ctrl_gt out_min, ctrl_gt out_max)
+    {
+        hpid->out_min = out_min;
+        hpid->out_max = out_max;
+    }
 
     GMP_STATIC_INLINE
     void ctl_clear_pid(pid_regular_t *hpid)
@@ -103,42 +120,8 @@ extern "C"
         return hpid->out;
     }
 
-    // PID discrete structure
-
-    // discrete PID with bilinear transform
-    // tex:
-    // $$\frac{U(z)}{E(z)} = \left. K_p + K_I\frac{1}{s} + K_ds\right|_{s = \frac{2}{T}\frac{1-z^{-1}}{1+z^{-1}}}\\
-    //=\frac{1}{2T(1-z^{-2})} \cdot
-    //\left((4K_d - 2TK_p + T^2K_I)z^{-2} + (-8K_d+2T^2K_I)z^{-1} + (4K_d + 2TK_p + T^2K_I)\right)\\
-    //=\frac{1}{2f(1-z^{-2})} \cdot
-    //\left((4f^2K_d - 2fK_p + K_I)z^{-2} + (-8f^2K_d+2K_I)z^{-1} + (4f^2K_d + 2fK_p + K_I)\right)\\
-    //=\frac{1}{1-z^{-2}} \cdot
-    //\left((2fK_d)z^{-2} + (-4fK_d)z^{-1} + (2fK_d)\right),f\gg 1, \rm{for\; PID}\\
-    //=\frac{1}{1-z^{-2}} \cdot
-    //\left((-Kp)z^{-2} + (1/f\cdot K_I(\approx 0))z^{-1} + (Kp)\right),f\gg 1, \rm{for\; PI}$$
-
-    // discrete PID with basic transform
-    // tex:
-    // $$\frac{U(z)}{E(z)} = \left. K_p + K_I\frac{1}{s} + K_ds\right|_{s = \frac{z-1}{T}}$$
-
-    // typedef struct _tag_discrete_pid_t
-    //{
-    //	// output
-    //	ctrl_gt out;
-    //
-    //	// parameters
-    //
-    //
-    //	// intrinsic variables
-    //	gmp_ctrl_param_t Kp;
-    //	gmp_ctrl_param_t Ki;
-    //	gmp_ctrl_param_t Kd;
-    //
-    //
-    // }disc_pid_t;
-
 #ifdef __cplusplus
 }
 #endif //__cplusplus
 
-#endif // _FILE_PI_H_
+#endif // _FILE_CONTINUOUS_PID_H_

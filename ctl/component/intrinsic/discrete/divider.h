@@ -48,9 +48,11 @@ extern "C"
         return 0;
     }
 
-    ec_gt ctl_init_divider(ctl_divider_t *obj);
+    //ec_gt ctl_init_divider(ctl_divider_t *obj);
 
-    ec_gt ctl_setup_divider(ctl_divider_t *obj, uint32_t counter_period);
+    //ec_gt ctl_setup_divider(ctl_divider_t *obj, uint32_t counter_period);
+
+    void ctl_init_divider(ctl_divider_t *obj, uint32_t counter_period);
 
     static inline void ctl_clear_divider(ctl_divider_t *obj)
     {

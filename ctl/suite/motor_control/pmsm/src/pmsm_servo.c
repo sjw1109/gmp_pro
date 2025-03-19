@@ -5,7 +5,7 @@
 
 #include <ctl/suite/motor_control/pmsm/pmsm_servo.h>
 
-ec_gt ctl_init_pmsm_servo_framework(pmsm_servo_fm_t *pmsm)
+ec_gt ctl_init_pmsm_framework(pmsm_fm_t *pmsm)
 {
     ctl_fm_init_nano_header(&pmsm->base);
 
@@ -34,7 +34,7 @@ ec_gt ctl_init_pmsm_servo_framework(pmsm_servo_fm_t *pmsm)
     return GMP_EC_OK;
 }
 
-ec_gt ctl_setup_pmsm_servo_framework(pmsm_servo_fm_t *pmsm,
+ec_gt ctl_setup_pmsm_framework(pmsm_fm_t *pmsm,
                                      // target motor position encoder
                                      ctl_rotation_encif_t *pos_enc,
                                      // target motor speed encoder
@@ -90,7 +90,7 @@ ec_gt ctl_setup_pmsm_servo_framework(pmsm_servo_fm_t *pmsm,
     return GMP_EC_OK;
 }
 
-void ctl_clear_pmsm_servo_framework(pmsm_servo_fm_t *pmsm)
+void ctl_clear_pmsm_framework(pmsm_fm_t *pmsm)
 {
     // clear current controller
     ctl_clear_motor_current_ctrl(&pmsm->current_ctrl);

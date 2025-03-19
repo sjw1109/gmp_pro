@@ -10,7 +10,7 @@ extern "C"
     typedef struct _tag_ctl_vector4_t
     {
         ctrl_gt dat[4];
-    } ctl_vector4_t;
+    } ctl_vector4_t, vector4_gt;
 
 #ifdef __cplusplus
 }

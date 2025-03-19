@@ -58,9 +58,9 @@ extern "C"
     GMP_STATIC_INLINE
     void ctl_fmif_input_stage_routine(ctl_object_nano_t *pctl_obj)
     {
-        pmsm_servo_fm_t *pmsm = (pmsm_servo_fm_t *)pctl_obj;
+        pmsm_fm_t *pmsm = (pmsm_fm_t *)pctl_obj;
 
-        ctl_input_pmsm_servo_framework(pmsm, adc2_res[MOTOR_IA], adc1_res[MOTOR_IB], adc2_res[MOTOR_IC]);
+        ctl_input_pmsm_framework(pmsm, adc2_res[MOTOR_IA], adc1_res[MOTOR_IB], adc2_res[MOTOR_IC]);
 
         ctl_step_adc_tri_channel(&pmsm->vabc_input, adc2_res[MOTOR_UA], adc1_res[MOTOR_UB], adc1_res[MOTOR_UC]);
 
@@ -71,11 +71,11 @@ extern "C"
     GMP_STATIC_INLINE
     void ctl_fmif_output_stage_routine(ctl_object_nano_t *pctl_obj)
     {
-        pmsm_servo_fm_t *pmsm = (pmsm_servo_fm_t *)pctl_obj;
+        pmsm_fm_t *pmsm = (pmsm_fm_t *)pctl_obj;
 
-        __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, ctl_get_pmsm_servo_modulation(pmsm, phase_A));
-        __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, ctl_get_pmsm_servo_modulation(pmsm, phase_B));
-        __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, ctl_get_pmsm_servo_modulation(pmsm, phase_C));
+        __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, ctl_get_pmsm_modulation(pmsm, phase_A));
+        __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, ctl_get_pmsm_modulation(pmsm, phase_B));
+        __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, ctl_get_pmsm_modulation(pmsm, phase_C));
     }
 
     // request other information via peripheral, for instance SPI.

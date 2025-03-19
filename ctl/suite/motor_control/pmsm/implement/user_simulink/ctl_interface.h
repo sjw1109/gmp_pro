@@ -29,9 +29,9 @@ extern "C"
     GMP_STATIC_INLINE
     void ctl_fmif_input_stage_routine(ctl_object_nano_t *pctl_obj)
     {
-        pmsm_servo_fm_t *pmsm = (pmsm_servo_fm_t *)pctl_obj;
+        pmsm_fm_t *pmsm = (pmsm_fm_t *)pctl_obj;
 
-        ctl_input_pmsm_servo_framework(pmsm, gmp_csp_sl_get_rx_buffer()->iabc[phase_A],
+        ctl_input_pmsm_framework(pmsm, gmp_csp_sl_get_rx_buffer()->iabc[phase_A],
             gmp_csp_sl_get_rx_buffer()->iabc[phase_B], gmp_csp_sl_get_rx_buffer()->iabc[phase_C]);
 
         ctl_step_adc_tri_channel(&pmsm->vabc_input, gmp_csp_sl_get_rx_buffer()->uabc[phase_A],
@@ -43,12 +43,12 @@ extern "C"
     GMP_STATIC_INLINE
     void ctl_fmif_output_stage_routine(ctl_object_nano_t *pctl_obj)
     {
-        pmsm_servo_fm_t *pmsm = (pmsm_servo_fm_t *)pctl_obj;
+        pmsm_fm_t *pmsm = (pmsm_fm_t *)pctl_obj;
 
         // Write PWM compare register
-        gmp_csp_sl_get_tx_buffer()->tabc[phase_A] = ctl_get_pmsm_servo_modulation(pmsm, phase_A);
-        gmp_csp_sl_get_tx_buffer()->tabc[phase_B] = ctl_get_pmsm_servo_modulation(pmsm, phase_B);
-        gmp_csp_sl_get_tx_buffer()->tabc[phase_C] = ctl_get_pmsm_servo_modulation(pmsm, phase_C);
+        gmp_csp_sl_get_tx_buffer()->tabc[phase_A] = ctl_get_pmsm_modulation(pmsm, phase_A);
+        gmp_csp_sl_get_tx_buffer()->tabc[phase_B] = ctl_get_pmsm_modulation(pmsm, phase_B);
+        gmp_csp_sl_get_tx_buffer()->tabc[phase_C] = ctl_get_pmsm_modulation(pmsm, phase_C);
 
 #if BUILD_LEVEL == 1
         gmp_csp_sl_get_tx_buffer()->monitor_port[0] = pmsm->pos_enc->position;

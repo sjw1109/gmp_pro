@@ -13,9 +13,10 @@
     {
         "name": "gmp_ctl_core",
         "tag" : "GMP CTL",
-        "source_path" :[
+        "source_path": [
             "ctl/framework/",
-            "ctl/component/intrinsic/"
+            "ctl/component/intrinsic/",
+            "ctl/component/interface/"
         ],
         "include_path": [
             "."

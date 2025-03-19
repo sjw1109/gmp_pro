@@ -52,10 +52,10 @@
 __interrupt void cla1Isr1()
 {
     // output routine
-    ctl_fmif_output_stage_routine(&pmsm_servo.base);
+    ctl_fmif_output_stage_routine(&pmsm.base);
 
     // request routine
-    ctl_fmif_request_stage_routine(&pmsm_servo.base);
+    ctl_fmif_request_stage_routine(&pmsm.base);
 
     //
     // Acknowledge the end-of-task interrupt for task 1

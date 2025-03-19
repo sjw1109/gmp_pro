@@ -21,9 +21,9 @@ extern "C"{
 GMP_STATIC_INLINE
 void ctl_fmif_input_stage_routine(ctl_object_nano_t *pctl_obj)
 {
-    pmsm_servo_fm_t* pmsm = (pmsm_servo_fm_t*) pctl_obj;
+    pmsm_fm_t* pmsm = (pmsm_fm_t*) pctl_obj;
 
-//    ctl_input_pmsm_servo_framework(pmsm,
+//    ctl_input_pmsm_framework(pmsm,
 //          ADC_readResult(ADC_PHASE_U_RESULT_BASE, ADC_IU),
 //          ADC_readResult(ADC_PHASE_V_BASE, ADC_IV),
 //          ADC_readResult(ADC_PHASE_W_BASE, ADC_IW));
@@ -43,18 +43,18 @@ void ctl_fmif_input_stage_routine(ctl_object_nano_t *pctl_obj)
 GMP_STATIC_INLINE
 void ctl_fmif_output_stage_routine(ctl_object_nano_t *pctl_obj)
 {
-    pmsm_servo_fm_t* pmsm = (pmsm_servo_fm_t*) pctl_obj;
+    pmsm_fm_t* pmsm = (pmsm_fm_t*) pctl_obj;
 
 //    ctl_vector3_t Tabc;
 //
 //    ctl_ct_svpwm_calc(&pmsm->current_ctrl.iab0, &Tabc);
 
 //    EPWM_setCounterCompareValue(EPWMU_BASE, EPWM_COUNTER_COMPARE_A,
-//                                ctl_get_pmsm_servo_modulation(pmsm, phase_A));
+//                                ctl_get_pmsm_modulation(pmsm, phase_A));
 //    EPWM_setCounterCompareValue(EPWMV_BASE, EPWM_COUNTER_COMPARE_A,
-//                                ctl_get_pmsm_servo_modulation(pmsm, phase_B));
+//                                ctl_get_pmsm_modulation(pmsm, phase_B));
 //    EPWM_setCounterCompareValue(EPWMW_BASE, EPWM_COUNTER_COMPARE_A,
-//                                ctl_get_pmsm_servo_modulation(pmsm, phase_C));
+//                                ctl_get_pmsm_modulation(pmsm, phase_C));
 
 
 }

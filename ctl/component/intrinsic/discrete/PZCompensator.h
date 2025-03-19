@@ -3,7 +3,7 @@
  * @author Javnson (javnson@zju.edu.cn)
  * @brief
  * @version 0.1
- * @date 2024-09-30
+ * @date 2025-03-19
  *
  * @copyright Copyright GMP(c) 2024
  *
@@ -16,6 +16,8 @@
 extern "C"
 {
 #endif //__cplusplus
+
+
 
     // tex:
     //  Bilinear transform:
@@ -106,6 +108,22 @@ extern "C"
         ctrl_gt out_min;
 
     } ctrl_2p2z_t;
+
+    // unit Hz
+    void ctl_init_2p2z(ctrl_2p2z_t* ctrl, parameter_gt f_z0, parameter_gt f_z1, parameter_gt f_p1, parameter_gt fs)
+    {
+        parameter_gt z0 = f_z0 * 2 * pi;
+        parameter_gt z1 = f_z1 * 2 * pi;
+        parameter_gt p1 = f_p1 * 2 * pi;
+
+        // discrete controller parameter 
+        parameter_gt gain_discrete = gain * (1 / 2 / fs / (p1 + 2 * fs));
+        parameter_gt b0 = (z1 + 2 * fs) * (z0 + 2 * fs);
+        parameter_gt b1 = ((z0 + 2 * fs) * (z1 - 2 * fs) + (z1 + 2 * fs) * (z0 - 2 * fs));
+        parameter_gt b2 = (z1 - 2 * fs) * (z0 - 2 * fs);
+        parameter_gt a1 = -(4 * fs / (p1 + 2 * fs));
+        parameter_gt a2 = (2 * fs - p1) / (2 * fs + p1);
+    }
 
     GMP_STATIC_INLINE
     ctrl_gt ctl_step_2p2z(ctrl_2p2z_t *c, ctrl_gt input)

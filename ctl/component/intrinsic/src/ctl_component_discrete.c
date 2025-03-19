@@ -8,8 +8,8 @@
  * @copyright Copyright GMP(c) 2024
  *
  */
-#include <gmp_core.h>
 #include <ctl/ctl_core.h>
+#include <gmp_core.h>
 
 #include <math.h>
 
@@ -18,22 +18,23 @@
 
 #include <ctl/component/intrinsic/discrete/divider.h>
 
-ec_gt ctl_init_divider(ctl_divider_t *obj)
+// ec_gt ctl_init_divider(ctl_divider_t *obj)
+//{
+//     // Current counter
+//     obj->counter = 0;
+//
+//     // No division
+//     obj->target = 0;
+//
+//     return GMP_EC_OK;
+// }
+
+void ctl_init_divider(ctl_divider_t *obj, uint32_t counter_period)
 {
     // Current counter
     obj->counter = 0;
 
-    // No division
-    obj->target = 0;
-
-    return GMP_EC_OK;
-}
-
-ec_gt ctl_setup_divider(ctl_divider_t *obj, uint32_t counter_period)
-{
     obj->target = counter_period;
-
-    return GMP_EC_OK;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -42,46 +43,46 @@ ec_gt ctl_setup_divider(ctl_divider_t *obj, uint32_t counter_period)
 #include <ctl/component/intrinsic/discrete/filter.h>
 #include <math.h> // support for sinf and cosf
 
-ec_gt ctl_init_lp_filter(ctl_low_pass_filter_t *lpf)
+// ec_gt ctl_init_lp_filter(ctl_low_pass_filter_t *lpf)
+//{
+//     lpf->a = GMP_CONST_1;
+//     lpf->out = 0;
+//
+//     return GMP_EC_OK;
+// }
+
+void ctl_init_lp_filter(ctl_low_pass_filter_t *lpf, parameter_gt fs, parameter_gt fc)
 {
-    lpf->a = GMP_CONST_1;
     lpf->out = 0;
-
-    return GMP_EC_OK;
-}
-
-ec_gt ctl_setup_lp_filter(ctl_low_pass_filter_t *lpf, parameter_gt fs, parameter_gt fc)
-{
     lpf->a = ctl_helper_lp_filter(fs, fc);
-
-    return GMP_EC_OK;
 }
 
-ctrl_gt ctl_helper_lp_filter(parameter_gt fs, parameter_gt fc)
-{
-    return float2ctrl(fc * 2 * PI / fs);
-}
+//// This function has move to header file
+// ctrl_gt ctl_helper_lp_filter(parameter_gt fs, parameter_gt fc)
+//{
+//     return float2ctrl(fc * 2 * PI / fs);
+// }
 
-ec_gt ctl_init_filter_iir2(ctl_filter_IIR2_t *obj)
-{
-    int i;
+// ec_gt ctl_init_filter_iir2(ctl_filter_IIR2_t *obj)
+//{
+//     int i;
+//
+//     obj->out = 0;
+//
+//     for (i = 0; i < 2; ++i)
+//     {
+//         obj->x[i] = 0;
+//         obj->y[i] = 0;
+//         obj->a[i] = 0;
+//         obj->b[i] = 0;
+//     }
+//
+//     obj->b[2] = 0;
+//
+//         return GMP_EC_OK;
+// }
 
-    obj->out = 0;
-
-    for (i = 0; i < 2; ++i)
-    {
-        obj->x[i] = 0;
-        obj->y[i] = 0;
-        obj->a[i] = 0;
-        obj->b[i] = 0;
-    }
-
-    obj->b[2] = 0;
-        
-        return GMP_EC_OK;
-}
-
-ec_gt ctl_setup_filter_iir2(ctl_filter_IIR2_t *obj, ctl_filter_IIR2_setup_t *setup_obj)
+ec_gt ctl_init_filter_iir2(ctl_filter_IIR2_t *obj, ctl_filter_IIR2_setup_t *setup_obj)
 {
     // center frequency
     // tex: $$ f_0 = f_c * 2Q$$
@@ -124,79 +125,9 @@ ec_gt ctl_setup_filter_iir2(ctl_filter_IIR2_t *obj, ctl_filter_IIR2_setup_t *set
         break;
     }
 
-            return GMP_EC_OK;
-
-}
-
-//////////////////////////////////////////////////////////////////////////
-// HCC regular
-
-#include <ctl/component/intrinsic/discrete/hcc.h>
-
-ec_gt ctl_init_hcc(ctl_hcc_t *hcc)
-{
-    hcc->target = 0;
-    hcc->half_width = float2ctrl(0.5);
-    hcc->current = 0;
-    hcc->switch_out = 0;
-    hcc->flag_polarity = 1;
+    obj->out = 0;
 
     return GMP_EC_OK;
-}
-
-ec_gt ctl_setup_hcc(ctl_hcc_t *hcc, fast_gt flag_polarity, ctrl_gt half_width)
-{
-    hcc->flag_polarity = flag_polarity;
-    hcc->half_width = half_width;
-
-    return GMP_EC_OK;
-}
-
-//////////////////////////////////////////////////////////////////////////
-// PID regular
-
-#include <ctl/component/intrinsic/discrete/pid.h>
-
-ec_gt ctl_init_pid(pid_regular_t *hpid)
-{
-    hpid->out = 0;
-
-    hpid->kp = float2ctrl(1.0f);
-    hpid->ki = 0;
-    hpid->kd = 0;
-
-    hpid->out_min = float2ctrl(-1.0f);
-    hpid->out_max = float2ctrl(1.0f);
-
-    hpid->dn = 0;
-    hpid->sn = 0;
-
-    return GMP_EC_OK;
-}
-
-ec_gt ctl_setup_pid(pid_regular_t *hpid, ctrl_gt kp, ctrl_gt ki, ctrl_gt kd, ctrl_gt out_min, ctrl_gt out_max)
-{
-    hpid->kp = kp;
-    hpid->ki = ki;
-    hpid->kd = kd;
-
-    hpid->out_min = out_min;
-    hpid->out_max = out_max;
-
-    return GMP_EC_OK;
-}
-
-void ctl_set_pid_parameter(pid_regular_t *hpid, ctrl_gt kp, ctrl_gt ki, ctrl_gt kd)
-{
-    hpid->kp = kp;
-    hpid->ki = ki;
-    hpid->kd = kd;
-}
-
-void ctl_set_pid_limit(pid_regular_t *hpid, ctrl_gt out_min, ctrl_gt out_max)
-{
-    hpid->out_min = out_min;
-    hpid->out_max = out_max;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -231,55 +162,29 @@ ec_gt ctl_setup_pll(ctl_pll_t *pll, ctrl_gt kp, ctrl_gt ki, ctrl_gt kd, // PID p
 }
 
 //////////////////////////////////////////////////////////////////////////
-// Saturation
-
-#include <ctl/component/intrinsic/discrete/saturation.h>
-
-ec_gt ctl_init_saturation(saturation_t *obj)
-{
-    obj->out_min = float2ctrl(-1.0f);
-    obj->out_max = float2ctrl(1.0f);
-
-    return GMP_EC_OK;
-}
-
-ec_gt ctl_setup_saturation(saturation_t *obj, ctrl_gt out_min, ctrl_gt out_max)
-{
-    obj->out_min = out_min;
-    obj->out_max = out_max;
-
-    return GMP_EC_OK;
-}
-
-void ctl_set_saturation(saturation_t *obj, ctrl_gt out_min, ctrl_gt out_max)
-{
-    obj->out_min = out_min;
-    obj->out_max = out_max;
-}
-
-//////////////////////////////////////////////////////////////////////////
 // Slope Limiter
 
 #include <ctl/component/intrinsic/discrete/slope_lim.h>
 
-ec_gt ctl_init_slope_limit(ctl_slope_lim_t *obj)
-{
-    obj->slope_min = float2ctrl(-1.0f);
-    obj->slope_max = float2ctrl(1.0f);
+// ec_gt ctl_init_slope_limit(ctl_slope_lim_t *obj)
+//{
+//     obj->slope_min = float2ctrl(-1.0f);
+//     obj->slope_max = float2ctrl(1.0f);
+//
+//     obj->out = float2ctrl(0);
+//
+//     return GMP_EC_OK;
+// }
 
-    obj->out = float2ctrl(0);
-
-    return GMP_EC_OK;
-}
-
-ec_gt ctl_setup_slope_limit(ctl_slope_lim_t *obj, ctrl_gt slope_min, ctrl_gt slope_max)
+void ctl_init_slope_limit(ctl_slope_lim_t *obj, ctrl_gt slope_min, ctrl_gt slope_max)
 {
     obj->slope_min = slope_min;
     obj->slope_max = slope_max;
 
-    return GMP_EC_OK;
+    obj->out = float2ctrl(0);
 }
 
+// The following function has move to header file
 void ctl_set_sl_slope(ctl_slope_lim_t *obj, ctrl_gt slope_min, ctrl_gt slope_max)
 {
     obj->slope_min = slope_min;
@@ -291,62 +196,84 @@ void ctl_set_sl_slope(ctl_slope_lim_t *obj, ctrl_gt slope_min, ctrl_gt slope_max
 
 #include <ctl/component/intrinsic/discrete/stimulate.h>
 
-ec_gt ctl_init_sincos_gen(ctl_src_sg_t *sg)
-{
-    sg->ph_sin = float2ctrl(0);
-    sg->ph_cos = float2ctrl(1.0f);
+// ec_gt ctl_init_sincos_gen(ctl_src_sg_t *sg)
+//{
+//     sg->ph_sin = float2ctrl(0);
+//     sg->ph_cos = float2ctrl(1.0f);
+//
+//     sg->ph_sin_delta = float2ctrl(0);
+//     sg->ph_cos_delta = float2ctrl(1.0f);
+//
+//     return GMP_EC_OK;
+// }
 
-    sg->ph_sin_delta = float2ctrl(0);
-    sg->ph_cos_delta = float2ctrl(1.0f);
-
-    return GMP_EC_OK;
-}
-
-ec_gt ctl_setup_sincos_gen(ctl_src_sg_t *sg,
-                           ctrl_gt init_angle, // rad
-                           ctrl_gt step_angle) // rad
+void ctl_init_sincos_gen(ctl_src_sg_t *sg,
+                         ctrl_gt init_angle, // rad
+                         ctrl_gt step_angle) // rad
 {
     sg->ph_cos = ctl_cos(init_angle);
     sg->ph_sin = ctl_sin(init_angle);
 
     sg->ph_sin_delta = ctl_sin(step_angle);
     sg->ph_cos_delta = ctl_cos(step_angle);
-
-    return GMP_EC_OK;
 }
 
-ec_gt ctl_init_ramp_gen(ctl_src_rg_t *rg)
+// ec_gt ctl_init_ramp_gen(ctl_src_rg_t *rg)
+//{
+//     rg->current = float2ctrl(0);
+//     rg->maximum = float2ctrl(1.0f);
+//     rg->minimum = float2ctrl(0);
+//
+//     rg->slope = float2ctrl(0);
+//
+//     return GMP_EC_OK;
+// }
+
+void ctl_init_ramp_gen(ctl_src_rg_t *rg, ctrl_gt slope, parameter_gt amp_pos, parameter_gt amp_neg)
 {
     rg->current = float2ctrl(0);
-    rg->maximum = float2ctrl(1.0f);
-    rg->minimum = float2ctrl(0);
 
-    rg->slope = float2ctrl(0);
-
-    return GMP_EC_OK;
-}
-
-ec_gt ctl_setup_ramp_gen(ctl_src_rg_t *rg, ctrl_gt slope, parameter_gt amp_pos, parameter_gt amp_neg)
-{
     rg->maximum = float2ctrl(amp_pos);
     rg->minimum = float2ctrl(amp_neg);
 
     rg->slope = slope;
-
-    return GMP_EC_OK;
 }
 
-ec_gt ctl_setup_ramp_gen_via_amp_freq(ctl_src_rg_t *rg, parameter_gt isr_freq, parameter_gt target_freq,
-                                      parameter_gt amp_pos, parameter_gt amp_neg)
+void ctl_init_ramp_gen_via_amp_freq(ctl_src_rg_t *rg, parameter_gt isr_freq, parameter_gt target_freq,
+                                    parameter_gt amp_pos, parameter_gt amp_neg)
 {
+    rg->current = float2ctrl(0);
+
     rg->maximum = float2ctrl(amp_pos);
     rg->minimum = float2ctrl(amp_neg);
-	
-	float a = isr_freq / target_freq;
-	float b = amp_pos - amp_neg;
 
-    //rg->slope = float2ctrl((amp_pos - amp_neg) / (isr_freq / target_freq));
-	rg->slope = float2ctrl( b / a);
+    float a = isr_freq / target_freq;
+    float b = amp_pos - amp_neg;
 
-    return GMP_EC_OK;
+    // rg->slope = float2ctrl((amp_pos - amp_neg) / (isr_freq / target_freq));
+    rg->slope = float2ctrl(b / a);
+}
+
+//////////////////////////////////////////////////////////////////////////
+// Discrete PID controller
+
+#include <ctl/component/intrinsic/discrete/discrete_pid.h>
+
+void ctl_init_discrete_pid(discrete_pid_t *pid, parameter_gt kp, parameter_gt Ti, parameter_gt Td, parameter_gt fs)
+{
+    pid->input = 0;
+    pid->input_1 = 0;
+    pid->input_2 = 0;
+    pid->output = 0;
+    pid->output_1 = 0;
+
+    ctrl_gt ki = kp / Ti;
+    ctrl_gt kd = kp * Td;
+
+    pid->b2 = kd * fs;
+    pid->b1 = ki / 2 / fs - kp - 2 * kd * fs;
+    pid->b0 = kp + kd * fs + ki / 2 / fs;
+
+    output_max = float2ctrl(1.0);
+    output_min = float2ctrl(-1.0);
 }

@@ -30,9 +30,11 @@ extern "C"
         fast_gt flag_polarity;
     } ctl_hcc_t;
 
-    ec_gt ctl_init_hcc(ctl_hcc_t *hcc);
+    //ec_gt ctl_init_hcc(ctl_hcc_t *hcc);
 
-    ec_gt ctl_setup_hcc(ctl_hcc_t *hcc, fast_gt flag_polarity, ctrl_gt half_width);
+    //ec_gt ctl_setup_hcc(ctl_hcc_t *hcc, fast_gt flag_polarity, ctrl_gt half_width);
+
+    void ctl_init_hcc(ctl_hcc_t *hcc, fast_gt flag_polarity, ctrl_gt half_width);
 
     GMP_STATIC_INLINE
     fast_gt ctl_step_hcc(ctl_hcc_t *hcc, ctrl_gt input)

@@ -9,7 +9,8 @@
  *
  */
 
-#include <gmp_core.h>
+//#include <gmp_core.h>
+#include <ctl/component/interface/interface_base.h>
 
 #ifndef _FILE_ADC_CHANNEL_H_
 #define _FILE_ADC_CHANNEL_H_
@@ -21,6 +22,10 @@ extern "C"
 
     typedef struct _tag_adc_channel_t
     {
+        // OUTPUT the ADC data in ctrl_gt type
+        // Formal expression: value = gain * (raw - gain);
+        adc_ift control_port;
+        
         // INPUT raw data from adc
         adc_gt raw;
 
@@ -38,15 +43,10 @@ extern "C"
         // Negative gain is permitted 
         ctrl_gt gain;
 
-        // OUTPUT the ADC data in ctrl_gt type
-        // Formal expression: value = gain * (raw - gain);
-        ctrl_gt value;
     } adc_channel_t;
 
     // init object function
-    ec_gt ctl_init_adc_channel(adc_channel_t *adc_obj);
-
-    ec_gt ctl_setup_adc_channel(adc_channel_t *adc_obj, ctrl_gt gain, ctrl_gt bias, fast_gt resolution, fast_gt iqn);
+    void ctl_init_adc_channel(adc_channel_t *adc_obj, ctrl_gt gain, ctrl_gt bias, fast_gt resolution, fast_gt iqn);
 
     // transfer raw data to final value
     GMP_STATIC_INLINE
@@ -60,22 +60,24 @@ extern "C"
 #elif defined CTRL_GT_IS_FLOAT
     // for float point number, transfer ADC data to p.u.
     ctrl_gt raw_data = (ctrl_gt)adc_obj->raw / (1 << adc_obj->resolution);
+#else
+#error("The system does not specify ctrl_gt is float or fixed. You should define CTRL_GT_IS_FLOAT or CTRL_GT_IS_FIXED.")
 #endif // CTRL_GT_IS_XXX
 
         // remove bias
         ctrl_gt raw_without_bias = raw_data - adc_obj->bias;
 
         // Gain
-        adc_obj->value = ctl_mul(raw_without_bias, adc_obj->gain);
+        adc->control_port.value = ctl_mul(raw_without_bias, adc_obj->gain);
 
-        return adc_obj->value;
+        return adc->control_port.value;
     }
 
     // get result
     GMP_STATIC_INLINE
     ctrl_gt ctl_get_adc_data(adc_channel_t *adc)
     {
-        return adc->value;
+        return adc->control_port.value;
     }
 
     // save bias
@@ -92,6 +94,13 @@ extern "C"
         return adc->bias;
     }
 
+    // get control port
+    GMP_STATIC_INLINE
+    adc_ift *ctl_get_adc_channel_ctrl_port(adc_channel_t *adc)
+    {
+        return &adc->control_port;
+    }
+
     //////////////////////////////////////////////////
     // Dual channel ADC
 
@@ -100,6 +109,10 @@ extern "C"
     // or use it as a differential pair.
     typedef struct _tag_adc_dual_channel_t
     {
+        // OUTPUT the ADC data in ctrl_gt type
+        // Formal expression: value = gain * (raw - gain);
+        dual_adc_ift control_port;
+
         // INPUT raw data from adc
         adc_gt raw[2];
 
@@ -114,15 +127,18 @@ extern "C"
         // Negative gain is permitted 
         ctrl_gt gain[2];
 
-        // OUTPUT the ADC data in ctrl_gt type
-        // Formal expression: value = gain * (raw - gain);
-        ctrl_gt value[2];
+        //// OUTPUT the ADC data in ctrl_gt type
+        //// Formal expression: value = gain * (raw - gain);
+        //ctrl_gt value[2];
     } adc_dual_channel_t;
 
-    ec_gt ctl_init_adc_dual_channel(adc_dual_channel_t *adc);
+    //ec_gt ctl_init_adc_dual_channel(adc_dual_channel_t *adc);
 
-    ec_gt ctl_setup_adc_dual_channel(adc_dual_channel_t *adc, ctrl_gt gain, ctrl_gt bias, fast_gt resolution,
-                                     fast_gt iqn);
+    //ec_gt ctl_setup_adc_dual_channel(adc_dual_channel_t *adc, ctrl_gt gain, ctrl_gt bias, fast_gt resolution,
+    //                                 fast_gt iqn);
+
+    void ctl_init_adc_dual_channel(adc_dual_channel_t *adc, ctrl_gt gain, ctrl_gt bias, fast_gt resolution,
+                                   fast_gt iqn);
 
     GMP_STATIC_INLINE
     void ctl_step_adc_dual_channel(adc_dual_channel_t *adc_obj, adc_gt raw1, adc_gt raw2)
@@ -143,55 +159,63 @@ extern "C"
 #elif defined CTRL_GT_IS_FLOAT
         // for float point number, transfer ADC data to p.u.
         raw_data = (ctrl_gt)adc_obj->raw[i] / (1 << adc_obj->resolution);
+#else
+#error("The system does not specify ctrl_gt is float or fixed. You should define CTRL_GT_IS_FLOAT or CTRL_GT_IS_FIXED.")
 #endif // CTRL_GT_IS_XXX
 
             // remove bias
             raw_without_bias = raw_data - adc_obj->bias[i];
 
             // Gain
-            adc_obj->value[i] = ctl_mul(raw_without_bias, adc_obj->gain[i]);
+            adc->control_port.value.dat[i] = ctl_mul(raw_without_bias, adc_obj->gain[i]);
         }
-        return;
     }
 
     GMP_STATIC_INLINE
     void ctl_get_adc_dual_channel(adc_dual_channel_t *adc, ctrl_gt *dat1, ctrl_gt *dat2)
     {
-        *dat1 = adc->value[0];
-        *dat2 = adc->value[1];
+        *dat1 = adc->control_port.value.dat[0];
+        *dat2 = adc->control_port.value.dat[1];
     }
 
     GMP_STATIC_INLINE
-    ctrl_gt ctl_get_adc_dual_channel1(adc_dual_channel_t *adc, ctrl_gt *dat1, ctrl_gt *dat2)
+    ctrl_gt ctl_get_adc_dual_channel1(adc_dual_channel_t *adc)
     {
-        return adc->value[0];
+        return adc->control_port.value.dat[0];
     }
 
     GMP_STATIC_INLINE
-    ctrl_gt ctl_get_adc_dual_channel2(adc_dual_channel_t *adc, ctrl_gt *dat1, ctrl_gt *dat2)
+    ctrl_gt ctl_get_adc_dual_channel2(adc_dual_channel_t *adc)
     {
-        return adc->value[1];
+        return adc->control_port.value.dat[1];
     }
 
     // positive - negative
     GMP_STATIC_INLINE
     ctrl_gt ctl_get_adc_dual_channel_diff(adc_dual_channel_t *adc)
     {
-        return adc->value[0] - adc->value[1];
+        return adc->control_port.value.dat[0] - adc->control_port.value.dat[1];
     }
 
     // (positive + negative) / 2
     GMP_STATIC_INLINE
     ctrl_gt ctl_get_adc_dual_channel_comm(adc_dual_channel_t *adc)
     {
-        return ctl_div2(adc->value[0] + adc->value[1]);
+        return ctl_div2(adc->control_port.value.dat[0] + adc->control_port.value.dat[1]);
     }
 
     GMP_STATIC_INLINE
     void ctl_get_adc_dual_channel_via_vector2(adc_dual_channel_t *adc, ctl_vector2_t *vector)
     {
-        vector->dat[0] = adc->value[0];
-        vector->dat[1] = adc->value[1];
+        vector->dat[0] = adc->control_port.value.dat[0];
+        vector->dat[1] = adc->control_port.value.dat[1];
+    }
+
+    // get control port
+    GMP_STATIC_INLINE
+    dual_adc_ift *ctl_get_adc_dual_channel_ctrl_port(adc_dual_channel_t *adc)
+    {
+        return &adc->control_port;
     }
 
     //////////////////////////////////////////////////////////////////////////
@@ -201,6 +225,10 @@ extern "C"
     // Such as motor controller and power grid application
     typedef struct _tag_adc_tri_channel_t
     {
+        // OUTPUT the ADC data in ctrl_gt type
+        // Formal expression: value = gain * (raw - gain);
+        tri_adc_ift control_port;
+
         // INPUT raw data from adc
         adc_gt raw[3];
 
@@ -215,9 +243,6 @@ extern "C"
         // Negative gain is permitted 
         ctrl_gt gain[3];
 
-        // OUTPUT the ADC data in ctrl_gt type
-        // Formal expression: value = gain * (raw - gain);
-        ctrl_gt value[3];
     } adc_tri_channel_t;
 
     ec_gt ctl_init_adc_tri_channel(adc_tri_channel_t *adc);
@@ -246,13 +271,15 @@ extern "C"
 #elif defined CTRL_GT_IS_FLOAT
         // for float point number, transfer ADC data to p.u.
         raw_data = (ctrl_gt)adc_obj->raw[i] / (1 << adc_obj->resolution);
+#else 
+#error("The system does not specify ctrl_gt is float or fixed. You should define CTRL_GT_IS_FLOAT or CTRL_GT_IS_FIXED.")
 #endif // CTRL_GT_IS_XXX
 
             // remove bias
             raw_without_bias = raw_data - adc_obj->bias[i];
 
             // Gain
-            adc_obj->value[i] = ctl_mul(raw_without_bias, adc_obj->gain[i]);
+            adc_obj->control_port.value.dat[i] = ctl_mul(raw_without_bias, adc_obj->gain[i]);
         }
 
 // // NOTE: test if extend code is great choice, result no.
@@ -310,9 +337,9 @@ extern "C"
     GMP_STATIC_INLINE
     void ctl_get_adc_tri_channel_via_vector3(adc_tri_channel_t *adc, ctl_vector3_t *vec)
     {
-        vec->dat[0] = adc->value[0];
-        vec->dat[1] = adc->value[1];
-        vec->dat[2] = adc->value[2];
+        vec->dat[0] = adc->value->dat[0];
+        vec->dat[1] = adc->value->dat[1];
+        vec->dat[2] = adc->value->dat[2];
     }
 
     GMP_STATIC_INLINE
@@ -326,6 +353,14 @@ extern "C"
     {
         return adc->bias[index];
     }
+    
+    // get control port
+    GMP_STATIC_INLINE
+    tri_adc_ift *ctl_get_adc_tri_channel_ctrl_port(adc_tri_channel_t *adc)
+    {
+        return &adc->control_port;
+    }
+
 
     //////////////////////////////////////////////////////////////////////////
     // ADC bias calibrator
@@ -335,10 +370,10 @@ extern "C"
     typedef struct _tag_adc_bias_calibrator_t
     {
         // OUTPUT ADC bias data
-        ctrl_gt bias_output;
+        //ctrl_gt bias_output;
 
         // output flag
-        fast_gt flag_output_valid;
+        //fast_gt flag_output_valid;
 
         // INPUT ADC RAW data
         ctrl_gt raw;
@@ -346,43 +381,71 @@ extern "C"
         // tools filter for RAW data.
         ctl_filter_IIR2_t filter;
 
-        // total observation period
-        uint32_t total_period;
-
-        // current period
-        uint32_t current_period;
-
-        // start tick
-        // start period == 0 means need a brand new beginning.
-        uint32_t start_period;
-
-        // filter tick
+       // filter tick
         uint32_t filter_tick;
+
+        // total observation period
+        uint32_t filter_period;
+
+        //// current period
+        //uint32_t current_period;
+
+        //// start tick
+        //// start period == 0 means need a brand new beginning.
+        //uint32_t start_period;
+
+        // filter enable
+        fast_gt enable_filter;
+
+        // output valid
+        fast_gt output_valid;
 
     } adc_bias_calibrator_t;
 
-    ec_gt ctl_init_adc_bias_calibrator(adc_bias_calibrator_t *obj);
+    //ec_gt ctl_init_adc_bias_calibrator(adc_bias_calibrator_t *obj);
 
-    ec_gt ctl_setup_adc_bias_calibrator(adc_bias_calibrator_t *obj, ctl_filter_IIR2_setup_t *filter_parameter);
+    //ec_gt ctl_setup_adc_bias_calibrator(adc_bias_calibrator_t *obj, ctl_filter_IIR2_setup_t *filter_parameter);
 
-    void ctl_restart_adc_bias_calibrator(adc_bias_calibrator_t *obj);
+    void ctl_init_adc_bias_calibrator(adc_bias_calibrator_t *obj, ctl_filter_IIR2_setup_t *filter_parameter);
 
-    // return value means if the calibration output is valid
-    fast_gt ctl_step_adc_bias_calibrator(adc_bias_calibrator_t *obj, uint32_t main_isr_tick, ctrl_gt adc_value);
+    void ctl_enable_adc_calibrator(adc_bias_calibrator_t *obj);
 
-    // get calibrated bias
+    // judge if current ADC calibrate is completed.
     GMP_STATIC_INLINE
-    ctrl_gt ctl_get_adc_bias_calibrator_result(adc_bias_calibrator_t *obj)
+    fast_gt ctl_is_adc_calibrator_cmpt(adc_bias_calibrator_t *obj)
     {
-        return obj->bias_output;
+        // return ((obj->current_period - obj->start_period) > filter_period) ? 1 : 0;
+        return (obj->filter_tick > obj->filter_period) ? 1 : 0;
     }
 
-    // judge if calibration process is complete
+    // This function should called in Main ISR function
+    // When user enable ADC calibrator this function may running.
+    // User should judge if calibrate is complete by function @ctl_is_adc_calibrator_cmpt,
+    // and wait until adc calibrator is completed. Then call @ctl_get_adc_calibrator_result
+    // to get result, and move to next position.
     GMP_STATIC_INLINE
-    fast_gt ctl_is_adc_calibration_cmpt(adc_bias_calibrator_t *obj)
+    void ctl_step_adc_calibrator(adc_bias_calibrator_t *obj, ctrl_gt adc_value)
     {
-        return obj->flag_output_valid;
+        if (obj->enable_filter)
+        {
+            ctl_step_filter_iir2(&obj->filter, adc_value);
+            obj->filter_tick += 1;
+
+            if (ctl_is_adc_calibrator_cmpt(obj))
+            {
+                obj->enable_filter = 0;
+                obj->output_valid = 1;
+            }
+        }
     }
+
+    // Get ADC calibrate result
+    GMP_STATIC_INLINE
+    ctrl_gt ctl_get_adc_calibrator_result(adc_bias_calibrator_t *obj)
+    {
+        return ctl_get_filter_iir2_output(&obj->filter);
+    }
+
 
 #ifdef __cplusplus
 }

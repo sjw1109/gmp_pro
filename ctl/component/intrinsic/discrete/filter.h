@@ -35,16 +35,24 @@ extern "C"
         ctrl_gt out;
     } ctl_low_pass_filter_t;
 
-    ec_gt ctl_init_lp_filter(ctl_low_pass_filter_t *lpf);
+    // ec_gt ctl_init_lp_filter(ctl_low_pass_filter_t *lpf);
 
-    ec_gt ctl_setup_lp_filter(ctl_low_pass_filter_t *lpf,
-                              parameter_gt fs,  // Sample rate
-                              parameter_gt fc); // cut frequency
+    // ec_gt ctl_setup_lp_filter(ctl_low_pass_filter_t *lpf,
+    //                           parameter_gt fs,  // Sample rate
+    //                           parameter_gt fc); // cut frequency
+
+    // init a low-pass filter object
+    // @param fs sample rate
+    // @param fc cut rate
+    void ctl_init_lp_filter(ctl_low_pass_filter_t *lpf, parameter_gt fs, parameter_gt fc);
 
     // get filter coefficient via parameter
     ctrl_gt ctl_helper_lp_filter(parameter_gt fs, // Sample rate
                                  parameter_gt fc  // cut frequency
-    );
+    )
+    {
+        return float2ctrl(fc * 2 * PI / fs);
+    }
 
     GMP_STATIC_INLINE
     ctrl_gt ctl_step_lowpass_filter(ctl_low_pass_filter_t *lpf, ctrl_gt input)
@@ -116,6 +124,12 @@ extern "C"
         }
     }
 
+    GMP_STATIC_INLINE
+    void ctl_get_filter_iir2_output(ctl_filter_IIR2_t *obj)
+    {
+        return obj->out;
+    }
+
     typedef enum _tag_filter_IIR2_type_t
     {
         FILTER_IIR2_TYPE_LOWPASS = 0,
@@ -142,11 +156,13 @@ extern "C"
 
     } ctl_filter_IIR2_setup_t;
 
-    ec_gt ctl_init_filter_iir2(ctl_filter_IIR2_t *obj);
+    //ec_gt ctl_init_filter_iir2(ctl_filter_IIR2_t *obj);
+
+    //// Design a 2rd Order IIR filter based on center frequency and Q
+    //ec_gt ctl_setup_filter_iir2(ctl_filter_IIR2_t *obj, ctl_filter_IIR2_setup_t *setup_obj);
 
     // Design a 2rd Order IIR filter based on center frequency and Q
-    ec_gt ctl_setup_filter_iir2(ctl_filter_IIR2_t *obj, ctl_filter_IIR2_setup_t *setup_obj);
-
+    ec_gt ctl_init_filter_iir2(ctl_filter_IIR2_t *obj, ctl_filter_IIR2_setup_t *setup_obj)
 
     //////////////////////////////////////////////////////////////////////////
     // FIR filter
@@ -154,7 +170,7 @@ extern "C"
 
     typedef struct _tag_filter_FIR_t
     {
-        // pointer to parameter  
+        // pointer to parameter
         ctrl_gt *parameters;
 
         // pointer to data buffer
@@ -171,7 +187,7 @@ extern "C"
 
         // filter output
         ctrl_gt output;
-    }filter_fir_t;
+    } filter_fir_t;
 
 #ifdef __cplusplus
 }
