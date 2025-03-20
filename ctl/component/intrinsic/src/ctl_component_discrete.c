@@ -239,8 +239,15 @@ void ctl_init_ramp_gen(ctl_src_rg_t *rg, ctrl_gt slope, parameter_gt amp_pos, pa
     rg->slope = slope;
 }
 
-void ctl_init_ramp_gen_via_amp_freq(ctl_src_rg_t *rg, parameter_gt isr_freq, parameter_gt target_freq,
-                                    parameter_gt amp_pos, parameter_gt amp_neg)
+void ctl_init_ramp_gen_via_amp_freq(
+    // pointer to ramp generator object
+    ctl_src_rg_t *rg,
+    // isr frequency, unit Hz
+    parameter_gt isr_freq,
+    // target frequency, unit Hz
+    parameter_gt target_freq,
+    // ramp range
+    parameter_gt amp_pos, parameter_gt amp_neg)
 {
     rg->current = float2ctrl(0);
 
@@ -259,7 +266,15 @@ void ctl_init_ramp_gen_via_amp_freq(ctl_src_rg_t *rg, parameter_gt isr_freq, par
 
 #include <ctl/component/intrinsic/discrete/discrete_pid.h>
 
-void ctl_init_discrete_pid(discrete_pid_t *pid, parameter_gt kp, parameter_gt Ti, parameter_gt Td, parameter_gt fs)
+void ctl_init_discrete_pid(
+    // pointer to pid object
+    discrete_pid_t *pid,
+    // gain of the pid controller
+    parameter_gt kp,
+    // Time constant for integral and differential part, unit Hz
+    parameter_gt Ti, parameter_gt Td,
+    // sample frequency, unit Hz
+    parameter_gt fs)
 {
     pid->input = 0;
     pid->input_1 = 0;
@@ -267,13 +282,88 @@ void ctl_init_discrete_pid(discrete_pid_t *pid, parameter_gt kp, parameter_gt Ti
     pid->output = 0;
     pid->output_1 = 0;
 
-    ctrl_gt ki = kp / Ti;
-    ctrl_gt kd = kp * Td;
+    parameter_gt ki = kp / Ti;
+    parameter_gt kd = kp * Td;
 
-    pid->b2 = kd * fs;
-    pid->b1 = ki / 2 / fs - kp - 2 * kd * fs;
-    pid->b0 = kp + kd * fs + ki / 2 / fs;
+    parameter_gt b2 = kd * fs;
+    parameter_gt b1 = ki / 2 / fs - kp - 2 * kd * fs;
+    parameter_gt b0 = kp + kd * fs + ki / 2 / fs;
+
+    pid->b2 = float2ctrl(b2);
+    pid->b1 = float2ctrl(b1);
+    pid->b0 = float2ctrl(b0);
 
     output_max = float2ctrl(1.0);
     output_min = float2ctrl(-1.0);
+}
+
+//////////////////////////////////////////////////////////////////////////
+// Discrete track pid
+
+#include <ctl/component/intrinsic/discrete/track_discrete_pid.h>
+
+void ctl_init_discrete_track_pid(
+    // pointer to track pid object
+    track_discrete_pid_t *tp,
+    // pid parameters, unit sec
+    parameter_gt kp, parameter_gt Ti, parameter_gt Td,
+    // saturation limit
+    ctrl_gt sat_max, ctrl_gt sat_min,
+    // slope limit, unit: p.u./sec
+    parameter_gt slope_max, parameter_gt slope_min,
+    // division factor:
+    uint32_t division,
+    // controller frequency, unit Hz
+    parameter_gt fs)
+{
+    ctl_init_discrete_pid(&tp->pid, kp, Ti, Td, fs);
+    ctl_set_discrete_pid_limit(&tp->pid, sat_max, sat_min);
+    ctl_init_slope_limit(&tp->traj, float2ctrl(slope_min / fs), float2ctrl(slope_max / fs));
+    ctl_init_divider(&tp->div, division);
+}
+
+//////////////////////////////////////////////////////////////////////////
+// Pole-Zero Compensator
+
+#include <ctl/component/intrinsic/discrete/PZCompensator.h>
+
+// unit Hz
+void ctl_init_2p2z(
+    // pointer to a 2p2z compensator
+    ctrl_2p2z_t *ctrl,
+    // two zero frequency, unit Hz
+    parameter_gt f_z0, parameter_gt f_z1,
+    // one pole frequency, unit Hz
+    parameter_gt f_p1,
+    // sample frequency
+    parameter_gt fs)
+{
+    parameter_gt z0 = f_z0 * 2 * pi;
+    parameter_gt z1 = f_z1 * 2 * pi;
+    parameter_gt p1 = f_p1 * 2 * pi;
+
+    // discrete controller parameter
+    parameter_gt gain_discrete = gain * (1 / 2 / fs / (p1 + 2 * fs));
+    parameter_gt b0 = (z1 + 2 * fs) * (z0 + 2 * fs);
+    parameter_gt b1 = ((z0 + 2 * fs) * (z1 - 2 * fs) + (z1 + 2 * fs) * (z0 - 2 * fs));
+    parameter_gt b2 = (z1 - 2 * fs) * (z0 - 2 * fs);
+    parameter_gt a1 = -(4 * fs / (p1 + 2 * fs));
+    parameter_gt a2 = (2 * fs - p1) / (2 * fs + p1);
+
+    ctrl->a1 = float2ctrl(a1);
+    ctrl->a2 = float2ctrl(a2);
+    ctrl->b0 = float2ctrl(b0);
+    ctrl->b1 = float2ctrl(b1);
+    ctrl->b2 = float2ctrl(b2);
+
+    ctrl->out_max = float2ctrl(1.0);
+    ctrl->out_min = float2ctrl(-1.0);
+
+    ctrl->output_1 = 0;
+    ctrl->output_2 = 0;
+    ctrl->input_1 = 0;
+    ctrl->input_2 = 0;
+
+    ctrl->output = 0;
+    ctrl->input = 0;
 }

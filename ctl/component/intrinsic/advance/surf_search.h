@@ -24,11 +24,14 @@ extern "C"
 
     } linear_lut_t;
 
-    // init a linear LUT object
-    void ctl_init_linear_lut(linear_lut_t *lut);
+    //// init a linear LUT object
+    //void ctl_init_linear_lut(linear_lut_t *lut);
 
-    // setup a LUT object based on specified content.
-    void ctl_setup_linear_lut(linear_lut_t *lut, ctrl_gt *content, size_gt lut_size);
+    //// setup a LUT object based on specified content.
+    //void ctl_setup_linear_lut(linear_lut_t *lut, ctrl_gt *content, size_gt lut_size);
+
+    // init a linear LUT object
+    void ctl_init_linear_lut(linear_lut_t *lut, ctrl_gt *content, size_gt lut_size);
 
     // LUT content is
     //
@@ -164,10 +167,14 @@ extern "C"
 
     } surf_lut_t;
 
-    void ctl_init_surf_lut(surf_lut_t *lut);
+    //void ctl_init_surf_lut(surf_lut_t *lut);
 
-    void ctl_setup_surf_lut(surf_lut_t *lut, ctrl_gt *asix_x, size_gt size_x, ctrl_gt *asix_y, size_gt size_y,
-                            ctrl_gt **surface);
+    //void ctl_setup_surf_lut(surf_lut_t *lut, ctrl_gt *asix_x, size_gt size_x, ctrl_gt *asix_y, size_gt size_y,
+    //                        ctrl_gt **surface);
+
+    void ctl_init_surf_lut(surf_lut_t *lut, ctrl_gt *asix_x, size_gt size_x, ctrl_gt *asix_y, size_gt size_y,
+                           ctrl_gt **surface);
+
 
     // Obtain the value of the bottom left corner closest to the target point
     GMP_STATIC_INLINE
@@ -312,10 +319,13 @@ extern "C"
         ctrl_gt **surface; // point to a `surface[x_sub+1][y_sub+1];` array
     } uniform_surf_lut_t;
 
-    void ctl_init_uniform_surf_lut(uniform_surf_lut_t *lut);
+    //void ctl_init_uniform_surf_lut(uniform_surf_lut_t *lut);
 
-    void ctl_setup_uniform_surf_lut(uniform_surf_lut_t *lut, ctrl_gt x_inf, ctrl_gt x_sup, size_gt x_sub, ctrl_gt y_inf,
-                                    ctrl_gt y_sup, size_gt y_sub, ctrl_gt **surface);
+    //void ctl_setup_uniform_surf_lut(uniform_surf_lut_t *lut, ctrl_gt x_inf, ctrl_gt x_sup, size_gt x_sub, ctrl_gt y_inf,
+    //                                ctrl_gt y_sup, size_gt y_sub, ctrl_gt **surface);
+
+    void ctl_init_uniform_surf_lut(uniform_surf_lut_t *lut, ctrl_gt x_inf, ctrl_gt x_sup, size_gt x_sub, ctrl_gt y_inf,
+                                   ctrl_gt y_sup, size_gt y_sub, ctrl_gt **surface);
 
     // get uniform surface LUT result
     GMP_STATIC_INLINE

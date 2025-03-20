@@ -36,14 +36,17 @@
 //}
 
  
-void ctl_init_pid(pid_regular_t *hpid, ctrl_gt kp, ctrl_gt ki, ctrl_gt kd, ctrl_gt out_min, ctrl_gt out_max)
+void ctl_init_pid(pid_regular_t *hpid, ctrl_gt kp, ctrl_gt ki, ctrl_gt kd)
 {
     hpid->kp = kp;
     hpid->ki = ki;
     hpid->kd = kd;
 
-    hpid->out_min = out_min;
-    hpid->out_max = out_max;
+    //hpid->out_min = out_min;
+    //hpid->out_max = out_max;
+
+    hpid->out_min = float2ctrl(-1.0f); 
+    hpid->out_max = float2ctrl(1.0f);
 
     hpid->out = 0;
     hpid->dn = 0;
@@ -77,15 +80,55 @@ void ctl_init_pid(pid_regular_t *hpid, ctrl_gt kp, ctrl_gt ki, ctrl_gt kd, ctrl_
 //    return GMP_EC_OK;
 //}
 
-void ctl_setup_saturation(saturation_t *obj, ctrl_gt out_min, ctrl_gt out_max)
+void ctl_init_saturation(ctl_saturation_t *obj, ctrl_gt out_min, ctrl_gt out_max)
 {
     obj->out_min = out_min;
     obj->out_max = out_max;
 }
 
-// The following function has move to header file
-void ctl_set_saturation(saturation_t *obj, ctrl_gt out_min, ctrl_gt out_max)
+//// The following function has move to header file
+//void ctl_set_saturation(saturation_t *obj, ctrl_gt out_min, ctrl_gt out_max)
+//{
+//    obj->out_min = out_min;
+//    obj->out_max = out_max;
+//}
+
+
+//////////////////////////////////////////////////////////////////////////
+// Track_PID.h
+//
+
+#include <ctl/component/intrinsic/combo/track_pid.h>
+
+// ec_gt ctl_init_track_pid(ctl_track_pid_t *tp)
+//{
+//     ctl_init_divider(&tp->div);
+//     ctl_init_slope_limit(&tp->traj);
+//     ctl_init_pid(&tp->pid);
+//
+//     return GMP_EC_OK;
+// }
+
+void ctl_init_track_pid(ctl_track_pid_t *tp,
+                        // pid parameters
+                        ctrl_gt kp, ctrl_gt ki, ctrl_gt kd,
+                        // saturation limit
+                        ctrl_gt sat_min, ctrl_gt sat_max,
+                        // slope limit
+                        ctrl_gt slope_min, ctrl_gt slope_max,
+                        // division factor
+                        uint32_t division)
 {
-    obj->out_min = out_min;
-    obj->out_max = out_max;
+    ctl_init_slope_limit(&tp->traj, slope_min, slope_max);
+    ctl_init_divider(&tp->div, division);
+    ctl_init_pid(&tp->pid, kp, ki, kd);
+    ctl_set_pid_limit(&tp->pid, sat_min, sat_max);
 }
+
+//// The following function has moved to header file.
+// void ctl_clear_track_pid(ctl_track_pid_t *tp)
+//{
+//     ctl_clear_pid(&tp->pid);
+//     ctl_clear_divider(&tp->div);
+//     ctl_clear_limit_slope(&tp->traj);
+// }

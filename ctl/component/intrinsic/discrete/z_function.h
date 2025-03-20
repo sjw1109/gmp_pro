@@ -17,6 +17,8 @@
  * 2022.03.10 | 1.0.1:0001 | Javnson  | Add discrete time for discrete system. |
  * 2022.03.27 | 1.0.1:0002 | Javnson  | Add dcs_param_t, dcs_uint_t, dcs_difference_t |
  *
+ * 
+ * This file may be removed.
  */
 
 //#include <emlib_setting.h>

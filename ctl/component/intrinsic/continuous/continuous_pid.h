@@ -84,15 +84,15 @@ extern "C"
     }
 
     // initialize function
-    //ec_gt ctl_init_pid(pid_regular_t *hpid);
+    // ec_gt ctl_init_pid(pid_regular_t *hpid);
 
-    //ec_gt ctl_setup_pid(pid_regular_t *hpid, ctrl_gt kp, ctrl_gt ki, ctrl_gt kd, ctrl_gt out_min, ctrl_gt out_max);
+    // ec_gt ctl_setup_pid(pid_regular_t *hpid, ctrl_gt kp, ctrl_gt ki, ctrl_gt kd, ctrl_gt out_min, ctrl_gt out_max);
 
-    //void ctl_set_pid_parameter(pid_regular_t *hpid, ctrl_gt kp, ctrl_gt ki, ctrl_gt kd);
+    // void ctl_set_pid_parameter(pid_regular_t *hpid, ctrl_gt kp, ctrl_gt ki, ctrl_gt kd);
 
-    //void ctl_set_pid_limit(pid_regular_t *hpid, ctrl_gt out_min, ctrl_gt out_max);
+    // void ctl_set_pid_limit(pid_regular_t *hpid, ctrl_gt out_min, ctrl_gt out_max);
 
-    void ctl_init_pid(pid_regular_t *hpid, ctrl_gt kp, ctrl_gt ki, ctrl_gt kd, ctrl_gt out_min, ctrl_gt out_max);
+    void ctl_init_pid(pid_regular_t *hpid, ctrl_gt kp, ctrl_gt ki, ctrl_gt kd);
 
     void ctl_set_pid_parameter(pid_regular_t *hpid, ctrl_gt kp, ctrl_gt ki, ctrl_gt kd)
     {

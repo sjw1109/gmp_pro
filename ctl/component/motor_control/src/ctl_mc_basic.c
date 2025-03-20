@@ -54,34 +54,70 @@
 #include <ctl/component/motor_control/basic/encoder.h>
 
 // Absolute rotation position encoder
-void ctl_init_pos_encoder(ctl_pos_encoder_t *enc)
+// 
+
+// void ctl_init_pos_encoder(ctl_pos_encoder_t *enc)
+//{
+//    // interface
+//    enc->encif.position = 0;
+//    enc->encif.elec_position = 0;
+//
+//    enc->offset = 0;
+//    enc->pole_pairs = 1;
+//    enc->position_base = 1;
+//}
+
+void ctl_init_pos_encoder(ctl_pos_encoder_t *enc, uint16_t poles, uint32_t position_base)
 {
-    // interface
     enc->encif.position = 0;
     enc->encif.elec_position = 0;
+    enc->encif.revolutions = 0;
 
     enc->offset = 0;
-    enc->pole_pairs = 1;
-    enc->position_base = 1;
+
+    enc->pole_pairs = poles;
+    enc->position_base = position_base;
 }
 
-void ctl_setup_pos_encoder(ctl_pos_encoder_t *enc, uint16_t poles, uint32_t position_base)
+void ctl_init_multiturn_pos_encoder(ctl_pos_multiturn_encoder_t *enc, uint16_t poles, uint32_t position_base)
 {
+    enc->encif.position = 0;
+    enc->encif.elec_position = 0;
+    enc->encif.revolutions = 0;
+
+    enc->offset = 0;
+
+    enc->pole_pairs = poles;
+    enc->position_base = position_base;
+}
+
+void ctl_init_autoturn_pos_encoder(ctl_pos_autoturn_encoder_t *enc, uint16_t poles, uint32_t position_base)
+{
+    enc->encif.position = 0;
+    enc->encif.elec_position = 0;
+    enc->encif.revolutions = 0;
+
+    enc->offset = 0;
+
     enc->pole_pairs = poles;
     enc->position_base = position_base;
 }
 
 // Speed position encoder
-void ctl_init_spd_encoder(ctl_spd_encoder_t *spd_encoder)
-{
-    spd_encoder->speed_base = 3000;
-    spd_encoder->encif.speed = 0;
-    spd_encoder->speed_krpm = 0;
-}
+//
 
-void ctl_setup_spd_encoder(ctl_spd_encoder_t *enc, parameter_gt speed_base)
+//void ctl_init_spd_encoder(ctl_spd_encoder_t *spd_encoder)
+//{
+//    spd_encoder->speed_base = 3000;
+//    spd_encoder->encif.speed = 0;
+//    spd_encoder->speed_krpm = 0;
+//}
+
+void ctl_init_spd_encoder(ctl_spd_encoder_t *enc, parameter_gt speed_base)
 {
     enc->speed_base = speed_base;
+    enc->encif.speed = 0;
+    enc->speed_krpm = 0;
 }
 
 void ctl_init_spd_calculator(ctl_spd_calculator_t *sc)
@@ -279,8 +315,6 @@ void ctl_dsn_pmsm_pmsm_flux_via_Kt(ctl_pmsm_dsn_consultant_t *pmsm_dsn, paramete
     pmsm_dsn->flux = Kt / ((parameter_gt)CTL_CONST_PARAM_3_OVER_2 * pmsm_dsn->pole_pair);
 }
 
-
-
 //////////////////////////////////////////////////////////////////////////
 // const f module
 
@@ -298,13 +332,9 @@ ec_gt ctl_init_const_f_controller(ctl_const_f_controller *ctrl)
 
 ec_gt ctl_setup_const_f_controller(ctl_const_f_controller *ctrl, parameter_gt frequency, parameter_gt isr_freq)
 {
-    //ctl_setup_ramp_gen(&ctrl->rg, float2ctrl(frequency / isr_freq), 1, 0);
+    // ctl_setup_ramp_gen(&ctrl->rg, float2ctrl(frequency / isr_freq), 1, 0);
 
     ctl_setup_ramp_gen_via_amp_freq(&ctrl->rg, isr_freq, frequency, 1, 0);
 
     return GMP_EC_OK;
 }
-
-
-
-

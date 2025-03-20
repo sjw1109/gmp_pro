@@ -54,6 +54,7 @@ extern "C"
         return float2ctrl(fc * 2 * PI / fs);
     }
 
+    // SISO standard interface
     GMP_STATIC_INLINE
     ctrl_gt ctl_step_lowpass_filter(ctl_low_pass_filter_t *lpf, ctrl_gt input)
     {
@@ -95,6 +96,7 @@ extern "C"
         ctrl_gt out;
     } ctl_filter_IIR2_t;
 
+    // SISO standard interface
     GMP_STATIC_INLINE
     ctrl_gt ctl_step_filter_iir2(ctl_filter_IIR2_t *obj, ctrl_gt input)
     {
@@ -156,19 +158,19 @@ extern "C"
 
     } ctl_filter_IIR2_setup_t;
 
-    //ec_gt ctl_init_filter_iir2(ctl_filter_IIR2_t *obj);
+    // ec_gt ctl_init_filter_iir2(ctl_filter_IIR2_t *obj);
 
     //// Design a 2rd Order IIR filter based on center frequency and Q
-    //ec_gt ctl_setup_filter_iir2(ctl_filter_IIR2_t *obj, ctl_filter_IIR2_setup_t *setup_obj);
+    // ec_gt ctl_setup_filter_iir2(ctl_filter_IIR2_t *obj, ctl_filter_IIR2_setup_t *setup_obj);
 
     // Design a 2rd Order IIR filter based on center frequency and Q
     ec_gt ctl_init_filter_iir2(ctl_filter_IIR2_t *obj, ctl_filter_IIR2_setup_t *setup_obj)
 
-    //////////////////////////////////////////////////////////////////////////
-    // FIR filter
-    //
+        //////////////////////////////////////////////////////////////////////////
+        // FIR filter
+        //
 
-    typedef struct _tag_filter_FIR_t
+        typedef struct _tag_filter_FIR_t
     {
         // pointer to parameter
         ctrl_gt *parameters;

@@ -200,7 +200,7 @@ typedef struct _tag_motor_driver_consultant_t
 
 	// Motor Driver parameters, PWM frequency
 	// unit, SI Hz
-	parameter_gt pmw_freq;
+	parameter_gt pwm_freq;
 
 	// Motor Driver parameters, control law frequency
 	// unit, SI Hz

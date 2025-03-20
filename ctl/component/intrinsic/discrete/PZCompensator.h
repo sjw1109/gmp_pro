@@ -17,8 +17,6 @@ extern "C"
 {
 #endif //__cplusplus
 
-
-
     // tex:
     //  Bilinear transform:
     //  $$s = \frac{2}{T} \frac{1-z^{-1}}{1+z^{-1}}$$
@@ -91,57 +89,91 @@ extern "C"
 
     typedef struct _tag_ctrl_2p2z_t
     {
+        // SISO standard interface
+
+        // input signal
+        ctrl_gt input;
+
         // u(n)
         ctrl_gt output;
 
-        // coef_a[0]->a_1, coef_a[0]->a_2
-        ctrl_gt coef_a[2];
-        // coef_b[0]->b_0, coef_b[1]->b_1, coef_b[2]->b_2
-        ctrl_gt coef_b[3];
-        // resp[0]->u(n-1), resp[1]->u(n-2)
-        ctrl_gt resp[2]; // response buffer
-        // input->e(n), exct[0]->e(n-1), exct[1]->e(n-2)
-        ctrl_gt exct[2]; // excitation buffer
+        //// coef_a[0]->a_1, coef_a[0]->a_2
+        // ctrl_gt coef_a[2];
+        //// coef_b[0]->b_0, coef_b[1]->b_1, coef_b[2]->b_2
+        // ctrl_gt coef_b[3];
+        //// resp[0]->u(n-1), resp[1]->u(n-2)
+        // ctrl_gt resp[2]; // response buffer
+        //// input->e(n), exct[0]->e(n-1), exct[1]->e(n-2)
+        // ctrl_gt exct[2]; // excitation buffer
+
+        ctrl_gt b0, b1, b2;
+        ctrl_gt a1, a2;
+
+        ctrl_gt gain;
+
+        ctrl_gt output_1;
+        ctrl_gt output_2;
+
+        ctrl_gt input_1;
+        ctrl_gt input_2;
 
         ctrl_gt out_max;
-        ctrl_gt out_sto_min; // generally is -0.9
         ctrl_gt out_min;
 
     } ctrl_2p2z_t;
 
     // unit Hz
-    void ctl_init_2p2z(ctrl_2p2z_t* ctrl, parameter_gt f_z0, parameter_gt f_z1, parameter_gt f_p1, parameter_gt fs)
-    {
-        parameter_gt z0 = f_z0 * 2 * pi;
-        parameter_gt z1 = f_z1 * 2 * pi;
-        parameter_gt p1 = f_p1 * 2 * pi;
+    void ctl_init_2p2z(ctrl_2p2z_t *ctrl, parameter_gt f_z0, parameter_gt f_z1, parameter_gt f_p1, parameter_gt fs);
 
-        // discrete controller parameter 
-        parameter_gt gain_discrete = gain * (1 / 2 / fs / (p1 + 2 * fs));
-        parameter_gt b0 = (z1 + 2 * fs) * (z0 + 2 * fs);
-        parameter_gt b1 = ((z0 + 2 * fs) * (z1 - 2 * fs) + (z1 + 2 * fs) * (z0 - 2 * fs));
-        parameter_gt b2 = (z1 - 2 * fs) * (z0 - 2 * fs);
-        parameter_gt a1 = -(4 * fs / (p1 + 2 * fs));
-        parameter_gt a2 = (2 * fs - p1) / (2 * fs + p1);
+    GMP_STATIC_INLINE
+    void ctl_set_2p2z_limit(ctrl_2p2z_t *ctrl, ctrl_gt limit_max, ctrl_gt limit_min)
+    {
+        ctrl->out_max = limit_max;
+        ctrl->out_min = limit_min;
     }
 
     GMP_STATIC_INLINE
-    ctrl_gt ctl_step_2p2z(ctrl_2p2z_t *c, ctrl_gt input)
+    ctrl_gt ctl_step_2p2z(ctrl_2p2z_t *ctrl, ctrl_gt input)
     {
-        c->output = c->coef_a[0] * c->resp[0] + c->coef_a[1] * c->resp[1];
-        c->output += c->coef_b[1] * c->exct[0] + c->coef_b[2] * c->exct[1];
-        c->output += c->coef_b[0] * input;
+        ctrl->input = input;
+        
+        ctrl->output = ctl_mul(ctrl->b0, ctrl->input);
+        ctrl->output += ctl_mul(ctrl->b1, ctrl->input_1);
+        ctrl->output += ctl_mul(ctrl->b2, ctrl->input_2);
 
-        c->exct[1] = c->exct[0];
-        c->exct[0] = input;
+        ctrl->output += ctl_mul(ctrl->output, ctrl->gain);
 
-        c->resp[1] = c->resp[0];
-        c->resp[0] = ctl_sat(c->output, c->out_sto_min, c->out_max);
+        ctrl->output -= ctl_mul(ctrl->a1, ctrl->output_1);
+        ctrl->output -= ctl_mul(ctrl->a2, ctrl->output_2);
 
-        c->output = ctl_sat(c->output, c->out_min, c->out_max);
+        // saturation
+        ctrl->output = ctl_sat(ctrl->output, ctrl->out_max, ctrl->out_min);
 
-        return c->output;
+        // round items
+        ctrl->input_2 = ctrl->input_1;
+        ctrl->input_1 = ctrl->input;
+
+        ctrl->output_2 = ctrl->output_1;
+        ctrl->output_1 = ctrl->output;
     }
+
+    // GMP_STATIC_INLINE
+    // ctrl_gt ctl_step_2p2z(ctrl_2p2z_t *c, ctrl_gt input)
+    //{
+    //     c->output = c->coef_a[0] * c->resp[0] + c->coef_a[1] * c->resp[1];
+    //     c->output += c->coef_b[1] * c->exct[0] + c->coef_b[2] * c->exct[1];
+    //     c->output += c->coef_b[0] * input;
+
+    //    c->exct[1] = c->exct[0];
+    //    c->exct[0] = input;
+
+    //    c->resp[1] = c->resp[0];
+    //    c->resp[0] = ctl_sat(c->output, c->out_sto_min, c->out_max);
+
+    //    c->output = ctl_sat(c->output, c->out_min, c->out_max);
+
+    //    return c->output;
+    //}
 
     // 3 poles 3 zeros controller
     // 3-order IIR filter

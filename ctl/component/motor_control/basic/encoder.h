@@ -47,9 +47,11 @@ extern "C"
 
     } ctl_pos_encoder_t;
 
-    void ctl_init_pos_encoder(ctl_pos_encoder_t *pos_encoder);
+    // void ctl_init_pos_encoder(ctl_pos_encoder_t *pos_encoder);
 
-    void ctl_setup_pos_encoder(ctl_pos_encoder_t *enc, uint16_t poles, uint32_t position_base);
+    // void ctl_setup_pos_encoder(ctl_pos_encoder_t *enc, uint16_t poles, uint32_t position_base);
+
+    void ctl_init_pos_encoder(ctl_pos_encoder_t *enc, uint16_t poles, uint32_t position_base);
 
     // This function may calculate and get angle from encoder source data
     GMP_STATIC_INLINE
@@ -102,7 +104,55 @@ extern "C"
     //////////////////////////////////////////////////////////////////////////
     // Multi-turns encoder
 
+    // User should input revolution of motor
     typedef struct _tag_ctl_pos_multiturn_encoder_t
+    {
+        // output interface, encoder output interface
+        ctl_rotation_encif_t encif;
+
+        // offset,
+        // position + offset means the true position
+        ctrl_gt offset;
+
+        // pole_pairs
+        // poles*(position + offset) = Electrical position
+        uint16_t poles;
+
+    } ctl_pos_multiturn_encoder_t;
+
+    void ctl_init_multiturn_pos_encoder(ctl_pos_multiturn_encoder_t *enc, uint16_t poles, uint32_t position_base);
+
+    // This function may calculate and get angle from encoder source data
+    GMP_STATIC_INLINE
+    ctrl_gt ctl_step_multiturn_pos_encoder(ctl_pos_multiturn_encoder_t *enc, uint32_t raw, int32_t revolutions)
+    {
+        // record raw data
+        enc->raw = raw;
+
+        // calculate absolute mechanical position
+        enc->encif.position = ctl_div(raw, enc->position_base);
+
+        // calculate electrical position
+        ctrl_gt elec_pos = enc->pole_pairs * (enc->encif.position + GMP_CONST_1 - enc->offset);
+        ctrl_gt elec_pos_pu = ctrl_mod_1(elec_pos);
+
+        // record electrical position data
+        enc->encif.elec_position = elec_pos_pu;
+
+        // record revolutions of motor
+        enc->encif.revolutions = revolutions;
+
+        // record last position
+        enc->last_pos = enc->encif.position;
+
+        return enc->encif.elec_position;
+    }
+
+    //////////////////////////////////////////////////////////////////////////
+    // Auto - turn position encoder
+
+    // only need position as input, turns will be calculated automatically.
+    typedef struct _tag_ctl_pos_autoturn_encoder_t
     {
 
         // output interface, encoder output interface
@@ -116,10 +166,47 @@ extern "C"
         // poles*(position + offset) = Electrical position
         uint16_t poles;
 
-        // lap counter
-        int32_t turns;
+        // record last position to calculate revolutions.
+        uint32_t last_pos;
 
-    } ctl_pos_multiturn_encoder_t;
+    } ctl_pos_autoturn_encoder_t;
+
+    void ctl_init_autoturn_pos_encoder(ctl_pos_autoturn_encoder_t *enc, uint16_t poles, uint32_t position_base);
+
+    // This function may calculate and get angle from encoder source data
+    GMP_STATIC_INLINE
+    ctrl_gt ctl_step_autoturn_pos_encoder(ctl_pos_autoturn_encoder_t *enc, uint32_t raw)
+    {
+        // record raw data
+        enc->raw = raw;
+
+        // calculate absolute mechanical position
+        enc->encif.position = ctl_div(raw, enc->position_base);
+
+        // calculate electrical position
+        ctrl_gt elec_pos = enc->pole_pairs * (enc->encif.position + GMP_CONST_1 - enc->offset);
+        ctrl_gt elec_pos_pu = ctrl_mod_1(elec_pos);
+
+        // record electrical position data
+        enc->encif.elec_position = elec_pos_pu;
+
+        // judge if multi turn count event has occurred.
+        if (enc->encif.position - enc->last_pos > GMP_CONST_1_OVER_2)
+        {
+            // position has a negative step
+            enc->encif.revolutions -= 1;
+        }
+        if (enc->last_pos - enc->encif.position > GMP_CONST_1_OVER_2)
+        {
+            // position has a positive step
+            enc->encif.revolutions += 1;
+        }
+
+        // record last position
+        enc->last_pos = enc->encif.position;
+
+        return enc->encif.elec_position;
+    }
 
     //////////////////////////////////////////////////////////////////////////
     // speed encoder
@@ -135,9 +222,11 @@ extern "C"
         ctrl_gt speed_krpm;
     } ctl_spd_encoder_t;
 
-    void ctl_init_spd_encoder(ctl_spd_encoder_t *spd_encoder);
+    //void ctl_init_spd_encoder(ctl_spd_encoder_t *spd_encoder);
 
-    void ctl_setup_spd_encoder(ctl_spd_encoder_t *enc, parameter_gt speed_base);
+    //void ctl_setup_spd_encoder(ctl_spd_encoder_t *enc, parameter_gt speed_base);
+
+    void ctl_init_spd_encoder(ctl_spd_encoder_t *enc, parameter_gt speed_base);
 
     //////////////////////////////////////////////////////////////////////////
     // Speed calculator based on position
@@ -185,17 +274,16 @@ extern "C"
         uint16_t pole_pairs,
         // just set this value to 1.
         // generally, speed_filter_fc approx to speed_calc freq divided by 5
-        parameter_gt speed_filter_fc, 
+        parameter_gt speed_filter_fc,
         // link to a position encoder
-        ctl_rotation_encif_t *pos_encif
-    );
+        ctl_rotation_encif_t *pos_encif);
 
     // Step Speed calculate function
     GMP_STATIC_INLINE
     void ctl_step_spd_calc(ctl_spd_calculator_t *sc)
     {
-//        ctrl_gt CTRL_PI = GMP_CONST_PI;
-//        ctrl_gt CTRL_2PI = GMP_CONST_2_PI;
+        //        ctrl_gt CTRL_PI = GMP_CONST_PI;
+        //        ctrl_gt CTRL_2PI = GMP_CONST_2_PI;
 
         if (ctl_step_divider(&sc->div))
         {
@@ -296,10 +384,8 @@ extern "C"
     //
     // }gmp_tamagawa_encoder_t;
 
-    #ifdef __cplusplus
+#ifdef __cplusplus
 }
 #endif // __cplusplus
 
 #endif // _FILE_ENCODER_H_
-
-
