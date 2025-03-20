@@ -37,8 +37,13 @@ typedef struct _tag_rx_buf_t
     // DC bus voltage
     uint32_t udc;
 
+    // DC bus current
+    uint32_t idc;
+
     // encoder feedback
     uint32_t encoder;
+
+    int32_t revolution;
 
 } rx_buf_t;
 #pragma pack()
