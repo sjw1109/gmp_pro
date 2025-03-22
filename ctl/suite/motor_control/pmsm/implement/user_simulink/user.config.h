@@ -26,7 +26,7 @@
 //#define SPECIFY_DISABLE_GMP_CTL
 
 // Specify enable CTL framework nano
-#define SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+//#define SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
 // Specify GMP CTL default type
 // 

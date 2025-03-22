@@ -16,7 +16,7 @@
 //////////////////////////////////////////////////////////////////////////
 // PID regular
 
-#include <ctl/component/intrinsic/continuous/continous_pid.h>
+#include <ctl/component/intrinsic/continuous/continuous_pid.h>
 
 //ec_gt ctl_init_pid(pid_regular_t *hpid)
 //{
@@ -98,7 +98,7 @@ void ctl_init_saturation(ctl_saturation_t *obj, ctrl_gt out_min, ctrl_gt out_max
 // Track_PID.h
 //
 
-#include <ctl/component/intrinsic/combo/track_pid.h>
+#include <ctl/component/intrinsic/continuous/track_pid.h>
 
 // ec_gt ctl_init_track_pid(ctl_track_pid_t *tp)
 //{

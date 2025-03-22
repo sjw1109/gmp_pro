@@ -82,6 +82,19 @@ extern "C"
     //
     void gmp_base_system_stuck(void);
 
+    // This function implement a basic assert function.
+    // user may call this function to ensure if program is correct.
+    // This function has a basic version in gmp_std_port.c
+
+#if defined USE_GMP_SELF_BASE_ASSERT
+    void gmp_base_assert(void *condition);
+
+#elif defined DISABLE_GMP_BASE_ASSERT
+#define gmp_base_assert(assert_condition) (void)(assert_condition)
+#else
+#include <assert.h>
+#define gmp_base_assert(assert_condition) assert(assert_condition)
+#endif // USE_GMP_BASE_ASSERT
     // When a function is unimplemented, the function would be invoke.
     //
     void gmp_base_not_impl(const char *file, uint32_t line);
@@ -93,7 +106,7 @@ extern "C"
 #if defined USER_SPECIFIED_PRINT_FUNCTION
 
 #if defined SPECIFY_BASE_PRINT_NOT_IMPL
-#define gmp_base_print(x,...)
+#define gmp_base_print(x, ...)
 #else // SPECIFY_BASE_PRINT_NOT_IMPL
 #define gmp_base_print USER_SPECIFIED_PRINT_FUNCTION
 #endif // SPECIFY_BASE_PRINT_NOT_IMPL
@@ -118,7 +131,7 @@ extern "C"
     // This function should be called only once.
     // This is a inline function, defined in gmp_core_func.h
     //
-    //void gmp_base_entry(void);
+    // void gmp_base_entry(void);
 
 #ifdef SPECIFY_ENABLE_GMP_CTL
 #ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO

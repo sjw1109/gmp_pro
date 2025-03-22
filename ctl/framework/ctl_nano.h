@@ -192,13 +192,20 @@ extern "C"
     //////////////////////////////////////////////////////////////////////////
     // Function Prototypes
 
-    // You should call this function to initialize the object
-    void ctl_fm_init_nano_header(ctl_object_nano_t *ctl_obj);
+    //// You should call this function to initialize the object
+    //void ctl_fm_init_nano_header(ctl_object_nano_t *ctl_obj);
 
-    // Then you may call this function to set the details of the objects
-    void ctl_fm_setup_nano_header(ctl_object_nano_t *ctl_obj,
-                                  uint32_t ctrl_freq // the frequency of the control law, unit Hz
-    );
+    //// Then you may call this function to set the details of the objects
+    //void ctl_fm_setup_nano_header(ctl_object_nano_t *ctl_obj,
+    //                              uint32_t ctrl_freq // the frequency of the control law, unit Hz
+    //);
+
+    // You should call this function to initialize the object
+    void ctl_fm_init_nano_header(
+        // controller nano object
+        ctl_object_nano_t *ctl_obj,
+        // the frequency of the control law, unit Hz
+        uint32_t ctrl_freq);
 
     extern ctl_object_nano_t *ctl_nano_handle;
 

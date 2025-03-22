@@ -13,7 +13,7 @@
 
 #include <ctl/math_block/gmp_math.h>
 
-#ifdef _FILE_CONTINUOUS_PID_H_
+#ifndef _FILE_CONTINUOUS_PID_H_
 #define _FILE_CONTINUOUS_PID_H_
 
 #ifdef __cplusplus

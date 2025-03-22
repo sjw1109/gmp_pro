@@ -151,14 +151,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\implement\user_common\ctl_main.c" />
-    <ClCompile Include="..\..\implement\user_common\user_main.c" />
-    <ClCompile Include="..\..\implement\user_simulink\peripheral.c" />
-    <ClCompile Include="..\..\src\pmsm_servo.c" />
+    <ClCompile Include="..\..\implement\common\ctl_main.c" />
+    <ClCompile Include="..\..\implement\common\user_main.c" />
+    <ClCompile Include="..\..\implement\simulate\peripheral.c" />
     <ClCompile Include="gmp_src\ctl_component_advance.c" />
-    <ClCompile Include="gmp_src\ctl_component_combo.c" />
+    <ClCompile Include="gmp_src\ctl_component_continuous.c" />
     <ClCompile Include="gmp_src\ctl_component_discrete.c" />
     <ClCompile Include="gmp_src\ctl_component_interface.c" />
+    <ClCompile Include="gmp_src\ctl_component_lebesgue.c" />
     <ClCompile Include="gmp_src\ctl_component_protection.c" />
     <ClCompile Include="gmp_src\ctl_mc_basic.c" />
     <ClCompile Include="gmp_src\ctl_mc_consultant.c" />
@@ -175,11 +175,11 @@
     <ClCompile Include="motor_control_simulink.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\implement\user_common\ctl_main.h" />
-    <ClInclude Include="..\..\implement\user_common\user_main.h" />
-    <ClInclude Include="..\..\implement\user_simulink\ctl_interface.h" />
-    <ClInclude Include="..\..\implement\user_simulink\pc_simulate_buffer.h" />
-    <ClInclude Include="..\..\implement\user_simulink\user.config.h" />
+    <ClInclude Include="..\..\implement\common\ctl_main.h" />
+    <ClInclude Include="..\..\implement\common\user_main.h" />
+    <ClInclude Include="..\..\implement\simulate\ctl_interface.h" />
+    <ClInclude Include="..\..\implement\simulate\pc_simulate_buffer.h" />
+    <ClInclude Include="..\..\implement\simulate\user.config.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

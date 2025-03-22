@@ -10,7 +10,7 @@
  */
 
 #include <ctl/component/intrinsic/discrete/stimulate.h>
-#include <ctl/component/motor_control/basic/encoder_if.h>
+#include <ctl/component/motor_control/basic/motor_universal_interface.h>
 
 #ifndef _FILE_CONST_VF_H_
 #define _FILE_CONST_VF_H_
@@ -45,9 +45,11 @@ typedef struct _tag_const_f
 } ctl_const_f_controller;
 
 
-ec_gt ctl_init_const_f_controller(ctl_const_f_controller *ctrl);
+//ec_gt ctl_init_const_f_controller(ctl_const_f_controller *ctrl);
+//
+//ec_gt ctl_setup_const_f_controller(ctl_const_f_controller *ctrl, parameter_gt frequency, parameter_gt isr_freq);
 
-ec_gt ctl_setup_const_f_controller(ctl_const_f_controller *ctrl, parameter_gt frequency, parameter_gt isr_freq);
+void ctl_setup_const_f_controller(ctl_const_f_controller *ctrl, parameter_gt frequency, parameter_gt isr_freq);
 
 GMP_STATIC_INLINE
 void ctl_step_const_f_controller(ctl_const_f_controller *ctrl)

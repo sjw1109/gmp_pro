@@ -11,8 +11,10 @@
 
 // based on filter module
 #include "core/std/gmp_cport.h"
+
+#include <ctl/component/intrinsic/discrete/divider.h>
 #include <ctl/component/intrinsic/discrete/filter.h>
-#include <ctl/component/motor_control/basic/encoder_if.h>
+#include <ctl/component/motor_control/basic/motor_universal_interface.h>
 
 #ifndef _FILE_ENCODER_H_
 #define _FILE_ENCODER_H_
@@ -110,13 +112,19 @@ extern "C"
         // output interface, encoder output interface
         ctl_rotation_encif_t encif;
 
+        // input raw encoder data
+        uint32_t raw;
+
         // offset,
         // position + offset means the true position
         ctrl_gt offset;
 
         // pole_pairs
         // poles*(position + offset) = Electrical position
-        uint16_t poles;
+        uint16_t pole_pairs;
+
+        // uint32_t p.u. base value
+        uint32_t position_base;
 
     } ctl_pos_multiturn_encoder_t;
 
@@ -142,9 +150,6 @@ extern "C"
         // record revolutions of motor
         enc->encif.revolutions = revolutions;
 
-        // record last position
-        enc->last_pos = enc->encif.position;
-
         return enc->encif.elec_position;
     }
 
@@ -158,16 +163,22 @@ extern "C"
         // output interface, encoder output interface
         ctl_rotation_encif_t encif;
 
+        // input raw encoder data
+        uint32_t raw;
+
         // offset,
         // position + offset means the true position
         ctrl_gt offset;
 
         // pole_pairs
         // poles*(position + offset) = Electrical position
-        uint16_t poles;
+        uint16_t pole_pairs;
 
         // record last position to calculate revolutions.
-        uint32_t last_pos;
+        ctrl_gt last_pos;
+
+        // uint32_t p.u. base value
+        uint32_t position_base;
 
     } ctl_pos_autoturn_encoder_t;
 
@@ -184,7 +195,7 @@ extern "C"
         enc->encif.position = ctl_div(raw, enc->position_base);
 
         // calculate electrical position
-        ctrl_gt elec_pos = enc->pole_pairs * (enc->encif.position + GMP_CONST_1 - enc->offset);
+        ctrl_gt elec_pos = (enc->encif.position + GMP_CONST_1 - enc->offset) * enc->pole_pairs;
         ctrl_gt elec_pos_pu = ctrl_mod_1(elec_pos);
 
         // record electrical position data
@@ -222,9 +233,9 @@ extern "C"
         ctrl_gt speed_krpm;
     } ctl_spd_encoder_t;
 
-    //void ctl_init_spd_encoder(ctl_spd_encoder_t *spd_encoder);
+    // void ctl_init_spd_encoder(ctl_spd_encoder_t *spd_encoder);
 
-    //void ctl_setup_spd_encoder(ctl_spd_encoder_t *enc, parameter_gt speed_base);
+    // void ctl_setup_spd_encoder(ctl_spd_encoder_t *enc, parameter_gt speed_base);
 
     void ctl_init_spd_encoder(ctl_spd_encoder_t *enc, parameter_gt speed_base);
 
@@ -254,14 +265,31 @@ extern "C"
 
     } ctl_spd_calculator_t;
 
-    void ctl_init_spd_calculator(ctl_spd_calculator_t *sc);
+    // void ctl_init_spd_calculator(ctl_spd_calculator_t *sc);
 
-    // (pos - old_pos) * speed_calc_freq -> rad/s
-    // 60/(2*pi)*(rad/s) -> rpm
-    // rpm / (pole_pairs * rate_speed_rpm) -> Mech p.u.
+    //// (pos - old_pos) * speed_calc_freq -> rad/s
+    //// 60/(2*pi)*(rad/s) -> rpm
+    //// rpm / (pole_pairs * rate_speed_rpm) -> Mech p.u.
 
-    // User must ensure fcalc > n_max_rpm / 30
-    void ctl_setup_spd_calculator(
+    //// User must ensure fcalc > n_max_rpm / 30
+    // void ctl_setup_spd_calculator(
+    //     // speed calculator objects
+    //     ctl_spd_calculator_t *sc,
+    //     // control law frequency, unit Hz
+    //     parameter_gt control_law_freq,
+    //     // division of control law frequency, unit ticks
+    //     uint16_t speed_calc_div,
+    //     // Speed per unit base value, unit rpm
+    //     parameter_gt rated_speed_rpm,
+    //     // pole pairs, if you pass a elec-angle,
+    //     uint16_t pole_pairs,
+    //     // just set this value to 1.
+    //     // generally, speed_filter_fc approx to speed_calc freq divided by 5
+    //     parameter_gt speed_filter_fc,
+    //     // link to a position encoder
+    //     ctl_rotation_encif_t *pos_encif);
+
+    void ctl_init_spd_calculator(
         // speed calculator objects
         ctl_spd_calculator_t *sc,
         // control law frequency, unit Hz

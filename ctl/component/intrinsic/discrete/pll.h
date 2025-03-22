@@ -12,7 +12,7 @@
 // This file is for PLL (Phase lock Loop) Module
 
 // PLL module is based on PID module and filter module
-#include <ctl/component/intrinsic/discrete/pid.h>
+#include <ctl/component/intrinsic/continuous/continuous_pid.h>
 #include <ctl/component/intrinsic/discrete/filter.h>
 
 #ifndef _FILE_PLL_H_

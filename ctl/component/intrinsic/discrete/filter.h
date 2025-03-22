@@ -127,7 +127,7 @@ extern "C"
     }
 
     GMP_STATIC_INLINE
-    void ctl_get_filter_iir2_output(ctl_filter_IIR2_t *obj)
+    ctrl_gt ctl_get_filter_iir2_output(ctl_filter_IIR2_t *obj)
     {
         return obj->out;
     }
@@ -164,13 +164,13 @@ extern "C"
     // ec_gt ctl_setup_filter_iir2(ctl_filter_IIR2_t *obj, ctl_filter_IIR2_setup_t *setup_obj);
 
     // Design a 2rd Order IIR filter based on center frequency and Q
-    ec_gt ctl_init_filter_iir2(ctl_filter_IIR2_t *obj, ctl_filter_IIR2_setup_t *setup_obj)
+    ec_gt ctl_init_filter_iir2(ctl_filter_IIR2_t *obj, ctl_filter_IIR2_setup_t *setup_obj);
 
-        //////////////////////////////////////////////////////////////////////////
-        // FIR filter
-        //
+    //////////////////////////////////////////////////////////////////////////
+    // FIR filter
+    //
 
-        typedef struct _tag_filter_FIR_t
+    typedef struct _tag_filter_FIR_t
     {
         // pointer to parameter
         ctrl_gt *parameters;

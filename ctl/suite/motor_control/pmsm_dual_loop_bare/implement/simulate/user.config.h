@@ -51,5 +51,8 @@
 // specify ASIO config .json file
 #define GMP_ASIO_CONFIG_JSON "network.json"
 
+// specify Simulink Communicate buffer
+#define gmp_pc_simulink_rx_buffer_t mtr_sil_rx_buf_t
+#define gmp_pc_simulink_tx_buffer_t mtr_sil_tx_buf_t
 
 

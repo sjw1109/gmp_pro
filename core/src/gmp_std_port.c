@@ -122,6 +122,19 @@ void gmp_base_free(void *ptr)
 #endif // SPECIFY_GMP_DEFAULT_ALLOC
 }
 
+#if defined USE_GMP_SELF_BASE_ASSERT
+void gmp_base_assert(void *condition)
+{
+    if (condition)
+    {
+        gmp_base_print("[ASSERT] occurrd, program will stuck here.\r\n");
+        gmp_base_print("[NOTE] You may continue in debug mode, to ignore this event.\r\n");
+
+        GMP_DBG_SWBP;
+    }
+}
+#endif // USE_GMP_SELF_BASE_ASSERT
+
 //////////////////////////////////////////////////////////////////////////
 // Weak function definition
 

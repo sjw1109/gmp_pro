@@ -42,45 +42,45 @@ extern "C"
 
     }bipolar_fusing_t;
 
-    GMP_STATIC_INLINE
-        void ctl_step_fusing(
-        ctl_object_nano_t* pctl_obj,
-        bipolar_fusing_t* fusing
-    )
-    {
-        uint32_t delta_tick;
+    //GMP_STATIC_INLINE
+    //    void ctl_step_fusing(
+    //    ctl_object_nano_t* pctl_obj,
+    //    bipolar_fusing_t* fusing
+    //)
+    //{
+    //    uint32_t delta_tick;
 
-        // If no items are assigned to the fusing object
-        // just ignore.
-            if (!fusing->target_object)
-            return;
+    //    // If no items are assigned to the fusing object
+    //    // just ignore.
+    //        if (!fusing->target_object)
+    //        return;
 
-        // Check Bound
-        if (*fusing->target_object > fusing->upper_bound ||
-            *fusing->target_object < fusing->lower_bound)
-        {
-            // Calculate two fusing event 
-            if (pctl_obj->isr_tick > fusing->last_tick)
-            {
-                delta_tick = pctl_obj->isr_tick - fusing->last_tick;
-            }
-            else
-            {
-                delta_tick = UINT32_MAX - fusing->last_tick + pctl_obj->isr_tick;
-            }
+    //    // Check Bound
+    //    if (*fusing->target_object > fusing->upper_bound ||
+    //        *fusing->target_object < fusing->lower_bound)
+    //    {
+    //        // Calculate two fusing event 
+    //        if (pctl_obj->isr_tick > fusing->last_tick)
+    //        {
+    //            delta_tick = pctl_obj->isr_tick - fusing->last_tick;
+    //        }
+    //        else
+    //        {
+    //            delta_tick = UINT32_MAX - fusing->last_tick + pctl_obj->isr_tick;
+    //        }
 
-            // Fault condition
-            if (delta_tick <= CTL_FUSING_ISR_LIMIT)
-            {
-                pctl_obj->state_machine = CTL_SM_FAULT;
-                pctl_obj->error_code = fusing->error_code;
-            }
+    //        // Fault condition
+    //        if (delta_tick <= CTL_FUSING_ISR_LIMIT)
+    //        {
+    //            pctl_obj->state_machine = CTL_SM_FAULT;
+    //            pctl_obj->error_code = fusing->error_code;
+    //        }
 
-            // Log the fusing event
-            fusing->last_tick = pctl_obj->isr_tick;
-        }
-        return;
-    }
+    //        // Log the fusing event
+    //        fusing->last_tick = pctl_obj->isr_tick;
+    //    }
+    //    return;
+    //}
 
     ec_gt ctl_init_bipolar_fusing(bipolar_fusing_t *fusing);
 

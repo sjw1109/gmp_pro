@@ -123,7 +123,17 @@ extern "C"
     } ctrl_2p2z_t;
 
     // unit Hz
-    void ctl_init_2p2z(ctrl_2p2z_t *ctrl, parameter_gt f_z0, parameter_gt f_z1, parameter_gt f_p1, parameter_gt fs);
+    void ctl_init_2p2z(
+        // pointer to a 2p2z compensator
+        ctrl_2p2z_t *ctrl,
+        // gain of 2P2Z compensator
+        parameter_gt gain,
+        // two zero frequency, unit Hz
+        parameter_gt f_z0, parameter_gt f_z1,
+        // one pole frequency, unit Hz
+        parameter_gt f_p1,
+        // sample frequency
+        parameter_gt fs);
 
     GMP_STATIC_INLINE
     void ctl_set_2p2z_limit(ctrl_2p2z_t *ctrl, ctrl_gt limit_max, ctrl_gt limit_min)

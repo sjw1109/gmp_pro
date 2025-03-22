@@ -1,4 +1,7 @@
 
+
+#include <ctl/component/motor_contro/basic/std_sil_motor_interface.h>
+
 #ifndef _FILE_CTL_INTERFACE_H_
 #define _FILE_CTL_INTERFACE_H_
 
@@ -24,6 +27,7 @@ extern "C"
 
     extern ctl_pos_encoder_t pos_enc;
 
+
 #ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
     GMP_STATIC_INLINE
@@ -32,7 +36,7 @@ extern "C"
         pmsm_fm_t *pmsm = (pmsm_fm_t *)pctl_obj;
 
         ctl_input_pmsm_framework(pmsm, gmp_csp_sl_get_rx_buffer()->iabc[phase_A],
-            gmp_csp_sl_get_rx_buffer()->iabc[phase_B], gmp_csp_sl_get_rx_buffer()->iabc[phase_C]);
+                                 gmp_csp_sl_get_rx_buffer()->iabc[phase_B], gmp_csp_sl_get_rx_buffer()->iabc[phase_C]);
 
         ctl_step_adc_tri_channel(&pmsm->vabc_input, gmp_csp_sl_get_rx_buffer()->uabc[phase_A],
                                  gmp_csp_sl_get_rx_buffer()->uabc[phase_B], gmp_csp_sl_get_rx_buffer()->uabc[phase_C]);

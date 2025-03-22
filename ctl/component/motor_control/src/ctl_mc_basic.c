@@ -54,7 +54,7 @@
 #include <ctl/component/motor_control/basic/encoder.h>
 
 // Absolute rotation position encoder
-// 
+//
 
 // void ctl_init_pos_encoder(ctl_pos_encoder_t *enc)
 //{
@@ -106,12 +106,12 @@ void ctl_init_autoturn_pos_encoder(ctl_pos_autoturn_encoder_t *enc, uint16_t pol
 // Speed position encoder
 //
 
-//void ctl_init_spd_encoder(ctl_spd_encoder_t *spd_encoder)
+// void ctl_init_spd_encoder(ctl_spd_encoder_t *spd_encoder)
 //{
-//    spd_encoder->speed_base = 3000;
-//    spd_encoder->encif.speed = 0;
-//    spd_encoder->speed_krpm = 0;
-//}
+//     spd_encoder->speed_base = 3000;
+//     spd_encoder->encif.speed = 0;
+//     spd_encoder->speed_krpm = 0;
+// }
 
 void ctl_init_spd_encoder(ctl_spd_encoder_t *enc, parameter_gt speed_base)
 {
@@ -120,16 +120,16 @@ void ctl_init_spd_encoder(ctl_spd_encoder_t *enc, parameter_gt speed_base)
     enc->speed_krpm = 0;
 }
 
-void ctl_init_spd_calculator(ctl_spd_calculator_t *sc)
-{
-    sc->old_position = 0;
-    sc->scale_factor = float2ctrl(1.0);
-    sc->encif.speed = 0;
-    ctl_init_lp_filter(&sc->spd_filter);
-    ctl_init_divider(&sc->div);
-}
+// void ctl_init_spd_calculator(ctl_spd_calculator_t *sc)
+//{
+//     sc->old_position = 0;
+//     sc->scale_factor = float2ctrl(1.0);
+//     sc->encif.speed = 0;
+//     ctl_init_lp_filter(&sc->spd_filter);
+//     ctl_init_divider(&sc->div);
+// }
 
-void ctl_setup_spd_calculator(
+void ctl_init_spd_calculator(
     // speed calculator objects
     ctl_spd_calculator_t *sc,
     // control law frequency, unit Hz
@@ -152,9 +152,12 @@ void ctl_setup_spd_calculator(
         maximum_div = speed_calc_div;
     }
 
+    sc->old_position = 0;
+    sc->encif.speed = 0;
+
     sc->scale_factor = float2ctrl(60.0f * control_law_freq / maximum_div / pole_pairs / rated_speed_rpm);
-    ctl_setup_lp_filter(&sc->spd_filter, control_law_freq / maximum_div, speed_filter_fc);
-    ctl_setup_divider(&sc->div, maximum_div);
+    ctl_init_lp_filter(&sc->spd_filter, control_law_freq / maximum_div, speed_filter_fc);
+    ctl_init_divider(&sc->div, maximum_div);
 
     sc->pos_encif = pos_encif;
 }
@@ -320,21 +323,22 @@ void ctl_dsn_pmsm_pmsm_flux_via_Kt(ctl_pmsm_dsn_consultant_t *pmsm_dsn, paramete
 
 #include <ctl/component/motor_control/basic/vf_generator.h>
 
-ec_gt ctl_init_const_f_controller(ctl_const_f_controller *ctrl)
-{
-    ctrl->enc.elec_position = 0;
-    ctrl->enc.position = 0;
+//ec_gt ctl_init_const_f_controller(ctl_const_f_controller *ctrl)
+//{
+//    ctrl->enc.elec_position = 0;
+//    ctrl->enc.position = 0;
+//
+//    ctl_init_ramp_gen(&ctrl->rg);
+//
+//    return GMP_EC_OK;
+//}
 
-    ctl_init_ramp_gen(&ctrl->rg);
-
-    return GMP_EC_OK;
-}
-
-ec_gt ctl_setup_const_f_controller(ctl_const_f_controller *ctrl, parameter_gt frequency, parameter_gt isr_freq)
+void ctl_setup_const_f_controller(ctl_const_f_controller *ctrl, parameter_gt frequency, parameter_gt isr_freq)
 {
     // ctl_setup_ramp_gen(&ctrl->rg, float2ctrl(frequency / isr_freq), 1, 0);
 
-    ctl_setup_ramp_gen_via_amp_freq(&ctrl->rg, isr_freq, frequency, 1, 0);
+    ctrl->enc.elec_position = 0;
+    ctrl->enc.position = 0;
 
-    return GMP_EC_OK;
+    ctl_init_ramp_gen_via_amp_freq(&ctrl->rg, isr_freq, frequency, 1, 0);
 }

@@ -36,7 +36,7 @@ extern "C"
         parameter_gt fs);
 
     // reset discrete track pid object
-    void ctl_clear_discrete_track_pid(ctl_track_pid_t *tp)
+    void ctl_clear_discrete_track_pid(track_discrete_pid_t *tp)
     {
         ctl_clear_discrete_pid(&tp->pid);
         ctl_clear_divider(&tp->div);
@@ -44,7 +44,7 @@ extern "C"
     }
 
     // step discrete track pid object
-    ctrl_gt ctl_step_discrete_track_pid(ctl_track_pid_t *tp, ctrl_gt taget, ctrl_gt fbk)
+    ctrl_gt ctl_step_discrete_track_pid(track_discrete_pid_t *tp, ctrl_gt target, ctrl_gt fbk)
     {
         if (ctl_step_divider(&tp->div))
         {
@@ -52,7 +52,7 @@ extern "C"
             return ctl_step_discrete_pid(&tp->pid, tp->traj.out - fbk);
         }
 
-        return ctl_get_discrete_pid_output(tp->pid);
+        return ctl_get_discrete_pid_output(&tp->pid);
     }
 
 #ifdef __cplusplus

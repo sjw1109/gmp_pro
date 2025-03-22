@@ -57,7 +57,7 @@ extern "C"
     GMP_STATIC_INLINE
     ctrl_gt ctl_get_adc_diff_result(dual_adc_ift *adc)
     {
-        return adc->control_port.value.dat[0] - adc->control_port.value.dat[1];
+        return adc->value.dat[0] - adc->value.dat[1];
     }
 
     GMP_STATIC_INLINE

@@ -137,13 +137,13 @@ ec_gt ctl_init_filter_iir2(ctl_filter_IIR2_t *obj, ctl_filter_IIR2_setup_t *setu
 
 ec_gt ctl_init_pll(ctl_pll_t *pll)
 {
-    ctl_init_pid(&pll->pid);
-    ctl_init_lp_filter(&pll->filter);
-    pll->input.dat[0] = 0;
-    pll->input.dat[1] = 0;
-    pll->output_theta = 0;
-    pll->output_freq = 0;
-    pll->freq_sf = float2ctrl(1.0);
+    //ctl_init_pid(&pll->pid);
+    //ctl_init_lp_filter(&pll->filter);
+    //pll->input.dat[0] = 0;
+    //pll->input.dat[1] = 0;
+    //pll->output_theta = 0;
+    //pll->output_freq = 0;
+    //pll->freq_sf = float2ctrl(1.0);
 
     return GMP_EC_OK;
 }
@@ -154,9 +154,9 @@ ec_gt ctl_setup_pll(ctl_pll_t *pll, ctrl_gt kp, ctrl_gt ki, ctrl_gt kd, // PID p
                     parameter_gt fc                                     // cutoff frequency
 )
 {
-    ctl_setup_pid(&pll->pid, kp, ki, kd, out_min, out_max);
+    //ctl_setup_pid(&pll->pid, kp, ki, kd, out_min, out_max);
 
-    ctl_setup_lp_filter(&pll->filter, fs, fc);
+    //ctl_setup_lp_filter(&pll->filter, fs, fc);
 
     return GMP_EC_OK;
 }
@@ -184,12 +184,12 @@ void ctl_init_slope_limit(ctl_slope_lim_t *obj, ctrl_gt slope_min, ctrl_gt slope
     obj->out = float2ctrl(0);
 }
 
-// The following function has move to header file
-void ctl_set_sl_slope(ctl_slope_lim_t *obj, ctrl_gt slope_min, ctrl_gt slope_max)
-{
-    obj->slope_min = slope_min;
-    obj->slope_max = slope_max;
-}
+//// The following function has move to header file
+//void ctl_set_sl_slope(ctl_slope_lim_t *obj, ctrl_gt slope_min, ctrl_gt slope_max)
+//{
+//    obj->slope_min = slope_min;
+//    obj->slope_max = slope_max;
+//}
 
 //////////////////////////////////////////////////////////////////////////
 // Signal Generator
@@ -293,8 +293,8 @@ void ctl_init_discrete_pid(
     pid->b1 = float2ctrl(b1);
     pid->b0 = float2ctrl(b0);
 
-    output_max = float2ctrl(1.0);
-    output_min = float2ctrl(-1.0);
+    pid->output_max = float2ctrl(1.0);
+    pid->output_min = float2ctrl(-1.0);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -331,6 +331,8 @@ void ctl_init_discrete_track_pid(
 void ctl_init_2p2z(
     // pointer to a 2p2z compensator
     ctrl_2p2z_t *ctrl,
+    // gain of 2P2Z compensator
+    parameter_gt gain,
     // two zero frequency, unit Hz
     parameter_gt f_z0, parameter_gt f_z1,
     // one pole frequency, unit Hz
@@ -338,9 +340,9 @@ void ctl_init_2p2z(
     // sample frequency
     parameter_gt fs)
 {
-    parameter_gt z0 = f_z0 * 2 * pi;
-    parameter_gt z1 = f_z1 * 2 * pi;
-    parameter_gt p1 = f_p1 * 2 * pi;
+    parameter_gt z0 = f_z0 * 2 * PI;
+    parameter_gt z1 = f_z1 * 2 * PI;
+    parameter_gt p1 = f_p1 * 2 * PI;
 
     // discrete controller parameter
     parameter_gt gain_discrete = gain * (1 / 2 / fs / (p1 + 2 * fs));

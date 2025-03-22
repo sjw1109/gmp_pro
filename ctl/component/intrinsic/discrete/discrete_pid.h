@@ -40,7 +40,7 @@ extern "C"
         parameter_gt Ti;
         parameter_gt Td;
         parameter_gt fs;
-    };
+    }discrete_pid_tunning_t;
 
     typedef struct _tag_discrete_pid_t
     {
@@ -96,6 +96,8 @@ extern "C"
         ctrl->input_2 = ctrl->input_1;
         ctrl->input_1 = ctrl->input;
         ctrl->output_1 = ctrl->output;
+
+        return ctrl->output;
     }
 
     // get discrete pid output

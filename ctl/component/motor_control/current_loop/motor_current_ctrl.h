@@ -2,9 +2,9 @@
 // This module would be implemented by FPGA.
 
 // necessary headers
-#include <ctl/component/intrinsic/discrete/pid.h>
-#include <ctl/component/intrinsic/interface/adc_channel.h>
-#include <ctl/component/intrinsic/interface/pwm_channel.h>
+#include <ctl/component/intrinsic/continuous/continuous_pid.h>
+#include <ctl/component/interface/adc_channel.h>
+#include <ctl/component/interface/pwm_channel.h>
 
 #include <ctl/math_block/coordinate/coord_trans.h>
 
@@ -60,21 +60,27 @@ typedef struct _tag_motor_current_ctrl
     //fast_gt flag_enable_svpwm;
 } ctl_motor_current_ctrl_t;
 
-ec_gt ctl_init_motor_current_ctrl(ctl_motor_current_ctrl_t *obj);
+//ec_gt ctl_init_motor_current_ctrl(ctl_motor_current_ctrl_t *obj);
+//
+//ec_gt ctl_setup_motor_current_ctrl(ctl_motor_current_ctrl_t *obj,
+//                                   // PID parameter for motor current controller
+//                                   ctrl_gt kp, ctrl_gt ki, ctrl_gt kd,
+//                                   // PID saturation parameter for motor current controller
+//                                   ctrl_gt out_min, ctrl_gt out_max);
 
-ec_gt ctl_setup_motor_current_ctrl(ctl_motor_current_ctrl_t *obj,
-                                   // PID parameter for motor current controller
-                                   ctrl_gt kp, ctrl_gt ki, ctrl_gt kd,
-                                   // PID saturation parameter for motor current controller
-                                   ctrl_gt out_min, ctrl_gt out_max);
+void ctl_setup_motor_current_ctrl(ctl_motor_current_ctrl_t *obj,
+                                  // PID parameter for motor current controller
+                                  ctrl_gt kp, ctrl_gt ki, ctrl_gt kd,
+                                  // PID saturation parameter for motor current controller
+                                  ctrl_gt out_min, ctrl_gt out_max);
 
 // Clear all the residual informations
 void ctl_clear_motor_current_ctrl(ctl_motor_current_ctrl_t *obj);
 
 GMP_STATIC_INLINE
-void ctl_input_motor_current_ctrl(ctl_motor_current_ctrl_t *obj, adc_tri_channel_t *adc_channel)
+void ctl_input_motor_current_ctrl(ctl_motor_current_ctrl_t *obj, tri_adc_channel_t *adc_channel)
 {
-    ctl_get_adc_tri_channel_via_vector3(adc_channel, &obj->iabc);
+    ctl_get_tri_adc_channel_via_vector3(adc_channel, &obj->iabc);
 }
 
 GMP_STATIC_INLINE

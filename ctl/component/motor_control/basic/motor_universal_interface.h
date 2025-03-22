@@ -14,7 +14,7 @@ extenr "C"
 
     //////////////////////////////////////////////////////////////////////////
     // Motor position encoder interface
-    // 
+    //
 
     typedef struct _tag_rotation_encoder_t
     {
@@ -76,7 +76,7 @@ extenr "C"
 
         // output mechanical torque output, unit p.u.
         ctrl_gt torque;
-    }torque_ift;
+    } torque_ift;
 
 // Type transfer
 
@@ -92,18 +92,18 @@ extenr "C"
     // This struct only contain all the motor input sensor.
     typedef struct _tag_universal_mtr_if_t
     {
-        // current sensor
-        tri_adc_ift *iabc;
-
         // voltage sensor
         tri_adc_ift *uabc;
+
+        // current sensor
+        tri_adc_ift *iabc;
 
         // DC bus voltage sensor
         adc_ift *udc;
 
         // DC bus current sensor
         adc_ift *idc;
-    
+
         // position encoder
         rotation_ift *position;
 
@@ -115,96 +115,106 @@ extenr "C"
 
         //// PWM output / GPIO output
         //// for modulation output the three variables is duty of three channel.
-        //// for directly output the three variables is switch state of three channel. 
-        //tri_pwm_ift *uabc_target;
+        //// for directly output the three variables is switch state of three channel.
+        // tri_pwm_ift *uabc_target;
 
-    }mtr_ift;
+    } mtr_ift;
 
     // controller should communicate with motor controller via the following function.
     // interface function
 
     // current access function
-    ctrl_gt ctl_get_mtr_current_single(mtr_ift* mtr, uint32_t phase)
+    GMP_STATIC_INLINE
+    ctrl_gt ctl_get_mtr_current_single(mtr_ift * mtr, uint32_t phase)
     {
-        gmp_core_assert(iabc);
-        gmp_core_assert(phase < 4);
+        gmp_base_assert(mtr->iabc);
+        gmp_base_assert(phase < 4);
 
         return mtr->iabc->value.dat[phase];
     }
 
-    vector3_gt* ctl_get_mtr_current(mtr_ift* mtr)
+    GMP_STATIC_INLINE
+    vector3_gt *ctl_get_mtr_current(mtr_ift * mtr)
     {
-        gmp_core_assert(mtr->iabc);
+        gmp_base_assert(mtr->iabc);
 
         return &mtr->iabc->value;
     }
 
     // voltage access function
-    ctrl_gt ctl_get_mtr_voltage_single(mtr_ift* mtr, uint32_t phase)
+    GMP_STATIC_INLINE
+    ctrl_gt ctl_get_mtr_voltage_single(mtr_ift * mtr, uint32_t phase)
     {
-        gmp_core_assert(iabc);
-        gmp_core_assert(phase < 4);
+        gmp_base_assert(mtr->iabc);
+        gmp_base_assert(phase < 4);
 
         return mtr->uabc->value.dat[phase];
     }
 
-    vector3_gt* ctl_get_mtr_voltage(mtr_ift* mtr)
+    GMP_STATIC_INLINE
+    vector3_gt *ctl_get_mtr_voltage(mtr_ift * mtr)
     {
-        gmp_core_assert(mtr->vabc);
+        gmp_base_assert(mtr->uabc);
 
         return &mtr->uabc->value;
     }
 
     // dc bus access function
-    ctrl_gt ctl_get_mtr_dc_voltage(mtr_ift* mtr)
+    GMP_STATIC_INLINE
+    ctrl_gt ctl_get_mtr_dc_voltage(mtr_ift * mtr)
     {
-        gmp_core_assert(mtr->udc);
+        gmp_base_assert(mtr->udc);
 
         return mtr->udc->value;
     }
 
-    ctrl_gt ctl_get_mtr_dc_current(mtr_ift* mtr)
+    GMP_STATIC_INLINE
+    ctrl_gt ctl_get_mtr_dc_current(mtr_ift * mtr)
     {
-        gmp_core_assert(mtr->idc);
+        gmp_base_assert(mtr->idc);
 
         return mtr->idc->value;
     }
 
     // position access
+    GMP_STATIC_INLINE
     ctrl_gt ctl_get_mtr_elec_theta(mtr_ift * mtr)
     {
-        gmp_core_assert(mtr->position);
+        gmp_base_assert(mtr->position);
 
         return mtr->position->elec_position;
     }
 
-    ctrl_gt ctl_get_mtr_theta(mtr_ift* mtr)
+    GMP_STATIC_INLINE
+    ctrl_gt ctl_get_mtr_theta(mtr_ift * mtr)
     {
-        gmp_core_assert(mtr->position);
+        gmp_base_assert(mtr->position);
 
         return mtr->position->position;
     }
 
-    int32_t ctl_get_mtr_revolution(mtr_ift* mtr)
+    GMP_STATIC_INLINE
+    int32_t ctl_get_mtr_revolution(mtr_ift * mtr)
     {
-        gmp_core_assert(mtr->position);
+        gmp_base_assert(mtr->position);
 
         return mtr->position->revolutions;
     }
 
     // speed access
-    
-    ctrl_gt ctl_get_mtr_velocity(mtr_ift* mtr)
+    GMP_STATIC_INLINE
+    ctrl_gt ctl_get_mtr_velocity(mtr_ift * mtr)
     {
-        gmp_core_assert(mtr->velocity);
+        gmp_base_assert(mtr->velocity);
 
         return mtr->velocity->speed;
     }
 
     // torque access
-    ctrl_gt ctl_get_mtr_torque(mtr_ift* mtr)
+    GMP_STATIC_INLINE
+    ctrl_gt ctl_get_mtr_torque(mtr_ift * mtr)
     {
-        gmp_core_assert(mtr->torque);
+        gmp_base_assert(mtr->torque);
 
         return mtr->torque->torque;
     }
@@ -215,40 +225,44 @@ extenr "C"
     ////  + 0 close whole output,
     ////  + 1 open the upper bridge
     ////  + -1 open the lower bridge
-    //void ctl_set_mtr_out_duty(mtr_ift* mtr, ctrl_gt phase_u, ctrl_gt phase_v, ctrl_gt phase_w)
+    // void ctl_set_mtr_out_duty(mtr_ift* mtr, ctrl_gt phase_u, ctrl_gt phase_v, ctrl_gt phase_w)
     //{
-    //    gmp_core_assert(mtr->uabc_target);
+    //     gmp_base_assert(mtr->uabc_target);
 
     //    mtr->uabc_target->value.dat[phase_U] = phase_u;
     //    mtr->uabc_target->value.dat[phase_V] = phase_v;
     //    mtr->uabc_target->value.dat[phase_W] = phase_w;
     //}
 
-
     // User should call the following function to attach interface to motor universal interface
-    
-    void ctl_attach_mtr_current(mtr_ift* mtr, tri_adc_ift* iabc)
+
+    GMP_STATIC_INLINE
+    void ctl_attach_mtr_current(mtr_ift * mtr, tri_adc_ift * iabc)
     {
         mtr->iabc = iabc;
     }
 
-    void ctl_attach_mtr_voltage(mtr_ift* mtr, tri_adc_ift* uabc)
+    GMP_STATIC_INLINE
+    void ctl_attach_mtr_voltage(mtr_ift * mtr, tri_adc_ift * uabc)
     {
         mtr->uabc = uabc;
     }
 
-    void ctl_attach_mtr_dc_current(mtr_ift* mtr, adc_ift *idc)
+    GMP_STATIC_INLINE
+    void ctl_attach_mtr_dc_current(mtr_ift * mtr, adc_ift * idc)
     {
         mtr->idc = idc;
     }
 
-    void ctl_attach_mtr_dc_voltage(mtr_ift* mtr, adc_ift* udc)
+    GMP_STATIC_INLINE
+    void ctl_attach_mtr_dc_voltage(mtr_ift * mtr, adc_ift * udc)
     {
         mtr->udc = udc;
     }
 
-    void ctl_attach_mtr_adc_channels(mtr_ift* mtr, tri_adc_ift* iabc, tri_adc_ift* uabc, adc_ift* idc,
-        adc_ift* udc)
+    GMP_STATIC_INLINE
+    void ctl_attach_mtr_adc_channels(mtr_ift * mtr, tri_adc_ift * iabc, tri_adc_ift * uabc, adc_ift * idc,
+                                     adc_ift * udc)
     {
         mtr->iabc = iabc;
         mtr->uabc = uabc;
@@ -256,21 +270,23 @@ extenr "C"
         mtr->udc = udc;
     }
 
-    void ctl_attach_mtr_position(mtr_ift* mtr, rotation_ift* pos)
+    GMP_STATIC_INLINE
+    void ctl_attach_mtr_position(mtr_ift * mtr, rotation_ift * pos)
     {
         mtr->position = pos;
     }
 
-    void ctl_attach_mtr_velocity(mtr_ift* mtr, velocity_ift* vel)
+    GMP_STATIC_INLINE
+    void ctl_attach_mtr_velocity(mtr_ift * mtr, velocity_ift * vel)
     {
         mtr->velocity = vel;
     }
 
-    void ctl_attach_mtr_torque(mtr_ift* mtr, torque_ift* torque)
+    GMP_STATIC_INLINE
+    void ctl_attach_mtr_torque(mtr_ift * mtr, torque_ift * torque)
     {
         mtr->torque = torque;
     }
-
 
 #ifdef __cplusplus
 }

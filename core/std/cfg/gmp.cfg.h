@@ -309,7 +309,7 @@
 //#define SPECIFY_DISABLE_GMP_CTL
 
 // Specify enable GMP CTL Nano Framework
-#define SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+//#define SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
 // Select Default Controller calculating type
 // options reference <options.cfg.h>

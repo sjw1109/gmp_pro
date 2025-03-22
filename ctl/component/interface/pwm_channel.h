@@ -48,27 +48,27 @@ extern "C"
     // calculate function
     pwm_gt ctl_calc_pwm_channel(pwm_channel_t *pwm_obj, ctrl_gt raw)
     {
-        pwm_obj->raw.value.dat = raw;
+        pwm_obj->raw.value = raw;
 
-        pwm_obj->value = pwm_mul(pwm_obj->raw.value.dat, pwm_obj->full_scale) + pwm_obj->phase;
+        pwm_obj->value = pwm_mul(pwm_obj->raw.value, pwm_obj->full_scale) + pwm_obj->phase;
         pwm_obj->value = pwm_sat(pwm_obj->value, pwm_obj->full_scale, 0);
 
         return pwm_obj->value;
     }
     pwm_gt ctl_calc_pwm_channel_warp(pwm_channel_t *pwm_obj, ctrl_gt raw)
     {
-        pwm_obj->raw.value.dat = raw;
+        pwm_obj->raw.value = raw;
 
-        pwm_obj->value = pwm_mul(pwm_obj->raw.value.dat, pwm_obj->full_scale) + pwm_obj->phase;
+        pwm_obj->value = pwm_mul(pwm_obj->raw.value, pwm_obj->full_scale) + pwm_obj->phase;
         pwm_obj->value = pwm_obj->value % pwm_obj->full_scale;
 
         return pwm_obj->value;
     }
     pwm_gt ctl_calc_pwm_channel_inv(pwm_channel_t *pwm_obj, ctrl_gt raw)
     {
-        pwm_obj->raw.value.dat = raw;
+        pwm_obj->raw.value = raw;
 
-        pwm_obj->value = pwm_obj->full_scale - pwm_mul(pwm_obj->raw.value.dat, pwm_obj->full_scale);
+        pwm_obj->value = pwm_obj->full_scale - pwm_mul(pwm_obj->raw.value, pwm_obj->full_scale);
         pwm_obj->value = pwm_sat(pwm_obj->value, pwm_obj->full_scale, 0);
 
         return pwm_obj->value;
@@ -152,7 +152,7 @@ extern "C"
     }
 
     GMP_STATIC_INLINE
-    dual_pwm_ift *ctl_get_pwm_channel_ctrl_port(pwm_channel_t *pwm)
+    dual_pwm_ift *ctl_get_dual_pwm_channel_ctrl_port(pwm_dual_channel_t *pwm)
     {
         return &pwm->raw;
     }
@@ -187,7 +187,7 @@ extern "C"
     // calculate function
     void ctl_calc_pwm_tri_channel(pwm_tri_channel_t* pwm_obj, ctl_vector3_t* raw)
     {
-        int i;
+        fast_gt i;
 
         for (i = 0; i < 3; ++i)
         {
@@ -199,7 +199,7 @@ extern "C"
     }
     void ctl_calc_pwm_tri_channel_warp(pwm_tri_channel_t* pwm_obj, ctl_vector3_t* raw)
     {
-        int i;
+        fast_gt i;
 
         for (i = 0; i < 3; ++i)
         {
@@ -211,7 +211,7 @@ extern "C"
     }
     void ctl_calc_pwm_tri_channel_inv(pwm_tri_channel_t* pwm_obj, ctl_vector3_t* raw)
     {
-        int i;
+        fast_gt i;
 
         for (i = 0; i < 3; ++i)
         {

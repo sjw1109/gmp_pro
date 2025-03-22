@@ -1,197 +1,192 @@
 /**
  * @file pmsm.smo.h
  * @author Javnson (javnson@zju.edu.cn)
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2024-09-30
- * 
+ *
  * @copyright Copyright GMP(c) 2024
- * 
+ *
  */
 
 // This module is a PMSM SMO module
 
 // include pll module
-//#include <ctl/component/common/pll.h>
-#include <ctl/component/intrinsic/discrete/pid.h>
+// #include <ctl/component/common/pll.h>
+#include <ctl/component/intrinsic/continuous/continuous_pid.h>
 #include <ctl/component/motor_control/consultant/motor_driver_consultant.h>
 #include <ctl/component/motor_control/consultant/pmsm_consultant.h>
 
-
-//#include <arm_math.h>
+// #include <arm_math.h>
 
 #ifndef _FILE_PMSM_SMO_H_
 #define _FILE_PMSM_SMO_H_
 
 #ifdef __cplusplus
-extern"C"
+extern "C"
 {
 #endif // __cplusplus
 
-	typedef struct _tag_pmsm_smo_observer_t
-	{
-		// input section
-		ctrl_gt u_alpha;
-		ctrl_gt u_beta;
+    typedef struct _tag_pmsm_smo_observer_t
+    {
+        // input section
+        ctrl_gt u_alpha;
+        ctrl_gt u_beta;
 
-		ctrl_gt i_alpha;
-		ctrl_gt i_beta;
+        ctrl_gt i_alpha;
+        ctrl_gt i_beta;
 
-		// output section
-		// output estimated theta, unit rad
-		ctrl_gt theta_est;
-		// output estimated speed, unit p.u.
-		ctrl_gt spd_est_pu;
-		// phasor for theta
-		ctl_vector2_t phasor;
+        // output section
+        // output estimated theta, unit rad
+        ctrl_gt theta_est;
+        // output estimated speed, unit p.u.
+        ctrl_gt spd_est_pu;
+        // phasor for theta
+        ctl_vector2_t phasor;
 
-		// intermediate variable section
+        // intermediate variable section
 
-		// i estimate
-		ctrl_gt i_alpha_est;
-		ctrl_gt i_beta_est;
+        // i estimate
+        ctrl_gt i_alpha_est;
+        ctrl_gt i_beta_est;
 
-		// EMF estimate
-		ctrl_gt e_alpha_est;
-		ctrl_gt e_beta_est;
+        // EMF estimate
+        ctrl_gt e_alpha_est;
+        ctrl_gt e_beta_est;
 
-		// slide model output 
-		ctrl_gt z_alpha;
-		ctrl_gt z_beta;
+        // slide model output
+        ctrl_gt z_alpha;
+        ctrl_gt z_beta;
 
+        // parameters
+        // angular velocity
+        ctrl_gt wr;
 
-		// parameters
-		// angular velocity
-		ctrl_gt wr;
+        // k1: Ts*1/Ld
+        ctrl_gt k1;
 
-		// k1: Ts*1/Ld
-		ctrl_gt k1;
+        // k2: Ts*Rs/Ld
+        ctrl_gt k2;
 
-		// k2: Ts*Rs/Ld
-		ctrl_gt k2;
+        // k3: (Ld-Lq)*Ts*1/Ld
+        // coupling term
+        ctrl_gt k3;
 
-		// k3: (Ld-Lq)*Ts*1/Ld
-		// coupling term
-		ctrl_gt k3;
+        // k: Slide Model gain
+        ctrl_gt k_slide;
 
-		// k: Slide Model gain
-		ctrl_gt k_slide;
+        // k filter: E filter
+        ctrl_gt k_filter_e;
 
-		// k filter: E filter
-		ctrl_gt k_filter_e;
+        // k filter: omega filter
+        ctrl_gt k_filter_omega;
 
-		// k filter: omega filter
-		ctrl_gt k_filter_omega;
+        // PLL pid controller
+        ctl_pid_t pid_pll;
 
-		// PLL pid controller
-		ctl_pid_t pid_pll;
+        // speed scale factor
+        // scale factor: rad/tick -> p.u.
+        ctrl_gt spd_sf;
+    } ctl_pmsm_smo_observer_t;
 
-		// speed scale factor
-		// scale factor: rad/tick -> p.u.
-		ctrl_gt spd_sf;
-	}ctl_pmsm_smo_observer_t;
+    // void ctl_init_pmsm_smo(ctl_pmsm_smo_observer_t* smo);
 
-	void ctl_init_pmsm_smo(ctl_pmsm_smo_observer_t* smo);
+    // void ctl_setup_pmsm_smo(ctl_pmsm_smo_observer_t* smo,
+    //	parameter_gt Rs, parameter_gt Ld, parameter_gt Lq, parameter_gt f_ctrl,
+    //	parameter_gt fc_e, parameter_gt fc_omega,
+    //	ctrl_gt pid_kp, ctrl_gt pid_ki, ctrl_gt pid_kd,
+    //	ctrl_gt spd_max_limit, ctrl_gt spd_min_limit, // unit p.u.
+    //	ctrl_gt k_slide, parameter_gt speed_base_rpm,
+    //	uint16_t pole_pairs);
 
-	void ctl_setup_pmsm_smo(ctl_pmsm_smo_observer_t* smo,
-		parameter_gt Rs, parameter_gt Ld, parameter_gt Lq, parameter_gt f_ctrl,
-		parameter_gt fc_e, parameter_gt fc_omega,
-		ctrl_gt pid_kp, ctrl_gt pid_ki, ctrl_gt pid_kd,
-		ctrl_gt spd_max_limit, ctrl_gt spd_min_limit, // unit p.u.
-		ctrl_gt k_slide, parameter_gt speed_base_rpm,
-		uint16_t pole_pairs);
+    void ctl_init_pmsm_smo(ctl_pmsm_smo_observer_t *smo, parameter_gt Rs, parameter_gt Ld, parameter_gt Lq,
+                           parameter_gt f_ctrl, parameter_gt fc_e, parameter_gt fc_omega, ctrl_gt pid_kp,
+                           ctrl_gt pid_ki, ctrl_gt pid_kd, ctrl_gt spd_max_limit,
+                           ctrl_gt spd_min_limit, // unit p.u.
+                           ctrl_gt k_slide, parameter_gt speed_base_rpm, uint16_t pole_pairs);
 
-	void ctl_setup_pmsm_smo_via_consultant(ctl_pmsm_smo_observer_t* smo,
-		// use it to calculate controller parameters
-		ctl_pmsm_dsn_consultant_t* dsn,
-		// use it to calculate controller parameters
-		ctl_motor_driver_consultant_t* drv,
-		// use it to per unit controller
-		ctl_pmsm_nameplate_consultant_t* np,
-		ctrl_gt pid_kp, ctrl_gt pid_ki, ctrl_gt pid_kd,
-		ctrl_gt k_slide);
+    void ctl_init_pmsm_smo_via_consultant(ctl_pmsm_smo_observer_t *smo,
+                                          // use it to calculate controller parameters
+                                          ctl_pmsm_dsn_consultant_t *dsn,
+                                          // use it to calculate controller parameters
+                                          ctl_motor_driver_consultant_t *drv,
+                                          // use it to per unit controller
+                                          ctl_pmsm_nameplate_consultant_t *np, ctrl_gt pid_kp, ctrl_gt pid_ki,
+                                          ctrl_gt pid_kd, ctrl_gt k_slide);
 
-	GMP_STATIC_INLINE
-		void ctl_input_pmsm_smo(ctl_pmsm_smo_observer_t* smo,
-			ctrl_gt u_alpha, ctrl_gt u_beta, ctrl_gt i_alpha, ctrl_gt i_beta)
-	{
-		smo->i_alpha = i_alpha;
-		smo->i_beta = i_beta;
-		smo->u_alpha = u_alpha;
-		smo->u_beta = u_beta;
-	}
+    GMP_STATIC_INLINE
+    void ctl_input_pmsm_smo(ctl_pmsm_smo_observer_t *smo, ctrl_gt u_alpha, ctrl_gt u_beta, ctrl_gt i_alpha,
+                            ctrl_gt i_beta)
+    {
+        smo->i_alpha = i_alpha;
+        smo->i_beta = i_beta;
+        smo->u_alpha = u_alpha;
+        smo->u_beta = u_beta;
+    }
 
-	GMP_STATIC_INLINE
-		ctrl_gt ctl_step_pmsm_smo(ctl_pmsm_smo_observer_t* smo)
-	{
-		// Model
-		ctrl_gt delta_i_alpha = ctl_mul(smo->k1, smo->u_alpha - smo->e_alpha_est - smo->z_alpha)
-			- ctl_mul(smo->k2, smo->i_alpha_est)
-			- ctl_mul(ctl_mul(smo->wr, smo->k3), smo->i_beta_est);
+    GMP_STATIC_INLINE
+    ctrl_gt ctl_step_pmsm_smo(ctl_pmsm_smo_observer_t *smo)
+    {
+        // Model
+        ctrl_gt delta_i_alpha = ctl_mul(smo->k1, smo->u_alpha - smo->e_alpha_est - smo->z_alpha) -
+                                ctl_mul(smo->k2, smo->i_alpha_est) -
+                                ctl_mul(ctl_mul(smo->wr, smo->k3), smo->i_beta_est);
 
-		ctrl_gt delta_i_beta = ctl_mul(smo->k1, smo->u_beta - smo->e_beta_est - smo->z_beta)
-			- ctl_mul(smo->k2, smo->i_beta_est)
-			+ ctl_mul(ctl_mul(smo->wr, smo->k3), smo->i_alpha_est);
+        ctrl_gt delta_i_beta = ctl_mul(smo->k1, smo->u_beta - smo->e_beta_est - smo->z_beta) -
+                               ctl_mul(smo->k2, smo->i_beta_est) + ctl_mul(ctl_mul(smo->wr, smo->k3), smo->i_alpha_est);
 
-		// Step i est
-		smo->i_alpha_est += delta_i_alpha;
-		smo->i_beta_est += delta_i_beta;
+        // Step i est
+        smo->i_alpha_est += delta_i_alpha;
+        smo->i_beta_est += delta_i_beta;
 
-		// Slide model
-		smo->z_alpha = ctl_mul(ctl_sat(smo->i_alpha_est - smo->i_alpha, float2ctrl(0.1), -float2ctrl(0.1)),
-			smo->k_slide);
-		smo->z_beta = ctl_mul(ctl_sat(smo->i_beta_est - smo->i_beta, float2ctrl(0.1), -float2ctrl(0.1)),
-			smo->k_slide);
+        // Slide model
+        smo->z_alpha =
+            ctl_mul(ctl_sat(smo->i_alpha_est - smo->i_alpha, float2ctrl(0.1), -float2ctrl(0.1)), smo->k_slide);
+        smo->z_beta = ctl_mul(ctl_sat(smo->i_beta_est - smo->i_beta, float2ctrl(0.1), -float2ctrl(0.1)), smo->k_slide);
 
-		// Filter and get e est
-		smo->e_alpha_est = ctl_mul(smo->z_alpha, smo->k_filter_e)
-			+ ctl_mul(smo->e_alpha_est, float2ctrl(1.0) - smo->k_filter_e);
-		smo->e_beta_est = ctl_mul(smo->z_beta, smo->k_filter_e)
-			+ ctl_mul(smo->e_beta_est, float2ctrl(1.0) - smo->k_filter_e);
+        // Filter and get e est
+        smo->e_alpha_est =
+            ctl_mul(smo->z_alpha, smo->k_filter_e) + ctl_mul(smo->e_alpha_est, float2ctrl(1.0) - smo->k_filter_e);
+        smo->e_beta_est =
+            ctl_mul(smo->z_beta, smo->k_filter_e) + ctl_mul(smo->e_beta_est, float2ctrl(1.0) - smo->k_filter_e);
 
-		// PLL get angle out
-		// 0. generate phasor
-		ctl_set_phasor_via_angle(smo->theta_est, &smo->phasor);
+        // PLL get angle out
+        // 0. generate phasor
+        ctl_set_phasor_via_angle(smo->theta_est, &smo->phasor);
 
-		//smo->phasor.dat[0] = (arm_sin_q31(smo->theta_est << (31 - 24))) >> (31 - 24);
-		//smo->phasor.dat[1] = (arm_cos_q31(smo->theta_est << (31 - 24))) >> (31 - 24);
+        // smo->phasor.dat[0] = (arm_sin_q31(smo->theta_est << (31 - 24))) >> (31 - 24);
+        // smo->phasor.dat[1] = (arm_cos_q31(smo->theta_est << (31 - 24))) >> (31 - 24);
 
-		// 1. error signal generate
-		ctrl_gt e_error = -ctl_mul(smo->e_alpha_est, smo->phasor.dat[1])
-			- ctl_mul(smo->e_beta_est, smo->phasor.dat[0]);
+        // 1. error signal generate
+        ctrl_gt e_error = -ctl_mul(smo->e_alpha_est, smo->phasor.dat[1]) - ctl_mul(smo->e_beta_est, smo->phasor.dat[0]);
 
-		// 2. PLL speed lock routine
-		ctl_step_pid_ser(&smo->pid_pll, e_error);
+        // 2. PLL speed lock routine
+        ctl_step_pid_ser(&smo->pid_pll, e_error);
 
-		// 3. filter speed, unit rad/tick
-		smo->wr = ctl_mul(smo->pid_pll.out, smo->k_filter_omega)
-			+ ctl_mul(smo->wr, float2ctrl(1.0) - smo->k_filter_omega);
+        // 3. filter speed, unit rad/tick
+        smo->wr =
+            ctl_mul(smo->pid_pll.out, smo->k_filter_omega) + ctl_mul(smo->wr, float2ctrl(1.0) - smo->k_filter_omega);
 
-		// 4. update theta
-		smo->theta_est += smo->wr;
+        // 4. update theta
+        smo->theta_est += smo->wr;
 
-		if (smo->theta_est > GMP_CONST_2_PI)
-			smo->theta_est -= GMP_CONST_2_PI;
-		else if (smo->theta_est < 0)
-			smo->theta_est += GMP_CONST_2_PI;
+        if (smo->theta_est > GMP_CONST_2_PI)
+            smo->theta_est -= GMP_CONST_2_PI;
+        else if (smo->theta_est < 0)
+            smo->theta_est += GMP_CONST_2_PI;
 
+        // 5. update speed
+        smo->spd_est_pu = ctl_mul(smo->wr, smo->spd_sf);
 
-		// 5. update speed
-		smo->spd_est_pu = ctl_mul(smo->wr, smo->spd_sf);
+        // 6. output phase
+        // float out = theta + 180 * atan(speed / wc) / Pi;
+        // UPDATE HERE
 
-
-		// 6. output phase 
-		//float out = theta + 180 * atan(speed / wc) / Pi;
-		// UPDATE HERE
-
-		return smo->theta_est;
-	}
-
+        return smo->theta_est;
+    }
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
 
 #endif // _FILE_PMSM_SMO_H_
-
-

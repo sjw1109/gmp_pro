@@ -42,7 +42,7 @@ extern ctl_pos_encoder_t pos_enc;
 extern ctl_spd_calculator_t spd_enc;
 
 // PMSM servo objects
-extern pmsm_fm_t pmsm;
+//extern pmsm_fm_t pmsm;
 
 // PMSM const frequency controller
 extern ctl_const_f_controller const_f;

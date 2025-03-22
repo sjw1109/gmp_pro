@@ -18,19 +18,37 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="motor_control_simulink.cpp">
+    <ClCompile Include="..\..\implement\simulate\peripheral.c">
+      <Filter>implement_interface</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\implement\common\ctl_main.c">
+      <Filter>implement_common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\implement\common\user_main.c">
+      <Filter>implement_common</Filter>
+    </ClCompile>
+    <ClCompile Include="gmp_src\gmp_dev_util.c">
+      <Filter>implement_interface</Filter>
+    </ClCompile>
+    <ClCompile Include="gmp_src\gmp_ds_list.c">
+      <Filter>implement_interface</Filter>
+    </ClCompile>
+    <ClCompile Include="gmp_src\gmp_std_port.c">
       <Filter>implement_interface</Filter>
     </ClCompile>
     <ClCompile Include="gmp_src\ctl_component_advance.c">
       <Filter>GMP Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gmp_src\ctl_component_combo.c">
+    <ClCompile Include="gmp_src\ctl_component_continuous.c">
       <Filter>GMP Source Files</Filter>
     </ClCompile>
     <ClCompile Include="gmp_src\ctl_component_discrete.c">
       <Filter>GMP Source Files</Filter>
     </ClCompile>
     <ClCompile Include="gmp_src\ctl_component_interface.c">
+      <Filter>GMP Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gmp_src\ctl_component_lebesgue.c">
       <Filter>GMP Source Files</Filter>
     </ClCompile>
     <ClCompile Include="gmp_src\ctl_component_protection.c">
@@ -54,52 +72,34 @@
     <ClCompile Include="gmp_src\ctl_nano.c">
       <Filter>GMP Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gmp_src\gmp_dev_util.c">
-      <Filter>GMP Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="gmp_src\gmp_ds_list.c">
-      <Filter>GMP Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="gmp_src\gmp_mm_block_memory.c">
       <Filter>GMP Source Files</Filter>
     </ClCompile>
     <ClCompile Include="gmp_src\gmp_std_error_code.c">
       <Filter>GMP Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gmp_src\gmp_std_port.c">
-      <Filter>GMP Source Files</Filter>
+    <ClCompile Include="motor_control_simulink.cpp">
+      <Filter>implement_interface</Filter>
     </ClCompile>
     <ClCompile Include="gmp_src\windows_simulink_main.cpp">
       <Filter>GMP Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\implement\user_simulink\peripheral.c">
-      <Filter>implement_interface</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\pmsm_servo.c">
-      <Filter>GMP Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\implement\user_common\ctl_main.c">
-      <Filter>implement_common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\implement\user_common\user_main.c">
-      <Filter>implement_common</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\implement\user_common\ctl_main.h">
+    <ClInclude Include="..\..\implement\simulate\pc_simulate_buffer.h">
+      <Filter>implement_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\implement\simulate\user.config.h">
+      <Filter>implement_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\implement\common\ctl_main.h">
       <Filter>implement_common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\implement\user_common\user_main.h">
+    <ClInclude Include="..\..\implement\common\user_main.h">
       <Filter>implement_common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\implement\user_simulink\ctl_interface.h">
-      <Filter>implement_interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\implement\user_simulink\pc_simulate_buffer.h">
-      <Filter>implement_interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\implement\user_simulink\user.config.h">
-      <Filter>implement_interface</Filter>
+    <ClInclude Include="..\..\implement\simulate\ctl_interface.h">
+      <Filter>GMP Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

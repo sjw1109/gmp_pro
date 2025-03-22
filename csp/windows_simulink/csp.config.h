@@ -46,20 +46,26 @@
 #define GMP_BASE_PRINT_FUNCTION(A, B) windows_print_function(A, B)
 #endif // GMP_BASE_PRINT_DEFAULT_HANDLE_TYPE
 
+// define GMP Base time tick resolution
+// tick timer will pulse GMP_BASE_TIME_TICK_RESOLUTION times in 1 second.
+#ifndef GMP_BASE_TIME_TICK_RESOLUTION
+#define GMP_BASE_TIME_TICK_RESOLUTION 1000
+#endif // GMP_BASE_TIME_TICK_RESOLUTION
+
 // Enable GMP LOGO
 #ifdef SPECIFY_DISABLE_GMP_LOGO
 #undef SPECIFY_DISABLE_GMP_LOGO
 #endif // SPECIFY_DISABLE_GMP_LOGO
 
 // Enable GMP CTL
-#ifndef SPECIFY_ENABLE_GMP_CTL
-#define SPECIFY_ENABLE_GMP_CTL
-#endif // SPECIFY_ENABLE_GMP_CTL
+//#ifndef SPECIFY_ENABLE_GMP_CTL
+//#define SPECIFY_ENABLE_GMP_CTL
+//#endif // SPECIFY_ENABLE_GMP_CTL
 
 // Enable GMP CTL Controller Framework Nano
-#ifndef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
-#define SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
-#endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+//#ifndef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+//#define SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+//#endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
 // Simulation condition stop
 // if connection is setup but no message comes in 2 sec, 

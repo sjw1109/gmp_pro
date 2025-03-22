@@ -133,10 +133,10 @@ exnter "C"
         vector3_gt idq0;
 
         // v_alpha, v_beta, v0
-        vector3_gt vab0;
+        vector3_gt uab0;
 
         // v_d, v_q, v0
-        vector3_gt vdq0;
+        vector3_gt udq0;
 
         // .....................................................................//
         // controller feed forward parameters
@@ -162,8 +162,8 @@ exnter "C"
         // id, iq set
         vector2_gt idq_set;
 
-        // vd, vq set
-        vector2_gt vdq_set;
+        // vd, vq, v0 set
+        vector3_gt vdq_set;
 
         // valpha, vbeta, v0 set
         vector3_gt ab0_set;
@@ -200,7 +200,7 @@ exnter "C"
         ctl_vector2_t phasor;
         ctrl_gt etheta;
 
-        if (flag_enable_controller)
+        if (ctrl->flag_enable_controller)
         {
             //
             // Clark Transformation
@@ -208,20 +208,20 @@ exnter "C"
 
             // iab = clark(iabc)
 #if MTR_CTRL_CURRENT_MEASUREMENT_PHASES == 3
-            ctl_ct_clark(&ctrl->iabc, &ctrl->iab0);
+            ctl_ct_clark(&ctrl->mtr_interface.iabc->value, &ctrl->iab0);
 #elif MTR_CTRL_CURRENT_MEASUREMENT_PHASES == 2
-        ctl_ct_clark_2ph(&ctrl->iabc, &ctrl->iab0);
+        ctl_ct_clark_2ph(&ctrl->mtr_interface.iabc->value, &ctrl->iab0);
 #else
 #error("Wrong parameter for macro MTR_CTRL_CURRENT_MEASUREMENT_PHASES, this parameter means how many current sensors have for each motor.")
 #endif // MTR_CTRL_CURRENT_MEASUREMENT_PHASES
 
             // uab = clark(uabc)
 #if MTR_CTRL_VOLTAGE_MEASUREMENT_PHASES == 3
-            ctl_ct_clark(&ctrl->vabc, &ctrl->vab0);
+            ctl_ct_clark(&ctrl->mtr_interface.uabc->value, &ctrl->uab0);
 #elif MTR_CTRL_VOLTAGE_MEASUREMENT_PHASES == 2
-        ctl_ct_clark_2ph(&ctrl->vabc, &ctrl->vab0);
+        ctl_ct_clark_2ph(&ctrl->mtr_interface.uabc->value, &ctrl->uab0);
 #elif MTR_CTRL_VOLTAGE_MEASUREMENT_PHASES == 0
-        ctl_vector3_clear(&ctrl->vab0);
+        ctl_vector3_clear(&ctrl->uab0);
 #else
 #error("Wrong parameter for macro MTR_CTRL_VOLTAGE_MEASUREMENT_PHASES, this parameter means how many voltage sensors have for each motor.")
 #endif // MTR_CTRL_VOLTAGE_MEASUREMENT_PHASES
@@ -237,13 +237,13 @@ exnter "C"
             ctl_set_phasor_via_angle(etheta, &phasor);
 
             // idq = park(iab)
-            ctl_ct_park(&obj->iab0, &phasor, &obj->idq0);
+            ctl_ct_park(&ctrl->iab0, &phasor, &ctrl->idq0);
 
             // vdq = park(vab)
 #if MTR_CTRL_VOLTAGE_MEASUREMENT_PHASES != 0
-            ctl_ct_park(&ctrl->vab0, &phasor, &obj->vdq0);
+            ctl_ct_park(&ctrl->uab0, &phasor, &ctrl->udq0);
 #else
-        ctl_vector3_clear(&ctrl->vab0);
+        ctl_vector3_clear(&ctrl->uab0);
 #endif // MTR_CTRL_VOLTAGE_MEASUREMENT_PHASES
 
             //
@@ -261,10 +261,10 @@ exnter "C"
 
             if (ctrl->flag_enable_velocity_ctrl)
             {
-                ctrl->idq_set[phase_d] = ctrl->idq_ff.dat[phase_d];
-                ctrl->idq_set[phase_q] = ctl_step_discrete_track_pid(&ctrl->spd_ctrl, ctrl->speed_set,
-                                                                     ctl_get_mtr_velocity(ctrl->mtr_interface)) +
-                                         ctrl->idq_ff.dat[phase_q];
+                ctrl->idq_set.dat[phase_d] = ctrl->idq_ff.dat[phase_d];
+                ctrl->idq_set.dat[phase_q] = ctl_step_discrete_track_pid(&ctrl->spd_ctrl, ctrl->speed_set,
+                                                                         ctl_get_mtr_velocity(&ctrl->mtr_interface)) +
+                                             ctrl->idq_ff.dat[phase_q];
 
 #if MTR_CTRL_FEEDFORWARD_STRATEGY == 1
                 // ctl_mtr_pmsm_decouple(&ctrl->vdq_set, &ctrl->idq_set, ctrl->Ld, ctrl->Lq,
@@ -273,8 +273,8 @@ exnter "C"
             }
             else
             {
-                ctrl->idq_set[phase_d] = ctrl->idq_ff.dat[phase_d];
-                ctrl->idq_set[phase_q] = ctrl->idq_ff.dat[phase_q];
+                ctrl->idq_set.dat[phase_d] = ctrl->idq_ff.dat[phase_d];
+                ctrl->idq_set.dat[phase_q] = ctrl->idq_ff.dat[phase_q];
             }
 
             //
@@ -284,17 +284,22 @@ exnter "C"
             if (ctrl->flag_enable_current_ctrl)
             {
                 ctrl->vdq_set.dat[phase_d] =
-                    ctl_step_discrete_pid(&ctrl->current_ctrl[phase_d], ctrl->idq_set[phase_d] - ctrl->idq0[phase_d]) +
-                    ctrl->vdq_ff[phase_d];
+                    ctl_step_discrete_pid(&ctrl->current_ctrl[phase_d],
+                                          ctrl->idq_set.dat[phase_d] - ctrl->idq0.dat[phase_d]) +
+                    ctrl->vdq_ff.dat[phase_d];
 
                 ctrl->vdq_set.dat[phase_q] =
-                    ctl_step_discrete_pid(&ctrl->current_ctrl[phase_q], ctrl->idq_set[phase_q] - ctrl->idq0[phase_q]) +
-                    ctrl->vdq_ff[phase_q];
+                    ctl_step_discrete_pid(&ctrl->current_ctrl[phase_q],
+                                          ctrl->idq_set.dat[phase_q] - ctrl->idq0.dat[phase_q]) +
+                    ctrl->vdq_ff.dat[phase_q];
+
+                ctrl->vdq_set.dat[phase_0] = 0;
             }
             else
             {
-                ctrl->vdq_set.dat[phase_d] = ctrl->vdq_ff[phase_d];
-                ctrl->vdq_set.dat[phase_q] = ctrl->vdq_ff[phase_q];
+                ctrl->vdq_set.dat[phase_d] = ctrl->vdq_ff.dat[phase_d];
+                ctrl->vdq_set.dat[phase_q] = ctrl->vdq_ff.dat[phase_q];
+                ctrl->vdq_set.dat[phase_0] = 0;
             }
 
             //
@@ -313,13 +318,13 @@ exnter "C"
 
             if (ctrl->flag_enable_output)
             {
-                ctl_ct_svpwm_calc(&ctrl->ab0_set, &ctrl->pwm_out.value);
+                ctl_ct_svpwm_calc(&ctrl->ab0_set, &ctrl->pwm_out->value);
             }
             else
             {
-                ctrl->pwm_out.value.dat[phase_A] = 0;
-                ctrl->pwm_out.value.dat[phase_B] = 0;
-                ctrl->pwm_out.value.dat[phase_C] = 0;
+                ctrl->pwm_out->value.dat[phase_A] = 0;
+                ctrl->pwm_out->value.dat[phase_B] = 0;
+                ctrl->pwm_out->value.dat[phase_C] = 0;
             }
         }
     }
@@ -331,7 +336,7 @@ exnter "C"
         ctl_clear_discrete_pid(&ctrl->current_ctrl[phase_d]);
         ctl_clear_discrete_pid(&ctrl->current_ctrl[phase_q]);
 
-        ctl_clear_discrete_track_pid(&spd_ctrl)
+        ctl_clear_discrete_track_pid(&ctrl->spd_ctrl);
     }
 
     // .....................................................................//
@@ -382,7 +387,7 @@ exnter "C"
     //
 
     // PMSM controller run in valpha vbeta mode
-    // user should specify vdq0 by function ctl_set_pmsm_ctrl_vdq
+    // user should specify udq0 by function ctl_set_pmsm_ctrl_vdq
     GMP_STATIC_INLINE
     void ctl_pmsm_ctrl_voltage_mode(pmsm_bare_controller_t * ctrl)
     {
@@ -531,7 +536,6 @@ exnter "C"
 
     // attach to output port
     void ctl_attach_pmsm_bare_output(pmsm_bare_controller_t * ctrl, tri_pwm_ift * pwm_out);
-
 
 #ifdef __cplsuplus
 }
