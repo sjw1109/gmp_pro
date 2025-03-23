@@ -49,9 +49,9 @@ extern "C"
         ctrl_gt output;
 
         ctrl_gt b2, b1, b0;
-#ifndef _USE_STD_DISCRETE_PID
+#ifdef _USE_DEBUG_DISCRETE_PID
         ctrl_gt kp;
-#endif // _USE_STD_DISCRETE_PID
+#endif // _USE_DEBUG_DISCRETE_PID
 
         ctrl_gt input_1;
         ctrl_gt input_2;
@@ -80,18 +80,19 @@ extern "C"
     }
 
 // SISO standard interface
-#ifdef _USE_STD_DISCRETE_PID
+#ifdef _USE_DEBUG_DISCRETE_PID
     GMP_STATIC_INLINE
     ctrl_gt ctl_step_discrete_pid(discrete_pid_t *ctrl, ctrl_gt input)
     {
         ctrl->input = input;
 
         // transfer function
-        ctrl->output = ctl_mul(ctrl->b0, ctrl->input);
+        ctrl->output = ctl_mul(ctrl->kp, ctrl->input);
+        ctrl->output += ctl_mul(ctrl->b0, ctrl->input);
         ctrl->output += ctl_mul(ctrl->b1, ctrl->input_1);
         ctrl->output += ctl_mul(ctrl->b2, ctrl->input_2);
 
-        ctrl->output += ctrl->output_1;
+        ctrl->output += ctl_mul(float2ctrl(0.95), ctrl->output_1);
 
         // saturation
         ctrl->output = ctl_sat(ctrl->output, ctrl->output_max, ctrl->output_min);
@@ -103,19 +104,19 @@ extern "C"
 
         return ctrl->output;
     }
-#else // _USE_STD_DISCRETE_PID
+#else // _USE_DEBUG_DISCRETE_PID
+
 GMP_STATIC_INLINE
 ctrl_gt ctl_step_discrete_pid(discrete_pid_t *ctrl, ctrl_gt input)
 {
     ctrl->input = input;
 
     // transfer function
-    ctrl->output = ctl_mul(ctrl->kp, ctrl->input);
-    ctrl->output += ctl_mul(ctrl->b0, ctrl->input);
+    ctrl->output = ctl_mul(ctrl->b0, ctrl->input);
     ctrl->output += ctl_mul(ctrl->b1, ctrl->input_1);
     ctrl->output += ctl_mul(ctrl->b2, ctrl->input_2);
 
-    ctrl->output += ctl_mul(float2ctrl(0.95), ctrl->output_1);
+    ctrl->output += ctrl->output_1;
 
     // saturation
     ctrl->output = ctl_sat(ctrl->output, ctrl->output_max, ctrl->output_min);
@@ -128,7 +129,7 @@ ctrl_gt ctl_step_discrete_pid(discrete_pid_t *ctrl, ctrl_gt input)
     return ctrl->output;
 }
 
-#endif // _USE_STD_DISCRETE_PID
+#endif // _USE_DEBUG_DISCRETE_PID
 
     // get discrete pid output
     GMP_STATIC_INLINE
