@@ -46,8 +46,8 @@ void ctl_init()
     pmsm_ctrl_init.fs = CONTROLLER_FREQUENCY;
 
     // current pid controller parameters
-    pmsm_ctrl_init.current_pid_gain = 0.01f;
-    pmsm_ctrl_init.current_Ti = 1.0f / 1000;
+    pmsm_ctrl_init.current_pid_gain = 0.001f;
+    pmsm_ctrl_init.current_Ti = 1.0f / 2000;
     pmsm_ctrl_init.current_Td = 0;
     pmsm_ctrl_init.voltage_limit_min = float2ctrl(0.3);
     pmsm_ctrl_init.voltage_limit_max = float2ctrl(-0.3);
