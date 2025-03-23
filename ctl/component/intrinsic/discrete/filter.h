@@ -47,6 +47,7 @@ extern "C"
     void ctl_init_lp_filter(ctl_low_pass_filter_t *lpf, parameter_gt fs, parameter_gt fc);
 
     // get filter coefficient via parameter
+    GMP_STATIC_INLINE
     ctrl_gt ctl_helper_lp_filter(parameter_gt fs, // Sample rate
                                  parameter_gt fc  // cut frequency
     )

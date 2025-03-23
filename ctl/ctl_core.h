@@ -10,31 +10,29 @@
  */
 
 // Invoke All the GMP features
-#include <gmp_core.h>
+//#include <gmp_core.h>
 
-#if !defined SPECIFY_DISABLE_GMP_CTL
+#if defined SPECIFY_ENABLE_GMP_CTL
 
-// Invoke CTL configurations 
-#include <ctl/ctl.config.h>
+//// Invoke CTL configurations 
+//#include <ctl/ctl.config.h>
+//
+//// Invoke Necessary math supports
+//#include <ctl/math_block/gmp_math.h>
 
-// Invoke Necessary math supports
-#include <ctl/math_block/gmp_math.h>
+// This file is provided by user,
+// User should define controller related function in this header file
+//#include <ctl_main.h>
+
+//#include <ctl_interface.h>
+
+//#include <ctl/framework/ctl_dispatch.h>
 
 
 #if defined SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
-
-
-// This file is provided by user,
-// User should define controller related function in this header file
-#include <ctl_main.h>
-
-#include <ctl_interface.h>
-
-#include <ctl/framework/ctl_dispatch.h>
-
 // Invoke necessary CTL libraries
-#include <ctl/framework/ctl_nano.h>
+//#include <ctl/framework/ctl_nano.h>
 
 #endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 

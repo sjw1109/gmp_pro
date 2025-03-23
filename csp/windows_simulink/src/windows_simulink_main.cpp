@@ -14,7 +14,7 @@
 #include <gmp_core.h>
 #include <tools/gmp_sil/udp_helper/asio_udp_helper.hpp>
 
-#include <simulink_buffer.h>
+#include <ctl/ctl_core.h>
 
 #include <iostream>
 #include <stdlib.h>
@@ -27,8 +27,11 @@ half_duplex_ift simulink_rx;
 half_duplex_ift simulink_tx;
 
 // buffer for rx & tx
-gmp_pc_simulink_rx_buffer_t simulink_rx_buffer;
-gmp_pc_simulink_tx_buffer_t simulink_tx_buffer;
+extern "C"
+{
+    gmp_pc_simulink_rx_buffer_t simulink_rx_buffer;
+    gmp_pc_simulink_tx_buffer_t simulink_tx_buffer;
+}
 
 // Simulink Enable signal
 void csp_sl_enable_output(void)
@@ -45,15 +48,15 @@ void csp_sl_disable_output(void)
 // User should invoke this function to get time (system tick).
 time_gt gmp_port_system_tick(void)
 {
-    return 0;
+    return (time_gt)(simulink_rx_buffer.time * GMP_BASE_TIME_TICK_RESOLUTION);
 }
 
 // This function may be called and used to initialize all the peripheral.
 void gmp_csp_startup(void)
 {
-    //static uint32_t default_debug_dev_place_holder = 0;
-    // Specify a non-zero value to enable print.
-    //default_debug_dev = &default_debug_dev_place_holder;
+    // static uint32_t default_debug_dev_place_holder = 0;
+    //  Specify a non-zero value to enable print.
+    // default_debug_dev = &default_debug_dev_place_holder;
 
     // Setup ASIO helper
     helper = asio_udp_helper::parse_network_config(GMP_ASIO_CONFIG_JSON);
@@ -70,7 +73,7 @@ void gmp_csp_startup(void)
 #ifdef GMP_ASIO_ENABLE_STOP_CMD
     // enable this program acknowledge "Stop" Command from Simulink
     // BUG REPORT this function may cause exception
-    //helper->server_ack_cmd();
+    // helper->server_ack_cmd();
 #endif // GMP_ASIO_ENABLE_STOP_CMD
 
     gmp_base_print("[INFO] Simulink RX buffer size: %llu\r\n", sizeof(simulink_rx_buffer));

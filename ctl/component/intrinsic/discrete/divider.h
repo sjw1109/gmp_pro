@@ -32,7 +32,8 @@ extern "C"
 
     } ctl_divider_t;
 
-    static inline fast_gt ctl_step_divider(ctl_divider_t *obj)
+    GMP_STATIC_INLINE
+    fast_gt ctl_step_divider(ctl_divider_t *obj)
     {
 
         obj->counter += 1;
@@ -54,7 +55,8 @@ extern "C"
 
     void ctl_init_divider(ctl_divider_t *obj, uint32_t counter_period);
 
-    static inline void ctl_clear_divider(ctl_divider_t *obj)
+    GMP_STATIC_INLINE
+    void ctl_clear_divider(ctl_divider_t *obj)
     {
         obj->counter = 0;
     }

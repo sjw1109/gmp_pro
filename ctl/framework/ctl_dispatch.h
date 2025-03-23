@@ -7,6 +7,8 @@ extern "C"
 {
 #endif // __cplusplus
 
+#ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+
     // If only one interrupt will complete the control task,
     // This function should be called by
     GMP_STATIC_INLINE
@@ -56,6 +58,8 @@ extern "C"
 #endif // GMP_CTL_FRM_NANO_REQUEST_STANDALONE
     }
 
+#endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+
     //
     // This function is kernel of GMP CTL module.
     // This function should be invoked by user in Main ISR
@@ -72,12 +76,18 @@ extern "C"
         ctl_fm_periodic_dispatch(ctl_nano_handle);
 
 #endif // SPECIFY_CALL_PERIODIC_DISPATCH_MANUALLY
-
-#endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+        ctl_dispatch();
+#else
+        // input stage
+        ctl_input_callback();
 
         // call user controller user defined ISR
         ctl_dispatch();
 
+        // output stage
+        ctl_output_callback();
+
+#endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 #endif // SPECIFY_ENABLE_GMP_CTL
     }
 

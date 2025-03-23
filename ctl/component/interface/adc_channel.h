@@ -174,7 +174,7 @@ extern "C"
         }
     }
 
- GMP_STATIC_INLINE
+    GMP_STATIC_INLINE
     void ctl_get_dual_adc_channel(dual_adc_channel_t *adc, ctrl_gt *dat1, ctrl_gt *dat2)
     {
         *dat1 = adc->control_port.value.dat[0];
@@ -363,7 +363,6 @@ extern "C"
     {
         return &adc->control_port;
     }
-
 
     //////////////////////////////////////////////////////////////////////////
     // ADC bias calibrator

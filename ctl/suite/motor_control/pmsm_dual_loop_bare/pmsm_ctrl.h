@@ -366,6 +366,7 @@ exnter "C"
     GMP_STATIC_INLINE
     void ctl_pmsm_ctrl_valphabeta_mode(pmsm_bare_controller_t * ctrl)
     {
+        ctrl->flag_enable_output = 1;
         ctrl->flag_enable_modulation = 0;
         ctrl->flag_enable_current_ctrl = 0;
         ctrl->flag_enable_velocity_ctrl = 0;
@@ -391,6 +392,7 @@ exnter "C"
     GMP_STATIC_INLINE
     void ctl_pmsm_ctrl_voltage_mode(pmsm_bare_controller_t * ctrl)
     {
+        ctrl->flag_enable_output = 1;
         ctrl->flag_enable_modulation = 1;
         ctrl->flag_enable_current_ctrl = 0;
         ctrl->flag_enable_velocity_ctrl = 0;
@@ -415,6 +417,7 @@ exnter "C"
     GMP_STATIC_INLINE
     void ctl_pmsm_ctrl_current_mode(pmsm_bare_controller_t * ctrl)
     {
+        ctrl->flag_enable_output = 1;
         ctrl->flag_enable_modulation = 1;
         ctrl->flag_enable_current_ctrl = 1;
         ctrl->flag_enable_velocity_ctrl = 0;
@@ -439,6 +442,7 @@ exnter "C"
     GMP_STATIC_INLINE
     void ctl_pmsm_ctrl_velocity_mode(pmsm_bare_controller_t * ctrl)
     {
+        ctrl->flag_enable_output = 1;
         ctrl->flag_enable_modulation = 1;
         ctrl->flag_enable_current_ctrl = 1;
         ctrl->flag_enable_velocity_ctrl = 1;
@@ -460,6 +464,7 @@ exnter "C"
     GMP_STATIC_INLINE
     void ctl_pmsm_ctrl_position_mode(pmsm_bare_controller_t * ctrl)
     {
+        ctrl->flag_enable_output = 1;
         ctrl->flag_enable_modulation = 1;
         ctrl->flag_enable_current_ctrl = 1;
         ctrl->flag_enable_velocity_ctrl = 1;

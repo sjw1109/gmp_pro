@@ -94,6 +94,7 @@ extern "C"
 
     void ctl_init_pid(pid_regular_t *hpid, ctrl_gt kp, ctrl_gt ki, ctrl_gt kd);
 
+    GMP_STATIC_INLINE
     void ctl_set_pid_parameter(pid_regular_t *hpid, ctrl_gt kp, ctrl_gt ki, ctrl_gt kd)
     {
         hpid->kp = kp;
@@ -101,6 +102,7 @@ extern "C"
         hpid->kd = kd;
     }
 
+    GMP_STATIC_INLINE
     void ctl_set_pid_limit(pid_regular_t *hpid, ctrl_gt out_min, ctrl_gt out_max)
     {
         hpid->out_min = out_min;

@@ -20,7 +20,7 @@
 #include <core/std/gmp.std.h>
 
 // invoke GMP Simulink Communication buffer type
-#include <csp/windows_simulink/simulink_buffer.h>
+//#include <csp/windows_simulink/simulink_buffer.h>
 
 //
 // Instert a software breakpoint right here
@@ -33,7 +33,7 @@
 // Step III: Invoke all the other CSP headers
 //
 
-ec_gt windows_print_function(uint32_t *handle, half_duplex_ift* port);
+//ec_gt windows_print_function(uint32_t *handle, half_duplex_ift *port);
 
 
 // Simulink Disable/Enable output

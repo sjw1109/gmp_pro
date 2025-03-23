@@ -46,6 +46,7 @@ extern "C"
     void ctl_init_pwm_channel(pwm_channel_t *pwm_obj, pwm_gt phase, pwm_gt full_scale);
 
     // calculate function
+    GMP_STATIC_INLINE
     pwm_gt ctl_calc_pwm_channel(pwm_channel_t *pwm_obj, ctrl_gt raw)
     {
         pwm_obj->raw.value = raw;
@@ -55,6 +56,8 @@ extern "C"
 
         return pwm_obj->value;
     }
+
+    GMP_STATIC_INLINE
     pwm_gt ctl_calc_pwm_channel_warp(pwm_channel_t *pwm_obj, ctrl_gt raw)
     {
         pwm_obj->raw.value = raw;
@@ -64,6 +67,8 @@ extern "C"
 
         return pwm_obj->value;
     }
+
+    GMP_STATIC_INLINE
     pwm_gt ctl_calc_pwm_channel_inv(pwm_channel_t *pwm_obj, ctrl_gt raw)
     {
         pwm_obj->raw.value = raw;
@@ -185,37 +190,42 @@ extern "C"
     void ctl_init_pwm_tri_channel(pwm_tri_channel_t *pwm_obj, pwm_gt phase, pwm_gt full_scale);
 
     // calculate function
-    void ctl_calc_pwm_tri_channel(pwm_tri_channel_t* pwm_obj, ctl_vector3_t* raw)
+    GMP_STATIC_INLINE
+    void ctl_calc_pwm_tri_channel(pwm_tri_channel_t* pwm_obj)
     {
         fast_gt i;
 
         for (i = 0; i < 3; ++i)
         {
-            pwm_obj->raw.value.dat[i] = raw->dat[i];
+            //pwm_obj->raw.value.dat[i] = raw->dat[i];
 
             pwm_obj->value[i] = pwm_mul(pwm_obj->raw.value.dat[i], pwm_obj->full_scale) + pwm_obj->phase;
             pwm_obj->value[i] = pwm_sat(pwm_obj->value[i], pwm_obj->full_scale, 0);
         }
     }
-    void ctl_calc_pwm_tri_channel_warp(pwm_tri_channel_t* pwm_obj, ctl_vector3_t* raw)
+
+    GMP_STATIC_INLINE
+    void ctl_calc_pwm_tri_channel_warp(pwm_tri_channel_t* pwm_obj)
     {
         fast_gt i;
 
         for (i = 0; i < 3; ++i)
         {
-            pwm_obj->raw.value.dat[i] = raw->dat[i];
+            //pwm_obj->raw.value.dat[i] = raw->dat[i];
 
             pwm_obj->value[i] = pwm_mul(pwm_obj->raw.value.dat[i], pwm_obj->full_scale) + pwm_obj->phase;
             pwm_obj->value[i] = pwm_obj->value[i] % pwm_obj->full_scale;
         }
     }
-    void ctl_calc_pwm_tri_channel_inv(pwm_tri_channel_t* pwm_obj, ctl_vector3_t* raw)
+
+    GMP_STATIC_INLINE
+    void ctl_calc_pwm_tri_channel_inv(pwm_tri_channel_t* pwm_obj)
     {
         fast_gt i;
 
         for (i = 0; i < 3; ++i)
         {
-            pwm_obj->raw.value.dat[i] = raw->dat[i];
+            //pwm_obj->raw.value.dat[i] = raw->dat[i];
 
             pwm_obj->value[i] = pwm_obj->full_scale - pwm_mul(pwm_obj->raw.value.dat[i], pwm_obj->full_scale);
             pwm_obj->value[i] = pwm_sat(pwm_obj->value[i], pwm_obj->full_scale, 0);

@@ -26,18 +26,15 @@ extern "C"
 // Include all options for config
 #include <core/std/cfg/options.cfg.h>
 
-
 // invoke user config file
 //
 #include "user.config.h"
-
 
 #ifndef SPECIFY_DISABLE_CSP
 // invoke CSP default config
 //
 #include <csp.config.h>
 #endif // SPECIFY_DISABLE_CSP
-
 
 // invoke system default config
 //
@@ -65,7 +62,6 @@ extern "C"
 
 #include <stddef.h>
 #include <stdint.h>
-
 
 // ....................................................................//
 // invoke all the GMP STD (standard support)
@@ -113,24 +109,7 @@ extern "C"
 #include <core/mm/block_mem.h>
 
 // ....................................................................//
-// memory controller
-#ifndef SPECIFY_DISABLE_GMP_CTL
-#include <ctl/ctl_core.h>
-
-#ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
-#include <ctl/framework/ctl_nano.h>
-
-#include "ctl_main.h"
-#include "ctl_interface.h"
-
-#include <ctl/framework/ctl_dispatch.h>
-
-
-#endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
-#endif // SPECIFY_ENABLE_GMP_CTL
-
-    // ....................................................................//
-    // Invoke all the ports function
+// Invoke all the ports function
 
 // GMP C port function
 //
@@ -140,10 +119,38 @@ extern "C"
 //
 #include <core/std/cfg/csp.cfg.h>
 
-    // ....................................................................//
-    // GMP device function 
+// ....................................................................//
+// controller
+#if defined SPECIFY_ENABLE_GMP_CTL
 
-    // ring buffer for device  
+// Invoke CTL configurations
+#include <ctl/ctl.config.h>
+
+// Invoke Necessary math supports
+#include <ctl/math_block/gmp_math.h>
+
+// This file is provided by user,
+// User should define controller related function in this header file
+#include <ctl_main.h>
+
+#include <ctl_interface.h>
+
+#include <ctl/framework/ctl_dispatch.h>
+
+#if defined SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+
+// Invoke necessary CTL libraries
+#include <ctl/framework/ctl_nano.h>
+
+#endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+
+#endif // SPECIFY_ENABLE_GMP_CTL
+
+
+    // ....................................................................//
+    // GMP device function
+
+    // ring buffer for device
 #include <core/dev/ring_buf.h>
 
 #ifdef __cplusplus

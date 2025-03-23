@@ -36,6 +36,7 @@ extern "C"
         parameter_gt fs);
 
     // reset discrete track pid object
+    GMP_STATIC_INLINE
     void ctl_clear_discrete_track_pid(track_discrete_pid_t *tp)
     {
         ctl_clear_discrete_pid(&tp->pid);
@@ -44,6 +45,7 @@ extern "C"
     }
 
     // step discrete track pid object
+    GMP_STATIC_INLINE
     ctrl_gt ctl_step_discrete_track_pid(track_discrete_pid_t *tp, ctrl_gt target, ctrl_gt fbk)
     {
         if (ctl_step_divider(&tp->div))

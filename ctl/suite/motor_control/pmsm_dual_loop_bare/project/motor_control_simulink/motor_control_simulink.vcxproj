@@ -79,19 +79,19 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(GMP_PRO_LOCATION)\ctl\suite\motor_control\pmsm\implement\user_simulink;$(GMP_PRO_LOCATION)\ctl\suite\motor_control\pmsm\implement\user_common;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\implement\common;$(ProjectDir)..\..\implement\simulate;$(IncludePath)</IncludePath>
     <ExternalIncludePath>$(GMP_PRO_LOCATION)\ctl\suite\motor_control\pmsm\implement\user_common;$(GMP_PRO_LOCATION)\ctl\suite\motor_control\pmsm\implement\user_simulink;$(ProjectDir);$(GMP_PRO_LOCATION);$(GMP_PRO_LOCATION)/third_party/asio/include;$(GMP_PRO_LOCATION)/third_party/eigen/Eigen;$(GMP_PRO_LOCATION)/csp/windows_simulink;$(GMP_PRO_LOCATION)/third_party/fmt/include/fmt;$(VC_IncludePath);$(WindowsSDK_IncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(GMP_PRO_LOCATION)\ctl\suite\motor_control\pmsm\implement\user_simulink;$(GMP_PRO_LOCATION)\ctl\suite\motor_control\pmsm\implement\user_common;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\implement\common;$(ProjectDir)..\..\implement\simulate;$(IncludePath)</IncludePath>
     <ExternalIncludePath>$(GMP_PRO_LOCATION)\ctl\suite\motor_control\pmsm\implement\user_common;$(GMP_PRO_LOCATION)\ctl\suite\motor_control\pmsm\implement\user_simulink;$(ProjectDir);$(GMP_PRO_LOCATION);$(GMP_PRO_LOCATION)/third_party/asio/include;$(GMP_PRO_LOCATION)/third_party/eigen/Eigen;$(GMP_PRO_LOCATION)/csp/windows_simulink;$(GMP_PRO_LOCATION)/third_party/fmt/include/fmt;$(VC_IncludePath);$(WindowsSDK_IncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(GMP_PRO_LOCATION)\ctl\suite\motor_control\pmsm\implement\user_simulink;$(GMP_PRO_LOCATION)\ctl\suite\motor_control\pmsm\implement\user_common;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\implement\common;$(ProjectDir)..\..\implement\simulate;$(IncludePath)</IncludePath>
     <ExternalIncludePath>$(GMP_PRO_LOCATION)\ctl\suite\motor_control\pmsm\implement\user_common;$(GMP_PRO_LOCATION)\ctl\suite\motor_control\pmsm\implement\user_simulink;$(ProjectDir);$(GMP_PRO_LOCATION);$(GMP_PRO_LOCATION)/third_party/asio/include;$(GMP_PRO_LOCATION)/third_party/eigen/Eigen;$(GMP_PRO_LOCATION)/csp/windows_simulink;$(GMP_PRO_LOCATION)/third_party/fmt/include/fmt;$(VC_IncludePath);$(WindowsSDK_IncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(GMP_PRO_LOCATION)\ctl\suite\motor_control\pmsm\implement\user_simulink;$(GMP_PRO_LOCATION)\ctl\suite\motor_control\pmsm\implement\user_common;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\implement\common;$(ProjectDir)..\..\implement\simulate;$(IncludePath)</IncludePath>
     <ExternalIncludePath>$(GMP_PRO_LOCATION)\ctl\suite\motor_control\pmsm\implement\user_common;$(GMP_PRO_LOCATION)\ctl\suite\motor_control\pmsm\implement\user_simulink;$(ProjectDir);$(GMP_PRO_LOCATION);$(GMP_PRO_LOCATION)/third_party/asio/include;$(GMP_PRO_LOCATION)/third_party/eigen/Eigen;$(GMP_PRO_LOCATION)/csp/windows_simulink;$(GMP_PRO_LOCATION)/third_party/fmt/include/fmt;$(VC_IncludePath);$(WindowsSDK_IncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -154,6 +154,7 @@
     <ClCompile Include="..\..\implement\common\ctl_main.c" />
     <ClCompile Include="..\..\implement\common\user_main.c" />
     <ClCompile Include="..\..\implement\simulate\peripheral.c" />
+    <ClCompile Include="..\..\src\pmsm_ctrl.c" />
     <ClCompile Include="gmp_src\ctl_component_advance.c" />
     <ClCompile Include="gmp_src\ctl_component_continuous.c" />
     <ClCompile Include="gmp_src\ctl_component_discrete.c" />
@@ -178,8 +179,10 @@
     <ClInclude Include="..\..\implement\common\ctl_main.h" />
     <ClInclude Include="..\..\implement\common\user_main.h" />
     <ClInclude Include="..\..\implement\simulate\ctl_interface.h" />
-    <ClInclude Include="..\..\implement\simulate\pc_simulate_buffer.h" />
     <ClInclude Include="..\..\implement\simulate\user.config.h" />
+    <ClInclude Include="..\..\pmsm_ctrl.h" />
+    <ClInclude Include="ctrl_settings.h" />
+    <ClInclude Include="peripheral.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

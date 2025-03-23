@@ -386,7 +386,7 @@ void ctl_init_ptr_adc_channel(
 {
     adc->raw = adc_target;
 
-    adc->raw = 0;
+    //adc->raw = 0;
     adc->bias = bias;
 
     adc->gain = gain;

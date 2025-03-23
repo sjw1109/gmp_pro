@@ -1,35 +1,39 @@
 
-#ifndef _FILE_ARCH_C28X_H_
-#define _FILE_ARCH_C28X_H_
+#ifndef _FILE_ARCH_X86_64_H_
+#define _FILE_ARCH_X86_64_H_
 
-#define ARCH_NAME "C28x"
+#define ARCH_NAME "x86_64"
 
 // 2 bytes for each sizeof() result.
-#define SIZEOF_UNIT (2)
+#define SIZEOF_UNIT (1)
 
 // C28x BASIC DATA TYPE
-#define GMP_PORT_DATA_T              int16_t
-#define GMP_PORT_DATA_SIZE_PER_BITS  (16)
-#define GMP_PORT_DATA_SIZE_PER_BYTES (2)
+#define GMP_PORT_DATA_T              int8_t
+#define GMP_PORT_DATA_SIZE_PER_BITS  (8)
+#define GMP_PORT_DATA_SIZE_PER_BYTES (1)
 
 // FAST TYPES
-#define GMP_PORT_FAST_T                int_fast16_t
-#define GMP_PORT_FAST_SIZE_PER_BITS    (16)
-#define GMP_PORT_FAST_SIZE_PER_BYTES   (2)
+#define GMP_PORT_FAST_T                int_fast32_t
+#define GMP_PORT_FAST_SIZE_PER_BITS    (32)
+#define GMP_PORT_FAST_SIZE_PER_BYTES   (4)
 
-#define GMP_PORT_FAST8_T               int16_t
-#define GMP_PORT_FAST8_SIZE_PER_BITS   (16)
-#define GMP_PORT_FAST8_SIZE_PER_BYTES  (2)
+#define GMP_PORT_FAST8_T               int32_t
+#define GMP_PORT_FAST8_SIZE_PER_BITS   (32)
+#define GMP_PORT_FAST8_SIZE_PER_BYTES  (4)
 
-#define GMP_PORT_FAST16_T              int16_t
-#define GMP_PORT_FAST16_SIZE_PER_BITS  (16)
-#define GMP_PORT_FAST16_SIZE_PER_BYTES (2)
+#define GMP_PORT_FAST16_T              int32_t
+#define GMP_PORT_FAST16_SIZE_PER_BITS  (32)
+#define GMP_PORT_FAST16_SIZE_PER_BYTES (4)
+
+#define GMP_PORT_FAST32_T              int_fast32_t
+#define GMP_PORT_FAST32_SIZE_PER_BITS  (32)
+#define GMP_PORT_FAST32_SIZE_PER_BYTES (4)
 
 // time_gt
-#define GMP_PORT_TIME_T              uint32_t
-#define GMP_PORT_TIME_SIZE_PER_BITS  (32)
-#define GMP_PORT_TIME_SIZE_PER_BYTES (4)
-#define GMP_PORT_TIME_MAXIMUM        (UINT32_MAX)
+#define GMP_PORT_TIME_T              uint64_t
+#define GMP_PORT_TIME_SIZE_PER_BITS  (64)
+#define GMP_PORT_TIME_SIZE_PER_BYTES (8)
+#define GMP_PORT_TIME_MAXIMUM        (UINT64_MAX)
 
 // size_gt
 #define GMP_PORT_SIZE_T              uint32_t
@@ -76,4 +80,4 @@
 #define GMP_PORT_PWM_SIZE_PER_BITS  (32)
 #define GMP_PORT_PWM_SIZE_PER_BYTES (4)
 
-#endif // _FILE_ARCH_C28X_H_
+#endif // _FILE_ARCH_X86_64_H_

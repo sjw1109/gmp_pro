@@ -19,8 +19,6 @@ typedef struct _tag_tx_buf_t
 } tx_buf_t;
 #pragma pack()
 
-
-
 #pragma pack(1)
 // Specify Simulink communication RX structure type
 // Default type name is rx_buf_t
@@ -47,10 +45,6 @@ typedef struct _tag_rx_buf_t
 
 } rx_buf_t;
 #pragma pack()
-
-GMP_STATIC_INLINE 
-void 
-
 
 #define GMP_PC_SIMULINK_TX_STRUCT tx_buf_t
 #define GMP_PC_SIMULINK_RX_STRUCT rx_buf_t

@@ -1,5 +1,7 @@
 // This is a example of user_main.h
 
+#include "ctrl_settings.h"
+
 
 #ifndef _FILE_USER_MAIN_H_
 #define _FILE_USER_MAIN_H_

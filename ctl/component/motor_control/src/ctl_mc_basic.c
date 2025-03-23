@@ -132,6 +132,8 @@ void ctl_init_spd_encoder(ctl_spd_encoder_t *enc, parameter_gt speed_base)
 void ctl_init_spd_calculator(
     // speed calculator objects
     ctl_spd_calculator_t *sc,
+    // link to a position encoder
+    ctl_rotation_encif_t *pos_encif,
     // control law frequency, unit Hz
     parameter_gt control_law_freq,
     // division of control law frequency, unit ticks
@@ -142,9 +144,7 @@ void ctl_init_spd_calculator(
     uint16_t pole_pairs,
     // just set this value to 1.
     // generally, speed_filter_fc approx to speed_calc freq divided by 5
-    parameter_gt speed_filter_fc,
-    // link to a position encoder
-    ctl_rotation_encif_t *pos_encif)
+    parameter_gt speed_filter_fc)
 {
     uint16_t maximum_div = (uint16_t)rated_speed_rpm / 30;
     if (speed_calc_div < maximum_div)
@@ -323,15 +323,15 @@ void ctl_dsn_pmsm_pmsm_flux_via_Kt(ctl_pmsm_dsn_consultant_t *pmsm_dsn, paramete
 
 #include <ctl/component/motor_control/basic/vf_generator.h>
 
-//ec_gt ctl_init_const_f_controller(ctl_const_f_controller *ctrl)
+// ec_gt ctl_init_const_f_controller(ctl_const_f_controller *ctrl)
 //{
-//    ctrl->enc.elec_position = 0;
-//    ctrl->enc.position = 0;
+//     ctrl->enc.elec_position = 0;
+//     ctrl->enc.position = 0;
 //
-//    ctl_init_ramp_gen(&ctrl->rg);
+//     ctl_init_ramp_gen(&ctrl->rg);
 //
-//    return GMP_EC_OK;
-//}
+//     return GMP_EC_OK;
+// }
 
 void ctl_setup_const_f_controller(ctl_const_f_controller *ctrl, parameter_gt frequency, parameter_gt isr_freq)
 {

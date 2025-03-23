@@ -10,7 +10,7 @@
 //#define SPECIFY_BASE_PRINT_NOT_IMPL
 
 // using user specified default log print function
-#define USER_SPECIFIED_PRINT_FUNCTION printf
+#define USER_SPECIFIED_PRINT_FUNCTION printf_s
 
 // Disable GMP startup screen
 //#define SPECIFY_DISABLE_GMP_LOGO
@@ -35,7 +35,7 @@
 // #define SPECIFY_CTRL_GT_TYPE USING_FIXED_TI_IQ_LIBRARY
 
 // Specify enable CTL library, this macro is disabled
-//#define SPECIFY_ENABLE_GMP_CTL
+#define SPECIFY_ENABLE_GMP_CTL
 
 
 

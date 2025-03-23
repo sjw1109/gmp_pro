@@ -16,6 +16,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="motor_driver_bare">
+      <UniqueIdentifier>{4a6d68fd-b83a-450b-8884-47debe6a5ba4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\implement\simulate\peripheral.c">
@@ -26,15 +29,6 @@
     </ClCompile>
     <ClCompile Include="..\..\implement\common\user_main.c">
       <Filter>implement_common</Filter>
-    </ClCompile>
-    <ClCompile Include="gmp_src\gmp_dev_util.c">
-      <Filter>implement_interface</Filter>
-    </ClCompile>
-    <ClCompile Include="gmp_src\gmp_ds_list.c">
-      <Filter>implement_interface</Filter>
-    </ClCompile>
-    <ClCompile Include="gmp_src\gmp_std_port.c">
-      <Filter>implement_interface</Filter>
     </ClCompile>
     <ClCompile Include="gmp_src\ctl_component_advance.c">
       <Filter>GMP Source Files</Filter>
@@ -84,11 +78,20 @@
     <ClCompile Include="gmp_src\windows_simulink_main.cpp">
       <Filter>GMP Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="gmp_src\gmp_dev_util.c">
+      <Filter>GMP Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gmp_src\gmp_ds_list.c">
+      <Filter>GMP Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gmp_src\gmp_std_port.c">
+      <Filter>GMP Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\pmsm_ctrl.c">
+      <Filter>motor_driver_bare</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\implement\simulate\pc_simulate_buffer.h">
-      <Filter>implement_interface</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\implement\simulate\user.config.h">
       <Filter>implement_interface</Filter>
     </ClInclude>
@@ -99,7 +102,16 @@
       <Filter>implement_common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\implement\simulate\ctl_interface.h">
-      <Filter>GMP Source Files</Filter>
+      <Filter>implement_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="ctrl_settings.h">
+      <Filter>implement_common</Filter>
+    </ClInclude>
+    <ClInclude Include="peripheral.h">
+      <Filter>implement_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\pmsm_ctrl.h">
+      <Filter>motor_driver_bare</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

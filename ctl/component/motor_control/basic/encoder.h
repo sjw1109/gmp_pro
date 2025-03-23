@@ -289,9 +289,11 @@ extern "C"
     //     // link to a position encoder
     //     ctl_rotation_encif_t *pos_encif);
 
-    void ctl_init_spd_calculator(
+void ctl_init_spd_calculator(
         // speed calculator objects
         ctl_spd_calculator_t *sc,
+        // link to a position encoder
+        ctl_rotation_encif_t *pos_encif,
         // control law frequency, unit Hz
         parameter_gt control_law_freq,
         // division of control law frequency, unit ticks
@@ -302,9 +304,7 @@ extern "C"
         uint16_t pole_pairs,
         // just set this value to 1.
         // generally, speed_filter_fc approx to speed_calc freq divided by 5
-        parameter_gt speed_filter_fc,
-        // link to a position encoder
-        ctl_rotation_encif_t *pos_encif);
+        parameter_gt speed_filter_fc);
 
     // Step Speed calculate function
     GMP_STATIC_INLINE

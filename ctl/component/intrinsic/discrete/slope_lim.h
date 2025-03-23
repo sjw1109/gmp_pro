@@ -56,14 +56,15 @@ extern "C"
     //     ctrl_gt slope_min, ctrl_gt slope_max
     //);
 
-    //void ctl_init_slope_limit(ctl_slope_lim_t *obj, ctrl_gt slope_min, ctrl_gt slope_max)
+    // void ctl_init_slope_limit(ctl_slope_lim_t *obj, ctrl_gt slope_min, ctrl_gt slope_max)
     //{
 
     //    obj->slope_min = slope_min;
     //    obj->slope_max = slope_max;
     //}
 
-     void ctl_set_sl_slope(ctl_slope_lim_t *obj, ctrl_gt slope_min, ctrl_gt slope_max)
+    GMP_STATIC_INLINE
+    void ctl_set_sl_slope(ctl_slope_lim_t *obj, ctrl_gt slope_min, ctrl_gt slope_max)
     {
         obj->slope_min = slope_min;
         obj->slope_max = slope_max;

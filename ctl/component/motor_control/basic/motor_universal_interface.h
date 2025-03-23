@@ -8,7 +8,7 @@
 #define _FILE_MOTOR_UNIVERSAL_INTERFACE_H_
 
 #ifdef __cplusplus
-extenr "C"
+extern "C"
 {
 #endif // __cplusplus
 
@@ -128,6 +128,7 @@ extenr "C"
     ctrl_gt ctl_get_mtr_current_single(mtr_ift * mtr, uint32_t phase)
     {
         gmp_base_assert(mtr->iabc);
+
         gmp_base_assert(phase < 4);
 
         return mtr->iabc->value.dat[phase];

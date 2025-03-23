@@ -9,80 +9,77 @@
  *
  */
 
+// const F & VF controller
+#include <ctl/component/motor_control/basic/vf_generator.h>
+
+// speed encoder
+#include <ctl\component\motor_control\basic\encoder.h>
+
+// motor controller
+#include <ctl/suite/motor_control/pmsm_dual_loop_bare/pmsm_ctrl.h>
+
+#include <ctl/component/interface/pwm_channel.h>
+
+#include <peripheral.h>
+
 #ifndef _FILE_CTL_MAIN_H_
 #define _FILE_CTL_MAIN_H_
 
 #ifdef __cplusplus
-extern "C"{
+extern "C"
+{
 #endif // __cplusplus
 
+    // speed encoder
+    extern ctl_spd_calculator_t spd_enc;
 
-//
-//#include <gmp_core.h>
-//
-//#include <ctl/ctl_core.h>
+    // PMSM servo objects
+    // extern pmsm_fm_t pmsm;
 
-#include <ctl/suite/motor_control/pmsm_dual_loop_bare/pmsm_ctrl.h>
+    // PMSM const frequency controller
+    extern ctl_const_f_controller const_f;
 
-#include <ctl/component/motor_control/basic/encoder.h>
+    // PMSM controller
+    extern pmsm_bare_controller_t pmsm_ctrl;
 
-// const F & VF controller
-#include <ctl/component/motor_control/basic/vf_generator.h>
+    // periodic callback function things.
+    GMP_STATIC_INLINE void ctl_dispatch(void)
+    {
+        ctl_step_const_f_controller(&const_f);
 
-// BUILD_LEVEL 1: Voltage Open loop
-// BUILD_LEVEL 2: Current Open loop
-// BUILD_LEVEL 3: Current Open loop with actual position
-// BUILD_LEVEL 4: Speed Close loop
-#define BUILD_LEVEL (1)
+        ctl_step_spd_calc(&spd_enc);
 
-// position encoder
-extern ctl_pos_encoder_t pos_enc;
+        ctl_step_pmsm_ctrl(&pmsm_ctrl);
+    }
 
-// speed encoder
-extern ctl_spd_calculator_t spd_enc;
+#ifndef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
-// PMSM servo objects
-//extern pmsm_fm_t pmsm;
+    // periodic interrupt function
 
-// PMSM const frequency controller
-extern ctl_const_f_controller const_f;
-
-
-
-
-
-#ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
-
-// other periodic things.
-GMP_STATIC_INLINE
-void ctl_dispatch(void)
-{
-
-}
+#else // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO is defined
 
 //// controller core
-//GMP_STATIC_INLINE
-//void ctl_fmif_core_stage_routine(ctl_object_nano_t *pctl_obj)
+// GMP_STATIC_INLINE
+// void ctl_fmif_core_stage_routine(ctl_object_nano_t *pctl_obj)
 //{
-//    // input stage
-//    ctl_input_motor_current_ctrl(&pmsm.current_ctrl, &pmsm.iabc_input);
-//    
-//    ctl_step_spd_calc(&spd_enc);
+//     // input stage
+//     ctl_input_motor_current_ctrl(&pmsm.current_ctrl, &pmsm.iabc_input);
 //
-//    // constant frequency generator
-//    ctl_step_const_f_controller(&const_f);
+//     ctl_step_spd_calc(&spd_enc);
 //
-//    // run PMSM servo framework ISR function
-//    ctl_step_pmsm_framework(&pmsm);
+//     // constant frequency generator
+//     ctl_step_const_f_controller(&const_f);
 //
-//    // Modulation
-//    // Tabc = svpwm(vab) / udc;
-//    ctl_ct_svpwm_calc(&pmsm.current_ctrl.vab0, &pmsm.Tabc);
+//     // run PMSM servo framework ISR function
+//     ctl_step_pmsm_framework(&pmsm);
 //
-//    // Prepare PWM data
-//    ctl_calc_pwm_tri_channel(&pmsm.uabc, &pmsm.Tabc);
-//}
-
+//     // Modulation
+//     // Tabc = svpwm(vab) / udc;
+//     ctl_ct_svpwm_calc(&pmsm.current_ctrl.vab0, &pmsm.Tabc);
+//
+//     // Prepare PWM data
+//     ctl_calc_pwm_tri_channel(&pmsm.uabc, &pmsm.Tabc);
+// }
 
 #endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
@@ -91,4 +88,3 @@ void ctl_dispatch(void)
 #endif // _cplusplus
 
 #endif // _FILE_CTL_MAIN_H_
-

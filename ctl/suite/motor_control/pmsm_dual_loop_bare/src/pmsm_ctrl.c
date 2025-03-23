@@ -8,6 +8,8 @@
 
 #include <ctl/suite/motor_control/pmsm_dual_loop_bare/pmsm_ctrl.h>
 
+#include "peripheral.h"
+
 
     // init pmsm_bare_controller struct
 void ctl_init_pmsm_bare_controller(pmsm_bare_controller_t *ctrl, pmsm_bare_controller_init_t *init)
@@ -37,7 +39,7 @@ void ctl_init_pmsm_bare_controller(pmsm_bare_controller_t *ctrl, pmsm_bare_contr
         // parameters for speed controller
         init->spd_pid_gain, init->spd_Ti, init->spd_Td,
         // saturation
-        init->current_limit_max, init->current_limit_min;
+        init->current_limit_max, init->current_limit_min,
         // acceleration
         init->acc_limit_max, init->acc_limit_min,
         // speed controller divider
@@ -46,10 +48,10 @@ void ctl_init_pmsm_bare_controller(pmsm_bare_controller_t *ctrl, pmsm_bare_contr
         init->fs);
 
     // controller intermediate variable
-    ctl_vector3_clear(iab0);
-    ctl_vector3_clear(vab0);
-    ctl_vector3_clear(idq0);
-    ctl_vector3_clear(vdq0);
+    ctl_vector3_clear(&ctrl->iab0);
+    ctl_vector3_clear(&ctrl->uab0);
+    ctl_vector3_clear(&ctrl->idq0);
+    ctl_vector3_clear(&ctrl->udq0);
 
     // controller feed forward parameters
     ctl_vector2_clear(&ctrl->idq_ff);
@@ -57,11 +59,11 @@ void ctl_init_pmsm_bare_controller(pmsm_bare_controller_t *ctrl, pmsm_bare_contr
 
     // controller set parameters
     ctl_vector3_clear(&ctrl->ab0_set);
-    ctl_vector2_clear(&ctrl->vdq_set);
+    ctl_vector3_clear(&ctrl->vdq_set);
     ctl_vector2_clear(&ctrl->idq_set);
-    speed_set = 0;
-    pos_set = 0;
-    revolution_set = 0;
+    ctrl->speed_set = 0;
+    ctrl->pos_set = 0;
+    ctrl->revolution_set = 0;
 
     // flag stack
     ctl_disable_pmsm_ctrl(ctrl);
