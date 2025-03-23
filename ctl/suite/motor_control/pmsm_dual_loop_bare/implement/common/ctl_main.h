@@ -45,6 +45,7 @@ extern "C"
     // periodic callback function things.
     GMP_STATIC_INLINE void ctl_dispatch(void)
     {
+
         ctl_step_const_f_controller(&const_f);
 
         ctl_step_spd_calc(&spd_enc);

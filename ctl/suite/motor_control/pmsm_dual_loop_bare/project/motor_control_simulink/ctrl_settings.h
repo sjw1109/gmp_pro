@@ -20,7 +20,7 @@
 
 // Current sensor
 #define MTR_CTRL_CURRENT_GAIN (10.0)
-#define MTR_CTRL_CURRENT_BIAS (1.6 / ADC_REFERENCE)
+#define MTR_CTRL_CURRENT_BIAS (1.65 / ADC_REFERENCE)
 
 // Voltage sensor
 #define MTR_CTRL_VOLTAGE_GAIN (0.1)
@@ -30,7 +30,7 @@
 // BUILD_LEVEL 2: Current Open loop
 // BUILD_LEVEL 3: Current Open loop with actual position
 // BUILD_LEVEL 4: Speed Close loop
-#define BUILD_LEVEL (2)
+#define BUILD_LEVEL (4)
 
 
 

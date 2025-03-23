@@ -31,6 +31,8 @@ extern "C"
         ctl_step_autoturn_pos_encoder(&pos_enc, simulink_rx_buffer.encoder);
     }
 
+
+    extern ctrl_gt param_test;
     GMP_STATIC_INLINE
     void ctl_output_callback(void)
     {
@@ -40,11 +42,17 @@ extern "C"
         simulink_tx_buffer.tabc[phase_B] = pwm_out.value[phase_B];
         simulink_tx_buffer.tabc[phase_C] = pwm_out.value[phase_C];
 
-        simulink_tx_buffer.monitor_port[0] = pmsm_ctrl.idq0.dat[phase_d];
+        //simulink_tx_buffer.monitor_port[0] = pmsm_ctrl.idq0.dat[phase_d];
+        simulink_tx_buffer.monitor_port[0] = pmsm_ctrl.idq_set.dat[phase_q];
         simulink_tx_buffer.monitor_port[1] = pmsm_ctrl.idq0.dat[phase_q];
 
-        simulink_tx_buffer.monitor_port[2] = pmsm_ctrl.udq0.dat[phase_d];
-        simulink_tx_buffer.monitor_port[3] = pmsm_ctrl.udq0.dat[phase_q];
+        simulink_tx_buffer.monitor_port[2] = pmsm_ctrl.vdq_set.dat[phase_d];
+        //simulink_tx_buffer.monitor_port[3] = pmsm_ctrl.vdq_set.dat[phase_q];
+        
+        
+        //simulink_tx_buffer.monitor_port[3] = pmsm_ctrl.mtr_interface.position->elec_position;
+        simulink_tx_buffer.monitor_port[3] = pmsm_ctrl.mtr_interface.velocity->speed;
+            
 
     }
 
