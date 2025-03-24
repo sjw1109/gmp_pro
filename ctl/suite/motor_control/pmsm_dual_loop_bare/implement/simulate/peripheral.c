@@ -74,7 +74,7 @@ void setup_peripheral(void)
     ctl_attach_pmsm_bare_output(&pmsm_ctrl, &pwm_out.raw);
 
     // output channel
-    ctl_init_pwm_tri_channel(&pwm_out, 0, GONTROLLER_PWM_CMP_MAX);
+    ctl_init_pwm_tri_channel(&pwm_out, 0, CONTROLLER_PWM_CMP_MAX);
 
     // open hardware switch
     csp_sl_enable_output();

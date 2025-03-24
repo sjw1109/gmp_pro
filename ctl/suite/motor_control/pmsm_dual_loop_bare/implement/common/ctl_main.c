@@ -46,6 +46,7 @@ void ctl_init()
 
     // current pid controller parameters
     pmsm_ctrl_init.current_pid_gain = 2.15f;
+    //pmsm_ctrl_init.current_Ti = 1.0f / 500;
     pmsm_ctrl_init.current_Ti = 1.0f / 500;
     pmsm_ctrl_init.current_Td = 0;
     pmsm_ctrl_init.voltage_limit_min = float2ctrl(-0.45);

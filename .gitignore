@@ -442,5 +442,9 @@ ctl/suite/motor_control/pmsm/projects/motor_control_stm32g474_hrtim/MDK-ARM/moto
 ctl/suite/motor_control/pmsm/projects/motor_control_stm32g431_tim/Drivers/**
 ctl/suite/motor_control/pmsm/projects/motor_control_stm32g431_tim/MDK-ARM/motor_control_stm32g431_tim/**
 
+
+ctl/suite/motor_control/pmsm_dual_loop_bare/project/stm32g431/Drivers/**
+ctl/suite/motor_control/pmsm_dual_loop_bare/project/stm32g431/MDK-ARM/motor_control_stm32g431_tim/**
+
 tools/facilities_generator/gmp_make_tool.cmake
 gmp_pro.zip

@@ -15,8 +15,8 @@ typedef struct _tag_std_ctrl_tx_port
     // 24 PWM channel
     uint32_t pwm_channel[24];
 
-    // 24 DAC channel
-    uint32_t dac_channel[24];
+    // 24 channel Data output
+    double dout[24];
 
     // Communicate port
     double monitor_port[24];
@@ -29,6 +29,9 @@ typedef struct _tag_std_ctrl_rx_port
 
     // 24 channel ADC result
     uint32_t adc_channel[24];
+
+    // 24 channel Data input
+    double din[24];
 
     // communicate port
     double sensor_port[24];

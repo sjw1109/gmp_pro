@@ -71,7 +71,7 @@ void ctl_setup_motor_current_ctrl(
     parameter_gt fs);
 
 // Clear all the residual informations
-void ctl_clear_motor_current_ctrl(ctl_motor_current_ctrl_t *obj);
+//void ctl_clear_motor_current_ctrl(ctl_motor_current_ctrl_t *obj);
 
 GMP_STATIC_INLINE
 void ctl_input_motor_current_ctrl(ctl_motor_current_ctrl_t *obj, tri_adc_channel_t *adc_channel)

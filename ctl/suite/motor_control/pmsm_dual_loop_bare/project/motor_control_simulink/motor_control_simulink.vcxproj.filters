@@ -113,5 +113,11 @@
     <ClInclude Include="..\..\pmsm_ctrl.h">
       <Filter>motor_driver_bare</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\implement\simulate\ctrl_settings.h">
+      <Filter>implement_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\implement\simulate\peripheral.h">
+      <Filter>implement_interface</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

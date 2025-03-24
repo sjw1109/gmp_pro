@@ -158,6 +158,8 @@ extern "C"
 
         ctrl->output_2 = ctrl->output_1;
         ctrl->output_1 = ctrl->output;
+			
+			return ctrl->output;
     }
 
 //////////////////////////////////////////////////////////////////////////

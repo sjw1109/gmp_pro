@@ -67,7 +67,7 @@ extern "C"
     // This function would be called in every controller loop
     // This function would be called by `gmp_base_ctl_step`
     //
-    void ctl_dispatch(void);
+//    void ctl_dispatch(void);
 
     // ....................................................................//
     // The following function would be called by user.

@@ -444,7 +444,7 @@ exnter "C"
     {
         ctrl->vdq_ff.dat[phase_d] = vd;
         ctrl->vdq_ff.dat[phase_q] = vq;
-        ctrl->vdq_ff.dat[phase_0] = 0;
+//        ctrl->vdq_ff.dat[phase_0] = 0;
     }
 
     // .....................................................................//
@@ -469,7 +469,7 @@ exnter "C"
     {
         ctrl->idq_ff.dat[phase_d] = id;
         ctrl->idq_ff.dat[phase_q] = iq;
-        ctrl->idq_ff.dat[phase_0] = 0;
+//        ctrl->idq_ff.dat[phase_0] = 0;
     }
 
     // .....................................................................//

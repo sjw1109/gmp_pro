@@ -61,26 +61,26 @@ extern "C"
     }
 
     GMP_STATIC_INLINE
-    ctrl_gt ctl_get_dual_adc_result_vec(dual_adc_ift *adc, vector2_gt *vec)
+    void ctl_get_dual_adc_result_vec(dual_adc_ift *adc, vector2_gt *vec)
     {
         ctl_vector2_copy(vec, &adc->value);
     }
 
     GMP_STATIC_INLINE
-    ctrl_gt ctl_set_dual_pwm(dual_pwm_ift *pwm, ctrl_gt phase1, ctrl_gt phase2)
+    void ctl_set_dual_pwm(dual_pwm_ift *pwm, ctrl_gt phase1, ctrl_gt phase2)
     {
         pwm->value.dat[0] = phase1;
         pwm->value.dat[1] = phase2;
     }
 
     GMP_STATIC_INLINE
-    ctrl_gt ctl_set_dual_pwm_vec(dual_pwm_ift *pwm, vector2_gt *vec)
+    void ctl_set_dual_pwm_vec(dual_pwm_ift *pwm, vector2_gt *vec)
     {
         ctl_vector2_copy(&pwm->value, vec);
     }
 
     GMP_STATIC_INLINE
-    ctrl_gt ctl_set_dual_dac(dual_pwm_ift *pwm, ctrl_gt phase1, ctrl_gt phase2)
+    void ctl_set_dual_dac(dual_pwm_ift *pwm, ctrl_gt phase1, ctrl_gt phase2)
     {
         pwm->value.dat[0] = phase1;
         pwm->value.dat[1] = phase2;

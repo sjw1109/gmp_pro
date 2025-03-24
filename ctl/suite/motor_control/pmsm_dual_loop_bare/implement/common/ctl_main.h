@@ -41,6 +41,8 @@ extern "C"
 
     // PMSM controller
     extern pmsm_bare_controller_t pmsm_ctrl;
+		
+		
 
     // periodic callback function things.
     GMP_STATIC_INLINE void ctl_dispatch(void)
