@@ -8,7 +8,6 @@
  * @copyright Copyright GMP(c) 2024
  *
  */
-#include <ctl/ctl_core.h>
 #include <gmp_core.h>
 
 #include <math.h>
@@ -17,17 +16,6 @@
 // Divider
 
 #include <ctl/component/intrinsic/discrete/divider.h>
-
-// ec_gt ctl_init_divider(ctl_divider_t *obj)
-//{
-//     // Current counter
-//     obj->counter = 0;
-//
-//     // No division
-//     obj->target = 0;
-//
-//     return GMP_EC_OK;
-// }
 
 void ctl_init_divider(ctl_divider_t *obj, uint32_t counter_period)
 {
@@ -43,44 +31,12 @@ void ctl_init_divider(ctl_divider_t *obj, uint32_t counter_period)
 #include <ctl/component/intrinsic/discrete/filter.h>
 #include <math.h> // support for sinf and cosf
 
-// ec_gt ctl_init_lp_filter(ctl_low_pass_filter_t *lpf)
-//{
-//     lpf->a = GMP_CONST_1;
-//     lpf->out = 0;
-//
-//     return GMP_EC_OK;
-// }
 
 void ctl_init_lp_filter(ctl_low_pass_filter_t *lpf, parameter_gt fs, parameter_gt fc)
 {
     lpf->out = 0;
     lpf->a = ctl_helper_lp_filter(fs, fc);
 }
-
-//// This function has move to header file
-// ctrl_gt ctl_helper_lp_filter(parameter_gt fs, parameter_gt fc)
-//{
-//     return float2ctrl(fc * 2 * PI / fs);
-// }
-
-// ec_gt ctl_init_filter_iir2(ctl_filter_IIR2_t *obj)
-//{
-//     int i;
-//
-//     obj->out = 0;
-//
-//     for (i = 0; i < 2; ++i)
-//     {
-//         obj->x[i] = 0;
-//         obj->y[i] = 0;
-//         obj->a[i] = 0;
-//         obj->b[i] = 0;
-//     }
-//
-//     obj->b[2] = 0;
-//
-//         return GMP_EC_OK;
-// }
 
 ec_gt ctl_init_filter_iir2(ctl_filter_IIR2_t *obj, ctl_filter_IIR2_setup_t *setup_obj)
 {
@@ -166,17 +122,7 @@ ec_gt ctl_setup_pll(ctl_pll_t *pll, ctrl_gt kp, ctrl_gt ki, ctrl_gt kd, // PID p
 
 #include <ctl/component/intrinsic/discrete/slope_lim.h>
 
-// ec_gt ctl_init_slope_limit(ctl_slope_lim_t *obj)
-//{
-//     obj->slope_min = float2ctrl(-1.0f);
-//     obj->slope_max = float2ctrl(1.0f);
-//
-//     obj->out = float2ctrl(0);
-//
-//     return GMP_EC_OK;
-// }
-
-void ctl_init_slope_limit(ctl_slope_lim_t *obj, ctrl_gt slope_min, ctrl_gt slope_max)
+void ctl_init_slope_limit(ctl_slope_lim_t *obj, ctrl_gt slope_max, ctrl_gt slope_min)
 {
     obj->slope_min = slope_min;
     obj->slope_max = slope_max;
@@ -184,28 +130,10 @@ void ctl_init_slope_limit(ctl_slope_lim_t *obj, ctrl_gt slope_min, ctrl_gt slope
     obj->out = float2ctrl(0);
 }
 
-//// The following function has move to header file
-// void ctl_set_sl_slope(ctl_slope_lim_t *obj, ctrl_gt slope_min, ctrl_gt slope_max)
-//{
-//     obj->slope_min = slope_min;
-//     obj->slope_max = slope_max;
-// }
-
 //////////////////////////////////////////////////////////////////////////
 // Signal Generator
 
 #include <ctl/component/intrinsic/discrete/stimulate.h>
-
-// ec_gt ctl_init_sincos_gen(ctl_src_sg_t *sg)
-//{
-//     sg->ph_sin = float2ctrl(0);
-//     sg->ph_cos = float2ctrl(1.0f);
-//
-//     sg->ph_sin_delta = float2ctrl(0);
-//     sg->ph_cos_delta = float2ctrl(1.0f);
-//
-//     return GMP_EC_OK;
-// }
 
 void ctl_init_sincos_gen(ctl_src_sg_t *sg,
                          ctrl_gt init_angle, // rad
@@ -217,17 +145,6 @@ void ctl_init_sincos_gen(ctl_src_sg_t *sg,
     sg->ph_sin_delta = ctl_sin(step_angle);
     sg->ph_cos_delta = ctl_cos(step_angle);
 }
-
-// ec_gt ctl_init_ramp_gen(ctl_src_rg_t *rg)
-//{
-//     rg->current = float2ctrl(0);
-//     rg->maximum = float2ctrl(1.0f);
-//     rg->minimum = float2ctrl(0);
-//
-//     rg->slope = float2ctrl(0);
-//
-//     return GMP_EC_OK;
-// }
 
 void ctl_init_ramp_gen(ctl_src_rg_t *rg, ctrl_gt slope, parameter_gt amp_pos, parameter_gt amp_neg)
 {
@@ -351,10 +268,11 @@ void ctl_init_discrete_track_pid(
     // controller frequency, unit Hz
     parameter_gt fs)
 {
+    ctl_init_slope_limit(&tp->traj, float2ctrl(slope_max / fs), float2ctrl(slope_min / fs));
+    ctl_init_divider(&tp->div, division);
+
     ctl_init_discrete_pid(&tp->pid, kp, Ti, Td, fs);
     ctl_set_discrete_pid_limit(&tp->pid, sat_max, sat_min);
-    ctl_init_slope_limit(&tp->traj, float2ctrl(slope_min / fs), float2ctrl(slope_max / fs));
-    ctl_init_divider(&tp->div, division);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -380,12 +298,12 @@ void ctl_init_2p2z(
     parameter_gt p1 = f_p1 * 2 * PI;
 
     // discrete controller parameter
-    parameter_gt gain_discrete = gain * (1.0 / 2.0 / fs / (p1 + 2.0 * fs));
-    parameter_gt b0 = (z1 + 2.0 * fs) * (z0 + 2.0 * fs);
-    parameter_gt b1 = ((z0 + 2.0 * fs) * (z1 - 2.0 * fs) + (z1 + 2.0 * fs) * (z0 - 2.0 * fs));
-    parameter_gt b2 = (z1 - 2.0 * fs) * (z0 - 2.0 * fs);
-    parameter_gt a1 = -(4.0 * fs / (p1 + 2.0 * fs));
-    parameter_gt a2 = (2.0 * fs - p1) / (2.0 * fs + p1);
+    parameter_gt gain_discrete = gain * (1.0f / 2.0f / fs / (p1 + 2.0f * fs));
+    parameter_gt b0 = (z1 + 2.0f * fs) * (z0 + 2.0f * fs);
+    parameter_gt b1 = ((z0 + 2.0f * fs) * (z1 - 2.0f * fs) + (z1 + 2.0f * fs) * (z0 - 2.0f * fs));
+    parameter_gt b2 = (z1 - 2.0f * fs) * (z0 - 2.0f * fs);
+    parameter_gt a1 = -(4.0f * fs / (p1 + 2.0f * fs));
+    parameter_gt a2 = (2.0f * fs - p1) / (2.0f * fs + p1);
 
     ctrl->a1 = float2ctrl(a1);
     ctrl->a2 = float2ctrl(a2);

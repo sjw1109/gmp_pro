@@ -29,18 +29,18 @@ extern "C"
         // output: mechanical revolutions of the motor
         int32_t revolutions;
 
-    } ctl_rotation_encif_t, rotation_ift;
+    } rotation_ift;
 
     // Get encoder position
     GMP_STATIC_INLINE
-    ctrl_gt ctl_get_encoder_position(ctl_rotation_encif_t * enc)
+    ctrl_gt ctl_get_encoder_position(rotation_ift *enc)
     {
         return enc->position;
     }
 
     // Get encoder position of electric
     GMP_STATIC_INLINE
-    ctrl_gt ctl_get_encoder_elec_postion(ctl_rotation_encif_t * enc)
+    ctrl_gt ctl_get_encoder_elec_postion(rotation_ift *enc)
     {
         return enc->elec_position;
     }
@@ -57,11 +57,11 @@ extern "C"
         // output: mechanical speed output, unit p.u.
         ctrl_gt speed;
 
-    } ctl_speed_encif_t, velocity_ift;
+    } velocity_ift;
 
     // Get encoder speed
     GMP_STATIC_INLINE
-    ctrl_gt ctl_get_encoder_speed(ctl_speed_encif_t * enc)
+    ctrl_gt ctl_get_encoder_speed(velocity_ift *enc)
     {
         return enc->speed;
     }
@@ -81,10 +81,10 @@ extern "C"
 // Type transfer
 
 // position encoder
-#define CTL_POSITION_IF(X) ((ctl_rotation_encif_t *)X)
+#define CTL_POSITION_IF(X) ((rotation_ift *)X)
 
 // velocity encoder
-#define CTL_SPEED_IF(X) ((ctl_speed_encif_t *)X)
+#define CTL_SPEED_IF(X) ((velocity_ift *)X)
 
     //////////////////////////////////////////////////////////////////////////4
     // universal single motor controller interface type

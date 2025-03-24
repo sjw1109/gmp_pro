@@ -29,20 +29,25 @@ extern "C"
 
         ctl_divider_t div;
         ctl_slope_lim_t traj;
-    } ctl_track_pid_t;
+    } track_pid_t;
 
-    void ctl_init_track_pid(ctl_track_pid_t *tp,
-                            // pid parameters
-                            ctrl_gt kp, ctrl_gt ki, ctrl_gt kd,
-                            // saturation limit
-                            ctrl_gt sat_min, ctrl_gt sat_max,
-                            // slope limit
-                            ctrl_gt slope_min, ctrl_gt slope_max,
-                            // division factor
-                            uint32_t division);
+    
+void ctl_init_track_pid(
+        // handle of track pid
+        track_pid_t *tp,
+        // pid parameters
+        ctrl_gt kp, ctrl_gt ki, ctrl_gt kd,
+        // saturation limit
+        ctrl_gt sat_max, ctrl_gt sat_min,
+        // slope limit
+        ctrl_gt slope_max, ctrl_gt slope_min,
+        // division factor
+        uint32_t division,
+        // controller frequency
+        parameter_gt fs);
 
     GMP_STATIC_INLINE
-    void ctl_clear_track_pid(ctl_track_pid_t *tp)
+    void ctl_clear_track_pid(track_pid_t *tp)
     {
         ctl_clear_pid(&tp->pid);
         ctl_clear_divider(&tp->div);
@@ -50,7 +55,7 @@ extern "C"
     }
 
     GMP_STATIC_INLINE
-    ctrl_gt ctl_step_track_pid(ctl_track_pid_t *tp, ctrl_gt target, ctrl_gt now)
+    ctrl_gt ctl_step_track_pid(track_pid_t *tp, ctrl_gt target, ctrl_gt now)
     {
         if (ctl_step_divider(&tp->div))
         {
@@ -63,7 +68,7 @@ extern "C"
     }
 
     GMP_STATIC_INLINE
-    ctrl_gt ctl_get_track_pid_output(ctl_track_pid_t *tp)
+    ctrl_gt ctl_get_track_pid_output(track_pid_t *tp)
     {
         return tp->pid.out;
     }

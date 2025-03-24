@@ -9,7 +9,6 @@
  *
  */
 
-#include <ctl/ctl_core.h>
 #include <gmp_core.h>
 
 #include <ctl/framework/ctl_nano.h>

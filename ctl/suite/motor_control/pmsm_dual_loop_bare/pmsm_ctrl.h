@@ -3,7 +3,12 @@
 #include <ctl/component/interface/interface_base.h>
 #include <ctl/component/motor_control/basic/motor_universal_interface.h>
 
+#ifdef PMSM_CTRL_USING_DISCRETE_CTRL
 #include <ctl/component/intrinsic/discrete/track_discrete_pid.h>
+#else
+#include <ctl/component/intrinsic/continuous/track_pid.h>
+#endif // PMSM_CTRL_USING_DISCRETE_CTRL
+
 #include <ctl/component/motor_control/basic/decouple.h>
 
 #include <ctl/math_block/coordinate/coord_trans.h>
@@ -115,12 +120,21 @@ exnter "C"
         // .....................................................................//
         // controller entity
         //
+#ifdef PMSM_CTRL_USING_DISCRETE_CTRL
 
         // current controller
         discrete_pid_t current_ctrl[2];
 
         // speed controller
         track_discrete_pid_t spd_ctrl;
+#else // use continuous controller
+
+    // current controller
+    pid_regular_t current_ctrl[2];
+
+    // speed controller
+    track_pid_t spd_ctrl;
+#endif
 
         // .....................................................................//
         // controller intermediate variable
@@ -262,9 +276,15 @@ exnter "C"
             if (ctrl->flag_enable_velocity_ctrl)
             {
                 ctrl->idq_set.dat[phase_d] = ctrl->idq_ff.dat[phase_d];
+#ifdef PMSM_CTRL_USING_DISCRETE_CTRL
                 ctrl->idq_set.dat[phase_q] = ctl_step_discrete_track_pid(&ctrl->spd_ctrl, ctrl->speed_set,
                                                                          ctl_get_mtr_velocity(&ctrl->mtr_interface)) +
                                              ctrl->idq_ff.dat[phase_q];
+#else  // using continuous controller
+            ctrl->idq_set.dat[phase_q] =
+                ctl_step_track_pid(&ctrl->spd_ctrl, ctrl->speed_set, ctl_get_mtr_velocity(&ctrl->mtr_interface)) +
+                ctrl->idq_ff.dat[phase_q];
+#endif // PMSM_CTRL_USING_DISCRETE_CTRL
 
 #if MTR_CTRL_FEEDFORWARD_STRATEGY == 1
                 // ctl_mtr_pmsm_decouple(&ctrl->vdq_set, &ctrl->idq_set, ctrl->Ld, ctrl->Lq,
@@ -283,6 +303,7 @@ exnter "C"
 
             if (ctrl->flag_enable_current_ctrl)
             {
+#ifdef PMSM_CTRL_USING_DISCRETE_CTRL
                 ctrl->vdq_set.dat[phase_d] =
                     ctl_step_discrete_pid(&ctrl->current_ctrl[phase_d],
                                           ctrl->idq_set.dat[phase_d] - ctrl->idq0.dat[phase_d]) +
@@ -292,6 +313,15 @@ exnter "C"
                     ctl_step_discrete_pid(&ctrl->current_ctrl[phase_q],
                                           ctrl->idq_set.dat[phase_q] - ctrl->idq0.dat[phase_q]) +
                     ctrl->vdq_ff.dat[phase_q];
+#else  //  using continuous controller
+            ctrl->vdq_set.dat[phase_d] =
+                ctl_step_pid_ser(&ctrl->current_ctrl[phase_d], ctrl->idq_set.dat[phase_d] - ctrl->idq0.dat[phase_d]) +
+                ctrl->vdq_ff.dat[phase_d];
+
+            ctrl->vdq_set.dat[phase_q] =
+                ctl_step_pid_ser(&ctrl->current_ctrl[phase_q], ctrl->idq_set.dat[phase_q] - ctrl->idq0.dat[phase_q]) +
+                ctrl->vdq_ff.dat[phase_q];
+#endif // PMSM_CTRL_USING_DISCRETE_CTRL
 
                 ctrl->vdq_set.dat[phase_0] = 0;
             }
@@ -332,11 +362,19 @@ exnter "C"
     GMP_STATIC_INLINE
     void ctl_clear_pmsm_ctrl(pmsm_bare_controller_t * ctrl)
     {
+#ifdef PMSM_CTRL_USING_DISCRETE_CTRL
         // clear controller intermediate variables
         ctl_clear_discrete_pid(&ctrl->current_ctrl[phase_d]);
         ctl_clear_discrete_pid(&ctrl->current_ctrl[phase_q]);
 
         ctl_clear_discrete_track_pid(&ctrl->spd_ctrl);
+#else // continuous controller
+       // clear controller intermediate variables
+        ctl_clear_pid(&ctrl->current_ctrl[phase_d]);
+        ctl_clear_pid(&ctrl->current_ctrl[phase_q]);
+
+        ctl_clear_track_pid(&ctrl->spd_ctrl);
+#endif // PMSM_CTRL_USING_DISCRETE_CTRL
     }
 
     // .....................................................................//

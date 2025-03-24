@@ -49,10 +49,6 @@ extern "C"
         return 0;
     }
 
-    //ec_gt ctl_init_divider(ctl_divider_t *obj);
-
-    //ec_gt ctl_setup_divider(ctl_divider_t *obj, uint32_t counter_period);
-
     void ctl_init_divider(ctl_divider_t *obj, uint32_t counter_period);
 
     GMP_STATIC_INLINE

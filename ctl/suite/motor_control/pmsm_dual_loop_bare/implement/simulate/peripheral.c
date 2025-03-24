@@ -17,7 +17,7 @@ tri_ptr_adc_channel_t iabc;
 ptr_adc_channel_t udc;
 ptr_adc_channel_t idc;
 
-ctl_pos_autoturn_encoder_t pos_enc;
+pos_autoturn_encoder_t pos_enc;
 
 pwm_tri_channel_t pwm_out;
 

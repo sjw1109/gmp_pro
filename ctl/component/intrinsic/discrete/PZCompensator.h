@@ -23,6 +23,7 @@ extern "C"
     //
     //  $$z = \frac{1+sT/2}{1-sT/2}$$
 
+    //////////////////////////////////////////////////////////////////////////
     // 1 pole 1 zero controller
     // 1-order IIR filter
 
@@ -70,6 +71,7 @@ extern "C"
         return c->output;
     }
 
+    //////////////////////////////////////////////////////////////////////////
     // 2 poles 2 zeros controller
     // 2-order IIR filter
 
@@ -96,15 +98,6 @@ extern "C"
 
         // u(n)
         ctrl_gt output;
-
-        //// coef_a[0]->a_1, coef_a[0]->a_2
-        // ctrl_gt coef_a[2];
-        //// coef_b[0]->b_0, coef_b[1]->b_1, coef_b[2]->b_2
-        // ctrl_gt coef_b[3];
-        //// resp[0]->u(n-1), resp[1]->u(n-2)
-        // ctrl_gt resp[2]; // response buffer
-        //// input->e(n), exct[0]->e(n-1), exct[1]->e(n-2)
-        // ctrl_gt exct[2]; // excitation buffer
 
         ctrl_gt b0, b1, b2;
         ctrl_gt a1, a2;
@@ -167,24 +160,7 @@ extern "C"
         ctrl->output_1 = ctrl->output;
     }
 
-    // GMP_STATIC_INLINE
-    // ctrl_gt ctl_step_2p2z(ctrl_2p2z_t *c, ctrl_gt input)
-    //{
-    //     c->output = c->coef_a[0] * c->resp[0] + c->coef_a[1] * c->resp[1];
-    //     c->output += c->coef_b[1] * c->exct[0] + c->coef_b[2] * c->exct[1];
-    //     c->output += c->coef_b[0] * input;
-
-    //    c->exct[1] = c->exct[0];
-    //    c->exct[0] = input;
-
-    //    c->resp[1] = c->resp[0];
-    //    c->resp[0] = ctl_sat(c->output, c->out_sto_min, c->out_max);
-
-    //    c->output = ctl_sat(c->output, c->out_min, c->out_max);
-
-    //    return c->output;
-    //}
-
+//////////////////////////////////////////////////////////////////////////
     // 3 poles 3 zeros controller
     // 3-order IIR filter
 

@@ -54,3 +54,7 @@
 // specify Simulink Communicate buffer
 #define gmp_pc_simulink_rx_buffer_t mtr_sil_rx_buf_t
 #define gmp_pc_simulink_tx_buffer_t mtr_sil_tx_buf_t
+
+// Use discrete PID controller
+// Discrete controller may bring more smooth response.
+#define PMSM_CTRL_USING_DISCRETE_CTRL

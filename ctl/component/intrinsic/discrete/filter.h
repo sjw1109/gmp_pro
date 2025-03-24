@@ -35,12 +35,6 @@ extern "C"
         ctrl_gt out;
     } ctl_low_pass_filter_t;
 
-    // ec_gt ctl_init_lp_filter(ctl_low_pass_filter_t *lpf);
-
-    // ec_gt ctl_setup_lp_filter(ctl_low_pass_filter_t *lpf,
-    //                           parameter_gt fs,  // Sample rate
-    //                           parameter_gt fc); // cut frequency
-
     // init a low-pass filter object
     // @param fs sample rate
     // @param fc cut rate
@@ -71,11 +65,11 @@ extern "C"
     // 2rd order IIR Filter
 
     // Z transfer function:
-    // tex:
+    //tex:
     // $$ H(z) = \frac{b_0 + b_1z^{-1} + b_2z^{-2}}{a_0 + a_1z^{-1} + a_2z^{-2}}$$
 
     // Discrete expression:
-    // tex:
+    //tex:
     // $$ y(n) = \frac{b_0}{a_0} x(n) + \frac{b_1}{a_0} x(n-1) + \frac{b_2}{a_0}x(n-2)
     // -\frac{a_1}{a_0}y(n-1) - \frac{a_2}{a_0}y(n-2)$$
 
@@ -158,11 +152,6 @@ extern "C"
         parameter_gt gain;
 
     } ctl_filter_IIR2_setup_t;
-
-    // ec_gt ctl_init_filter_iir2(ctl_filter_IIR2_t *obj);
-
-    //// Design a 2rd Order IIR filter based on center frequency and Q
-    // ec_gt ctl_setup_filter_iir2(ctl_filter_IIR2_t *obj, ctl_filter_IIR2_setup_t *setup_obj);
 
     // Design a 2rd Order IIR filter based on center frequency and Q
     ec_gt ctl_init_filter_iir2(ctl_filter_IIR2_t *obj, ctl_filter_IIR2_setup_t *setup_obj);

@@ -6,9 +6,6 @@
 // GMP basic core header
 #include <gmp_core.h>
 
-// Controller Template Library
-#include <ctl/ctl_core.h>
-
 // user main header
 #include "user_main.h"
 

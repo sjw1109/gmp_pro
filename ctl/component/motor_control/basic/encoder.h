@@ -31,7 +31,7 @@ extern "C"
     typedef struct _tag_ctl_pos_encoder_t
     {
         // output interface, encoder output interface
-        ctl_rotation_encif_t encif;
+        rotation_ift encif;
 
         // raw data of position encoder
         uint32_t raw;
@@ -47,17 +47,17 @@ extern "C"
         // uint32_t p.u. base value
         uint32_t position_base;
 
-    } ctl_pos_encoder_t;
+    } pos_encoder_t;
 
     // void ctl_init_pos_encoder(ctl_pos_encoder_t *pos_encoder);
 
     // void ctl_setup_pos_encoder(ctl_pos_encoder_t *enc, uint16_t poles, uint32_t position_base);
 
-    void ctl_init_pos_encoder(ctl_pos_encoder_t *enc, uint16_t poles, uint32_t position_base);
+    void ctl_init_pos_encoder(pos_encoder_t *enc, uint16_t poles, uint32_t position_base);
 
     // This function may calculate and get angle from encoder source data
     GMP_STATIC_INLINE
-    ctrl_gt ctl_step_pos_encoder(ctl_pos_encoder_t *enc, uint32_t raw)
+    ctrl_gt ctl_step_pos_encoder(pos_encoder_t *enc, uint32_t raw)
     {
         // record raw data
         enc->raw = raw;
@@ -98,7 +98,7 @@ extern "C"
     //}
 
     GMP_STATIC_INLINE
-    void ctl_set_pos_encoder_offset(ctl_pos_encoder_t *enc, ctrl_gt offset)
+    void ctl_set_pos_encoder_offset(pos_encoder_t *enc, ctrl_gt offset)
     {
         enc->offset = offset;
     }
@@ -110,7 +110,7 @@ extern "C"
     typedef struct _tag_ctl_pos_multiturn_encoder_t
     {
         // output interface, encoder output interface
-        ctl_rotation_encif_t encif;
+        rotation_ift encif;
 
         // input raw encoder data
         uint32_t raw;
@@ -126,13 +126,13 @@ extern "C"
         // uint32_t p.u. base value
         uint32_t position_base;
 
-    } ctl_pos_multiturn_encoder_t;
+    } pos_multiturn_encoder_t;
 
-    void ctl_init_multiturn_pos_encoder(ctl_pos_multiturn_encoder_t *enc, uint16_t poles, uint32_t position_base);
+    void ctl_init_multiturn_pos_encoder(pos_multiturn_encoder_t *enc, uint16_t poles, uint32_t position_base);
 
     // This function may calculate and get angle from encoder source data
     GMP_STATIC_INLINE
-    ctrl_gt ctl_step_multiturn_pos_encoder(ctl_pos_multiturn_encoder_t *enc, uint32_t raw, int32_t revolutions)
+    ctrl_gt ctl_step_multiturn_pos_encoder(pos_multiturn_encoder_t *enc, uint32_t raw, int32_t revolutions)
     {
         // record raw data
         enc->raw = raw;
@@ -161,7 +161,7 @@ extern "C"
     {
 
         // output interface, encoder output interface
-        ctl_rotation_encif_t encif;
+        rotation_ift encif;
 
         // input raw encoder data
         uint32_t raw;
@@ -180,13 +180,13 @@ extern "C"
         // uint32_t p.u. base value
         uint32_t position_base;
 
-    } ctl_pos_autoturn_encoder_t;
+    } pos_autoturn_encoder_t;
 
-    void ctl_init_autoturn_pos_encoder(ctl_pos_autoturn_encoder_t *enc, uint16_t poles, uint32_t position_base);
+    void ctl_init_autoturn_pos_encoder(pos_autoturn_encoder_t *enc, uint16_t poles, uint32_t position_base);
 
     // This function may calculate and get angle from encoder source data
     GMP_STATIC_INLINE
-    ctrl_gt ctl_step_autoturn_pos_encoder(ctl_pos_autoturn_encoder_t *enc, uint32_t raw)
+    ctrl_gt ctl_step_autoturn_pos_encoder(pos_autoturn_encoder_t *enc, uint32_t raw)
     {
         // record raw data
         enc->raw = raw;
@@ -224,20 +224,20 @@ extern "C"
     typedef struct _tag_ctl_volocity_encoder_t
     {
         // output: Speed p.u. value
-        ctl_speed_encif_t encif;
+        velocity_ift encif;
 
         // Speed p.u. base, unit rad/s or rpm
         parameter_gt speed_base;
 
         // Speed krpm value
         ctrl_gt speed_krpm;
-    } ctl_spd_encoder_t;
+    } spd_encoder_t;
 
     // void ctl_init_spd_encoder(ctl_spd_encoder_t *spd_encoder);
 
     // void ctl_setup_spd_encoder(ctl_spd_encoder_t *enc, parameter_gt speed_base);
 
-    void ctl_init_spd_encoder(ctl_spd_encoder_t *enc, parameter_gt speed_base);
+    void ctl_init_spd_encoder(spd_encoder_t *enc, parameter_gt speed_base);
 
     //////////////////////////////////////////////////////////////////////////
     // Speed calculator based on position
@@ -245,10 +245,10 @@ extern "C"
     typedef struct _tag_speed_calculator_t
     {
         // output: Speed p.u. value
-        ctl_speed_encif_t encif;
+        velocity_ift encif;
 
         // input postion p.u. input value
-        ctl_rotation_encif_t *pos_encif;
+        rotation_ift *pos_encif;
 
         // position old data
         ctrl_gt old_position;
@@ -263,7 +263,7 @@ extern "C"
         // speed division
         ctl_divider_t div;
 
-    } ctl_spd_calculator_t;
+    } spd_calculator_t;
 
     // void ctl_init_spd_calculator(ctl_spd_calculator_t *sc);
 
@@ -289,11 +289,11 @@ extern "C"
     //     // link to a position encoder
     //     ctl_rotation_encif_t *pos_encif);
 
-void ctl_init_spd_calculator(
+    void ctl_init_spd_calculator(
         // speed calculator objects
-        ctl_spd_calculator_t *sc,
+        spd_calculator_t *sc,
         // link to a position encoder
-        ctl_rotation_encif_t *pos_encif,
+        rotation_ift *pos_encif,
         // control law frequency, unit Hz
         parameter_gt control_law_freq,
         // division of control law frequency, unit ticks
@@ -308,7 +308,7 @@ void ctl_init_spd_calculator(
 
     // Step Speed calculate function
     GMP_STATIC_INLINE
-    void ctl_step_spd_calc(ctl_spd_calculator_t *sc)
+    void ctl_step_spd_calc(spd_calculator_t *sc)
     {
         //        ctrl_gt CTRL_PI = GMP_CONST_PI;
         //        ctrl_gt CTRL_2PI = GMP_CONST_2_PI;

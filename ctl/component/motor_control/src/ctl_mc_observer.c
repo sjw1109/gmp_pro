@@ -1,8 +1,6 @@
 
 #include <gmp_core.h>
 
-#include <ctl/ctl_core.h>
-
 #include <ctl/component/intrinsic/discrete/filter.h>
 
 //////////////////////////////////////////////////////////////////////////
@@ -45,9 +43,9 @@
 //    smo->wr = 0;
 //}
 
-void ctl_init_pmsm_smo(ctl_pmsm_smo_observer_t *smo, parameter_gt Rs, parameter_gt Ld, parameter_gt Lq,
-                        parameter_gt f_ctrl, parameter_gt fc_e, parameter_gt fc_omega, ctrl_gt pid_kp, ctrl_gt pid_ki,
-                        ctrl_gt pid_kd, ctrl_gt spd_max_limit, ctrl_gt spd_min_limit, // unit p.u.
+void ctl_init_pmsm_smo(pmsm_smo_observer_t *smo, parameter_gt Rs, parameter_gt Ld, parameter_gt Lq,
+                        parameter_gt f_ctrl, parameter_gt fc_e, parameter_gt fc_omega, ctrl_gt pid_kp, ctrl_gt pid_Ti,
+                        ctrl_gt pid_Td, ctrl_gt spd_max_limit, ctrl_gt spd_min_limit, // unit p.u.
                         ctrl_gt k_slide, parameter_gt speed_base_rpm, uint16_t pole_pairs)
 {
     smo->e_alpha_est = 0;
@@ -76,7 +74,7 @@ void ctl_init_pmsm_smo(ctl_pmsm_smo_observer_t *smo, parameter_gt Rs, parameter_
     smo->k_filter_e = ctl_helper_lp_filter(f_ctrl, fc_e);
     smo->k_filter_omega = ctl_helper_lp_filter(f_ctrl, fc_omega);
 
-    ctl_init_pid(&smo->pid_pll, pid_kp, pid_ki, pid_kd);
+    ctl_init_pid(&smo->pid_pll, pid_kp, pid_Ti, pid_Td, f_ctrl);
     ctl_set_pid_limit(&smo->pid_pll, spd_min_limit, spd_max_limit);
 
     smo->spd_sf = float2ctrl((60 / 2 / PI) * f_ctrl / speed_base_rpm / pole_pairs);
@@ -84,7 +82,7 @@ void ctl_init_pmsm_smo(ctl_pmsm_smo_observer_t *smo, parameter_gt Rs, parameter_
     smo->wr = 0;
 }
 
-void ctl_init_pmsm_smo_via_consultant(ctl_pmsm_smo_observer_t *smo,
+void ctl_init_pmsm_smo_via_consultant(pmsm_smo_observer_t *smo,
                                        // use it to calculate controller parameters
                                        ctl_pmsm_dsn_consultant_t *dsn,
                                        // use it to calculate controller parameters

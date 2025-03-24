@@ -57,9 +57,9 @@ extern "C"
         // records the error convergence time
         time_gt switch_time;
 
-    } ctl_position_enc_calibrate_t;
+    } position_enc_calibrate_t;
 
-    ec_gt ctl_task_position_encoder_offset_calibrate(ctl_position_enc_calibrate_t *obj)
+    ec_gt ctl_task_position_encoder_offset_calibrate(position_enc_calibrate_t *obj)
     {
         // Step I: set current target & voltage target
         ctl_set_motor_current_ctrl_idq_ref(&obj->mc, obj->current_target, 0);
@@ -116,7 +116,7 @@ extern "C"
         }
     }
 
-    ec_gt ctl_clear_position_encoder_calibrator(ctl_position_enc_calibrate_t *obj)
+    ec_gt ctl_clear_position_encoder_calibrator(position_enc_calibrate_t *obj)
     {
         obj->old_position = 0;
         obj->flag_position_convergence = ~0;

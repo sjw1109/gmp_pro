@@ -138,39 +138,6 @@ ctrl_gt ctl_step_discrete_pid(discrete_pid_t *ctrl, ctrl_gt input)
         return ctrl->output;
     }
 
-    // PID discrete structure
-
-    // discrete PID with bilinear transform
-    // tex:
-    // $$\frac{U(z)}{E(z)} = \left. K_p + K_I\frac{1}{s} + K_ds\right|_{s = \frac{2}{T}\frac{1-z^{-1}}{1+z^{-1}}}\\
-    //=\frac{1}{2T(1-z^{-2})} \cdot
-    //\left((4K_d - 2TK_p + T^2K_I)z^{-2} + (-8K_d+2T^2K_I)z^{-1} + (4K_d + 2TK_p + T^2K_I)\right)\\
-    //=\frac{1}{2f(1-z^{-2})} \cdot
-    //\left((4f^2K_d - 2fK_p + K_I)z^{-2} + (-8f^2K_d+2K_I)z^{-1} + (4f^2K_d + 2fK_p + K_I)\right)\\
-    //=\frac{1}{1-z^{-2}} \cdot
-    //\left((2fK_d)z^{-2} + (-4fK_d)z^{-1} + (2fK_d)\right),f\gg 1, \rm{for\; PID}\\
-    //=\frac{1}{1-z^{-2}} \cdot
-    //\left((-Kp)z^{-2} + (1/f\cdot K_I(\approx 0))z^{-1} + (Kp)\right),f\gg 1, \rm{for\; PI}$$
-
-    // discrete PID with basic transform
-    // tex:
-    // $$\frac{U(z)}{E(z)} = \left. K_p + K_I\frac{1}{s} + K_ds\right|_{s = \frac{z-1}{T}}$$
-
-    // typedef struct _tag_discrete_pid_t
-    //{
-    //	// output
-    //	ctrl_gt out;
-    //
-    //	// parameters
-    //
-    //
-    //	// intrinsic variables
-    //	gmp_ctrl_param_t Kp;
-    //	gmp_ctrl_param_t Ki;
-    //	gmp_ctrl_param_t Kd;
-    //
-    //
-    // }disc_pid_t;
 
 #ifdef __cplusplus
 }

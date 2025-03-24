@@ -87,25 +87,15 @@ extern "C"
         // speed scale factor
         // scale factor: rad/tick -> p.u.
         ctrl_gt spd_sf;
-    } ctl_pmsm_smo_observer_t;
+    } pmsm_smo_observer_t;
 
-    // void ctl_init_pmsm_smo(ctl_pmsm_smo_observer_t* smo);
-
-    // void ctl_setup_pmsm_smo(ctl_pmsm_smo_observer_t* smo,
-    //	parameter_gt Rs, parameter_gt Ld, parameter_gt Lq, parameter_gt f_ctrl,
-    //	parameter_gt fc_e, parameter_gt fc_omega,
-    //	ctrl_gt pid_kp, ctrl_gt pid_ki, ctrl_gt pid_kd,
-    //	ctrl_gt spd_max_limit, ctrl_gt spd_min_limit, // unit p.u.
-    //	ctrl_gt k_slide, parameter_gt speed_base_rpm,
-    //	uint16_t pole_pairs);
-
-    void ctl_init_pmsm_smo(ctl_pmsm_smo_observer_t *smo, parameter_gt Rs, parameter_gt Ld, parameter_gt Lq,
+    void ctl_init_pmsm_smo(pmsm_smo_observer_t *smo, parameter_gt Rs, parameter_gt Ld, parameter_gt Lq,
                            parameter_gt f_ctrl, parameter_gt fc_e, parameter_gt fc_omega, ctrl_gt pid_kp,
                            ctrl_gt pid_ki, ctrl_gt pid_kd, ctrl_gt spd_max_limit,
                            ctrl_gt spd_min_limit, // unit p.u.
                            ctrl_gt k_slide, parameter_gt speed_base_rpm, uint16_t pole_pairs);
 
-    void ctl_init_pmsm_smo_via_consultant(ctl_pmsm_smo_observer_t *smo,
+    void ctl_init_pmsm_smo_via_consultant(pmsm_smo_observer_t *smo,
                                           // use it to calculate controller parameters
                                           ctl_pmsm_dsn_consultant_t *dsn,
                                           // use it to calculate controller parameters
@@ -115,7 +105,7 @@ extern "C"
                                           ctrl_gt pid_kd, ctrl_gt k_slide);
 
     GMP_STATIC_INLINE
-    void ctl_input_pmsm_smo(ctl_pmsm_smo_observer_t *smo, ctrl_gt u_alpha, ctrl_gt u_beta, ctrl_gt i_alpha,
+    void ctl_input_pmsm_smo(pmsm_smo_observer_t *smo, ctrl_gt u_alpha, ctrl_gt u_beta, ctrl_gt i_alpha,
                             ctrl_gt i_beta)
     {
         smo->i_alpha = i_alpha;
@@ -125,7 +115,7 @@ extern "C"
     }
 
     GMP_STATIC_INLINE
-    ctrl_gt ctl_step_pmsm_smo(ctl_pmsm_smo_observer_t *smo)
+    ctrl_gt ctl_step_pmsm_smo(pmsm_smo_observer_t *smo)
     {
         // Model
         ctrl_gt delta_i_alpha = ctl_mul(smo->k1, smo->u_alpha - smo->e_alpha_est - smo->z_alpha) -

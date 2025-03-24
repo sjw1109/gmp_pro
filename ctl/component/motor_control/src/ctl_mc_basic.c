@@ -11,42 +11,6 @@
 
 #include <gmp_core.h>
 
-#include <ctl/ctl_core.h>
-
-//////////////////////////////////////////////////////////////////////////
-// SVPWM module, this module has been deleted
-// NEW SVPWM module please reference
-
-// #include <ctl/component/motor/svpwm.h>
-//
-// void ctl_init_svpwm(ctl_svpwm_channel_t *svpwm)
-//{
-//	svpwm->Ualpha = 0;
-//	svpwm->Ubeta = 0;
-//
-//	svpwm->pwm_period = 0;
-//
-//	for (int i = 0; i < 3; ++i)
-//	{
-//		svpwm->T[i] = 0;
-//		svpwm->pwm_cmp[i] = 0;
-//	}
-// }
-//
-// void ctl_setup_svpwm(ctl_svpwm_channel_t *svpwm, pwm_gt pwm_period)
-//{
-//	svpwm->pwm_period = pwm_period;
-//
-//	// re-calculate SVPWM comparator
-//	ctl_svpwm_modulation(svpwm);
-// }
-
-// void ctl_svpwm_set_Uab(ctl_svpwm_channel_t* svpwm, ctl_vector3_t Uab)
-//{
-//	svpwm->Ualpha = Uab.dat[0];
-//	svpwm->Ubeta = Uab.dat[1];
-//
-// }
 
 //////////////////////////////////////////////////////////////////////////
 // Encoder module
@@ -56,84 +20,58 @@
 // Absolute rotation position encoder
 //
 
-// void ctl_init_pos_encoder(ctl_pos_encoder_t *enc)
-//{
-//    // interface
-//    enc->encif.position = 0;
-//    enc->encif.elec_position = 0;
+void ctl_init_pos_encoder(pos_encoder_t *enc, uint16_t poles, uint32_t position_base)
+{
+    enc->encif.position = 0;
+    enc->encif.elec_position = 0;
+    enc->encif.revolutions = 0;
+
+    enc->offset = 0;
+
+    enc->pole_pairs = poles;
+    enc->position_base = position_base;
+}
+
+void ctl_init_multiturn_pos_encoder(pos_multiturn_encoder_t *enc, uint16_t poles, uint32_t position_base)
+{
+    enc->encif.position = 0;
+    enc->encif.elec_position = 0;
+    enc->encif.revolutions = 0;
+
+    enc->offset = 0;
+
+    enc->pole_pairs = poles;
+    enc->position_base = position_base;
+}
+
+void ctl_init_autoturn_pos_encoder(pos_autoturn_encoder_t *enc, uint16_t poles, uint32_t position_base)
+{
+    enc->encif.position = 0;
+    enc->encif.elec_position = 0;
+    enc->encif.revolutions = 0;
+
+    enc->offset = 0;
+
+    enc->pole_pairs = poles;
+    enc->position_base = position_base;
+}
+
 //
-//    enc->offset = 0;
-//    enc->pole_pairs = 1;
-//    enc->position_base = 1;
-//}
-
-void ctl_init_pos_encoder(ctl_pos_encoder_t *enc, uint16_t poles, uint32_t position_base)
-{
-    enc->encif.position = 0;
-    enc->encif.elec_position = 0;
-    enc->encif.revolutions = 0;
-
-    enc->offset = 0;
-
-    enc->pole_pairs = poles;
-    enc->position_base = position_base;
-}
-
-void ctl_init_multiturn_pos_encoder(ctl_pos_multiturn_encoder_t *enc, uint16_t poles, uint32_t position_base)
-{
-    enc->encif.position = 0;
-    enc->encif.elec_position = 0;
-    enc->encif.revolutions = 0;
-
-    enc->offset = 0;
-
-    enc->pole_pairs = poles;
-    enc->position_base = position_base;
-}
-
-void ctl_init_autoturn_pos_encoder(ctl_pos_autoturn_encoder_t *enc, uint16_t poles, uint32_t position_base)
-{
-    enc->encif.position = 0;
-    enc->encif.elec_position = 0;
-    enc->encif.revolutions = 0;
-
-    enc->offset = 0;
-
-    enc->pole_pairs = poles;
-    enc->position_base = position_base;
-}
-
 // Speed position encoder
 //
 
-// void ctl_init_spd_encoder(ctl_spd_encoder_t *spd_encoder)
-//{
-//     spd_encoder->speed_base = 3000;
-//     spd_encoder->encif.speed = 0;
-//     spd_encoder->speed_krpm = 0;
-// }
-
-void ctl_init_spd_encoder(ctl_spd_encoder_t *enc, parameter_gt speed_base)
+void ctl_init_spd_encoder(spd_encoder_t *enc, parameter_gt speed_base)
 {
     enc->speed_base = speed_base;
     enc->encif.speed = 0;
     enc->speed_krpm = 0;
 }
 
-// void ctl_init_spd_calculator(ctl_spd_calculator_t *sc)
-//{
-//     sc->old_position = 0;
-//     sc->scale_factor = float2ctrl(1.0);
-//     sc->encif.speed = 0;
-//     ctl_init_lp_filter(&sc->spd_filter);
-//     ctl_init_divider(&sc->div);
-// }
-
 void ctl_init_spd_calculator(
     // speed calculator objects
-    ctl_spd_calculator_t *sc,
+    spd_calculator_t *sc,
     // link to a position encoder
-    ctl_rotation_encif_t *pos_encif,
+    rotation_ift *pos_encif,
     // control law frequency, unit Hz
     parameter_gt control_law_freq,
     // division of control law frequency, unit ticks
@@ -322,16 +260,6 @@ void ctl_dsn_pmsm_pmsm_flux_via_Kt(ctl_pmsm_dsn_consultant_t *pmsm_dsn, paramete
 // const f module
 
 #include <ctl/component/motor_control/basic/vf_generator.h>
-
-// ec_gt ctl_init_const_f_controller(ctl_const_f_controller *ctrl)
-//{
-//     ctrl->enc.elec_position = 0;
-//     ctrl->enc.position = 0;
-//
-//     ctl_init_ramp_gen(&ctrl->rg);
-//
-//     return GMP_EC_OK;
-// }
 
 void ctl_setup_const_f_controller(ctl_const_f_controller *ctrl, parameter_gt frequency, parameter_gt isr_freq)
 {

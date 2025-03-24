@@ -22,7 +22,7 @@ extern "C"{
 typedef struct _tag_const_vf
 {
     // encoder output
-    ctl_rotation_encif_t enc;
+    rotation_ift enc;
 
     // parameters
     // E = 4.44 N \Phi \times f
@@ -37,7 +37,7 @@ typedef struct _tag_const_vf
 typedef struct _tag_const_f
 {
     // encoder output
-    ctl_rotation_encif_t enc;
+    rotation_ift enc;
 
     // ramp generator
     ctl_src_rg_t rg;

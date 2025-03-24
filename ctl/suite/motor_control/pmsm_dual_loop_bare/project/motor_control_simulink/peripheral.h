@@ -9,8 +9,6 @@ extern "C"
 
 #include <gmp_core.h>
 
-#include <ctl/ctl_core.h>
-
 // select ADC PTR interface
 #include <ctl/component/interface/adc_ptr_channel.h>
 
@@ -33,7 +31,7 @@ extern "C"
     extern ptr_adc_channel_t udc;
     extern ptr_adc_channel_t idc;
 
-    extern ctl_pos_autoturn_encoder_t pos_enc;
+    extern pos_autoturn_encoder_t pos_enc;
 
     extern pwm_tri_channel_t pwm_out;
 

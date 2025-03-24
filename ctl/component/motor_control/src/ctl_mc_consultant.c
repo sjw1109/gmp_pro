@@ -1,7 +1,5 @@
 #include <gmp_core.h>
 
-#include <ctl/ctl_core.h>
-
 #include <ctl/math_block/const/math_param_const.h>
 
 #include <ctl/component/motor_control/consultant/motor_per_unit_consultant.h>

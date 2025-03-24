@@ -60,19 +60,15 @@ typedef struct _tag_motor_current_ctrl
     //fast_gt flag_enable_svpwm;
 } ctl_motor_current_ctrl_t;
 
-//ec_gt ctl_init_motor_current_ctrl(ctl_motor_current_ctrl_t *obj);
-//
-//ec_gt ctl_setup_motor_current_ctrl(ctl_motor_current_ctrl_t *obj,
-//                                   // PID parameter for motor current controller
-//                                   ctrl_gt kp, ctrl_gt ki, ctrl_gt kd,
-//                                   // PID saturation parameter for motor current controller
-//                                   ctrl_gt out_min, ctrl_gt out_max);
-
-void ctl_setup_motor_current_ctrl(ctl_motor_current_ctrl_t *obj,
-                                  // PID parameter for motor current controller
-                                  ctrl_gt kp, ctrl_gt ki, ctrl_gt kd,
-                                  // PID saturation parameter for motor current controller
-                                  ctrl_gt out_min, ctrl_gt out_max);
+void ctl_setup_motor_current_ctrl(
+    // motor current controller
+    ctl_motor_current_ctrl_t *obj,
+    // PID parameter for motor current controller
+    ctrl_gt kp, ctrl_gt Ti, ctrl_gt Td,
+    // PID saturation parameter for motor current controller
+    ctrl_gt out_min, ctrl_gt out_max,
+    // controller rate, Hz
+    parameter_gt fs);
 
 // Clear all the residual informations
 void ctl_clear_motor_current_ctrl(ctl_motor_current_ctrl_t *obj);
@@ -144,16 +140,6 @@ void ctl_step_motor_current_ctrl(ctl_motor_current_ctrl_t *obj, ctrl_gt theta)
         // vab = inv_park(vdq);
         ctl_ct_ipark(&obj->vdq0, &phasor, &obj->vab0);
 
-    // if (obj->flag_enable_svpwm)
-    // {
-    //     // Tabc = svpwm(vab) / udc;
-    //     //ctl_ct_svpwm_calc(&obj->vab0, &obj->Tabc);
-    // }
-    // else
-    // {
-    //     ctl_vector3_clear(&obj->Tabc);
-    // }
-
 }
 
 GMP_STATIC_INLINE
@@ -168,13 +154,18 @@ void ctl_disable_motor_current_controller(ctl_motor_current_ctrl_t *obj)
     obj->flag_enable_current_controller = 0;
 }
 
-//GMP_STATIC_INLINE
-//void ctl_get_motor_current_controller_modulation(ctl_motor_current_ctrl_t *obj, ctl_vector3_t *tabc)
-//{
-//    tabc->dat[phase_A] = obj->Tabc.dat[phase_A];
-//    tabc->dat[phase_B] = obj->Tabc.dat[phase_B];
-//    tabc->dat[phase_C] = obj->Tabc.dat[phase_C];
-//}
+GMP_STATIC_INLINE
+void ctl_clear_motor_current_ctrl(ctl_motor_current_ctrl_t *obj)
+{
+    // clear PID controller
+    ctl_clear_pid(&obj->idq_ctrl[0]);
+    ctl_clear_pid(&obj->idq_ctrl[1]);
+
+    // clear Feed forward controller
+    obj->vdq_ff.dat[0] = 0;
+    obj->vdq_ff.dat[1] = 0;
+}
+
 
 GMP_STATIC_INLINE
 ctrl_gt ctl_get_motor_current_controller_id(ctl_motor_current_ctrl_t *obj)
@@ -187,13 +178,5 @@ ctrl_gt ctl_get_motor_current_controller_iq(ctl_motor_current_ctrl_t *obj)
 {
     return obj->idq0.dat[phase_q];
 }
-
-//GMP_STATIC_INLINE
-//void ctl_set_motor_current_controller_zero_output(ctl_motor_current_ctrl_t *obj)
-//{
-//    obj->Tabc.dat[0] = float2ctrl(0.5);
-//    obj->Tabc.dat[1] = float2ctrl(0.5);
-//    obj->Tabc.dat[2] = float2ctrl(0.5);
-//}
 
 #endif // _FILE_MOTOR_CURRENT_CTRL_H_

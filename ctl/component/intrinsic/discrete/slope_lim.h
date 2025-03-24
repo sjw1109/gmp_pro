@@ -47,7 +47,7 @@ extern "C"
         // slope limit object
         ctl_slope_lim_t *obj,
         // slope range
-        ctrl_gt slope_min, ctrl_gt slope_max);
+        ctrl_gt slope_max, ctrl_gt slope_min);
 
     // ec_gt ctl_init_slope_limit(ctl_slope_lim_t* obj);
 

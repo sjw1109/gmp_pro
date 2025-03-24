@@ -9,7 +9,6 @@
  *
  */
 
-#include <ctl/ctl_core.h>
 #include <gmp_core.h>
 
 #include <ctrl_settings.h>
@@ -20,7 +19,7 @@
 pmsm_bare_controller_t pmsm_ctrl;
 
 // speed encoder
-ctl_spd_calculator_t spd_enc;
+spd_calculator_t spd_enc;
 
 // PMSM const frequency controller
 ctl_const_f_controller const_f;

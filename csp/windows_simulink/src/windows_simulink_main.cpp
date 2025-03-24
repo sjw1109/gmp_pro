@@ -14,8 +14,6 @@
 #include <gmp_core.h>
 #include <tools/gmp_sil/udp_helper/asio_udp_helper.hpp>
 
-#include <ctl/ctl_core.h>
-
 #include <iostream>
 #include <stdlib.h>
 

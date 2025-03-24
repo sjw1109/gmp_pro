@@ -31,7 +31,7 @@ extern "C"
 #endif // __cplusplus
 
     // speed encoder
-    extern ctl_spd_calculator_t spd_enc;
+    extern spd_calculator_t spd_enc;
 
     // PMSM servo objects
     // extern pmsm_fm_t pmsm;
