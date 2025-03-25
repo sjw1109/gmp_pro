@@ -6,5 +6,6 @@
     "gmp_ctl_digital_power": true,
     "gmp_csp_windows": true,
     "gmp_csp_c28x": true,
+    "gmp_csp_null": true,
     "gmp_csp_stm32": true
 }

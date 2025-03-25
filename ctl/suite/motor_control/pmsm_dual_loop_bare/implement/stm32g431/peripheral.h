@@ -20,10 +20,11 @@ extern "C"
 
 #include <ctl/component/motor_control/basic/std_sil_motor_interface.h>
 
+#include <ctl/component/interface/adc_channel.h>
 
     // buffer for rx & tx
-//    extern gmp_pc_simulink_rx_buffer_t simulink_rx_buffer;
-//    extern gmp_pc_simulink_tx_buffer_t simulink_tx_buffer;
+    //    extern gmp_pc_simulink_rx_buffer_t simulink_rx_buffer;
+    //    extern gmp_pc_simulink_tx_buffer_t simulink_tx_buffer;
 
     extern tri_ptr_adc_channel_t uabc;
     extern tri_ptr_adc_channel_t iabc;
@@ -34,8 +35,8 @@ extern "C"
     extern pos_autoturn_encoder_t pos_enc;
 
     extern pwm_tri_channel_t pwm_out;
-		
-		    // position encoder object
+
+    // position encoder object
     extern pos_autoturn_encoder_t pos_enc;
 
     // ADC Sample objects
@@ -60,10 +61,11 @@ extern "C"
     };
 
     extern uint32_t adc2_res[ADC2_SEQ_SIZE];
-		
-		extern uint32_t idc_placeholder;
-		extern uint32_t iabc_reform[3];
-		extern uint32_t uabc_reform[3];
+
+    // ADC Sample result will copy to these array.
+    extern uint32_t idc_placeholder;
+    extern uint32_t iabc_reform[3];
+    extern uint32_t uabc_reform[3];
 
     // Peripheral Objects
     extern TIM_HandleTypeDef htim1;
@@ -71,9 +73,8 @@ extern "C"
     extern ADC_HandleTypeDef hadc2;
     extern SPI_HandleTypeDef hspi2;
 
-		
-		// encoder result
-		extern uint32_t encoder_result;
+    // encoder result
+    extern uint32_t encoder_result;
 #ifdef __cplusplus
 }
 #endif // __cplusplus

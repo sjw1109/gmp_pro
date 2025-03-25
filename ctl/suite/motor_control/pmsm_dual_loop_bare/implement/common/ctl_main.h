@@ -41,12 +41,32 @@ extern "C"
 
     // PMSM controller
     extern pmsm_bare_controller_t pmsm_ctrl;
-		
-		
+
+    extern adc_bias_calibrator_t adc_calibrator;
+    extern fast_gt flag_enable_adc_calibrator = 1;
+    extern fast_gt index_adc_calibrator = 0;
+
+    typedef enum _tag_adc_index
+    {
+        MTR_ADC_UA = 0,
+        MTR_ADC_UB,
+        MTR_ADC_UC,
+        MTR_ADC_IA,
+        MTR_ADC_IB,
+        MTR_ADC_IC,
+        MTR_ADC_UDC,
+        MTR_ADC_IDC
+    } adc_index_t;
+
+    void set_adc_bias_via_channel(fast_gt index, ctrl_gt bias);
 
     // periodic callback function things.
     GMP_STATIC_INLINE void ctl_dispatch(void)
     {
+        if (flag_enable_adc_calibrator)
+        {
+                ctl_step_adc_calibrator(&adc_calibrator, pmsm_ctrl.mtr_interface.uabc.value.dat[index_adc_calibrator]);
+        }
 
         ctl_step_const_f_controller(&const_f);
 

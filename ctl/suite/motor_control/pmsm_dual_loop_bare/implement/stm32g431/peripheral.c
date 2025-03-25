@@ -44,20 +44,20 @@ uint32_t encoder_result;
 void setup_peripheral(void)
 {
 
-		idc_placeholder = 0;
-	
+        idc_placeholder = 0;
+    
 
     HAL_ADC_Start_DMA(&hadc1, adc1_res, ADC1_SEQ_SIZE);
-		HAL_ADC_Start_DMA(&hadc2, adc2_res, ADC2_SEQ_SIZE);
-	
-		HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-		HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
-		HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
-		HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
-		HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
-		HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
+        HAL_ADC_Start_DMA(&hadc2, adc2_res, ADC2_SEQ_SIZE);
+    
+        HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+        HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+        HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
+        HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
+        HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
+        HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
 
-		ctl_init_ptr_adc_channel(
+        ctl_init_ptr_adc_channel(
         // bind idc channel with idc address
         &idc, &idc_placeholder,
         // ADC gain, ADC bias
@@ -113,12 +113,34 @@ void setup_peripheral(void)
 }
 
 
+
+void set_adc_bias_via_channel(fast_gt index, ctrl_gt bias)
+{
+    if(index<=MTR_ADC_UC)
+        ctl_set_tri_ptr_adc_channel_bias(&uabc, index, bias);
+    else if(index <= MTR_ADC_IC)
+        ctl_set_tri_ptr_adc_channel_bias(&iabc, index-3, bias);
+    else if (index == MTR_ADC_UDC)
+                ctl_set_ptr_adc_channel_bias(&udc, bias);
+    else if (index == MTR_ADC_IDC)
+        ctl_set_ptr_adc_channel_bias(&idc, bias);
+    else // never comes here.
+        gmp_base_assert(0);
+}
+
+
+
+//ctrl_gt get_adc_bias_via_channel(fast_gt index)
+//{
+//	
+//}
+
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 {
-	if(hadc == &hadc2)
-	{
-		gmp_base_ctl_step();
-	}
+    if(hadc == &hadc2)
+    {
+        gmp_base_ctl_step();
+    }
 }
 
 

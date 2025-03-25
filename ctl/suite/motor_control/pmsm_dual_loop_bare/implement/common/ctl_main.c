@@ -24,9 +24,23 @@ spd_calculator_t spd_enc;
 // PMSM const frequency controller
 ctl_const_f_controller const_f;
 
+// 
+adc_bias_calibrator_t adc_calibrator;
+fast_gt flag_enable_adc_calibrator = 1;
+fast_gt index_adc_calibrator = 0;
+
 // CTL initialize routine
 void ctl_init()
 {
+		// 
+		ctl_filter_IIR2_setup_t adc_calibrator_filter;
+		adc_calibrator_filter.filter_type = FILTER_IIR2_TYPE_LOWPASS;
+		adc_calibrator_filter.fc = 20;
+		adc_calibrator_filter.fs = CONTROLLER_FREQUENCY;
+		adc_calibrator_filter.gain = 1;
+		adc_calibrator_filter.q = 0.707f;
+		ctl_init_adc_bias_calibrator(&adc_calibrator, &adc_calibrator_filter);
+	
     // create a speed observer by position encoder
     ctl_init_spd_calculator(
         // attach position with speed encoder
@@ -71,7 +85,7 @@ void ctl_init()
     gmp_base_print(TEXT_STRING("PMSM SERVO struct has been inited, size :%d\r\n"), (int)sizeof(pmsm_ctrl_init));
 
 #if (BUILD_LEVEL == 1)
-    // ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &const_f.enc);
+    ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &const_f.enc);
     ctl_pmsm_ctrl_voltage_mode(&pmsm_ctrl);
     ctl_set_pmsm_ctrl_vdq_ff(&pmsm_ctrl, float2ctrl(0.2), float2ctrl(0.2));
 
@@ -98,6 +112,8 @@ void ctl_init()
 //////////////////////////////////////////////////////////////////////////
 // endless loop function here
 
+
+
 void ctl_mainloop(void)
 {
 
@@ -105,22 +121,17 @@ void ctl_mainloop(void)
 
     ctl_set_pmsm_ctrl_speed(&pmsm_ctrl, float2ctrl(0.1) * spd_target - float2ctrl(1.0));
 
-    // User Controller logic here.
-    //if (gmp_base_get_system_tick() > 350)
-    //{
-    //    ctl_set_pmsm_ctrl_speed(&pmsm_ctrl, float2ctrl(-0.5));
-    //}
-
-    //else if (gmp_base_get_system_tick() > 250)
-    //{
-    //    ctl_set_pmsm_ctrl_speed(&pmsm_ctrl, float2ctrl(0));
-    //}
-
-    //else if (gmp_base_get_system_tick() > 150)
-    //{
-    //    ctl_set_pmsm_ctrl_speed(&pmsm_ctrl, float2ctrl(0.5));
-    //}
-
+		// 
+	if(flag_enable_adc_calibrator)
+	{
+		if(ctl_is_adc_calibrator_cmpt(&adc_calibrator))
+		{
+			set_adc_bias_via_channel(index_adc_calibrator, ctl_get_adc_calibrator_result(&adc_calibrator));
+			index_adc_calibrator += 1;
+			if(index_adc_calibrator >MTR_ADC_IDC)
+				flag_enable_adc_calibrator = 0;
+		}
+	}
     return;
 }
 
