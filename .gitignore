@@ -446,7 +446,14 @@ tools/facilities_generator/gmp_make_tool.cmake
 **/.metadata
 
 # Simulink Library Install path
-slib/install_path/*
+slib/install_path/R2025b/**
+slib/install_path/R2025a/**
+slib/install_path/R2024b/**
+slib/install_path/R2024a/**
+slib/install_path/R2023b/**
+slib/install_path/R2023a/**
+slib/install_path/R2022b/**
+
 **/slprj/
 *.asv
 *.autosave
