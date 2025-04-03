@@ -8,8 +8,9 @@ GMP contains a set of tools for user, you may find then in specified folders.
 | core/   | This folder provide a set of basic components for the whole library and user. Such as, workflow and it's scheduling, memory management, and abstract of IO devices and etc.. |
 | csp/    | This folder contains all the chip support informations. This predefinitions may help you use the library more easily |
 | ctl/    | The controller template library. This folder provides not only basic components but also a whole host of controller and it's workflow agent. |
+| cctl/ | Class-based controller template library. This folder provides a set of C++ classes controller, and a simulator. |
+| vctl/ | Verilog-based controller template library. This folder provides a example code for controller design. |
 | ext/    | The extension module of the library. This folder contains a lot of devices based on the GMP core. These extensions may help you deploy application easily and rapidly. |
-| user/   | The folder is for user to implement their applications. Generally, this folder provide a template for user, and user may copy them to their own project src folder, and change them. |
 
 ## Quick Start
 

@@ -1,7 +1,17 @@
+:: Source file: gmp_fac_generate_srcs_example.bat
+
 :: User should copy this file to your project folder
 
 
+::
+:: This tool will copy all the necessary files.
+:: All the files will be copied and overwritten.
+::
+
+
 @echo off
+
+echo "All the GMP related files will be copy and overwritten."
 
 :: Check if gmp_src had exist
 if exist "gmp_src\" (

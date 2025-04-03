@@ -1,6 +1,7 @@
 import json
 import sys
 import os
+import filecmp
 import shutil
 from pathlib import Path
 
@@ -15,7 +16,17 @@ def copy_files(src_path, dest_path):
         dest_path.mkdir(parents=True)
     for item in src_path.rglob("*"):
         if item.is_file():
-            shutil.copy(item, dest_path / item.relative_to(src_path))
+            if(os.path.exists(dest_path / item.relative_to(src_path))):
+                if filecmp.cmp(src_path / item.relative_to(src_path), dest_path / item.relative_to(src_path), shallow=False):
+                    print(f"[ SKIP ] Source File: '{src_path / item.relative_to(src_path)} '")
+                else :
+                    #print(f"Debug Info: source position'{src_path}'")
+                    #print(f"Debug Info: target position'{dest_path}', '{item.relative_to(src_path)}'")
+                    print(f"[UPDATE] Source File: '{src_path / item.relative_to(src_path)}'")
+                    shutil.copy(item, dest_path / item.relative_to(src_path))
+            else :
+                print(f"[CREATE] Source File: '{src_path / item.relative_to(src_path)}'")
+                shutil.copy(item, dest_path / item.relative_to(src_path))
 
 def main():
     # Check parameter
