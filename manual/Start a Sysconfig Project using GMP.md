@@ -20,13 +20,13 @@ In order to provide the library support for the devices. In this document, we us
 
 + CCS
 
-Website:
+Website: https://www.ti.com/tool/CCSTUDIO
 
 In order to create and build the TI C28x devices projects. In this document, we use CCS 12.8.1 as example.
 
 + Sysconfig
 
-Website:https://www.ti.com/tool/SYSCONFIG
+Website: https://www.ti.com/tool/SYSCONFIG
 
 In order to generate TI initialize code. In this document, we use Sysconfig 1.21.2 as example.
 
@@ -40,9 +40,11 @@ In GMP library, a general User file example is provided in `<GMP>/core/usr`. You
 
 In order to address GMP code, and add them to your workspace, we provide a easy tools for user.
 
+You should copy the folder `<GMP ROOTS>/tools/facilities_generator/gmp_file_generator` to your own project workspace.
 
 
-## Config Compile enviroment
+
+## Config Compile environment
 
 
 

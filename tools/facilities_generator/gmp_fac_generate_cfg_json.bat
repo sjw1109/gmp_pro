@@ -18,7 +18,7 @@ set TARGET_DIR=%SCRIPT_DIR%gmp_file_generator
 if not exist "%TARGET_DIR%" (
     mkdir "%TARGET_DIR%"
     if errorlevel 1 (
-        echo 创建目标文件夹失败！
+        echo Cannot create target dir！
         exit /b 1
     )
 )
@@ -34,7 +34,7 @@ if exist "%SOURCE_FILE1%" (
         echo error happened when copying %SOURCE_FILE1% to %TARGET_FILE1% ！
         exit /b 1
     )
-    echo [INFO] %SOURCE_FILE1% -> %TARGET_FILE1%
+    echo [INFO] %SOURCE_FILE1% to %TARGET_FILE1%
 ) else (
     echo Source file %SOURCE_FILE1% is messing！
     exit /b 1
@@ -52,15 +52,15 @@ if exist "%SOURCE_FILE2%" (
         echo error happened when copying %SOURCE_FILE2% to %TARGET_FILE2% ！
         exit /b 1
     )
-    echo [INFO] %SOURCE_FILE2% -> %TARGET_FILE2%
+    echo [INFO] %SOURCE_FILE2% to %TARGET_FILE2%
 ) else (
     echo Source file %SOURCE_FILE2% is messing！
     exit /b 1
 )
 
 
-:: Copy file gmp_fac_config_gui_example2.bat -> gmp_fac_config_gui.bat
-set SOURCE_FILE3=%SCRIPT_DIR%gmp_fac_config_gui_example2.bat
+:: Copy file gmp_fac_config_gui_example.bat -> gmp_fac_config_gui.bat
+set SOURCE_FILE3=%SCRIPT_DIR%gmp_fac_config_gui_example.bat
 set TARGET_FILE3=%TARGET_DIR%\gmp_fac_config_gui.bat
 
 if exist "%SOURCE_FILE3%" (
@@ -69,7 +69,7 @@ if exist "%SOURCE_FILE3%" (
         echo error happened when copying %SOURCE_FILE3% to %TARGET_FILE3% ！
         exit /b 1
     )
-    echo [INFO] %SOURCE_FILE3% -> %TARGET_FILE3%
+    echo [INFO] %SOURCE_FILE3% to %TARGET_FILE3%
 ) else (
     echo Source file %SOURCE_FILE3% is messing!
     exit /b 1
