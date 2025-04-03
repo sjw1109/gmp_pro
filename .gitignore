@@ -436,15 +436,30 @@ test/*
 examples/stm32f411ce_dev_test/MDK-ARM/stm32f411ce_dev_test.uvguix.javnson
 
 
-ctl/suite/motor_control/pmsm/projects/motor_control_stm32g474_hrtim/Drivers/**
-ctl/suite/motor_control/pmsm/projects/motor_control_stm32g474_hrtim/MDK-ARM/motor_control_stm32g474_hrtim/**
+#ctl/suite/motor_control/pmsm/projects/motor_control_stm32g474_hrtim/Drivers/**
+#ctl/suite/motor_control/pmsm/projects/motor_control_stm32g474_hrtim/MDK-ARM/motor_control_stm32g474_hrtim/**
+#
+#ctl/suite/motor_control/pmsm/projects/motor_control_stm32g431_tim/Drivers/**
+#ctl/suite/motor_control/pmsm/projects/motor_control_stm32g431_tim/MDK-ARM/motor_control_stm32g431_tim/**
+#
+#
+#ctl/suite/motor_control/pmsm_dual_loop_bare/project/stm32g431/Drivers/**
+#ctl/suite/motor_control/pmsm_dual_loop_bare/project/stm32g431/MDK-ARM/motor_control_stm32g431_tim/**
+#
 
-ctl/suite/motor_control/pmsm/projects/motor_control_stm32g431_tim/Drivers/**
-ctl/suite/motor_control/pmsm/projects/motor_control_stm32g431_tim/MDK-ARM/motor_control_stm32g431_tim/**
+# Disable all the STM32 CubeMX generated files, and compiled results
+ctl/suite/**/Drivers
+ctl/suite/**/*.crf
+ctl/suite/**/*.o
+ctl/suite/**/*.d
+ctl/suite/**/*.lnp
+ctl/suite/**/*.map
+ctl/suite/**/*.dep
+ctl/suite/**/*.uvguix.*
+ctl/suite/**/MDK-ARM/**/*.htm
 
-
-ctl/suite/motor_control/pmsm_dual_loop_bare/project/stm32g431/Drivers/**
-ctl/suite/motor_control/pmsm_dual_loop_bare/project/stm32g431/MDK-ARM/motor_control_stm32g431_tim/**
+# disable all the CCS temporary files
+ctl/suite/**/*.launch
 
 tools/facilities_generator/gmp_make_tool.cmake
 gmp_pro.zip
