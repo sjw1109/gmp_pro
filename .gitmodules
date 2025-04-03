@@ -85,3 +85,6 @@
 [submodule "third_party/gsl"]
 	path = third_party/gsl
 	url = https://github.com/ampl/gsl
+[submodule "ext"]
+	path = ext
+	url = https://github.com/javnson/GMP_EXT
