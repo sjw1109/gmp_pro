@@ -373,79 +373,40 @@ FodyWeavers.xsd
 # Ignore some backup zips
 *_backup.zip
 
-# Simulink Library Install path
-slib/install_path/*
-**/slprj/
-
-*.asv
-*.autosave
-
-# ignore C28x CCS projects
-/csp/tms320/**/*.d
-/csp/tms320/**/*.mk
-/csp/tms320/**/*.launch
-
-/csp/x28x_syscfg/**/*.d
-/csp/x28x_syscfg/**/*.mk
-/csp/x28x_syscfg/**/*.launch
-
-# ignore meta folder
-**/.meta
-**/.metadata
-
-# ignore STM32 Cube MX project HAL Drivers
-/csp/stm32/**/Drivers/
-/csp/stm32/**/*.d
-/csp/stm32/**/*.crf
-/csp/stm32/**/*.o
-/csp/stm32/**/*.htm
-/csp/stm32/**/*.map
-/csp/stm32/**/*.axf
-/csp/stm32/**/*.hex
-/csp/stm32/**/*.lnp
-/csp/stm32/**/*.sct
-/csp/stm32/**/*.dep
-/csp/stm32/**/*.lst
-/csp/stm32/**/*.javnson
-
-# facilities tool generated files
-/tools/facilities_generator/gmp_src/**
-/tools/facilities_generator/include_paths.txt
-
-/ctl/**/gmp_src
-/ctl/**/include_paths.txt
-
-/cctl/**/gmp_src
-/cctl/**/include_paths.txt
-
-
-/csp/**/gmp_src
-/csp/**/include_paths.txt
-
-
-
-# Additional files
+# Disable Apple files
 **/.DS_Store/
 **/.DS_Store
-test/*
 
 
-/examples/stm32f411ce_dev_test/Drivers
-/examples/stm32f411ce_dev_test/MDK-ARM/stm32f411ce_dev_test
-/examples/tms320f28035_motorctrl/.settings
-examples/stm32f411ce_dev_test/MDK-ARM/stm32f411ce_dev_test.uvguix.javnson
 
 
-#ctl/suite/motor_control/pmsm/projects/motor_control_stm32g474_hrtim/Drivers/**
-#ctl/suite/motor_control/pmsm/projects/motor_control_stm32g474_hrtim/MDK-ARM/motor_control_stm32g474_hrtim/**
-#
-#ctl/suite/motor_control/pmsm/projects/motor_control_stm32g431_tim/Drivers/**
-#ctl/suite/motor_control/pmsm/projects/motor_control_stm32g431_tim/MDK-ARM/motor_control_stm32g431_tim/**
-#
-#
-#ctl/suite/motor_control/pmsm_dual_loop_bare/project/stm32g431/Drivers/**
-#ctl/suite/motor_control/pmsm_dual_loop_bare/project/stm32g431/MDK-ARM/motor_control_stm32g431_tim/**
-#
+###################################################################################
+# CSP Section
+
+# Disable all the STM32 CubeMX generated files, and compiled results
+csp/stm32/**/Drivers
+csp/stm32/**/*.crf
+csp/stm32/**/*.o
+csp/stm32/**/*.d
+csp/stm32/**/*.lnp
+csp/stm32/**/*.map
+csp/stm32/**/*.dep
+csp/stm32/**/*.uvguix.*
+csp/stm32/**/MDK-ARM/**/*.htm
+
+# Disable generted GMP source file
+csp/**/gmp_src/**
+csp/**/include_paths.txt
+
+# Disable 
+csp/c28x_syscfg/**/*.d
+csp/c28x_syscfg/**/*.mk
+csp/c28x_syscfg/**/*.launch
+csp/c28x_syscfg/**/*.prefs
+
+
+###################################################################################
+# CTL Section
 
 # Disable all the STM32 CubeMX generated files, and compiled results
 ctl/suite/**/Drivers
@@ -458,8 +419,39 @@ ctl/suite/**/*.dep
 ctl/suite/**/*.uvguix.*
 ctl/suite/**/MDK-ARM/**/*.htm
 
+# Disable generted GMP source file
+ctl/**/gmp_src/**
+ctl/**/include_paths.txt
+
 # disable all the CCS temporary files
 ctl/suite/**/*.launch
+ctl/suite/**/*.prefs
 
+###################################################################################
+# CCTL Section
+
+cctl/**/gmp_src/**
+cctl/**/include_paths.txt
+
+###################################################################################
+# TOOLs Section
+
+# facilities tool generated files
+tools/facilities_generator/gmp_src/**
+tools/facilities_generator/include_paths.txt
 tools/facilities_generator/gmp_make_tool.cmake
+
+# ignore meta folder
+**/.meta
+**/.metadata
+
+# Simulink Library Install path
+slib/install_path/*
+**/slprj/
+*.asv
+*.autosave
+
+# GMP pro zip file
 gmp_pro.zip
+
+
