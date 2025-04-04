@@ -1,7 +1,13 @@
-// This is the example of user.config.h
+//
+// THIS IS A DEMO SOURCE CODE FOR GMP LIBRARY.
+//
+// User should add all necessary GMP config macro in this file.
+//
+// WARNING: This file must be kept in the include search path during compilation.
+//
 
-// Specify the running environment
-//#define MASTERCHIP GMP_AUTO_STM32
+//////////////////////////////////////////////////////////////////////////
+// GMP core config module
 
 // Disable CSP
 //#define SPECIFY_DISABLE_CSP
@@ -16,31 +22,28 @@
 //#define SPECIFY_DISABLE_GMP_LOGO
 
 
-
-
-
 //////////////////////////////////////////////////////////////////////////
 // CTL config module
 // 
+
 // Disable GMP CTL module
 //#define SPECIFY_DISABLE_GMP_CTL
+
+// Specify enable CTL library
+#define SPECIFY_ENABLE_GMP_CTL
 
 // Specify enable CTL framework nano
 //#define SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
 // Specify GMP CTL default type
-// 
+
 // #define SPECIFY_CTRL_GT_TYPE USING_DOUBLE_FPU
 #define SPECIFY_CTRL_GT_TYPE USING_FLOAT_FPU
 // #define SPECIFY_CTRL_GT_TYPE USING_FIXED_TI_IQ_LIBRARY
 
-// Specify enable CTL library, this macro is disabled
-#define SPECIFY_ENABLE_GMP_CTL
-
-
 
 //////////////////////////////////////////////////////////////////////////
-// Windows Simulate platform
+// Windows Simulate platform config
 
 // PC environment setup
 #define SPECIFY_PC_ENVIRONMENT

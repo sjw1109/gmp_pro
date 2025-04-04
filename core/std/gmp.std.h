@@ -28,7 +28,7 @@ extern "C"
 
 // invoke user config file
 //
-#include "user.config.h"
+#include "xplt.config.h"
 
 #ifndef SPECIFY_DISABLE_CSP
 // invoke CSP default config
@@ -133,7 +133,7 @@ extern "C"
 // User should define controller related function in this header file
 #include <ctl_main.h>
 
-#include <ctl_interface.h>
+#include <xplt.ctl_interface.h>
 
 #include <ctl/framework/ctl_dispatch.h>
 

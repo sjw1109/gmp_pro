@@ -1,19 +1,25 @@
-/**
- * @file ctl_main.cpp
- * @author Javnson (javnson@zju.edu.cn)
- * @brief
- * @version 0.1
- * @date 2024-09-30
- *
- * @copyright Copyright GMP(c) 2024
- *
- */
+
+//
+// THIS IS A DEMO SOURCE CODE FOR GMP LIBRARY.
+//
+// User should define your own controller objects,
+// and initilize them.
+//
+// User should implement a ctl loop function, this
+// function would be called every main loop.
+//
+// User should implement a state machine if you are using
+// Controller Nanon framework.
+//
+
 
 #include <gmp_core.h>
 
 #include <ctrl_settings.h>
 
-#include "peripheral.h"
+#include "ctl_main.h"
+
+#include <xplt.peripheral.h>
 
 // PMSM controller
 pmsm_bare_controller_t pmsm_ctrl;
@@ -32,17 +38,18 @@ fast_gt index_adc_calibrator = 0;
 // enable motor running
 fast_gt falg_enable_system = 0;
 
+
 // CTL initialize routine
 void ctl_init()
 {
-    //
+    // setup ADC calibrate 
     ctl_filter_IIR2_setup_t adc_calibrator_filter;
     adc_calibrator_filter.filter_type = FILTER_IIR2_TYPE_LOWPASS;
     adc_calibrator_filter.fc = 20;
     adc_calibrator_filter.fs = CONTROLLER_FREQUENCY;
     adc_calibrator_filter.gain = 1;
     adc_calibrator_filter.q = 0.707f;
-    //ctl_init_adc_bias_calibrator(&adc_calibrator, &adc_calibrator_filter);
+    // ctl_init_adc_bias_calibrator(&adc_calibrator, &adc_calibrator_filter);
 
     falg_enable_system = 0;
 
@@ -50,7 +57,7 @@ void ctl_init()
     ctl_init_spd_calculator(
         // attach position with speed encoder
         &spd_enc, pmsm_ctrl.mtr_interface.position,
-        // set spd calculator parameteers
+        // set spd calculator parameters
         CONTROLLER_FREQUENCY, 5, MOTOR_PARAM_MAX_SPEED, 1, 150);
 
     ctl_setup_const_f_controller(&const_f, 20, CONTROLLER_FREQUENCY);
@@ -118,6 +125,7 @@ void ctl_init()
     {
     }
 
+    ctl_enable_output();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -125,7 +133,6 @@ void ctl_init()
 
 void ctl_mainloop(void)
 {
-
     int spd_target = gmp_base_get_system_tick() / 100;
 
     ctl_set_pmsm_ctrl_speed(&pmsm_ctrl, float2ctrl(0.1) * spd_target - float2ctrl(1.0));
@@ -135,7 +142,7 @@ void ctl_mainloop(void)
     {
         if (ctl_is_adc_calibrator_cmpt(&adc_calibrator))
         {
-            //set_adc_bias_via_channel(index_adc_calibrator, ctl_get_adc_calibrator_result(&adc_calibrator));
+            // set_adc_bias_via_channel(index_adc_calibrator, ctl_get_adc_calibrator_result(&adc_calibrator));
             index_adc_calibrator += 1;
             if (index_adc_calibrator > MTR_ADC_IDC)
                 flag_enable_adc_calibrator = 0;
@@ -165,7 +172,7 @@ fast_gt ctl_fmif_sm_pending_routine(ctl_object_nano_t *pctl_obj)
 // 0 keep the same state
 fast_gt ctl_fmif_sm_calibrate_routine(ctl_object_nano_t *pctl_obj)
 {
-    return ctl_cb_pmsm_frmework_current_calibrate(&pmsm);
+    return ctl_cb_pmsm_servo_frmework_current_calibrate(&pmsm_servo);
 }
 
 fast_gt ctl_fmif_sm_ready_routine(ctl_object_nano_t *pctl_obj)
@@ -194,3 +201,5 @@ fast_gt ctl_fmif_sm_fault_routine(ctl_object_nano_t *pctl_obj)
 }
 
 #endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+
+

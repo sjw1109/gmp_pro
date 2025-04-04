@@ -1,6 +1,11 @@
-// This is a example of user_main.h
+//
+// THIS IS A DEMO SOURCE CODE FOR GMP LIBRARY.
+//
+// User should add all declarations of user objects in this file.
+//
+// WARNING: This file must be kept in the include search path during compilation.
+//
 
-#include "ctrl_settings.h"
 
 
 #ifndef _FILE_USER_MAIN_H_
@@ -11,32 +16,17 @@ extern "C"
 {
 #endif
 
-
     //////////////////////////////////////////////////////////////////////////
     // Handle Type definition, copy from <main.c>
-    // 
-    // 
-    
+    //
+    //
+
 #ifndef SPECIFY_PC_TEST_ENV
-
-
 
 #endif // SPECIFY_PC_TEST_ENV
 
-
-    //////////////////////////////////////////////////////////////////////////
-    // Peripheral Variables
-
-
-
-    //////////////////////////////////////////////////////////////////////////
-    // Devices on the peripheral
-
-
-
     //////////////////////////////////////////////////////////////////////////
     // functions
-
 
     // User should implement this 3 functions at least
     //
@@ -49,17 +39,13 @@ extern "C"
     void ctl_init(void);
     void ctl_mainloop(void);
 
-    // For Controller framework project, the following functions should be implemented.
-    // 
-
-
     //////////////////////////////////////////////////////////////////////////
-    // Additionally functions prototypes 
-
-
+    // Additionally functions prototypes
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif // _FILE_USER_MAIN_H_
+
+

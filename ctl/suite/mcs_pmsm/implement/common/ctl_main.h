@@ -22,7 +22,7 @@
 
 #include <ctl/component/interface/adc_channel.h>
 
-#include <peripheral.h>
+#include <xplt.peripheral.h>
 
 #ifndef _FILE_CTL_MAIN_H_
 #define _FILE_CTL_MAIN_H_

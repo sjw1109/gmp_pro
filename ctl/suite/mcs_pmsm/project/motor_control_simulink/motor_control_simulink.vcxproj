@@ -153,7 +153,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\implement\common\ctl_main.c" />
     <ClCompile Include="..\..\implement\common\user_main.c" />
-    <ClCompile Include="..\..\implement\simulate\peripheral.c" />
+    <ClCompile Include="..\..\implement\simulate\xplt.peripheral.c" />
     <ClCompile Include="..\..\src\pmsm_ctrl.c" />
     <ClCompile Include="gmp_src\ctl_component_advance.c" />
     <ClCompile Include="gmp_src\ctl_component_continuous.c" />
@@ -178,13 +178,11 @@
   <ItemGroup>
     <ClInclude Include="..\..\implement\common\ctl_main.h" />
     <ClInclude Include="..\..\implement\common\user_main.h" />
-    <ClInclude Include="..\..\implement\simulate\ctl_interface.h" />
+    <ClInclude Include="..\..\implement\simulate\xplt.ctl_interface.h" />
     <ClInclude Include="..\..\implement\simulate\ctrl_settings.h" />
-    <ClInclude Include="..\..\implement\simulate\peripheral.h" />
-    <ClInclude Include="..\..\implement\simulate\user.config.h" />
+    <ClInclude Include="..\..\implement\simulate\xplt.peripheral.h" />
+    <ClInclude Include="..\..\implement\simulate\xplt.config.h" />
     <ClInclude Include="..\..\pmsm_ctrl.h" />
-    <ClInclude Include="ctrl_settings.h" />
-    <ClInclude Include="peripheral.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

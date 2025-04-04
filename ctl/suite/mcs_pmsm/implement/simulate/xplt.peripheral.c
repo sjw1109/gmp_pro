@@ -1,13 +1,24 @@
-// This is an example of peripheral.c
+//
+// THIS IS A DEMO SOURCE CODE FOR GMP LIBRARY.
+//
+// User should add all definitions of peripheral objects in this file.
+//
+// User should implement the peripheral objects initialization in setup_peripheral function.
+//
+// This file is platform-related.
+//
 
 // GMP basic core header
-#include <ctl/ctl.config.h>
 #include <gmp_core.h>
 
 // user main header
 #include "user_main.h"
 
-#include "peripheral.h"
+#include <xplt.peripheral.h>
+
+//////////////////////////////////////////////////////////////////////////
+// definitions of peripheral
+//
 
 // SIL standard port for Motor control
 
@@ -21,11 +32,11 @@ pos_autoturn_encoder_t pos_enc;
 
 pwm_tri_channel_t pwm_out;
 
-////////////////////////////////////////////////////////////////////////////
-//// Devices on the peripheral
+//////////////////////////////////////////////////////////////////////////
+// peripheral setup function
+//
 
 // User should setup all the peripheral in this function.
-// This function has been completed by syscfg
 void setup_peripheral(void)
 {
     ctl_init_ptr_adc_channel(
@@ -77,9 +88,6 @@ void setup_peripheral(void)
     ctl_init_pwm_tri_channel(&pwm_out, 0, CONTROLLER_PWM_CMP_MAX);
 
     // open hardware switch
-    csp_sl_enable_output();
+    // ctl_output_enable();
 }
 
-//////////////////////////////////////////////////////////////////////////
-// interrupt functions and callback functions here
-//
