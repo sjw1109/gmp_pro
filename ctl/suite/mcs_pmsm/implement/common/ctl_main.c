@@ -12,7 +12,6 @@
 // Controller Nanon framework.
 //
 
-
 #include <gmp_core.h>
 
 #include <ctrl_settings.h>
@@ -38,11 +37,10 @@ fast_gt index_adc_calibrator = 0;
 // enable motor running
 fast_gt falg_enable_system = 0;
 
-
 // CTL initialize routine
 void ctl_init()
 {
-    // setup ADC calibrate 
+    // setup ADC calibrate
     ctl_filter_IIR2_setup_t adc_calibrator_filter;
     adc_calibrator_filter.filter_type = FILTER_IIR2_TYPE_LOWPASS;
     adc_calibrator_filter.fc = 20;
@@ -117,15 +115,18 @@ void ctl_init()
     ctl_set_pmsm_ctrl_speed(&pmsm_ctrl, float2ctrl(0.25));
 #endif // BUILD_LEVEL
 
-    // Debug mode online the controller
-    ctl_enable_pmsm_ctrl(&pmsm_ctrl);
-
+    // if in simulation mode, enable system
+#if !defined SPECIFY_PC_ENVIRONMENT
     // stop here and wait for user start the motor controller
     while (falg_enable_system == 0)
     {
     }
+#endif // SPECIFY_PC_ENVIRONMENT
 
     ctl_enable_output();
+
+    // Debug mode online the controller
+    ctl_enable_pmsm_ctrl(&pmsm_ctrl);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -201,5 +202,3 @@ fast_gt ctl_fmif_sm_fault_routine(ctl_object_nano_t *pctl_obj)
 }
 
 #endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
-
-

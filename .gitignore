@@ -439,7 +439,7 @@ cctl/**/include_paths.txt
 # facilities tool generated files
 tools/facilities_generator/gmp_file_generator/gmp_src/**
 tools/facilities_generator/gmp_src/**
-tools/facilities_generator/include_paths.txt
+tools/facilities_generator/**/include_paths.txt
 tools/facilities_generator/gmp_make_tool.cmake
 
 # ignore meta folder

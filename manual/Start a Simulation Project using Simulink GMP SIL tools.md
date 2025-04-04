@@ -32,7 +32,7 @@ In order to generate TI initialize code. In this document, we use Sysconfig 1.21
 
 + MATLAB
 
-website:
+website: https://www.mathworks.com/products/matlab.html
 
 In order to run Simulation in Simulink you should install MATLAB, at least 2022b version.
 
@@ -45,6 +45,10 @@ In GMP library, a general User file example is provided in `<GMP>/core/usr`. You
 There are three files for controller implement.
 
 `ctl_interface.h` provide the interface of the controller. User should implement the specific function to get input.
+
+> 
+
+
 
 + User main and peripheral manager
 
