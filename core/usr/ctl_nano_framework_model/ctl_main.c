@@ -1,5 +1,14 @@
 //
 // THIS IS A DEMO SOURCE CODE FOR GMP LIBRARY. 
+// 
+// User should define your own controller objects,
+// and initilize them.
+// 
+// User should implement a ctl loop function, this 
+// function would be called every main loop.
+// 
+// User should implement a state machine if you are using 
+// Controller Nanon framework.
 //
 
 

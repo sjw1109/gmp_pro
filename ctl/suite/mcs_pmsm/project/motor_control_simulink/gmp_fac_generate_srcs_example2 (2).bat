@@ -3,6 +3,16 @@
 
 @echo off
 
+:: Check if gmp_src had exist
+if exist "gmp_src\" (
+    echo gmp_src folder exists, deleting...
+    :: remove gmp_src folder
+    rmdir /s /q "gmp_src"
+    echo gmp_src folder has been deleted.
+) else (
+    echo gmp_src folder does not exist.
+)
+
 
 :: Record Script Path
 set "SCRIPT_DIR=%~dp0"

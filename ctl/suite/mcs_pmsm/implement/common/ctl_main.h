@@ -16,9 +16,11 @@
 #include <ctl\component\motor_control\basic\encoder.h>
 
 // motor controller
-#include <ctl/suite/motor_control/pmsm_dual_loop_bare/pmsm_ctrl.h>
+#include <ctl/suite/mcs_pmsm/pmsm_ctrl.h>
 
 #include <ctl/component/interface/pwm_channel.h>
+
+#include <ctl/component/interface/adc_channel.h>
 
 #include <peripheral.h>
 
@@ -43,8 +45,8 @@ extern "C"
     extern pmsm_bare_controller_t pmsm_ctrl;
 
     extern adc_bias_calibrator_t adc_calibrator;
-    extern fast_gt flag_enable_adc_calibrator = 1;
-    extern fast_gt index_adc_calibrator = 0;
+    extern fast_gt flag_enable_adc_calibrator;
+    extern fast_gt index_adc_calibrator;
 
     typedef enum _tag_adc_index
     {
@@ -58,14 +60,14 @@ extern "C"
         MTR_ADC_IDC
     } adc_index_t;
 
-    void set_adc_bias_via_channel(fast_gt index, ctrl_gt bias);
+    //void set_adc_bias_via_channel(fast_gt index, ctrl_gt bias);
 
     // periodic callback function things.
     GMP_STATIC_INLINE void ctl_dispatch(void)
     {
         if (flag_enable_adc_calibrator)
         {
-                ctl_step_adc_calibrator(&adc_calibrator, pmsm_ctrl.mtr_interface.uabc.value.dat[index_adc_calibrator]);
+                ctl_step_adc_calibrator(&adc_calibrator, pmsm_ctrl.mtr_interface.uabc->value.dat[index_adc_calibrator]);
         }
 
         ctl_step_const_f_controller(&const_f);

@@ -2,7 +2,7 @@
 
 #include <gmp_core.h>
 
-#include <ctl/suite/motor_control/pmsm_dual_loop_bare/pmsm_ctrl.h>
+#include <ctl/suite/mcs_pmsm/pmsm_ctrl.h>
 
 #include "peripheral.h"
 

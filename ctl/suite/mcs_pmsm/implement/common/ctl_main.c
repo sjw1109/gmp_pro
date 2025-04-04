@@ -24,23 +24,28 @@ spd_calculator_t spd_enc;
 // PMSM const frequency controller
 ctl_const_f_controller const_f;
 
-// 
+//
 adc_bias_calibrator_t adc_calibrator;
 fast_gt flag_enable_adc_calibrator = 1;
 fast_gt index_adc_calibrator = 0;
 
+// enable motor running
+fast_gt falg_enable_system = 0;
+
 // CTL initialize routine
 void ctl_init()
 {
-		// 
-		ctl_filter_IIR2_setup_t adc_calibrator_filter;
-		adc_calibrator_filter.filter_type = FILTER_IIR2_TYPE_LOWPASS;
-		adc_calibrator_filter.fc = 20;
-		adc_calibrator_filter.fs = CONTROLLER_FREQUENCY;
-		adc_calibrator_filter.gain = 1;
-		adc_calibrator_filter.q = 0.707f;
-		ctl_init_adc_bias_calibrator(&adc_calibrator, &adc_calibrator_filter);
-	
+    //
+    ctl_filter_IIR2_setup_t adc_calibrator_filter;
+    adc_calibrator_filter.filter_type = FILTER_IIR2_TYPE_LOWPASS;
+    adc_calibrator_filter.fc = 20;
+    adc_calibrator_filter.fs = CONTROLLER_FREQUENCY;
+    adc_calibrator_filter.gain = 1;
+    adc_calibrator_filter.q = 0.707f;
+    //ctl_init_adc_bias_calibrator(&adc_calibrator, &adc_calibrator_filter);
+
+    falg_enable_system = 0;
+
     // create a speed observer by position encoder
     ctl_init_spd_calculator(
         // attach position with speed encoder
@@ -60,7 +65,7 @@ void ctl_init()
 
     // current pid controller parameters
     pmsm_ctrl_init.current_pid_gain = 2.15f;
-    //pmsm_ctrl_init.current_Ti = 1.0f / 500;
+    // pmsm_ctrl_init.current_Ti = 1.0f / 500;
     pmsm_ctrl_init.current_Ti = 1.0f / 500;
     pmsm_ctrl_init.current_Td = 0;
     pmsm_ctrl_init.voltage_limit_min = float2ctrl(-0.45);
@@ -107,12 +112,16 @@ void ctl_init()
 
     // Debug mode online the controller
     ctl_enable_pmsm_ctrl(&pmsm_ctrl);
+
+    // stop here and wait for user start the motor controller
+    while (falg_enable_system == 0)
+    {
+    }
+
 }
 
 //////////////////////////////////////////////////////////////////////////
 // endless loop function here
-
-
 
 void ctl_mainloop(void)
 {
@@ -121,17 +130,17 @@ void ctl_mainloop(void)
 
     ctl_set_pmsm_ctrl_speed(&pmsm_ctrl, float2ctrl(0.1) * spd_target - float2ctrl(1.0));
 
-		// 
-	if(flag_enable_adc_calibrator)
-	{
-		if(ctl_is_adc_calibrator_cmpt(&adc_calibrator))
-		{
-			set_adc_bias_via_channel(index_adc_calibrator, ctl_get_adc_calibrator_result(&adc_calibrator));
-			index_adc_calibrator += 1;
-			if(index_adc_calibrator >MTR_ADC_IDC)
-				flag_enable_adc_calibrator = 0;
-		}
-	}
+    //
+    if (flag_enable_adc_calibrator)
+    {
+        if (ctl_is_adc_calibrator_cmpt(&adc_calibrator))
+        {
+            //set_adc_bias_via_channel(index_adc_calibrator, ctl_get_adc_calibrator_result(&adc_calibrator));
+            index_adc_calibrator += 1;
+            if (index_adc_calibrator > MTR_ADC_IDC)
+                flag_enable_adc_calibrator = 0;
+        }
+    }
     return;
 }
 

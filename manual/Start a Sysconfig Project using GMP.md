@@ -46,9 +46,25 @@ You should copy the folder `<GMP ROOTS>/tools/facilities_generator/gmp_file_gene
 
 ## Config Compile environment
 
+Add necessary header paths：
+
++ Necessary Library Path
 
 
 
++ User files path
+
+
+
++ GMP generated path
+
+
+
+Add GMP related files to compiling list.
+
+
+
+Add User files to compiling list.
 
 
 

@@ -1,36 +1,41 @@
-// This is the example of user main.
+//
+// THIS IS A DEMO SOURCE CODE FOR GMP LIBRARY.
+//
+// User should add all declarations of user objects in this file.
+//
+// WARNING: This file must be kept in the include search path during compilation.
+//
  
 //////////////////////////////////////////////////////////////////////////
 // headers here
+//
 
 // GMP basic core header
 #include <gmp_core.h>
 
-// Controller Template Library
-#include <ctl/ctl_core.h>
-
 // user main header
 #include "user_main.h"
 
-// GMP Core Testbench
-#include <core/tb/gmp_core_tb.h>
-
 //////////////////////////////////////////////////////////////////////////
 // global variables here
+//
 
 
 
 //////////////////////////////////////////////////////////////////////////
 // initialize routine here
+//
+
 GMP_NO_OPT_PREFIX
 void init(void) GMP_NO_OPT_SUFFIX
 {
-    gmp_ringbuf_tb();
+
 }
 
 
 //////////////////////////////////////////////////////////////////////////
 // endless loop function here
+//
 void mainloop(void)
 {
 

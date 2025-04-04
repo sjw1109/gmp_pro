@@ -1,4 +1,11 @@
-// This is the example of user.config.h
+//
+// THIS IS A DEMO SOURCE CODE FOR GMP LIBRARY.
+//
+// User should add all necessary GMP config macro in this file.
+//
+// WARNING: This file must be kept in the include search path during compilation.
+//
+
 
 // Specify the running environment
 //#define MASTERCHIP GMP_AUTO_STM32

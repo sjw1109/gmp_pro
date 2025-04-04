@@ -1,4 +1,10 @@
-// This is a example of user_main.h
+//
+// THIS IS A DEMO SOURCE CODE FOR GMP LIBRARY.
+//
+// User should add all declarations of user objects in this file.
+//
+// WARNING: This file must be kept in the include search path during compilation.
+//
 
 
 #ifndef _FILE_USER_MAIN_H_
@@ -27,11 +33,6 @@ extern "C"
 
 
     //////////////////////////////////////////////////////////////////////////
-    // Devices on the peripheral
-
-
-
-    //////////////////////////////////////////////////////////////////////////
     // functions
 
 
@@ -45,10 +46,6 @@ extern "C"
     //
     void ctl_init(void);
     void ctl_mainloop(void);
-
-    // For Controller framework project, the following functions should be implemented.
-    // 
-
 
     //////////////////////////////////////////////////////////////////////////
     // Additionally functions prototypes 
