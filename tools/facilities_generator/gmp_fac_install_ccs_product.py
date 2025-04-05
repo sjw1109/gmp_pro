@@ -110,24 +110,24 @@ def gen_facilities_config_files(fac_data):
         if not os.path.exists(dest_dir):
             os.makedirs(dest_dir)
         # For all file objects
-        for root, dirs, files in os.walk(src_dir):
-            for file in files:
-                # construct full file path
-                src_file_path = os.path.join(root, file)
-                dest_file_path = os.path.join(dest_dir, f"{os.path.splitext(file)[0]}{suffix}")
-        
-                # copy
-                shutil.copy2(src_file_path, dest_file_path)
-                
-                # record
-                record = {
-                    "name": folder_item + f"{os.path.splitext(file)[0]}{suffix}" ,
-                    "outputPath": file,
-                    "alwaysRun": True
-                }
-                records.append(record)
-        
-                print('\033[93m[INFO]\033[00m ' + dest_file_path + ' is generated.')
+        #for root, dirs, files in os.walk(src_dir):
+        #    for file in files:
+        #        # construct full file path
+        #        src_file_path = os.path.join(root, file)
+        #        dest_file_path = os.path.join(dest_dir, f"{os.path.splitext(file)[0]}{suffix}")
+        #
+        #        # copy
+        #        shutil.copy2(src_file_path, dest_file_path)
+        #        
+        #        # record
+        #        record = {
+        #            "name": folder_item + f"{os.path.splitext(file)[0]}{suffix}" ,
+        #            "outputPath": file,
+        #            "alwaysRun": True
+        #        }
+        #        records.append(record)
+        #
+        #        print('\033[93m[INFO]\033[00m ' + dest_file_path + ' is generated.')
 
     # generate config files
     config_file_template["templates"] = records

@@ -35,7 +35,7 @@ fast_gt flag_enable_adc_calibrator = 1;
 fast_gt index_adc_calibrator = 0;
 
 // enable motor running
-fast_gt falg_enable_system = 0;
+volatile fast_gt falg_enable_system = 0;
 
 // CTL initialize routine
 void ctl_init()
@@ -118,9 +118,9 @@ void ctl_init()
     // if in simulation mode, enable system
 #if !defined SPECIFY_PC_ENVIRONMENT
     // stop here and wait for user start the motor controller
-    while (falg_enable_system == 0)
-    {
-    }
+//    while (falg_enable_system == 0)
+//    {
+//    }
 #endif // SPECIFY_PC_ENVIRONMENT
 
     ctl_enable_output();
@@ -132,11 +132,23 @@ void ctl_init()
 //////////////////////////////////////////////////////////////////////////
 // endless loop function here
 
+uint16_t sgen_out = 0;
+
 void ctl_mainloop(void)
 {
     int spd_target = gmp_base_get_system_tick() / 100;
 
     ctl_set_pmsm_ctrl_speed(&pmsm_ctrl, float2ctrl(0.1) * spd_target - float2ctrl(1.0));
+
+    //
+    // Scale next sine value
+    //
+    sgen_out = (1000 + 32768) >> 4;
+
+    //
+    // Write current sine value to buffered DAC
+    //
+    DAC_setShadowValue(DAC_A_BASE, sgen_out);
 
     //
     if (flag_enable_adc_calibrator)
