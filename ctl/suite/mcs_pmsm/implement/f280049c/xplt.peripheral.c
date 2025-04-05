@@ -32,45 +32,51 @@ pos_autoturn_encoder_t pos_enc;
 
 pwm_tri_channel_t pwm_out;
 
-//////////////////////////////////////////////////////////////////////////
+// raw data
+adc_gt uabc_raw[3];
+adc_gt iabc_raw[3];
+adc_gt udc_raw;
+adc_gt idc_raw;
+
+/////////////////////////////////////////////////////////////////////////
 // peripheral setup function
 //
 
 // User should setup all the peripheral in this function.
 void setup_peripheral(void)
 {
-//    ctl_init_ptr_adc_channel(
-//        // bind idc channel with idc address
-//        &idc, &simulink_rx_buffer.idc,
-//        // ADC gain, ADC bias
-//        float2ctrl(MTR_CTRL_CURRENT_GAIN), float2ctrl(MTR_CTRL_CURRENT_BIAS),
-//        // ADC resolution, IQN
-//        12, 24);
-//
-//    ctl_init_tri_ptr_adc_channel(
-//        // bind ibac channel with iabc address
-//        &iabc, simulink_rx_buffer.iabc,
-//        // ADC gain, ADC bias
-//        float2ctrl(MTR_CTRL_CURRENT_GAIN), float2ctrl(MTR_CTRL_CURRENT_BIAS),
-//        // ADC resolution, IQN
-//        12, 24);
-//
-//    ctl_init_ptr_adc_channel(
-//        // bind udc channel with udc address
-//        &udc, &simulink_rx_buffer.udc,
-//        // ADC gain, ADC bias
-//        float2ctrl(MTR_CTRL_VOLTAGE_GAIN), float2ctrl(MTR_CTRL_VOLTAGE_BIAS),
-//        // ADC resolution, IQN
-//        12, 24);
-//
-//    ctl_init_tri_ptr_adc_channel(
-//        // bind vbac channel with vabc address
-//        &uabc, simulink_rx_buffer.uabc,
-//        // ADC gain, ADC bias
-//        float2ctrl(MTR_CTRL_VOLTAGE_GAIN), float2ctrl(MTR_CTRL_VOLTAGE_BIAS),
-//        // ADC resolution, IQN
-//        12, 24);
-//
+    ctl_init_ptr_adc_channel(
+        // bind idc channel with idc address
+        &idc, &idc_raw,
+        // ADC gain, ADC bias
+        float2ctrl(MTR_CTRL_CURRENT_GAIN), float2ctrl(MTR_CTRL_CURRENT_BIAS),
+        // ADC resolution, IQN
+        12, 24);
+
+    ctl_init_tri_ptr_adc_channel(
+        // bind ibac channel with iabc address
+        &iabc, iabc_raw,
+        // ADC gain, ADC bias
+        float2ctrl(MTR_CTRL_CURRENT_GAIN), float2ctrl(MTR_CTRL_CURRENT_BIAS),
+        // ADC resolution, IQN
+        12, 24);
+
+    ctl_init_ptr_adc_channel(
+        // bind udc channel with udc address
+        &udc, &udc_raw,
+        // ADC gain, ADC bias
+        float2ctrl(MTR_CTRL_VOLTAGE_GAIN), float2ctrl(MTR_CTRL_VOLTAGE_BIAS),
+        // ADC resolution, IQN
+        12, 24);
+
+    ctl_init_tri_ptr_adc_channel(
+        // bind vbac channel with vabc address
+        &uabc, uabc_raw,
+        // ADC gain, ADC bias
+        float2ctrl(MTR_CTRL_VOLTAGE_GAIN), float2ctrl(MTR_CTRL_VOLTAGE_BIAS),
+        // ADC resolution, IQN
+        12, 24);
+
     ctl_init_autoturn_pos_encoder(&pos_enc, MOTOR_PARAM_POLE_PAIRS, ((uint32_t)1 << 14) - 1);
 
     // bind peripheral to motor controller

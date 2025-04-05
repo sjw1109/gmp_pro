@@ -78,6 +78,7 @@ adc2.soc3Name                = "MOTOR_VW";
 adc2.soc3Channel             = "ADC_CH_ADCIN1";
 adc2.soc3Trigger             = "ADC_TRIGGER_EPWM1_SOCA";
 adc2.soc3SampleWindow        = 8;
+adc2.soc3IndependentNameMode = true;
 
 asysctl.analogReference = "INTERNAL";
 
@@ -92,7 +93,6 @@ dac2.shadowValue      = 1000;
 dac2.$name            = "DAC_B";
 dac2.enableOutput     = true;
 
-epwm1.$name                                                      = "EPWM_PHASE_U";
 epwm1.epwmTimebase_hsClockDiv                                    = "EPWM_HSCLOCK_DIVIDER_1";
 epwm1.epwmTimebase_counterMode                                   = "EPWM_COUNTER_MODE_UP_DOWN";
 epwm1.epwmTimebase_period                                        = 5000;
@@ -114,6 +114,7 @@ epwm1.epwmEventTrigger_interruptEventCount                       = "1";
 epwm1.epwmEventTrigger_EPWM_SOC_A_triggerEnable                  = true;
 epwm1.epwmEventTrigger_EPWM_SOC_A_triggerSource                  = "EPWM_SOC_TBCTR_PERIOD";
 epwm1.epwmEventTrigger_EPWM_SOC_A_triggerEventPrescalar          = "1";
+epwm1.$name                                                      = "PHASE_U";
 epwm1.epwm.$assign                                               = "EPWM1";
 epwm1.epwm.epwm_aPin.$assign                                     = "GPIO0";
 epwm1.epwm.epwm_bPin.$assign                                     = "GPIO1";
@@ -137,12 +138,11 @@ epwm2.epwmDeadband_enableFED                                     = true;
 epwm2.epwmDeadband_delayFED                                      = 20;
 epwm2.epwmEventTrigger_enableInterrupt                           = true;
 epwm2.epwmEventTrigger_interruptEventCount                       = "1";
-epwm2.$name                                                      = "EPWM_PHASE_V";
+epwm2.$name                                                      = "PHASE_V";
 epwm2.epwm.$assign                                               = "EPWM4";
 epwm2.epwm.epwm_aPin.$assign                                     = "GPIO6";
 epwm2.epwm.epwm_bPin.$assign                                     = "GPIO7";
 
-epwm3.$name                                                      = "EPWM_PHASE_W";
 epwm3.copyFrom                                                   = "EPWM_PHASE_U";
 epwm3.epwmTimebase_hsClockDiv                                    = "EPWM_HSCLOCK_DIVIDER_1";
 epwm3.epwmTimebase_period                                        = 5000;
@@ -162,6 +162,7 @@ epwm3.epwmDeadband_enableFED                                     = true;
 epwm3.epwmDeadband_delayFED                                      = 20;
 epwm3.epwmEventTrigger_enableInterrupt                           = true;
 epwm3.epwmEventTrigger_interruptEventCount                       = "1";
+epwm3.$name                                                      = "PHASE_W";
 epwm3.epwm.$assign                                               = "EPWM2";
 epwm3.epwm.epwm_aPin.$assign                                     = "GPIO2";
 epwm3.epwm.epwm_bPin.$assign                                     = "GPIO3";

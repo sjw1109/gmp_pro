@@ -141,16 +141,6 @@ void ctl_mainloop(void)
     ctl_set_pmsm_ctrl_speed(&pmsm_ctrl, float2ctrl(0.1) * spd_target - float2ctrl(1.0));
 
     //
-    // Scale next sine value
-    //
-    sgen_out = (1000 + 32768) >> 4;
-
-    //
-    // Write current sine value to buffered DAC
-    //
-    DAC_setShadowValue(DAC_A_BASE, sgen_out);
-
-    //
     if (flag_enable_adc_calibrator)
     {
         if (ctl_is_adc_calibrator_cmpt(&adc_calibrator))

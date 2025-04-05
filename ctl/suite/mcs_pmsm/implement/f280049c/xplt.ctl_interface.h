@@ -27,6 +27,12 @@ extern "C"
     // Controller interface
     //
 
+// raw data
+extern adc_gt uabc_raw[3];
+extern adc_gt iabc_raw[3];
+extern adc_gt udc_raw;
+extern adc_gt idc_raw;
+
     // Functions without controller nano framework.
 #ifndef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
@@ -34,6 +40,17 @@ extern "C"
     GMP_STATIC_INLINE
     void ctl_input_callback(void)
     {
+       // copy ADC data to raw buffer
+        udc_raw = ADC_readResult(MOTOR_VBUS_ADC_BASE, MOTOR_VBUS);
+
+        uabc_raw[phase_U] = ADC_readResult(MOTOR_VU_ADC_BASE, MOTOR_VU);
+        uabc_raw[phase_V] = ADC_readResult(MOTOR_VV_ADC_BASE, MOTOR_VV);
+        uabc_raw[phase_W] = ADC_readResult(MOTOR_VW_ADC_BASE, MOTOR_VW);
+
+        iabc_raw[phase_U] = ADC_readResult(MOTOR_IU_ADC_BASE, MOTOR_IU);
+        iabc_raw[phase_V] = ADC_readResult(MOTOR_IV_ADC_BASE, MOTOR_IV);
+        iabc_raw[phase_W] = ADC_readResult(MOTOR_IW_ADC_BASE, MOTOR_IW);
+
         // invoke ADC p.u. routine
         ctl_step_tri_ptr_adc_channel(&iabc);
         ctl_step_tri_ptr_adc_channel(&uabc);
@@ -50,7 +67,19 @@ extern "C"
     {
         ctl_calc_pwm_tri_channel(&pwm_out);
 
-        DAC_setShadowValue(DAC_A_BASE, (pwm_out.value[phase_A]+0.5)*4096);
+        DAC_setShadowValue(DAC_A_BASE, pwm_out.value[phase_A]/2);
+        DAC_setShadowValue(DAC_B_BASE, pwm_out.value[phase_B]/2);
+
+//        EPWM_setCounterCompareValue(PHASE_U_PWM_BASE, EPWM_COUNTER_COMPARE_A,
+//                            (uint16_t)((INV_PWM_HALF_TBPRD * pwm1.Vabc_pu[0]) +
+//                                        INV_PWM_HALF_TBPRD));
+
+        EPWM_setCounterCompareValue(PHASE_U_BASE, EPWM_COUNTER_COMPARE_A,
+                                    pwm_out.value[phase_U]);
+        EPWM_setCounterCompareValue(PHASE_V_BASE, EPWM_COUNTER_COMPARE_A,
+                                    pwm_out.value[phase_V]);
+        EPWM_setCounterCompareValue(PHASE_W_BASE, EPWM_COUNTER_COMPARE_A,
+                                    pwm_out.value[phase_W]);
 
 //        simulink_tx_buffer.tabc[phase_A] = pwm_out.value[phase_A];
 //        simulink_tx_buffer.tabc[phase_B] = pwm_out.value[phase_B];
