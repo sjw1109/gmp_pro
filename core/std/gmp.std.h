@@ -94,15 +94,17 @@ extern "C"
 //
 #include <core/std/cfg/endian.cfg.h>
 
+// peripheral structure definitions
+//
+#include <core/std/cfg/peripheral.cfg.h>
+
 #ifndef SPECIFY_DISABLE_CSP
 // CSP support
 //
 #include <csp.general.h>
 #endif // SPECIFY_DISABLE_CSP
 
-// peripheral structure definitions
-//
-#include <core/std/cfg/peripheral.cfg.h>
+
 
 // ....................................................................//
 // memory controller

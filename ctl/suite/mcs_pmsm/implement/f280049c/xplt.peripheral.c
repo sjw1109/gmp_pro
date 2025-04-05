@@ -14,7 +14,6 @@
 // user main header
 #include "user_main.h"
 
-#include <xplt.peripheral.h>
 
 //////////////////////////////////////////////////////////////////////////
 // definitions of peripheral
@@ -45,6 +44,14 @@ adc_gt idc_raw;
 // User should setup all the peripheral in this function.
 void setup_peripheral(void)
 {
+    // Setup Debug Uart
+    debug_uart = debug_uart_BASE;
+
+    gmp_base_print(TEXT_STRING("Hello World!\r\n"));
+
+    asm(" RPT #255 || NOP");
+
+    // Init ADC channel
     ctl_init_ptr_adc_channel(
         // bind idc channel with idc address
         &idc, &idc_raw,

@@ -55,6 +55,8 @@
 #include "clb_config.h"
 #endif // _C2000_CSP_DISABLE_CLB_CONFIG_TOOL_
 
+#include <c28x_peripheral_driver.h>
+
 
 #ifdef __cplusplus
 extern "C"
@@ -92,27 +94,6 @@ extern "C"
 #define gmp_hal_gpio_toggle(pin_num)        GPIO_togglePin((pin_num))
 
 
-	// dbg_print function bind to this uart
-
-//#define GMP_PORT_SPI_T uint32_t
-
-
-// The data being sent must be left-justified in data->buf.
-//GMP_STATIC_INLINE void gmp_hal_spi_send(spi_halt spi, half_duplex_ift *data)
-//{
-//    size_gt i;
-//
-//    for(i=0;i<data->length;++i)
-//#if _C2000_SPI_INTERFACE_DATA_LENGTH == 16
-//        SPI_writeDataBlockingNonFIFO(spi, data->buf[i]);
-//#elif _C2000_SPI_INTERFACE_DATA_LENGTH == 8
-//        // note left-jusrified.
-//        SPI_writeDataBlockingNonFIFO(spi, data->buf[i]<<8);
-//#endif // _C2000_SPI_INTERFACE_DATA_LENGTH
-//
-//    return;
-//}
-
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -128,6 +109,9 @@ void gmp_hal_wd_feed(void)
 // Debug Print function
 size_gt gmp_base_print_c28xsyscfg(const char *p_fmt, ...);
 
+
+// Step System tick
+void gmp_step_system_tick(void);
 
 
 #ifdef __cplusplus

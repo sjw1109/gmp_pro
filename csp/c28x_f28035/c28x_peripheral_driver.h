@@ -7,6 +7,13 @@ extern "C"
 {
 #endif // __cplusplus
 
+
+    // UART Handle
+    #define GMP_PORT_UART_T uint32_t
+
+    // SPI Handle
+    #define GMP_PORT_SPI_T uint32_t
+
     // debug port
     extern uart_halt debug_uart;
 
