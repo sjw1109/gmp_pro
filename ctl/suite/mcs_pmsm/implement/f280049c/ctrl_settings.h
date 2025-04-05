@@ -13,7 +13,7 @@
 #define CONTROLLER_FREQUENCY (10000)
 
 // PWM depth
-#define CONTROLLER_PWM_CMP_MAX (6000)
+#define CONTROLLER_PWM_CMP_MAX (5000)
 
 // Speed controller Division
 #define SPD_CONTROLLER_PWM_DIVISION (5)

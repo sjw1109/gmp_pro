@@ -511,6 +511,11 @@
 			<locationURI>PARENT-2-PROJECT_LOC/implement/common/user_main.h</locationURI>
 		</link>
 		<link>
+			<name>xpltGMP/as5048a.c</name>
+			<type>1</type>
+			<locationURI>COM_TI_COM_GMP_CORE_C28X_SDK_INSTALL_DIR/ext/encoder/as5048/as5048a.c</locationURI>
+		</link>
+		<link>
 			<name>xpltGMP/ctrl_settings.h</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/implement/f280049c/ctrl_settings.h</locationURI>

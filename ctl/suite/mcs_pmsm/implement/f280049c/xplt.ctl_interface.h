@@ -14,6 +14,8 @@
 
 #include <xplt.peripheral.h>
 
+#include <ext/encoder/as5048/as5048a.h>
+
 #ifndef _FILE_CTL_INTERFACE_H_
 #define _FILE_CTL_INTERFACE_H_
 
@@ -62,6 +64,7 @@ extern adc_gt idc_raw;
 
         // invoke position encoder routine.
 //        ctl_step_autoturn_pos_encoder(&pos_enc, simulink_rx_buffer.encoder);
+        ctl_step_as5048a_pos_encoder(&pos_enc);
     }
 
     // Output Callback

@@ -24,6 +24,7 @@ const epwm3          = epwm.addInstance();
 const gpio           = scripting.addModule("/driverlib/gpio.js", {}, false);
 const gpio1          = gpio.addInstance();
 const gpio2          = gpio.addInstance();
+const gpio3          = gpio.addInstance();
 const sci            = scripting.addModule("/driverlib/sci.js", {}, false);
 const sci1           = sci.addInstance();
 const spi            = scripting.addModule("/driverlib/spi.js", {}, false);
@@ -180,6 +181,10 @@ gpio2.$name           = "LEDG";
 gpio2.direction       = "GPIO_DIR_MODE_OUT";
 gpio2.gpioPin.$assign = "GPIO34";
 
+gpio3.$name           = "SPI_ENCODER_NCS";
+gpio3.direction       = "GPIO_DIR_MODE_OUT";
+gpio3.gpioPin.$assign = "GPIO33";
+
 sci1.$name                 = "debug_uart";
 sci1.sci.$assign           = "SCIA";
 sci1.sci.sci_rxPin.$assign = "GPIO28";
@@ -187,22 +192,22 @@ sci1.sci.sci_txPin.$assign = "GPIO29";
 sci1.rxQual.$name          = "myGPIOQUAL4";
 sci1.txQual.$name          = "myGPIOQUAL5";
 
-spi1.$name            = "SPI_ENCODER";
-spi1.bitRate          = 1500000;
-spi1.dataWidth        = "8";
-spi1.transferProtocol = "SPI_PROT_POL0PHA1";
-spi1.picoQual.$name   = "myGPIOQUAL0";
-spi1.pociQual.$name   = "myGPIOQUAL1";
-spi1.clkQual.$name    = "myGPIOQUAL2";
-spi1.pteQual.$name    = "myGPIOQUAL3";
+spi1.$name                   = "SPI_ENCODER";
+spi1.bitRate                 = 1500000;
+spi1.dataWidth               = "8";
+spi1.transferProtocol        = "SPI_PROT_POL0PHA1";
+spi1.useCase                 = "CUSTOM";
+spi1.useInterfacePins        = ["SPI@_CLK","SPI@_SIMO","SPI@_SOMI"];
+spi1.picoQual.$name          = "myGPIOQUAL0";
+spi1.pociQual.$name          = "myGPIOQUAL1";
+spi1.spi.spi_picoPin.$assign = "GPIO24";
+spi1.spi.spi_pociPin.$assign = "GPIO31";
+spi1.spi.spi_clkPin.$assign  = "GPIO22_VFBSW";
+spi1.clkQual.$name           = "myGPIOQUAL2";
 
 /**
  * Pinmux solution for unlocked pins/peripherals. This ensures that minor changes to the automatic solver in a future
  * version of the tool will not impact the pinmux you originally saw.  These lines can be completely deleted in order to
  * re-solve from scratch.
  */
-spi1.spi.$suggestSolution             = "SPIA";
-spi1.spi.spi_picoPin.$suggestSolution = "GPIO16";
-spi1.spi.spi_pociPin.$suggestSolution = "GPIO10";
-spi1.spi.spi_clkPin.$suggestSolution  = "GPIO18_X2";
-spi1.spi.spi_ptePin.$suggestSolution  = "GPIO11";
+spi1.spi.$suggestSolution = "SPIB";

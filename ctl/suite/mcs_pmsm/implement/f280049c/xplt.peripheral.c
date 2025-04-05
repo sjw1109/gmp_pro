@@ -15,6 +15,7 @@
 #include "user_main.h"
 
 
+
 //////////////////////////////////////////////////////////////////////////
 // definitions of peripheral
 //
@@ -27,7 +28,7 @@ tri_ptr_adc_channel_t iabc;
 ptr_adc_channel_t udc;
 ptr_adc_channel_t idc;
 
-pos_autoturn_encoder_t pos_enc;
+//pos_autoturn_encoder_t pos_enc;
 
 pwm_tri_channel_t pwm_out;
 
@@ -36,6 +37,10 @@ adc_gt uabc_raw[3];
 adc_gt iabc_raw[3];
 adc_gt udc_raw;
 adc_gt idc_raw;
+
+// Encoder Interface
+ext_as5048a_encoder_t pos_enc;
+
 
 /////////////////////////////////////////////////////////////////////////
 // peripheral setup function
@@ -84,7 +89,8 @@ void setup_peripheral(void)
         // ADC resolution, IQN
         12, 24);
 
-    ctl_init_autoturn_pos_encoder(&pos_enc, MOTOR_PARAM_POLE_PAIRS, ((uint32_t)1 << 14) - 1);
+    //ctl_init_autoturn_pos_encoder(&pos_enc, MOTOR_PARAM_POLE_PAIRS, ((uint32_t)1 << 14) - 1);
+    ctl_init_as5048a_pos_encoder(&pos_enc, MOTOR_PARAM_POLE_PAIRS, SPI_ENCODER_BASE, SPI_ENCODER_NCS);
 
     // bind peripheral to motor controller
     ctl_attach_mtr_adc_channels(&pmsm_ctrl.mtr_interface,
