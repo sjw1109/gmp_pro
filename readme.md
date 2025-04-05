@@ -1,6 +1,10 @@
 # General Motor Platform (GMP) library manual summary
 
 GMP is a easy-going library which may help you implement a controller easily.
+
+![GMP LOGO](manual/img/GMP_LOGO.png)
+
+
 GMP contains a set of tools for user, you may find then in specified folders.
 
 | Folders | Summary |
