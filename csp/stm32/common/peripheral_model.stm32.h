@@ -203,6 +203,7 @@ extern "C"
 //     * @param data duplex data interface
 //     */
 //    stat_gt gmp_hal_spi_send_recv(stm32_spi_t *spi, duplex_ift *data);
+size_gt gmp_hal_spi_read_write(spi_halt spi, data_gt *data_in, data_gt *data_out, size_gt length);
 
 //#endif // HAL_SPI_MODULE_ENABLED
 

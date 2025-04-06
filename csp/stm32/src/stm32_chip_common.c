@@ -22,84 +22,84 @@
 //////////////////////////////////////////////////////////////////////////
 // GPIO Model
 #include <csp/stm32/common/gpio_model.stm32.h>
-//
-//#ifdef HAL_GPIO_MODULE_ENABLED
-//
-///**
-// * @brief Setup GPIO port and pin.
-// * @param hgpio handle of GPIO
-// * @param gpio_port GPIO port of STM32
-// * @param gpio_pin GPIO pin of STM32
-// */
-//void gmp_hal_gpio_setup(gpio_model_stm32_t *hgpio, GPIO_TypeDef *gpio_port, uint32_t gpio_pin)
-//{
-//    hgpio->gpio_port = gpio_port;
-//    hgpio->gpio_pin = gpio_pin;
-//}
-//
-///**
-// * @brief Set mode of gpio port, mode 0: input, mode 1: output.
-// * @param hgpio handle of gpio. Type of GPIO handle is given by CSP.
-// * @param mode target mode of GPIO. mode 0 is input mode, 1 is output mode.
-// */
-//ec_gt gmp_hal_gpio_set_mode(gpio_model_stm32_t *hgpio, fast_gt mode)
-//{
-//    return GMP_EC_OK;
-//}
-//
-///**
-// * @brief Write GPIO port. This port must be an output port.
-// * Or, undefined things may happen.
-// * @param hgpio handle of GPIO
-// * @param level target electrical level of GPIO port.
-// */
-//ec_gt gmp_hal_gpio_write(gpio_model_stm32_t *hgpio, fast_gt level)
-//{
-//    HAL_GPIO_WritePin(hgpio->gpio_port, hgpio->gpio_pin, (GPIO_PinState)level);
-//    return GMP_EC_OK;
-//}
-//
-///**
-// * @brief Read GPIO port, This port should be an input port.
-// * Or the return value is undefined.
-// * @param hgpio handle of GPIO
-// * @return fast_gt return GPIO electrical level
-// */
-//fast_gt gmp_hal_gpio_read(gpio_model_stm32_t *hgpio)
-//{
-//    return HAL_GPIO_ReadPin(hgpio->gpio_port, hgpio->gpio_pin);
-//}
-//
-///**
-// * @brief Set GPIO electrical level to high.
-// * if GPIO mode is not output mode, the result is undefined.
-// * @param hgpio handle of GPIO
-// */
-//ec_gt gmp_hal_gpio_set(gpio_model_stm32_t *hgpio)
-//{
-//    HAL_GPIO_WritePin(hgpio->gpio_port, hgpio->gpio_pin, (GPIO_PinState)GPIO_PIN_SET);
-//    return GMP_EC_OK;
-//}
-//
-///**
-// * @brief Set GPIO electrical level to low.
-// * if GPIO mode is not output mode, the result is undefined.
-// * @param hgpio handle of GPIO
-// */
-//ec_gt gmp_hal_gpio_clear(gpio_model_stm32_t *hgpio)
-//{
-//    HAL_GPIO_WritePin(hgpio->gpio_port, hgpio->gpio_pin, (GPIO_PinState)GPIO_PIN_RESET);
-//    return GMP_EC_OK;
-//}
-//
-//#endif // HAL_GPIO_MODULE_ENABLED
-//
-////////////////////////////////////////////////////////////////////////////
-//// peripheral Model
-//#include <csp/stm32/common/peripheral_model.stm32.h>
-//
-//#ifdef HAL_UART_MODULE_ENABLED
-//
+
+#ifdef HAL_GPIO_MODULE_ENABLED
+
+/**
+ * @brief Setup GPIO port and pin.
+ * @param hgpio handle of GPIO
+ * @param gpio_port GPIO port of STM32
+ * @param gpio_pin GPIO pin of STM32
+ */
+void gmp_hal_gpio_init(gpio_model_stm32_t *hgpio, GPIO_TypeDef *gpio_port, uint32_t gpio_pin)
+{
+    hgpio->gpio_port = gpio_port;
+    hgpio->gpio_pin = gpio_pin;
+}
+
+/**
+ * @brief Set mode of gpio port, mode 0: input, mode 1: output.
+ * @param hgpio handle of gpio. Type of GPIO handle is given by CSP.
+ * @param mode target mode of GPIO. mode 0 is input mode, 1 is output mode.
+ */
+ec_gt gmp_hal_gpio_set_mode(gpio_model_stm32_t *hgpio, fast_gt mode)
+{
+    return GMP_EC_OK;
+}
+
+/**
+ * @brief Write GPIO port. This port must be an output port.
+ * Or, undefined things may happen.
+ * @param hgpio handle of GPIO
+ * @param level target electrical level of GPIO port.
+ */
+ec_gt gmp_hal_gpio_write(gpio_model_stm32_t *hgpio, fast_gt level)
+{
+    HAL_GPIO_WritePin(hgpio->gpio_port, hgpio->gpio_pin, (GPIO_PinState)level);
+    return GMP_EC_OK;
+}
+
+/**
+ * @brief Read GPIO port, This port should be an input port.
+ * Or the return value is undefined.
+ * @param hgpio handle of GPIO
+ * @return fast_gt return GPIO electrical level
+ */
+fast_gt gmp_hal_gpio_read(gpio_model_stm32_t *hgpio)
+{
+    return HAL_GPIO_ReadPin(hgpio->gpio_port, hgpio->gpio_pin);
+}
+
+/**
+ * @brief Set GPIO electrical level to high.
+ * if GPIO mode is not output mode, the result is undefined.
+ * @param hgpio handle of GPIO
+ */
+ec_gt gmp_hal_gpio_set(gpio_model_stm32_t *hgpio)
+{
+    HAL_GPIO_WritePin(hgpio->gpio_port, hgpio->gpio_pin, (GPIO_PinState)GPIO_PIN_SET);
+    return GMP_EC_OK;
+}
+
+/**
+ * @brief Set GPIO electrical level to low.
+ * if GPIO mode is not output mode, the result is undefined.
+ * @param hgpio handle of GPIO
+ */
+ec_gt gmp_hal_gpio_clear(gpio_model_stm32_t *hgpio)
+{
+    HAL_GPIO_WritePin(hgpio->gpio_port, hgpio->gpio_pin, (GPIO_PinState)GPIO_PIN_RESET);
+    return GMP_EC_OK;
+}
+
+#endif // HAL_GPIO_MODULE_ENABLED
+
+//////////////////////////////////////////////////////////////////////////
+// peripheral Model
+#include <csp/stm32/common/peripheral_model.stm32.h>
+
+#ifdef HAL_UART_MODULE_ENABLED
+
 ///**
 // * @brief Setup GMP UART handle.
 // * This function should be called in `peripheral_mapping.c`
@@ -120,23 +120,23 @@
 //    huart->recv_buf = recv_buf;
 //    huart->buffer = data_buffer;
 //}
-//
-///**
-// * @brief send data via UART
-// * @param huart handle of UART
-// * @param data half_duplex data interface
-// */
-//ec_gt gmp_hal_uart_send(stm32_uart_t *huart, half_duplex_ift *data)
-//{
-//    assert(huart != nullptr);
-//    assert(huart->uart_handle != nullptr);
-//
-//    assert(data != nullptr);
-//
-//    HAL_UART_Transmit(huart->uart_handle, data->buf, data->length, 1);
-//    return GMP_EC_OK;
-//}
-//
+
+/**
+ * @brief send data via UART
+ * @param huart handle of UART
+ * @param data half_duplex data interface
+ */
+ec_gt gmp_hal_uart_send(stm32_uart_t *huart, half_duplex_ift *data)
+{
+    assert(huart != nullptr);
+    assert(huart->uart_handle != nullptr);
+
+    assert(data != nullptr);
+
+    HAL_UART_Transmit(huart->uart_handle, data->buf, data->length, 1);
+    return GMP_EC_OK;
+}
+
 ///**
 // * @brief receive data via UART
 // * @param huart handle of UART
@@ -264,63 +264,63 @@
 //        return 0; // DMA is still in using
 //}
 //
-//#endif // HAL_UART_MODULE_ENABLED
-//
-////////////////////////////////////////////////////////////////////////////
-//// SPI Model
-//
-//#if defined HAL_SPI_MODULE_ENABLED
-//
-///**
-// * @brief GMP SPI peripheral interface
-// * This function should be called in peripheral mapping routine.
-// * @param spi  handle of spi device
-// * @param hspi handle of STM32 SPI device
-// * @param ncs  Chip Select GPIO
-// */
+#endif // HAL_UART_MODULE_ENABLED
+
+////////////////////////////////////////////////////////////////////////
+// SPI Model
+
+#if defined HAL_SPI_MODULE_ENABLED
+
+/**
+ * @brief GMP SPI peripheral interface
+ * This function should be called in peripheral mapping routine.
+ * @param spi  handle of spi device
+ * @param hspi handle of STM32 SPI device
+ * @param ncs  Chip Select GPIO
+ */
 //void gmp_hal_spi_setup(stm32_spi_t *spi, SPI_HandleTypeDef *hspi, gpio_model_stm32_t *ncs)
 //{
 //    spi->hspi = hspi;
 //    spi->nchip_select = ncs;
 //}
 //
-///**
-// * @brief send data via half duplex SPI
-// * @param spi handle of SPI
-// * @param data half_duplex data interface
-// */
-//ec_gt gmp_hal_spi_send(stm32_spi_t *spi, half_duplex_ift *data)
-//{
-//
-//    HAL_SPI_Transmit(spi->hspi, (uint8_t *)data->buf, data->length, 1);
-//    return GMP_EC_OK;
-//}
-//
-///**
-// * @brief receive data via SPI
-// * @param spi handle of SPI
-// * @param data half_duplex data interface
-// */
-//ec_gt gmp_hal_spi_recv(stm32_spi_t *spi, half_duplex_ift *data)
-//{
-//    HAL_SPI_Receive(spi->hspi, (uint8_t *)data->buf, data->length, 1);
-//    return GMP_EC_OK;
-//}
-//
-///**
-// * @brief receive and transmit data via SPI interface
-// * This function should only be called in SPI duplex mode.
-// * @param spi handle of SPI
-// * @param data duplex data interface
-// */
-//ec_gt gmp_hal_spi_send_recv(stm32_spi_t *spi, duplex_ift *data)
-//{
-//    HAL_SPI_TransmitReceive(spi->hspi, (uint8_t *)data->tx_buf, (uint8_t *)data->rx_buf, data->length, 1);
-//    return GMP_EC_OK;
-//}
-//
-//#endif // HAL_SPI_MODULE_ENABLED
-//
+/**
+ * @brief send data via half duplex SPI
+ * @param spi handle of SPI
+ * @param data half_duplex data interface
+ */
+ec_gt gmp_hal_spi_send(spi_halt spi, half_duplex_ift *data)
+{
+
+    HAL_SPI_Transmit(spi, (uint8_t *)data->buf, data->length, 1);
+    return GMP_EC_OK;
+}
+
+/**
+ * @brief receive data via SPI
+ * @param spi handle of SPI
+ * @param data half_duplex data interface
+ */
+ec_gt gmp_hal_spi_recv(spi_halt spi, half_duplex_ift *data)
+{
+    HAL_SPI_Receive(spi, (uint8_t *)data->buf, data->length, 1);
+    return GMP_EC_OK;
+}
+
+/**
+ * @brief receive and transmit data via SPI interface
+ * This function should only be called in SPI duplex mode.
+ * @param spi handle of SPI
+ * @param data duplex data interface
+ */
+ec_gt gmp_hal_spi_send_recv(spi_halt spi, duplex_ift *data)
+{
+    HAL_SPI_TransmitReceive(spi, (uint8_t *)data->tx_buf, (uint8_t *)data->rx_buf, data->length, 1);
+    return GMP_EC_OK;
+}
+
+#endif // HAL_SPI_MODULE_ENABLED
+
 ////////////////////////////////////////////////////////////////////////////
 //// IIC Model
 //#ifdef HAL_I2C_MODULE_ENABLED

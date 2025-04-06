@@ -10,8 +10,8 @@
       <TargetName>motor_control_stm32g431_tim</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pArmCC>6210000::V6.21::ARMCLANG</pArmCC>
-      <pCCUsed>6210000::V6.21::ARMCLANG</pCCUsed>
+      <pArmCC>6190000::V6.19::ARMCLANG</pArmCC>
+      <pCCUsed>6190000::V6.19::ARMCLANG</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -71,9 +71,9 @@
             <nStopU2X>0</nStopU2X>
           </BeforeCompile>
           <BeforeMake>
-            <RunUserProg1>0</RunUserProg1>
+            <RunUserProg1>1</RunUserProg1>
             <RunUserProg2>0</RunUserProg2>
-            <UserProg1Name></UserProg1Name>
+            <UserProg1Name>..\gmp_fac_generate_src.bat</UserProg1Name>
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
@@ -341,7 +341,7 @@
               <MiscControls></MiscControls>
               <Define>USE_NUCLEO_64,USE_HAL_DRIVER,STM32G431xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32G4xx_HAL_Driver/Inc;../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy;../Drivers/BSP/STM32G4xx_Nucleo;../Drivers/CMSIS/Device/ST/STM32G4xx/Include;../Drivers/CMSIS/Include;..\..\..\..\..\..\..\csp\stm32;..\..\..\..\..\..\..\..\gmp_pro;..\..\..\implement\stm32g431;..\..\..\implement\common</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32G4xx_HAL_Driver/Inc;../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy;../Drivers/BSP/STM32G4xx_Nucleo;../Drivers/CMSIS/Device/ST/STM32G4xx/Include;../Drivers/CMSIS/Include;..\..\..\..\..\..\csp\stm32;..\..\..\..\..\..\..\gmp_pro;..\..\..\implement\stm32g431;..\..\..\implement\common</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -656,19 +656,9 @@
           <GroupName>GMP/User</GroupName>
           <Files>
             <File>
-              <FileName>peripheral.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\implement\stm32g431\peripheral.c</FilePath>
-            </File>
-            <File>
               <FileName>ctl_main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\implement\common\ctl_main.c</FilePath>
-            </File>
-            <File>
-              <FileName>user_main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\implement\common\user_main.c</FilePath>
             </File>
             <File>
               <FileName>ctl_main.h</FileName>
@@ -676,29 +666,14 @@
               <FilePath>..\..\..\implement\common\ctl_main.h</FilePath>
             </File>
             <File>
+              <FileName>user_main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\implement\common\user_main.c</FilePath>
+            </File>
+            <File>
               <FileName>user_main.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\implement\common\user_main.h</FilePath>
-            </File>
-            <File>
-              <FileName>ctl_interface.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\implement\stm32g431\ctl_interface.h</FilePath>
-            </File>
-            <File>
-              <FileName>ctrl_settings.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\implement\stm32g431\ctrl_settings.h</FilePath>
-            </File>
-            <File>
-              <FileName>peripheral.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\implement\stm32g431\peripheral.h</FilePath>
-            </File>
-            <File>
-              <FileName>user.config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\implement\stm32g431\user.config.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -714,6 +689,36 @@
               <FileName>pmsm_ctrl.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\src\pmsm_ctrl.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>GMP/xplt</GroupName>
+          <Files>
+            <File>
+              <FileName>ctrl_settings.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\implement\stm32g431\ctrl_settings.h</FilePath>
+            </File>
+            <File>
+              <FileName>xplt.config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\implement\stm32g431\xplt.config.h</FilePath>
+            </File>
+            <File>
+              <FileName>xplt.ctl_interface.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\implement\stm32g431\xplt.ctl_interface.h</FilePath>
+            </File>
+            <File>
+              <FileName>xplt.peripheral.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\implement\stm32g431\xplt.peripheral.c</FilePath>
+            </File>
+            <File>
+              <FileName>xplt.peripheral.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\implement\stm32g431\xplt.peripheral.h</FilePath>
             </File>
           </Files>
         </Group>

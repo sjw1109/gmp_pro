@@ -19,21 +19,7 @@ extern "C"
 
 #ifdef HAL_GPIO_MODULE_ENABLED
 
-    // STM32 GPIO MODEL
-    typedef struct _tag_gpio_model_stm32_t
-    {
-        // GPIO port of STM32
-        //
-        GPIO_TypeDef *gpio_port;
 
-        // GPIO pin of STM32
-        //
-        uint32_t gpio_pin;
-
-    } gpio_model_stm32_t;
-
-// specify the GPIO model to be STM32 model
-#define GMP_PORT_GPIO_T gpio_model_stm32_t*
 
     /**
      * @brief Setup GPIO port and pin.
@@ -41,8 +27,7 @@ extern "C"
      * @param gpio_port GPIO port of STM32
      * @param gpio_pin GPIO pin of STM32    
      */
-    void gmp_hal_gpio_setup(gpio_model_stm32_t *hgpio,
-     GPIO_TypeDef *gpio_port, uint32_t gpio_pin );
+    void gmp_hal_gpio_init(gpio_model_stm32_t *hgpio, GPIO_TypeDef *gpio_port, uint32_t gpio_pin);
 
     /**
      * @brief Set mode of gpio port, mode 0: input, mode 1: output.

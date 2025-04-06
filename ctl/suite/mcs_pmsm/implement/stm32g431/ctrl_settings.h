@@ -6,14 +6,14 @@
 #include <ctl/component/motor_control/motor_preset/GBM2804H_100T.h>
 
 
-// Internal 2.5V voltage reference
+// Given 3.3V voltage reference
 #define ADC_REFERENCE ((3.3))
 
 // Controller Frequency
-#define CONTROLLER_FREQUENCY ((10000))
+#define CONTROLLER_FREQUENCY (10000)
 
 // PWM depth
-#define CONTROLLER_PWM_CMP_MAX ((8500))
+#define CONTROLLER_PWM_CMP_MAX (8500)
 
 // Speed controller Division
 #define SPD_CONTROLLER_PWM_DIVISION (5)
