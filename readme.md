@@ -56,7 +56,7 @@ For now, you should select a user file template in `<GMP ROOT>/quick_start/usr`.
 
 Then add this user file into your include path searching options.
 
-### Let GMP code running in your projects
+### Let GMP code run in your projects
 
 Now invoke GMP, and let GMP framework running.
 
