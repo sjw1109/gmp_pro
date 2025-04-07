@@ -16,10 +16,22 @@ GMP contains a set of tools for user, you may find then in specified folders.
 | vctl/ | Verilog-based controller template library. This folder provides a example code for controller design. |
 | ext/    | The extension module of the library. This folder contains a lot of devices based on the GMP core. These extensions may help you deploy application easily and rapidly. |
 
+
+
+## Install GMP Product
+
+
+
+## Start a GMP Project
+
+
+
 ## Quick Start
 
 Start a project with GMP library is quite a easy routine. You may follow the four steps.
 Notice, this section of quick start may help you start your project based on GMP framework.
+
+
 
 ### prepare all the GMP related files
 
