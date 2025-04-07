@@ -1,9 +1,6 @@
 {
     "facilities": [
-        "GMP_C28x_Sysconfig",
-        "motor_control",
-        "power_control",
-        "suite_pmsm_control"
+        "GMP_C28x_Sysconfig"
     ],
 
     "GMP_C28x_Sysconfig": {
@@ -15,58 +12,6 @@
         "sourceDir": [
             "core/",
             "csp/c28x_syscfg/"
-        ],
-        "includeDir":[
-            ".",
-            "csp/c28x_syscfg/"
-        ]
-    },
-
-    "motor_control": {
-        "name": "GMP-CTL-MC",
-        "rootMacroName": "COM_GMP_CTL_MC_SDK_INSTALL_DIR",
-        "displayName": "GMP CTL Motor Controller SDK.",
-        "productDir": "ctl/component/motor_control/",
-        "description": "This GMP CTL with Motor Control support.",
-        "sourceDir": [
-            "ctl/framework/",
-            "ctl/component/intrinsic/",
-            "ctl/component/interface/",
-            "ctl/component/motor_control/"
-        ],
-        "includeDir":[
-            "."
-        ]
-    },
-
-    "power_control": {
-        "name": "GMP-CTL-DPC",
-        "rootMacroName": "COM_GMP_CTL_DPC_SDK_INSTALL_DIR",
-        "displayName": "GMP CTL Digital Power Controller SDK",
-        "productDir": "ctl/component/digital_power/",
-        "description": "This GMP CTL with Digital Power Control support.",
-        "sourceDir": [
-            "ctl/framework/",
-            "ctl/component/intrinsic/",
-            "ctl/component/interface/",
-            "ctl/component/digital_power/"
-        ],
-        "includeDir":[
-            "."
-        ]
-    },
-    "suite_pmsm_control":{
-        "name": "GMP-CTL-PMSM-Suite",
-        "rootMacroName": "COM_GMP_PMSM_SUITE_SDK_INSTALL_DIR",
-        "displayName": "GMP CTL PMSM controller Suite Controller SDK",
-        "productDir": "ctl/suite/motor_control/pmsm/",
-        "description": "This GMP CTL with PMSM Motor Control support suite.",
-        "sourceDir": [
-            "ctl/framework/",
-            "ctl/component/intrinsic/",
-            "ctl/component/interface/",
-            "ctl/component/motor_control/",
-            "ctl/suite/motor_control/pmsm/"
         ],
         "includeDir":[
             ".",

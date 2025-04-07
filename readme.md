@@ -20,119 +20,43 @@ GMP contains a set of tools for user, you may find then in specified folders.
 
 ## Install GMP Product
 
+If you need to install GMP product you should install the following softwares, in order to make install process smoothly.
+
+git : https://git-scm.com/downloads
+
+python: https://www.python.org/downloads/
+
+Then you may run script `install_gmp.bat`. This script will help you to install and register GMP product.
+
+By this script a environment variable will be created `GMP_PRO_LOCATION` will point to the GMP library root path. In CCS or Visual Studio we strongly recommend you to add source file or include path based on this environment variable.
+
+
+
+## Install GMP Simulink SIL Module
+
+If you have a MATLAB which versioin is greater than 2022b, you may install GMP Simulink Module by running a installing m file.
+
+`<GMP ROOT>\slib\install_gmp_simulink_lib.m`
+
 
 
 ## Start a GMP Project
 
++ As a GMP user, you may use the full cross-platform service.
 
+### Prepare necessary files
 
-## Quick Start
+You should copy all the files in `<GMP ROOT>\quick_start\gmp_file_generator` folder to your own project directory.
 
-Start a project with GMP library is quite a easy routine. You may follow the four steps.
-Notice, this section of quick start may help you start your project based on GMP framework.
+By runing script `gmp_fac_config_gui.bat` you may config the modules you need.
 
+And Then run script `gmp_fac_generate_src.bat` you may get all the files you need. and a txt file contains include path you should add to your include path. By the way, we recommended you to add the generate code script as the compile preparation step.
 
+For now, you should select a user file template in `<GMP ROOT>/quick_start/usr`. If you will start a SIL project you may copy the folder `ctl_simulation_mtr_model` to your project folder.  If you will start a controller project, you may copy the folder `ctl_nano_framework_model` to your project folder.
 
-### prepare all the GMP related files
+Then add this user file into your include path searching options.
 
-All the GMP file contains three parts, shown as follow:
-
-+ User Files (these files would be modified)
-
-All the user related files are saved in `<root>/user` folder. Some application examples may provide some user files. If you have the same running environment you can use them directly.
-
-User files including the following files:
-
-| File name                    | Summary                                                      |
-| ---------------------------- | :----------------------------------------------------------- |
-| user_main.cpp                | User may implement his application in this file. This file provide two key functions, `user_init`, and `user_loop`.  When GMP framework take over the whole program, the `user_init` function may be called once, after all the necessary GMP initialization; `user_loop` function may be invoked over and over till the program is killed. |
-| user_main.hpp                | User may add your own extern variables or extern functions in this file. This file may only visible for `user_main.cpp` and `ctl_main.cpp`. |
-| ctl_main.cpp<br />(optional) | Controller implement source file. If you will implement a Controller based on Controller Template Library, we strongly suggest you to implement your necessary top level controller code in this file. |
-| user.config.h                | This header file may be the first one include file for the whole GMP framework. This files only contains a set of configuration macros, in order to enable or disable some modules. |
-| peripheral.cpp               | This folder provide a set of functions which would be called by GMP framework. These functions may help you implement your peripheral setup routine on time. |
-
-Based on the previous content, you may copy a user file template to your own project. Then you may add a folder (or file filter, or file  groups) in your own project and add these files in your project manager.
-
-+ GMP Framework
-
-GMP Framework contains two folders in GMP library. One is `core` and another is `csp`.
-
->  Stage I: Invoke all GMP body code.
-
-In `core` folder, all the GMP framework and basic function is declared and defined. Here're some details
-
-| Sub-folder                     | Full Name                 | Summary                                                      |
-| ------------------------------ | ------------------------- | :----------------------------------------------------------- |
-| std<br />(necessary)           | Standardization           | This part of code is the basement of the GMP framework.      |
-| mm<br />(optional)             | Memory Management         | This part of code is Memory management for GMP code. When any GMP related submodule need to allocate or free some heap memory this submodule may be invoked. <br />This module may be disabled in your config file. |
-| dev<br />(provided by headers) | Device Abstract           | This folder provide a set of standard interface for peripheral communication based on bus. Chip Support Package or User defines a set of functions to compatible these standards may helps user use GMP- Extension and GMP-FPGA module easier. Because these extension and FPGA interface comply with these abstract interfaces. |
-| pm<br />(optional)             | Process Management        | This folder provide a set of tool kits for user to manage their process. Including three kernel parts, state machine standard, workflow standard, message mapping standard. |
-| fpga<br />(optional)           | FPGA support relate       | This folder provides a set of FPGA peripherals. These peripheral may be add to your heterogeneous designs. |
-| util<br />(optional)           | utilities provided by GMP | Some data structure and algorithm and some other utilities including in this folder. |
-
-Generally, and at least you have to add two files in your project, which is `error_code.c` and `gmp_main.cpp` which are stored in `<gmp root>/core/std`. If memory management is necessary you should add the `block_mem.c` in `core/mm` folder. These files are stored in `\core\src` folder.
-
-The  folder `<gmp root>/core/std`, provides all the necessary supports which is need by GMP, including four parts, that is, compiler standardization in `compiler_sup.h`, type name standardization in `default.types.h`, error code standardization in `error_code.h`, GMP basic port functions in `gmp_cport.h`.  
-
-> Stage II include all the Chip Support Files
-
-Another part of GMP core is Chip Support Package files. There're several functions and necessary function are defined in CSP submodule.
-
-You may find which chip you use. For instance my chip is STM32G431RB from  STMicroelectronics. I need to add `csp/stm32/stm32_chip_common.c` to my projects.
-
-+ GMP CTL (Controller Project Only) 
-
-If you need to create a GMP controller project, the GMP Controller Template Library is necessary for your projects.
-
-CTL module has five kernel folders, that is:
-
-| CTL folder | Summary                                                      |
-| ---------- | ------------------------------------------------------------ |
-| component  | This folder contains a set of components for user and CTL suite module to construct controllers. In this folder, all the components are stored based on it's application. |
-| framework  | This folder contains some standard framework which help user construct their own controller easier. |
-| objects    | This folder contains a set of controlled plants model.       |
-| suite      | This folder contains several complete suite of controller. Such as PMSM controller,  switching regulator controller. |
-| FPGA       | This folder contains a list of FPGA peripherals for controller. |
-
-All the source files are stored in `src` folders. User should add all the necessary components and framework source to your projects. In general, the controller framework is necessary, `ctl_nano.c`, stored in `ctl/framework/src`, and common component and interface_utils is necesaary, `ctl_common_init.c` and `peripheral_if_util_init.c`.
-
-If you will use GMP CTL suite controller, for  instance, PMSM controller. you may add `ctl_motor_init` for motor related components, and `pmsm.ctl.c` as PMSM controller basic implement, and `pmsm_speed_closeloop.c` as PMSM speed controller.
-
-+ Third parties and GMP Extensions
-
-If the chip you use is not support the IQ math, you may use the TI IQMATH open source version. which is provided in `third_party`.
-
-You should add all the sources files of IQ math library, and add correct include path.
-
-If some extension is needed, you may search some more help in the extension folder.
-
-### Add Correct Include searching path to your projects
-
-All the GMP files are organized and use relative path based on GMP library root path. So what user need to do is tell  IDE where your own config files are, and where GMP root path are.
-
-For instance, if  I've install GMP in my `E:\lib\gmp` folder. Then I create a project in `E:\project_based_on_GMP`, and all the user files are copied to `E:\project_based_on_GMP\user`. For now, I should add the following path into Include Path.
-
-+ user file path, so that the GMP library may find out the user config file `user.config.h`.
-
-`E:\project_based_on_GMP\user`
-
-+ GMP library, so that the GMP library modules may find all the header files based on this path.
-
-`E:\lib\gmp`
-
-+ Select correct GMP CSP (Chip Support Package) 
-
-`E:\lib\gmp\csp\stm32`
-
-### Customize your own GMP via user.config.h
-
-Generally, you may add only one line to `user.config.h` all the configure may automatically added. 
-
-`#define MASTERCHIP GMP_AUTO_STM32`
-
-For now, the project with GMP can compile. You may try it.
-
-### Let GMP library running in your projects
+### Let GMP code running in your projects
 
 Now invoke GMP, and let GMP framework running.
 
@@ -145,7 +69,7 @@ If your main source file is a C source file, please add the `core/gmp_core.h` ju
 If your main source file is a C++ source file, please add the `core/gmp_core.hpp` just like the following code.
 
 ``` C++
-#include <cire/gmp_core.hpp>
+#include <core/gmp_core.hpp>
 ```
 
 For now, you may invoke the `gmp_entry()` function in your main function. just like the following code does.
@@ -160,7 +84,7 @@ void main (void)
 	// ...
 
 	// Ready to entry the GMP
-	gmp_entry(); // invoke the GMP library
+	gmp_base_entry(); // invoke the GMP library
 
 	// Some other things.
 	// But code NEVER reach here.
@@ -168,8 +92,6 @@ void main (void)
 ```
 
 > Attention! when `gmp_entry()` is called, the function may not returned. Generally this function should be called after all the initialization code is completed, and 
-
-
 
 ### Enjoy!
 
@@ -179,66 +101,39 @@ Now you can implement your application based on GMP framework. These code may ad
 
 
 
-### compliment your GMP library configure
++ As a GMP-CTL user, you may disable all the additional functions, just use xplatform (cross platform) CTL module.
 
-This file is located in `<.config.h>`, user may open this file, and change it based on what you need.
-Worth mentioning, you should firstly pay attention to the first section of the file.
-That is, you should tell the correct `MASTERCHIP`, `MASTER_CHIP_SET` and `COMPILER_TYPE`.
+We will support this mode in next release version.
 
-Some example for chip set or board may provided in user folder.
-You may just copy and cover the `<.config.h>` file.
+## Introduction for GMP Core Module
 
-And then change your compiler settings, let your compiler support C++11 standard.
-
-> NOTICE: the C++ compiler should support at least C++03 version.
-> Using compiler supporting C++11 will greatly good at performance and compiler comments.
-> The compatible definition of C++11 is defined here `<core/std/compiler_sup.h>`.
->
-
-### Add the GMP source to your projects
-
-You should add all the source file (*.c and *.cpp) to compiler candidate.
-By the way, you need to add the location of GMP library root PATH to your include path.
-All the include command is write using relative path, based on the GMP library root path.
-
-
-### Call the `gmp_entry()` function and entry the GMP world
-
-You need to call the `gmp_entry()` function, in your main function, and sometimes you may need to complete a set of preparing firstly, for instance the code generated by CubeMX.
-Aiming to let program know the prototype of `gmp_entry()`, firstly,  you should add a include command in your main source file.
-
-If your main source file is a C source file, please add the `core/gmp_core.h` just like the following code.
-
-``` C
-#include <core/gmp_core.h>
-```
-
-If your main source file is a C++ source file, please add the `core/gmp_core.hpp` just like the following code.
+`gmp_base_` is a general prefix for GMP Core module.
 
 ``` C++
-#include <cire/gmp_core.hpp>
+// get current system tick
+time_gt gmp_base_get_system_tick(void);
+
+// assert function
+gmp_base_assert();
+
+// to specify the function isn't impelemted
+gmp_base_not_impl();
 ```
 
-For now, you may invoke the `gmp_entry()` function in your main function. just like the following code does.
 
-``` C++
-void main (void)
-{
-	// Do your preparing code
 
-	// ...
-
-	// Ready to entry the GMP
-	gmp_entry(); // invoke the GMP library
-
-	// Some other things.
-	// But code NEVER reach here.
-}
-```
-
-### Final step: just enjoy!
-
-You may start your own work in the `<user/>` folder.
+`gmp_hal_` is a general prefix for GMP HAL (Hardware Abstract Layer) module.
 
 
 
+`ctl_` is a general prefix for GMP CTL module.
+
+`ctl_init_` is the prefix for initial function of GMP CTL module.
+
+`ctl_step_` is the prefix for controller function of GMP CTL module. This name means discrete controller step to next state.
+
+
+
+
+
+\

@@ -75,7 +75,9 @@ extern "C"
     // Key this function must do implement, otherwise the time-based part may invalid.
     // This function would return the system tick point right now.
     //
+    #ifndef gmp_base_get_system_tick
     time_gt gmp_base_get_system_tick(void);
+    #endif // gmp_base_get_system_tick
 
     // The function should be called by user or system when fatal error happened.
     // So the function must own the ability of stop the program.

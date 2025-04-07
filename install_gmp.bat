@@ -83,16 +83,17 @@ echo Environment variable GMP_PRO_LOCATION has been set to: %SCRIPT_DIR%
 
 
 :: Check if Git has installed correctly.
-git --version >nul 2>&1
-if %errorlevel% neq 0 (
-    echo Git is not installed correctly.
-    echo You may find the installer of Git from the official website:
-    echo https://git-scm.com/downloads
-    exit /b
-) else (
-    echo Git has installed, 
-    git --version
-)
+:: For now git is not necessary.
+@REM git --version >nul 2>&1
+@REM if %errorlevel% neq 0 (
+@REM     echo Git is not installed correctly.
+@REM     echo You may find the installer of Git from the official website:
+@REM     echo https://git-scm.com/downloads
+@REM     exit /b
+@REM ) else (
+@REM     echo Git has installed, 
+@REM     git --version
+@REM )
 
 :: Check if Python has installed correctly.
 where python >nul 2>&1
@@ -107,9 +108,9 @@ if %ERRORLEVEL% neq 0 (
 )
 
 :: upgrade all submodules
-git submodule update --progress --init --recursive --force
+::git submodule update --progress --init --recursive --force
 
-echo All the necessary git submodule has installed.
+::echo All the necessary git submodule has installed.
 
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
