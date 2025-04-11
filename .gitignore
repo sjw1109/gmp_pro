@@ -401,7 +401,7 @@ csp/**/include_paths.txt
 # Disable 
 csp/c28x_syscfg/**/*.d
 csp/c28x_syscfg/**/*.mk
-csp/c28x_syscfg/**/*.launch
+# csp/c28x_syscfg/**/*.launch
 csp/c28x_syscfg/**/*.prefs
 
 
@@ -424,7 +424,7 @@ ctl/**/gmp_src/**
 ctl/**/include_paths.txt
 
 # disable all the CCS temporary files
-ctl/suite/**/*.launch
+# ctl/suite/**/*.launch
 ctl/suite/**/*.prefs
 
 ###################################################################################

@@ -26,6 +26,11 @@ time_gt gmp_base_get_system_tick(void)
 	return DSPC2000_SystemTick;
 }
 
+void gmp_step_system_tick(void)
+{
+	 DSPC2000_SystemTick += 1;
+}
+
 // This function may be called and used to initialize all the peripheral.
 void gmp_csp_startup(void)
 {
