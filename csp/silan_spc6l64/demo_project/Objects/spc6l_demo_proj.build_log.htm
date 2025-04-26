@@ -1,0 +1,180 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: μVision V5.38.0.0
+Copyright (C) 2022 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: 1 javnson, 2, LIC=65ISZ-JSXB1-RA5DM-XV92H-TL52X-6TCUC
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Plus  Version: 5.38.0.0
+Toolchain Path:  C:\Keil_v5\ARM\ARMCCV5\Bin
+C Compiler:      Armcc.exe V5.06 update 6 (build 750)
+Assembler:       Armasm.exe V5.06 update 6 (build 750)
+Linker/Locator:  ArmLink.exe V5.06 update 6 (build 750)
+Library Manager: ArmAr.exe V5.06 update 6 (build 750)
+Hex Converter:   FromElf.exe V5.06 update 6 (build 750)
+CPU DLL:         SARMCM3.DLL V5.38.0.0
+Dialog DLL:      DARMCM1.DLL V1.19.6.0
+Target DLL:      UL2CM3.DLL V1.164.8.0
+Dialog DLL:      TARMCM1.DLL V1.14.6.0
+ 
+<h2>Project:</h2>
+E:\lib\gmp_pro\csp\silan_spc6l64\demo_project\spc6l_demo_proj.uvprojx
+Project File Date:  04/26/2025
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil_v5\ARM\ARMCCV5\Bin'
+Build target 'SPC6L64'
+compiling DRV_Coproc.c...
+..\..\silan_spc6l64\driver/inc/coproc.h(4): error:  #5: cannot open source input file "driver/inc/IQmathLib.h": No such file or directory
+  #include "driver/inc/IQmathLib.h"
+driver_src\DRV_Coproc.c: 0 warnings, 1 error
+compiling DRV_Clk.c...
+..\..\silan_spc6l64\driver/inc/clk.h(4): error:  #5: cannot open source input file "driver/inc/IQmathLib.h": No such file or directory
+  #include "driver/inc/IQmathLib.h"
+driver_src\DRV_Clk.c: 0 warnings, 1 error
+compiling DRV_ACMP.c...
+compiling DRV_Adc.c...
+compiling ctl_component_continuous.c...
+..\..\..\..\gmp_pro\core/std/gmp.std.h(31): error:  #5: cannot open source input file "xplt.config.h": No such file or directory
+  #include "xplt.config.h"
+gmp_src\ctl_component_continuous.c: 0 warnings, 1 error
+compiling DRV_GPIO.c...
+compiling DRV_OPA.c...
+compiling DRV_PWM.c...
+compiling MOTOR_Math_func.c...
+driver_src\MOTOR_Math_func.c(1): error:  #5: cannot open source input file "math_func.h": No such file or directory
+  #include "math_func.h"
+driver_src\MOTOR_Math_func.c: 0 warnings, 1 error
+compiling DRV_IRQ.c...
+driver_src\DRV_IRQ.c(1): error:  #5: cannot open source input file "IRQ.h": No such file or directory
+  #include "IRQ.h"
+driver_src\DRV_IRQ.c: 0 warnings, 1 error
+compiling DRV_DMA.c...
+compiling DRV_Timer.c...
+driver_src\DRV_Timer.c(46): error:  #5: cannot open source input file "IQmathLib.h": No such file or directory
+  #include "IQmathLib.h"
+driver_src\DRV_Timer.c: 0 warnings, 1 error
+compiling ctl_component_advance.c...
+..\..\..\..\gmp_pro\core/std/gmp.std.h(31): error:  #5: cannot open source input file "xplt.config.h": No such file or directory
+  #include "xplt.config.h"
+gmp_src\ctl_component_advance.c: 0 warnings, 1 error
+compiling ctl_component_discrete.c...
+..\..\..\..\gmp_pro\core/std/gmp.std.h(31): error:  #5: cannot open source input file "xplt.config.h": No such file or directory
+  #include "xplt.config.h"
+gmp_src\ctl_component_discrete.c: 0 warnings, 1 error
+compiling DRV_IAP.c...
+compiling DRV_Uart1.c...
+driver_src\DRV_Uart1.c(107): error:  #20: identifier "UART0_IBRD" is undefined
+  	UARTx->UARTIBRD_b.BRDDI = UART0_IBRD;//波特率整数分频寄存器
+driver_src\DRV_Uart1.c(108): error:  #20: identifier "UART0_FBRD" is undefined
+  	UARTx->UARTBRCFG_b.BRDDF = UART0_FBRD;//UART小数分频
+driver_src\DRV_Uart1.c(160): error:  #20: identifier "UART0_IBRD" is undefined
+  	UARTx->UARTIBRD_b.BRDDI = UART0_IBRD;//波特率整数分频寄存器
+driver_src\DRV_Uart1.c(161): error:  #20: identifier "UART0_FBRD" is undefined
+  	UARTx->UARTBRCFG_b.BRDDF = UART0_FBRD;//UART小数分频
+driver_src\DRV_Uart1.c(190): error:  #20: identifier "UART0_IBRD" is undefined
+  	UARTx->UARTIBRD_b.BRDDI = UART0_IBRD;//波特率整数分频寄存器
+driver_src\DRV_Uart1.c(191): error:  #20: identifier "UART0_FBRD" is undefined
+  	UARTx->UARTBRCFG_b.BRDDF = UART0_FBRD;//UART小数分频
+driver_src\DRV_Uart1.c: 0 warnings, 6 errors
+compiling ctl_component_lebesgue.c...
+..\..\..\..\gmp_pro\core/std/gmp.std.h(31): error:  #5: cannot open source input file "xplt.config.h": No such file or directory
+  #include "xplt.config.h"
+gmp_src\ctl_component_lebesgue.c: 0 warnings, 1 error
+compiling ctl_component_interface.c...
+..\..\..\..\gmp_pro\core/std/gmp.std.h(31): error:  #5: cannot open source input file "xplt.config.h": No such file or directory
+  #include "xplt.config.h"
+gmp_src\ctl_component_interface.c: 0 warnings, 1 error
+compiling DRV_BT01.c...
+compiling DRV_SPI.c...
+compiling DRV_WDT.c...
+compiling ctl_component_protection.c...
+..\..\..\..\gmp_pro\core/std/gmp.std.h(31): error:  #5: cannot open source input file "xplt.config.h": No such file or directory
+  #include "xplt.config.h"
+gmp_src\ctl_component_protection.c: 0 warnings, 1 error
+compiling ctl_mc_basic.c...
+..\..\..\..\gmp_pro\core/std/gmp.std.h(31): error:  #5: cannot open source input file "xplt.config.h": No such file or directory
+  #include "xplt.config.h"
+gmp_src\ctl_mc_basic.c: 0 warnings, 1 error
+compiling ctl_mc_consultant.c...
+..\..\..\..\gmp_pro\core/std/gmp.std.h(31): error:  #5: cannot open source input file "xplt.config.h": No such file or directory
+  #include "xplt.config.h"
+gmp_src\ctl_mc_consultant.c: 0 warnings, 1 error
+compiling ctl_mc_motion.c...
+..\..\..\..\gmp_pro\core/std/gmp.std.h(31): error:  #5: cannot open source input file "xplt.config.h": No such file or directory
+  #include "xplt.config.h"
+gmp_src\ctl_mc_motion.c: 0 warnings, 1 error
+compiling ctl_mc_current_loop.c...
+..\..\..\..\gmp_pro\core/std/gmp.std.h(31): error:  #5: cannot open source input file "xplt.config.h": No such file or directory
+  #include "xplt.config.h"
+gmp_src\ctl_mc_current_loop.c: 0 warnings, 1 error
+compiling ctl_mc_observer.c...
+..\..\..\..\gmp_pro\core/std/gmp.std.h(31): error:  #5: cannot open source input file "xplt.config.h": No such file or directory
+  #include "xplt.config.h"
+gmp_src\ctl_mc_observer.c: 0 warnings, 1 error
+compiling ctl_nano.c...
+..\..\..\..\gmp_pro\core/std/gmp.std.h(31): error:  #5: cannot open source input file "xplt.config.h": No such file or directory
+  #include "xplt.config.h"
+gmp_src\ctl_nano.c: 0 warnings, 1 error
+compiling gmp_ds_list.c...
+gmp_src\gmp_ds_list.c(11): warning:  #1-D: last line of file ends without a newline
+   
+gmp_src\gmp_ds_list.c: 1 warning, 0 errors
+compiling gmp_dev_util.c...
+..\..\..\..\gmp_pro\core/std/gmp.std.h(31): error:  #5: cannot open source input file "xplt.config.h": No such file or directory
+  #include "xplt.config.h"
+gmp_src\gmp_dev_util.c: 0 warnings, 1 error
+compiling gmp_mm_block_memory.c...
+..\..\..\..\gmp_pro\core/std/gmp.std.h(31): error:  #5: cannot open source input file "xplt.config.h": No such file or directory
+  #include "xplt.config.h"
+gmp_src\gmp_mm_block_memory.c: 0 warnings, 1 error
+compiling gmp_std_error_code.c...
+..\..\..\..\gmp_pro\core/std/gmp.std.h(31): error:  #5: cannot open source input file "xplt.config.h": No such file or directory
+  #include "xplt.config.h"
+gmp_src\gmp_std_error_code.c: 0 warnings, 1 error
+compiling gmp_std_port.c...
+..\..\..\..\gmp_pro\core/std/gmp.std.h(31): error:  #5: cannot open source input file "xplt.config.h": No such file or directory
+  #include "xplt.config.h"
+gmp_src\gmp_std_port.c: 0 warnings, 1 error
+compiling spc6l64b_csp.c...
+..\..\..\..\gmp_pro\core/std/gmp.std.h(31): error:  #5: cannot open source input file "xplt.config.h": No such file or directory
+  #include "xplt.config.h"
+gmp_src\spc6l64b_csp.c: 0 warnings, 1 error
+assembling startup_SPC6Lxx.s...
+compiling system_SPC6Lxx.c...
+".\Objects\spc6l_demo_proj.axf" - 28 Error(s), 1 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                http://www.keil.com/pack/ARM.CMSIS.5.9.0.pack
+                ARM.CMSIS.5.9.0
+                CMSIS (Common Microcontroller Software Interface Standard)
+   * Component: CORE Version: 5.6.0
+
+Package Vendor: SILAN
+                https://github.com/Silanpack/Pack/raw/main/SILAN.SPC6Lxx_DFP.1.0.1.pack
+                SILAN.SPC6Lxx_DFP.1.0.1
+                Silan SPC6Lxx Device Family Pack
+   * Component: Startup Version: 1.0.0
+
+<h2>Collection of Component include folders:</h2>
+  ./RTE/_SPC6L64
+  C:/Users/javnson/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include
+  C:/Users/javnson/AppData/Local/Arm/Packs/SILAN/SPC6Lxx_DFP/1.0.1/Device/Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS:CORE:5.6.0
+
+   * Component: SILAN::Device:Startup:1.0.0
+      Source file:   Device/Source/system_SPC6Lxx.c
+      Source file:   Device/Source/ARM/startup_SPC6Lxx.s
+Target not created.
+Build Time Elapsed:  00:00:01
+</pre>
+</body>
+</html>

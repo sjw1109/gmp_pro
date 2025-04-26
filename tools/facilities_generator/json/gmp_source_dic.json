@@ -98,7 +98,7 @@
         "description": "GMP Chip Support Package for STM32 CubeMX Platform."
     },
     {
-        "name": "gmp_csp_silan_spc6l64",
+        "name": "gmp_csp_silan_spc6l64 (without chip driver)",
         "tag": "GMP CSP",
         "source_path": [
             "csp/silan_spc6l64"
@@ -107,7 +107,6 @@
             ".",
             "csp/silan_spc6l64"
         ],
-        "description": "GMP Chip Support Package for Silan SPC6L64 Motor Controller Chip."
+        "description": "GMP Chip Support Package for Silan SPC6L64 Motor Controller Chip. NOTICE: User should copy chip driver (in \"gmp_pro\\csp\\silan_spc6l64\\driver\\src\") in to your own source folder."
     }
-
 ]

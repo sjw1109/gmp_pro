@@ -29,11 +29,11 @@ extern "C"
     // Controller interface
     //
 
-// raw data
-extern adc_gt uabc_raw[3];
-extern adc_gt iabc_raw[3];
-extern adc_gt udc_raw;
-extern adc_gt idc_raw;
+    // raw data
+    extern adc_gt uabc_raw[3];
+    extern adc_gt iabc_raw[3];
+    extern adc_gt udc_raw;
+    extern adc_gt idc_raw;
 
     // Functions without controller nano framework.
 #ifndef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
@@ -45,16 +45,17 @@ extern adc_gt idc_raw;
         // update system tick
         gmp_step_system_tick();
 
-       // copy ADC data to raw buffer
-        udc_raw = ADC_readResult(MOTOR_VBUS_ADC_BASE, MOTOR_VBUS);
+        // copy ADC data to raw buffer
+        // NOTICE use Result base not adc base.
+        udc_raw = ADC_readResult(MOTOR_VBUS_RESULT_BASE, MOTOR_VBUS);
 
-        uabc_raw[phase_U] = ADC_readResult(MOTOR_VU_ADC_BASE, MOTOR_VU);
-        uabc_raw[phase_V] = ADC_readResult(MOTOR_VV_ADC_BASE, MOTOR_VV);
-        uabc_raw[phase_W] = ADC_readResult(MOTOR_VW_ADC_BASE, MOTOR_VW);
+        uabc_raw[phase_U] = ADC_readResult(MOTOR_VU_RESULT_BASE, MOTOR_VU);
+        uabc_raw[phase_V] = ADC_readResult(MOTOR_VV_RESULT_BASE, MOTOR_VV);
+        uabc_raw[phase_W] = ADC_readResult(MOTOR_VW_RESULT_BASE, MOTOR_VW);
 
-        iabc_raw[phase_U] = ADC_readResult(MOTOR_IU_ADC_BASE, MOTOR_IU);
-        iabc_raw[phase_V] = ADC_readResult(MOTOR_IV_ADC_BASE, MOTOR_IV);
-        iabc_raw[phase_W] = ADC_readResult(MOTOR_IW_ADC_BASE, MOTOR_IW);
+        iabc_raw[phase_U] = ADC_readResult(MOTOR_IU_RESULT_BASE, MOTOR_IU);
+        iabc_raw[phase_V] = ADC_readResult(MOTOR_IV_RESULT_BASE, MOTOR_IV);
+        iabc_raw[phase_W] = ADC_readResult(MOTOR_IW_RESULT_BASE, MOTOR_IW);
 
         // invoke ADC p.u. routine
         ctl_step_tri_ptr_adc_channel(&iabc);
@@ -63,7 +64,7 @@ extern adc_gt idc_raw;
         ctl_step_ptr_adc_channel(&udc);
 
         // invoke position encoder routine.
-//        ctl_step_autoturn_pos_encoder(&pos_enc, simulink_rx_buffer.encoder);
+        //        ctl_step_autoturn_pos_encoder(&pos_enc, simulink_rx_buffer.encoder);
         ctl_step_as5048a_pos_encoder(&pos_enc);
     }
 
@@ -73,20 +74,16 @@ extern adc_gt idc_raw;
     {
         ctl_calc_pwm_tri_channel(&pwm_out);
 
-        DAC_setShadowValue(DAC_A_BASE, pwm_out.value[phase_A]/2);
-        DAC_setShadowValue(DAC_B_BASE, pwm_out.value[phase_B]/2);
+        DAC_setShadowValue(DAC_A_BASE, pwm_out.value[phase_A] / 2);
+        DAC_setShadowValue(DAC_B_BASE, pwm_out.value[phase_B] / 2);
 
-//        EPWM_setCounterCompareValue(PHASE_U_PWM_BASE, EPWM_COUNTER_COMPARE_A,
-//                            (uint16_t)((INV_PWM_HALF_TBPRD * pwm1.Vabc_pu[0]) +
-//                                        INV_PWM_HALF_TBPRD));
+        //        EPWM_setCounterCompareValue(PHASE_U_PWM_BASE, EPWM_COUNTER_COMPARE_A,
+        //                            (uint16_t)((INV_PWM_HALF_TBPRD * pwm1.Vabc_pu[0]) +
+        //                                        INV_PWM_HALF_TBPRD));
 
-        EPWM_setCounterCompareValue(PHASE_U_BASE, EPWM_COUNTER_COMPARE_A,
-                                    pwm_out.value[phase_U]);
-        EPWM_setCounterCompareValue(PHASE_V_BASE, EPWM_COUNTER_COMPARE_A,
-                                    pwm_out.value[phase_V]);
-        EPWM_setCounterCompareValue(PHASE_W_BASE, EPWM_COUNTER_COMPARE_A,
-                                    pwm_out.value[phase_W]);
-
+        EPWM_setCounterCompareValue(PHASE_U_BASE, EPWM_COUNTER_COMPARE_A, pwm_out.value[phase_U]);
+        EPWM_setCounterCompareValue(PHASE_V_BASE, EPWM_COUNTER_COMPARE_A, pwm_out.value[phase_V]);
+        EPWM_setCounterCompareValue(PHASE_W_BASE, EPWM_COUNTER_COMPARE_A, pwm_out.value[phase_W]);
     }
 
     // Enable Motor Controller
@@ -94,14 +91,14 @@ extern adc_gt idc_raw;
     GMP_STATIC_INLINE
     void ctl_enable_output()
     {
-//        csp_sl_enable_output();
+        //        csp_sl_enable_output();
     }
 
     // Disable Output
     GMP_STATIC_INLINE
     void ctl_disable_output()
     {
-//        csp_sl_disable_output();
+        //        csp_sl_disable_output();
     }
 
 #endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
@@ -165,8 +162,6 @@ extern adc_gt idc_raw;
         csp_sl_disable_output();
     }
 
-
-
 #endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
 #ifdef __cplusplus
@@ -174,5 +169,3 @@ extern adc_gt idc_raw;
 #endif // __cplusplus
 
 #endif // _FILE_CTL_INTERFACE_H_
-
-

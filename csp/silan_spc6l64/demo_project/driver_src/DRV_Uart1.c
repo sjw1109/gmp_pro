@@ -47,7 +47,6 @@
 #include "driver/inc/GPIO.h"
 #include "driver/inc/uart1.h"
 
-// 配置串口收发速度
 
 #define UART0_BAUDRATE 115200 // 串口波特率UART0
 #define UART1_BAUDRATE 115200 // 串口波特率UART1
