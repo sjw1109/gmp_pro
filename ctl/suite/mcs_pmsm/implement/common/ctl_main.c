@@ -31,7 +31,7 @@ ctl_const_f_controller const_f;
 
 //
 adc_bias_calibrator_t adc_calibrator;
-fast_gt flag_enable_adc_calibrator = 1;
+fast_gt flag_enable_adc_calibrator = 0;
 fast_gt index_adc_calibrator = 0;
 
 // enable motor running
@@ -118,9 +118,9 @@ void ctl_init()
     // if in simulation mode, enable system
 #if !defined SPECIFY_PC_ENVIRONMENT
     // stop here and wait for user start the motor controller
-//    while (falg_enable_system == 0)
-//    {
-//    }
+    while (falg_enable_system == 0)
+    {
+    }
 #endif // SPECIFY_PC_ENVIRONMENT
 
     ctl_enable_output();

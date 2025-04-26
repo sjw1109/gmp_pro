@@ -33,6 +33,4 @@
 #define BUILD_LEVEL (4)
 
 
-
-
 #endif // _FILE_CTRL_SETTINGS_H_

@@ -41,21 +41,25 @@
 
 #include <ctl/math_block/ctrl_gt/float_macros.h>
 
-#elif SPECIFY_CTRL_GT_TYPE == USING_FLOAT_FPU
+#elif (SPECIFY_CTRL_GT_TYPE == USING_FLOAT_FPU)
 
 #include <ctl/math_block/ctrl_gt/float_macros.h>
 
-#elif SPECIFY_CTRL_GT_TYPE == USING_DOUBLE_FPU
+#elif (SPECIFY_CTRL_GT_TYPE == USING_DOUBLE_FPU)
 
 #include <ctl/math_block/ctrl_gt/double_macros.h>
 
-#elif SPECIFY_CTRL_GT_TYPE == USING_QFPLIB_FLOAT
+#elif (SPECIFY_CTRL_GT_TYPE == USING_QFPLIB_FLOAT)
 
 #include <ctl/math_block/ctrl_gt/qfp_float_macros.h>
 
-#elif SPECIFY_CTRL_GT_TYPE == USING_FLOAT_CLA_LIBRARY
+#elif (SPECIFY_CTRL_GT_TYPE == USING_FLOAT_CLA_LIBRARY)
 
 #include <ctl/math_block/ctrl_gt/cla_macros.h>
+
+#elif (SPECIFY_CTRL_GT_TYPE == USING_CSP_MATH_LIBRARY)
+
+#include <csp.math.h>
 
 #else
 
