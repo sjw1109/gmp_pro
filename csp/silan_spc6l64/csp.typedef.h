@@ -12,9 +12,24 @@
 #ifndef _FILE_CSP_TYPE_DEF_H_
 #define _FILE_CSP_TYPE_DEF_H_
 
+#include <driver/inc/UART1.h>
 
-// This file is for STM32 series micro controller
-// all the type definition keeps default.
+// C28x device peripheral
+#ifndef GMP_PORT_UART_T
+#define GMP_PORT_UART_T UART_PARAM_s *
+#endif // GMP_PORT_UART_T
+
+#ifndef GMP_PORT_I2C_T
+#define GMP_PORT_I2C_T uint32_t
+#endif // GMP_PORT_I2C_T
+
+#ifndef GMP_PORT_SPI_T
+#define GMP_PORT_SPI_T uint32_t
+#endif // GMP_PORT_SPI_T
+
+#ifndef GMP_PORT_CAN_T
+#define GMP_PORT_CAN_T uint32_t
+#endif // GMP_PORT_CAN_T
 
 
 
