@@ -394,6 +394,16 @@ csp/stm32/**/*.dep
 csp/stm32/**/*.uvguix.*
 csp/stm32/**/MDK-ARM/**/*.htm
 
+# Disable Silan Chip 
+csp/silan_spc6l64/**/*.crf
+csp/silan_spc6l64/**/*.o
+csp/silan_spc6l64/**/*.d
+csp/silan_spc6l64/**/*.lnp
+csp/silan_spc6l64/**/*.map	
+csp/silan_spc6l64/**/*.dep
+csp/silan_spc6l64/**/*.uvguix.*
+csp/silan_spc6l64/**/MDK-ARM/**/*.htm
+
 # Disable generted GMP source file
 csp/**/gmp_src/**
 csp/**/include_paths.txt

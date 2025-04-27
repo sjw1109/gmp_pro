@@ -46,6 +46,7 @@
 
 #include "driver/inc/GPIO.h"
 #include "driver/inc/uart1.h"
+#include "driver/inc/config.h"
 
 
 #define UART0_BAUDRATE 115200 // ´®¿Ú²¨ÌØÂÊUART0

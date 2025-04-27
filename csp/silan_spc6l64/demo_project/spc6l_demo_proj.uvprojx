@@ -11,7 +11,7 @@
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <pArmCC>5060750::V5.06 update 6 (build 750)::.\ARMCCV5</pArmCC>
-      <pCCUsed>6230000::V6.23::.\ArmCompilerforEmbedded6.23</pCCUsed>
+      <pCCUsed>5060750::V5.06 update 6 (build 750)::.\ARMCCV5</pCCUsed>
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -341,7 +341,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\gmp_pro;..\..\silan_spc6l64</IncludePath>
+              <IncludePath>..\..\..\..\gmp_pro;..\..\silan_spc6l64;.\user</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -564,6 +564,53 @@
         </Group>
         <Group>
           <GroupName>User</GroupName>
+          <Files>
+            <File>
+              <FileName>ctl_main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\user\ctl_main.c</FilePath>
+            </File>
+            <File>
+              <FileName>ctl_main.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\user\ctl_main.h</FilePath>
+            </File>
+            <File>
+              <FileName>ctrl_settings.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\user\ctrl_settings.h</FilePath>
+            </File>
+            <File>
+              <FileName>user_main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\user\user_main.c</FilePath>
+            </File>
+            <File>
+              <FileName>user_main.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\user\user_main.h</FilePath>
+            </File>
+            <File>
+              <FileName>xplt.config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\user\xplt.config.h</FilePath>
+            </File>
+            <File>
+              <FileName>xplt.ctl_interface.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\user\xplt.ctl_interface.h</FilePath>
+            </File>
+            <File>
+              <FileName>xplt.peripheral.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\user\xplt.peripheral.c</FilePath>
+            </File>
+            <File>
+              <FileName>xplt.peripheral.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\user\xplt.peripheral.h</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>::CMSIS</GroupName>

@@ -1,206 +1,0 @@
-Dependencies for Project 'spc6l_demo_proj', Target 'SPC6L64': (DO NOT MODIFY !)
-CompilerVersion: 5060750::V5.06 update 6 (build 750)::.\ARMCCV5
-F (.\driver_src\DRV_ACMP.c)(0x680C4EA8)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\drv_acmp.o --omf_browse .\objects\drv_acmp.crf --depend .\objects\drv_acmp.d)
-I (..\..\silan_spc6l64\driver/inc/ACMP.h)(0x680C4D5B)
-I (..\..\silan_spc6l64\driver/inc/SLMCU.h)(0x680AF280)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include\SPC6Lxx.h)(0x6386F7E6)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_CM0.h)(0x626F4ADE)
-I (C:\Keil_v5\ARM\ARMCCV5\include\stdint.h)(0x5CEB79E2)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include\system_SPC6Lxx.h)(0x6386F8A4)
-F (.\driver_src\DRV_Adc.c)(0x680C4EAD)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\drv_adc.o --omf_browse .\objects\drv_adc.crf --depend .\objects\drv_adc.d)
-I (..\..\silan_spc6l64\driver/inc/adc.h)(0x680C4D44)
-I (..\..\silan_spc6l64\driver/inc/SLMCU.h)(0x680AF280)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include\SPC6Lxx.h)(0x6386F7E6)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_CM0.h)(0x626F4ADE)
-I (C:\Keil_v5\ARM\ARMCCV5\include\stdint.h)(0x5CEB79E2)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include\system_SPC6Lxx.h)(0x6386F8A4)
-F (.\driver_src\DRV_BT01.c)(0x680C4EB2)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\drv_bt01.o --omf_browse .\objects\drv_bt01.crf --depend .\objects\drv_bt01.d)
-I (..\..\silan_spc6l64\driver/inc/BT01.h)(0x680C4D38)
-I (..\..\silan_spc6l64\driver/inc/GPIO.h)(0x680C4DFF)
-I (..\..\silan_spc6l64\driver/inc/SLMCU.h)(0x680AF280)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include\SPC6Lxx.h)(0x6386F7E6)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_CM0.h)(0x626F4ADE)
-I (C:\Keil_v5\ARM\ARMCCV5\include\stdint.h)(0x5CEB79E2)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include\system_SPC6Lxx.h)(0x6386F8A4)
-F (.\driver_src\DRV_Clk.c)(0x680C4EB9)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\drv_clk.o --omf_browse .\objects\drv_clk.crf --depend .\objects\drv_clk.d)
-I (..\..\silan_spc6l64\driver/inc/clk.h)(0x680C4D31)
-F (.\driver_src\DRV_Coproc.c)(0x680C4EBE)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\drv_coproc.o --omf_browse .\objects\drv_coproc.crf --depend .\objects\drv_coproc.d)
-I (..\..\silan_spc6l64\driver/inc/coproc.h)(0x680C4D25)
-F (.\driver_src\DRV_DMA.c)(0x680C4EC4)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\drv_dma.o --omf_browse .\objects\drv_dma.crf --depend .\objects\drv_dma.d)
-I (..\..\silan_spc6l64\driver/inc/DMA.h)(0x680C4DE9)
-I (..\..\silan_spc6l64\driver/inc/SLMCU.h)(0x680AF280)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include\SPC6Lxx.h)(0x6386F7E6)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_CM0.h)(0x626F4ADE)
-I (C:\Keil_v5\ARM\ARMCCV5\include\stdint.h)(0x5CEB79E2)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include\system_SPC6Lxx.h)(0x6386F8A4)
-I (..\..\silan_spc6l64\driver/inc/public.h)(0x680C4E66)
-I (..\..\silan_spc6l64\driver/inc/IAP.h)(0x680C4E0B)
-F (.\driver_src\DRV_GPIO.c)(0x680C4ECD)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\drv_gpio.o --omf_browse .\objects\drv_gpio.crf --depend .\objects\drv_gpio.d)
-I (..\..\silan_spc6l64\driver/inc/GPIO.h)(0x680C4DFF)
-I (..\..\silan_spc6l64\driver/inc/SLMCU.h)(0x680AF280)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include\SPC6Lxx.h)(0x6386F7E6)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_CM0.h)(0x626F4ADE)
-I (C:\Keil_v5\ARM\ARMCCV5\include\stdint.h)(0x5CEB79E2)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include\system_SPC6Lxx.h)(0x6386F8A4)
-F (.\driver_src\DRV_IAP.c)(0x680C4ED3)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\drv_iap.o --omf_browse .\objects\drv_iap.crf --depend .\objects\drv_iap.d)
-I (..\..\silan_spc6l64\driver/inc/IAP.h)(0x680C4E0B)
-I (..\..\silan_spc6l64\driver/inc/SLMCU.h)(0x680AF280)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include\SPC6Lxx.h)(0x6386F7E6)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_CM0.h)(0x626F4ADE)
-I (C:\Keil_v5\ARM\ARMCCV5\include\stdint.h)(0x5CEB79E2)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include\system_SPC6Lxx.h)(0x6386F8A4)
-F (.\driver_src\DRV_IRQ.c)(0x677F39A2)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\drv_irq.o --omf_browse .\objects\drv_irq.crf --depend .\objects\drv_irq.d)
-F (.\driver_src\DRV_OPA.c)(0x680C4EEB)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\drv_opa.o --omf_browse .\objects\drv_opa.crf --depend .\objects\drv_opa.d)
-I (..\..\silan_spc6l64\driver/inc/OPA.h)(0x680C4E27)
-I (..\..\silan_spc6l64\driver/inc/SLMCU.h)(0x680AF280)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include\SPC6Lxx.h)(0x6386F7E6)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_CM0.h)(0x626F4ADE)
-I (C:\Keil_v5\ARM\ARMCCV5\include\stdint.h)(0x5CEB79E2)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include\system_SPC6Lxx.h)(0x6386F8A4)
-F (.\driver_src\DRV_PWM.c)(0x680C4F01)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\drv_pwm.o --omf_browse .\objects\drv_pwm.crf --depend .\objects\drv_pwm.d)
-I (..\..\silan_spc6l64\driver/inc/pwm.h)(0x680C4E5A)
-I (..\..\silan_spc6l64\driver/inc/GPIO.h)(0x680C4DFF)
-I (..\..\silan_spc6l64\driver/inc/SLMCU.h)(0x680AF280)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include\SPC6Lxx.h)(0x6386F7E6)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_CM0.h)(0x626F4ADE)
-I (C:\Keil_v5\ARM\ARMCCV5\include\stdint.h)(0x5CEB79E2)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include\system_SPC6Lxx.h)(0x6386F8A4)
-F (.\driver_src\DRV_SPI.c)(0x680C4F2F)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\drv_spi.o --omf_browse .\objects\drv_spi.crf --depend .\objects\drv_spi.d)
-I (..\..\silan_spc6l64\driver/inc/SPI.h)(0x680C4E78)
-I (..\..\silan_spc6l64\driver/inc/SLMCU.h)(0x680AF280)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include\SPC6Lxx.h)(0x6386F7E6)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_CM0.h)(0x626F4ADE)
-I (C:\Keil_v5\ARM\ARMCCV5\include\stdint.h)(0x5CEB79E2)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include\system_SPC6Lxx.h)(0x6386F8A4)
-I (..\..\silan_spc6l64\driver/inc/public.h)(0x680C4E66)
-I (..\..\silan_spc6l64\driver/inc/IAP.h)(0x680C4E0B)
-I (..\..\silan_spc6l64\driver/inc/DMA.h)(0x680C4DE9)
-I (..\..\silan_spc6l64\driver/inc/GPIO.h)(0x680C4DFF)
-F (.\driver_src\DRV_Timer.c)(0x680C4F3A)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\drv_timer.o --omf_browse .\objects\drv_timer.crf --depend .\objects\drv_timer.d)
-F (.\driver_src\DRV_Uart1.c)(0x680C4F64)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\drv_uart1.o --omf_browse .\objects\drv_uart1.crf --depend .\objects\drv_uart1.d)
-I (..\..\silan_spc6l64\driver/inc/uart1.h)(0x680C4E98)
-I (..\..\silan_spc6l64\driver/inc/SLMCU.h)(0x680AF280)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include\SPC6Lxx.h)(0x6386F7E6)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_CM0.h)(0x626F4ADE)
-I (C:\Keil_v5\ARM\ARMCCV5\include\stdint.h)(0x5CEB79E2)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include\system_SPC6Lxx.h)(0x6386F8A4)
-I (..\..\silan_spc6l64\driver/inc/GPIO.h)(0x680C4DFF)
-F (.\driver_src\DRV_WDT.c)(0x680C4F63)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\drv_wdt.o --omf_browse .\objects\drv_wdt.crf --depend .\objects\drv_wdt.d)
-I (..\..\silan_spc6l64\driver/inc/WDT.h)(0x680C4EA0)
-I (..\..\silan_spc6l64\driver/inc/SLMCU.h)(0x680AF280)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include\SPC6Lxx.h)(0x6386F7E6)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_CM0.h)(0x626F4ADE)
-I (C:\Keil_v5\ARM\ARMCCV5\include\stdint.h)(0x5CEB79E2)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include\system_SPC6Lxx.h)(0x6386F8A4)
-F (.\driver_src\MOTOR_Math_func.c)(0x680C5075)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\motor_math_func.o --omf_browse .\objects\motor_math_func.crf --depend .\objects\motor_math_func.d)
-F (.\gmp_src\ctl_component_advance.c)(0x680C5734)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\ctl_component_advance.o --omf_browse .\objects\ctl_component_advance.crf --depend .\objects\ctl_component_advance.d)
-I (..\..\..\..\gmp_pro\gmp_core.h)(0x679D970F)
-I (..\..\..\..\gmp_pro\core/std/gmp.std.h)(0x67F14F26)
-I (..\..\..\..\gmp_pro\core/std/cfg/options.cfg.h)(0x67906198)
-F (.\gmp_src\ctl_component_continuous.c)(0x680C5734)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\ctl_component_continuous.o --omf_browse .\objects\ctl_component_continuous.crf --depend .\objects\ctl_component_continuous.d)
-I (..\..\..\..\gmp_pro\gmp_core.h)(0x679D970F)
-I (..\..\..\..\gmp_pro\core/std/gmp.std.h)(0x67F14F26)
-I (..\..\..\..\gmp_pro\core/std/cfg/options.cfg.h)(0x67906198)
-F (.\gmp_src\ctl_component_discrete.c)(0x680C5734)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\ctl_component_discrete.o --omf_browse .\objects\ctl_component_discrete.crf --depend .\objects\ctl_component_discrete.d)
-I (..\..\..\..\gmp_pro\gmp_core.h)(0x679D970F)
-I (..\..\..\..\gmp_pro\core/std/gmp.std.h)(0x67F14F26)
-I (..\..\..\..\gmp_pro\core/std/cfg/options.cfg.h)(0x67906198)
-F (.\gmp_src\ctl_component_interface.c)(0x680C5734)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\ctl_component_interface.o --omf_browse .\objects\ctl_component_interface.crf --depend .\objects\ctl_component_interface.d)
-I (..\..\..\..\gmp_pro\gmp_core.h)(0x679D970F)
-I (..\..\..\..\gmp_pro\core/std/gmp.std.h)(0x67F14F26)
-I (..\..\..\..\gmp_pro\core/std/cfg/options.cfg.h)(0x67906198)
-F (.\gmp_src\ctl_component_lebesgue.c)(0x680C5734)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\ctl_component_lebesgue.o --omf_browse .\objects\ctl_component_lebesgue.crf --depend .\objects\ctl_component_lebesgue.d)
-I (..\..\..\..\gmp_pro\gmp_core.h)(0x679D970F)
-I (..\..\..\..\gmp_pro\core/std/gmp.std.h)(0x67F14F26)
-I (..\..\..\..\gmp_pro\core/std/cfg/options.cfg.h)(0x67906198)
-F (.\gmp_src\ctl_component_protection.c)(0x680C5734)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\ctl_component_protection.o --omf_browse .\objects\ctl_component_protection.crf --depend .\objects\ctl_component_protection.d)
-I (..\..\..\..\gmp_pro\gmp_core.h)(0x679D970F)
-I (..\..\..\..\gmp_pro\core/std/gmp.std.h)(0x67F14F26)
-I (..\..\..\..\gmp_pro\core/std/cfg/options.cfg.h)(0x67906198)
-F (.\gmp_src\ctl_mc_basic.c)(0x680C5734)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\ctl_mc_basic.o --omf_browse .\objects\ctl_mc_basic.crf --depend .\objects\ctl_mc_basic.d)
-I (..\..\..\..\gmp_pro\gmp_core.h)(0x679D970F)
-I (..\..\..\..\gmp_pro\core/std/gmp.std.h)(0x67F14F26)
-I (..\..\..\..\gmp_pro\core/std/cfg/options.cfg.h)(0x67906198)
-F (.\gmp_src\ctl_mc_consultant.c)(0x680C5734)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\ctl_mc_consultant.o --omf_browse .\objects\ctl_mc_consultant.crf --depend .\objects\ctl_mc_consultant.d)
-I (..\..\..\..\gmp_pro\gmp_core.h)(0x679D970F)
-I (..\..\..\..\gmp_pro\core/std/gmp.std.h)(0x67F14F26)
-I (..\..\..\..\gmp_pro\core/std/cfg/options.cfg.h)(0x67906198)
-F (.\gmp_src\ctl_mc_current_loop.c)(0x680C5734)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\ctl_mc_current_loop.o --omf_browse .\objects\ctl_mc_current_loop.crf --depend .\objects\ctl_mc_current_loop.d)
-I (..\..\..\..\gmp_pro\gmp_core.h)(0x679D970F)
-I (..\..\..\..\gmp_pro\core/std/gmp.std.h)(0x67F14F26)
-I (..\..\..\..\gmp_pro\core/std/cfg/options.cfg.h)(0x67906198)
-F (.\gmp_src\ctl_mc_motion.c)(0x680C5734)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\ctl_mc_motion.o --omf_browse .\objects\ctl_mc_motion.crf --depend .\objects\ctl_mc_motion.d)
-I (..\..\..\..\gmp_pro\gmp_core.h)(0x679D970F)
-I (..\..\..\..\gmp_pro\core/std/gmp.std.h)(0x67F14F26)
-I (..\..\..\..\gmp_pro\core/std/cfg/options.cfg.h)(0x67906198)
-F (.\gmp_src\ctl_mc_observer.c)(0x680C5734)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\ctl_mc_observer.o --omf_browse .\objects\ctl_mc_observer.crf --depend .\objects\ctl_mc_observer.d)
-I (..\..\..\..\gmp_pro\gmp_core.h)(0x679D970F)
-I (..\..\..\..\gmp_pro\core/std/gmp.std.h)(0x67F14F26)
-I (..\..\..\..\gmp_pro\core/std/cfg/options.cfg.h)(0x67906198)
-F (.\gmp_src\ctl_nano.c)(0x680C5734)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\ctl_nano.o --omf_browse .\objects\ctl_nano.crf --depend .\objects\ctl_nano.d)
-I (..\..\..\..\gmp_pro\gmp_core.h)(0x679D970F)
-I (..\..\..\..\gmp_pro\core/std/gmp.std.h)(0x67F14F26)
-I (..\..\..\..\gmp_pro\core/std/cfg/options.cfg.h)(0x67906198)
-F (.\gmp_src\gmp_dev_util.c)(0x680C5734)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\gmp_dev_util.o --omf_browse .\objects\gmp_dev_util.crf --depend .\objects\gmp_dev_util.d)
-I (..\..\..\..\gmp_pro\gmp_core.h)(0x679D970F)
-I (..\..\..\..\gmp_pro\core/std/gmp.std.h)(0x67F14F26)
-I (..\..\..\..\gmp_pro\core/std/cfg/options.cfg.h)(0x67906198)
-F (.\gmp_src\gmp_ds_list.c)(0x680C5734)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\gmp_ds_list.o --omf_browse .\objects\gmp_ds_list.crf --depend .\objects\gmp_ds_list.d)
-F (.\gmp_src\gmp_mm_block_memory.c)(0x680C5734)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\gmp_mm_block_memory.o --omf_browse .\objects\gmp_mm_block_memory.crf --depend .\objects\gmp_mm_block_memory.d)
-I (..\..\..\..\gmp_pro\gmp_core.h)(0x679D970F)
-I (..\..\..\..\gmp_pro\core/std/gmp.std.h)(0x67F14F26)
-I (..\..\..\..\gmp_pro\core/std/cfg/options.cfg.h)(0x67906198)
-F (.\gmp_src\gmp_std_error_code.c)(0x680C5734)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\gmp_std_error_code.o --omf_browse .\objects\gmp_std_error_code.crf --depend .\objects\gmp_std_error_code.d)
-I (..\..\..\..\gmp_pro\gmp_core.h)(0x679D970F)
-I (..\..\..\..\gmp_pro\core/std/gmp.std.h)(0x67F14F26)
-I (..\..\..\..\gmp_pro\core/std/cfg/options.cfg.h)(0x67906198)
-F (.\gmp_src\gmp_std_port.c)(0x680C5734)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\gmp_std_port.o --omf_browse .\objects\gmp_std_port.crf --depend .\objects\gmp_std_port.d)
-I (..\..\..\..\gmp_pro\gmp_core.h)(0x679D970F)
-I (..\..\..\..\gmp_pro\core/std/gmp.std.h)(0x67F14F26)
-I (..\..\..\..\gmp_pro\core/std/cfg/options.cfg.h)(0x67906198)
-F (.\gmp_src\spc6l64b_csp.c)(0x680C5734)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\spc6l64b_csp.o --omf_browse .\objects\spc6l64b_csp.crf --depend .\objects\spc6l64b_csp.d)
-I (..\..\..\..\gmp_pro\gmp_core.h)(0x679D970F)
-I (..\..\..\..\gmp_pro\core/std/gmp.std.h)(0x67F14F26)
-I (..\..\..\..\gmp_pro\core/std/cfg/options.cfg.h)(0x67906198)
-F (RTE/Device/SPC6L64/startup_SPC6Lxx.s)(0x6386F904)(--cpu Cortex-M0 -g --apcs=interwork -I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include--pd "__UVISION_VERSION SETA 538" --pd "_RTE_ SETA 1" --pd "_RTE_ SETA 1"--list .\listings\startup_spc6lxx.lst --xref -o .\objects\startup_spc6lxx.o --depend .\objects\startup_spc6lxx.d)
-F (RTE/Device/SPC6L64/system_SPC6Lxx.c)(0x6386F99E)(--c99 --gnu -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\..\..\..\gmp_pro -I ..\..\silan_spc6l64-I.\RTE\_SPC6L64-IC:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include-D__UVISION_VERSION="538" -D_RTE_ -D_RTE_-o .\objects\system_spc6lxx.o --omf_browse .\objects\system_spc6lxx.crf --depend .\objects\system_spc6lxx.d)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include\SPC6Lxx.h)(0x6386F7E6)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_CM0.h)(0x626F4ADE)
-I (C:\Keil_v5\ARM\ARMCCV5\include\stdint.h)(0x5CEB79E2)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x626F4ADE)
-I (C:\Users\javnson\AppData\Local\Arm\Packs\SILAN\SPC6Lxx_DFP\1.0.1\Device\Include\system_SPC6Lxx.h)(0x6386F8A4)

@@ -124,3 +124,11 @@ void Device_Init(void)
     /*********************IRQ INIT*******************/
     IRQ_Init();
 }
+
+// System Main function
+int main()
+{
+    // This function may not return.
+    gmp_base_entry();
+}
+

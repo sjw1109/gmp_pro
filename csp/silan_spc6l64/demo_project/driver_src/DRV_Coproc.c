@@ -44,6 +44,7 @@
  * include file
  ******************************************************************************/
 #include "driver/inc/coproc.h"
+#include "driver/inc/math_func.h"
 
 /******************************************************************************
  * global data for the project

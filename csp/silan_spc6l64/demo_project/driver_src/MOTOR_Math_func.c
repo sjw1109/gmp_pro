@@ -1,4 +1,7 @@
-#include "math_func.h"
+
+#include "driver/inc/math_func.h"
+#include "driver/inc/coproc.h"
+
 
 //__attribute__ ((section ("RAMCODE")))
 const _iq Sin_Table[257] = { // ÕýÏÒ±í

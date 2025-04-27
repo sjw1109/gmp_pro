@@ -1,8 +1,12 @@
 #ifndef __CLK_H__
 #define __CLK_H__
 
-#include "driver/inc/IQmathLib.h"
+//#include "driver/inc/IQmathLib.h"
 #include "driver/inc/SLMCU.h"
+
+
+// MHz,系统时钟  (不建议修改)
+//#define SYS_CLK (72)
 
 #define PLLSRC_RCH   0
 #define PLLSRC_OSC   1

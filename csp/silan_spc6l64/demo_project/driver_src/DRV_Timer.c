@@ -43,7 +43,7 @@
 /******************************************************************************
  * include file
  ******************************************************************************/
-#include "IQmathLib.h"
+//#include "IQmathLib.h"
 #include "driver/inc/clk.h"
 #include "driver/inc/config.h"
 #include "driver/inc/timer.h"

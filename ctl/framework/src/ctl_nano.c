@@ -13,6 +13,8 @@
 
 #include <ctl/framework/ctl_nano.h>
 
+#ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+
 // controller nano object handle entity
 ctl_object_nano_t *ctl_nano_handle = NULL;
 
@@ -458,3 +460,5 @@ ec_gt ctl_setup_default_ctl_nano_obj(ctl_object_nano_t *ctl_obj)
     ctl_nano_handle = ctl_obj;
     return GMP_EC_OK;
 }
+
+#endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO

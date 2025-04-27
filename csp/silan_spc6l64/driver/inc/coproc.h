@@ -1,8 +1,8 @@
 #ifndef __COPROC_H__
 #define __COPROC_H__
 
-#include "driver/inc/IQmathLib.h"
 #include "driver/inc/SLMCU.h"
+
 
 #define MULT_SIGNED      (1 << 31)
 #define MULT_UNSIGNED    (0 << 31)
@@ -13,13 +13,16 @@
 
 #define _IQmpy(A, B)     silan_mult_Iq24(A, B)
 #define _IQdiv_MDU(A, B) silan_div_Iq24(A, B)
+#define _IQdiv2(A)          ((A)>>1)
+#define _IQdiv4(A)          ((A)>>2)
 
 #define MULT_INIT_MACRO()                                                                                              \
     COPROC->MULT_CTRL = (MULT_SIGNED + SHIFT_EN + SHIFT_SEL_EN);                                                       \
     COPROC->SHIFT_NUM = GLOBAL_Q;
 
 // c=a*b
-__INLINE int32_t silan_mult(int32_t a, int32_t b)
+__STATIC_INLINE
+int32_t silan_mult(int32_t a, int32_t b)
 {
     int32_t c;
     __disable_irq();
@@ -34,7 +37,8 @@ __INLINE int32_t silan_mult(int32_t a, int32_t b)
 }
 
 // d = (a*b)>>c
-__INLINE int64_t silan_mult_Iqx(int32_t a, int32_t b, int32_t c)
+__STATIC_INLINE
+int64_t silan_mult_Iqx(int32_t a, int32_t b, int32_t c)
 {
     int64_t d;
     __disable_irq();
@@ -52,7 +56,8 @@ __INLINE int64_t silan_mult_Iqx(int32_t a, int32_t b, int32_t c)
 }
 
 //__attribute__ ((section ("RAMCODE")))
-__INLINE int32_t silan_mult_Iq24(int32_t a, int32_t b)
+__STATIC_INLINE
+int32_t silan_mult_Iq24(int32_t a, int32_t b)
 {
     int32_t c;
     __disable_irq();
@@ -65,7 +70,8 @@ __INLINE int32_t silan_mult_Iq24(int32_t a, int32_t b)
 }
 
 // A*B+C*D
-__INLINE int32_t silan_mult_abPcd(int32_t a, int32_t b, int32_t c, int32_t d)
+__STATIC_INLINE
+int32_t silan_mult_abPcd(int32_t a, int32_t b, int32_t c, int32_t d)
 {
     int32_t e;
     __disable_irq();
@@ -79,7 +85,8 @@ __INLINE int32_t silan_mult_abPcd(int32_t a, int32_t b, int32_t c, int32_t d)
 }
 
 // A*B-C*D
-__INLINE int32_t silan_mult_abMcd(int32_t a, int32_t b, int32_t c, int32_t d)
+__STATIC_INLINE
+int32_t silan_mult_abMcd(int32_t a, int32_t b, int32_t c, int32_t d)
 {
     int32_t e;
     __disable_irq();
@@ -101,7 +108,8 @@ __INLINE int32_t silan_mult_abMcd(int32_t a, int32_t b, int32_t c, int32_t d)
     COPROC->DIV_CTRL = DIVIDER_64BIT;                                                                                  \
     DIV_RESET;
 
-__INLINE int32_t silan_div(int32_t dividend, int32_t divisor)
+__STATIC_INLINE
+int32_t silan_div(int32_t dividend, int32_t divisor)
 {
     int32_t tmp;
     __disable_irq();
@@ -116,7 +124,8 @@ __INLINE int32_t silan_div(int32_t dividend, int32_t divisor)
     return tmp;
 }
 
-__INLINE int32_t silan_div_Iq24(int32_t dividend, int32_t divisor)
+__STATIC_INLINE
+int32_t silan_div_Iq24(int32_t dividend, int32_t divisor)
 {
     int64_t tmp;
     __disable_irq();
