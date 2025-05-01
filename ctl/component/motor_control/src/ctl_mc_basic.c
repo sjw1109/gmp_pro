@@ -11,7 +11,6 @@
 
 #include <gmp_core.h>
 
-
 //////////////////////////////////////////////////////////////////////////
 // Encoder module
 
@@ -261,7 +260,7 @@ void ctl_dsn_pmsm_pmsm_flux_via_Kt(ctl_pmsm_dsn_consultant_t *pmsm_dsn, paramete
 
 #include <ctl/component/motor_control/basic/vf_generator.h>
 
-void ctl_setup_const_f_controller(ctl_const_f_controller *ctrl, parameter_gt frequency, parameter_gt isr_freq)
+void ctl_init_const_f_controller(ctl_const_f_controller *ctrl, parameter_gt frequency, parameter_gt isr_freq)
 {
     // ctl_setup_ramp_gen(&ctrl->rg, float2ctrl(frequency / isr_freq), 1, 0);
 
@@ -269,4 +268,91 @@ void ctl_setup_const_f_controller(ctl_const_f_controller *ctrl, parameter_gt fre
     ctrl->enc.position = 0;
 
     ctl_init_ramp_gen_via_amp_freq(&ctrl->rg, isr_freq, frequency, 1, 0);
+}
+
+// Const slope Frequency module
+
+void ctl_init_const_slope_f_controller(
+    // controller object
+    ctl_slope_f_controller *ctrl,
+    // ISR frequency
+    parameter_gt isr_freq,
+    // target frequency, Hz
+    parameter_gt frequency,
+    // frequency slope, Hz/s
+    parameter_gt freq_slope)
+{
+    ctrl->enc.elec_position = 0;
+    ctrl->enc.position = 0;
+
+    // init ramp frequency is 0
+    ctl_init_ramp_gen_via_amp_freq(&ctrl->rg, isr_freq, 0, 1, 0);
+
+    ctrl->target_frequency = frequency / isr_freq;
+
+    ctl_init_slope_limit(&ctrl->freq_slope, float2ctrl(freq_slope / isr_freq), -float2ctrl(freq_slope / isr_freq));
+}
+
+// change target frequency
+void ctl_set_slope_f_freq(
+    // Const VF controller
+    ctl_slope_f_controller *ctrl,
+    // target frequency, unit Hz
+    parameter_gt target_freq,
+    // Main ISR frequency
+    parameter_gt isr_freq)
+{
+    ctrl->target_frequency = float2ctrl(target_freq / isr_freq);
+}
+
+// VF controller
+
+ctrl_gt ctl_init_const_vf_controller(
+    // controller object
+    ctl_const_vf_controller *ctrl,
+    // ISR frequency
+    parameter_gt isr_freq,
+    // target frequency, Hz
+    parameter_gt frequency,
+    // frequency slope, Hz/s
+    parameter_gt freq_slope,
+    // voltage range
+    ctrl_gt voltage_bound,
+    // Voltage Frequency constant
+    // unit p.u./Hz, p.u.
+    ctrl_gt voltage_over_frequency, ctrl_gt voltage_bias)
+{
+    ctrl->enc.elec_position = 0;
+    ctrl->enc.position = 0;
+
+    // init ramp frequency is 0
+    ctl_init_ramp_gen_via_amp_freq(&ctrl->rg, isr_freq, 0, 1, 0);
+
+    ctrl->target_frequency = frequency / isr_freq;
+    ctrl->target_voltage = 0;
+
+#if defined CTRL_GT_IS_FIXED
+    ctrl->v_over_f = float2ctrl(voltage_over_frequency * isr_freq);
+#elif defined CTRL_GT_IS_FLOAT
+    ctrl->v_over_f = float2ctrl(voltage_over_frequency * isr_freq / (2 ^ GLOBAL_Q));
+#else
+#error("The system does not specify ctrl_gt is float or fixed. You should define CTRL_GT_IS_FLOAT or CTRL_GT_IS_FIXED.")
+#endif // CTRL_GT_IS_XXX
+    ctrl->v_bias = voltage_bias;
+
+    ctl_init_slope_limit(&ctrl->freq_slope, float2ctrl(freq_slope / isr_freq), -float2ctrl(freq_slope / isr_freq));
+
+    ctl_init_saturation(&ctrl->volt_sat, voltage_bound, -voltage_bound);
+}
+
+    // change target frequency
+void ctl_set_const_vf_target_freq(
+    // Const VF controller
+    ctl_const_vf_controller *ctrl,
+    // target frequency, unit Hz
+    parameter_gt target_freq,
+    // Main ISR frequency
+    parameter_gt isr_freq)
+{
+    ctrl->target_frequency = float2ctrl(target_freq / isr_freq);
 }

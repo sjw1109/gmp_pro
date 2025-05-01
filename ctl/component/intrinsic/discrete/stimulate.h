@@ -31,11 +31,11 @@ extern "C"
 
     } ctl_src_sg_t;
 
-    //ec_gt ctl_init_sincos_gen(ctl_src_sg_t *sg);
+    // ec_gt ctl_init_sincos_gen(ctl_src_sg_t *sg);
 
-    //ec_gt ctl_setup_sincos_gen(ctl_src_sg_t *sg,
-    //                           ctrl_gt init_angle,  // rad
-    //                           ctrl_gt step_angle); // rad
+    // ec_gt ctl_setup_sincos_gen(ctl_src_sg_t *sg,
+    //                            ctrl_gt init_angle,  // rad
+    //                            ctrl_gt step_angle); // rad
 
     void ctl_init_sincos_gen(ctl_src_sg_t *sg,
                              ctrl_gt init_angle,  // rad
@@ -66,19 +66,17 @@ extern "C"
         ctrl_gt slope;
     } ctl_src_rg_t;
 
-    //ec_gt ctl_init_ramp_gen(ctl_src_rg_t *rg);
+    // ec_gt ctl_init_ramp_gen(ctl_src_rg_t *rg);
 
-    //ec_gt ctl_setup_ramp_gen(ctl_src_rg_t *rg, ctrl_gt slope, parameter_gt amp_pos, parameter_gt amp_neg);
+    // ec_gt ctl_setup_ramp_gen(ctl_src_rg_t *rg, ctrl_gt slope, parameter_gt amp_pos, parameter_gt amp_neg);
 
     void ctl_init_ramp_gen(ctl_src_rg_t *rg, ctrl_gt slope, parameter_gt amp_pos, parameter_gt amp_neg);
 
-
-    //ec_gt ctl_setup_ramp_gen_via_amp_freq(ctl_src_rg_t *rg, parameter_gt isr_freq, parameter_gt target_freq,
-    //                                      parameter_gt amp_pos, parameter_gt amp_neg);
+    // ec_gt ctl_setup_ramp_gen_via_amp_freq(ctl_src_rg_t *rg, parameter_gt isr_freq, parameter_gt target_freq,
+    //                                       parameter_gt amp_pos, parameter_gt amp_neg);
 
     void ctl_init_ramp_gen_via_amp_freq(ctl_src_rg_t *rg, parameter_gt isr_freq, parameter_gt target_freq,
                                         parameter_gt amp_pos, parameter_gt amp_neg);
-
 
     GMP_STATIC_INLINE
     ctrl_gt ctl_step_ramp_gen(ctl_src_rg_t *rg)
@@ -97,8 +95,14 @@ extern "C"
         return rg->current;
     }
 
+    GMP_STATIC_INLINE
+    void ctl_set_ramp_freq(ctl_src_rg_t *rg, ctrl_gt slope)
+    {
+        rg->slope = slope;
+    }
+
 #ifdef __cplusplus
-}
+    }
 #endif //__cplusplus
 
 #endif // _FILE_SIGNAL_GENERATOR_H_

@@ -43,7 +43,7 @@ void ctl_init_pid(
 
 #include <ctl/component/intrinsic/continuous/saturation.h>
 
-void ctl_init_saturation(saturation_t *obj, ctrl_gt out_min, ctrl_gt out_max)
+void ctl_init_saturation(ctl_saturation_t *obj, ctrl_gt out_min, ctrl_gt out_max)
 {
     obj->out_min = out_min;
     obj->out_max = out_max;
