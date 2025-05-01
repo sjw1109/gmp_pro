@@ -8,6 +8,7 @@ extern "C"
 {
 #endif // __cplusplus
 
+    // Calculate voltage based on SVPWM generator
     typedef struct _tag_voltage_calculator
     {
         // input, DC bus voltage, unit p.u.

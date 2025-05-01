@@ -180,7 +180,7 @@ exnter "C"
         vector3_gt vdq_set;
 
         // valpha, vbeta, v0 set
-        vector3_gt ab0_set;
+        vector3_gt vab0_set;
 
         // .....................................................................//
         // flag stack
@@ -338,9 +338,9 @@ exnter "C"
 
             if (ctrl->flag_enable_modulation)
             {
-                ctl_ct_ipark(&ctrl->vdq_set, &phasor, &ctrl->ab0_set);
+                ctl_ct_ipark(&ctrl->vdq_set, &phasor, &ctrl->vab0_set);
             }
-            // else // ab0_set will be output.
+            // else // vab0_set will be output.
 
             //
             // SVPWM modulation
@@ -348,7 +348,7 @@ exnter "C"
 
             if (ctrl->flag_enable_output)
             {
-                ctl_ct_svpwm_calc(&ctrl->ab0_set, &ctrl->pwm_out->value);
+                ctl_ct_svpwm_calc(&ctrl->vab0_set, &ctrl->pwm_out->value);
             }
             else
             {
@@ -416,9 +416,9 @@ exnter "C"
     GMP_STATIC_INLINE
     void ctl_set_pmsm_ctrl_valphabeta(pmsm_bare_controller_t * ctrl, ctrl_gt valpha, ctrl_gt vbeta)
     {
-        ctrl->ab0_set.dat[phase_A] = valpha;
-        ctrl->ab0_set.dat[phase_B] = vbeta;
-        ctrl->ab0_set.dat[phase_0] = 0;
+        ctrl->vab0_set.dat[phase_A] = valpha;
+        ctrl->vab0_set.dat[phase_B] = vbeta;
+        ctrl->vab0_set.dat[phase_0] = 0;
     }
 
     // .....................................................................//

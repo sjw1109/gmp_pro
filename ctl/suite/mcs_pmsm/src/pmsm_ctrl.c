@@ -90,7 +90,7 @@ void ctl_init_pmsm_bare_controller(pmsm_bare_controller_t *ctrl, pmsm_bare_contr
     ctl_vector2_clear(&ctrl->vdq_ff);
 
     // controller set parameters
-    ctl_vector3_clear(&ctrl->ab0_set);
+    ctl_vector3_clear(&ctrl->vab0_set);
     ctl_vector3_clear(&ctrl->vdq_set);
     ctl_vector2_clear(&ctrl->idq_set);
     ctrl->speed_set = 0;
