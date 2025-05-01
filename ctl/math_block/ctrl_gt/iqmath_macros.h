@@ -32,6 +32,9 @@
 #define ctl_div2(A) (_IQdiv2(A))
 #define ctl_div4(A) (_IQdiv4(A))
 
+#define ctl_mul2(A) (_IQmpy2(A))
+#define ctl_mul4(A) (_IQmpy4(A))
+
 // Add and sub
 #define ctl_add(A, B) ((A + B))
 #define ctl_sub(A, B) ((A - B))

@@ -45,6 +45,9 @@ float multiple_static_inline(float A, float B)
 #define ctl_div2(A) ((float)((float)(A) / 2))
 #define ctl_div4(A) ((float)((float)(A) / 4))
 
+#define ctl_mul2(A) ((float)((float)(A) * 2))
+#define ctl_mul4(A) ((float)((float)(A) * 4))
+
 // Add and sub
 #define ctl_add(A, B) ((float)((float)(A) + (B)))
 #define ctl_sub(A, B) ((float)((float)(A) - (B)))

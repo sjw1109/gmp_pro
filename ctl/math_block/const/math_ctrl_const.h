@@ -19,6 +19,9 @@
 #define GMP_CONST_1             (float2ctrl(1.0f))
 #define GMP_CONST_1_OVER_2      (float2ctrl(0.5f))
 
+// Here're some constants for Voltage calculator
+#define GMP_CONST_1_OVER_SQRT3 ((float2ctrl(0.5773502691896f))) // 1/sqrt(3)
+
 // Here're some constants for encoder and filter
 #define GMP_CONST_PI         (float2ctrl(3.1415926535897932))
 #define GMP_CONST_2_PI       (float2ctrl(6.2831853071795865))
