@@ -57,12 +57,14 @@ extern "C"
         calc->slip = ctl_div(ctl_mul(calc->kt, isq), calc->imds);
 
         calc->omega_s = omega_r + calc->slip;
-        calc->enc.elec_position += ctl_mul(calc->ktheta, calc->omega_s);
+        calc->enc.elec_position += ctl_mul(calc->ktheta, calc->omega_s) + GMP_CONST_1;
 
-        if (calc->theta > GMP_CONST_1)
-            calc->enc.elec_position -= GMP_CONST_1;
-        else if (calc->theta < 0)
-            calc->enc.elec_position += GMP_CONST_1;
+        calc->enc.elec_position = ctrl_mod_1(calc->enc.elec_position);
+
+        // if (calc->theta > GMP_CONST_1)
+        //     calc->enc.elec_position -= GMP_CONST_1;
+        // else if (calc->theta < 0)
+        //     calc->enc.elec_position += GMP_CONST_1;
 
         calc->enc.position = calc->enc.elec_position;
 
