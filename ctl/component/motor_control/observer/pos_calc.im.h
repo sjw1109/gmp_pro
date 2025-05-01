@@ -2,6 +2,8 @@
 #ifndef _FILE_POS_CALC_IM_H_
 #define _FILE_POS_CALC_IM_H_
 
+#include <ctl/component/motor_control/basic/encoder.h>
+
 #ifdef __cplusplus
 extern "C"
 {
