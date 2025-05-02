@@ -30,14 +30,14 @@ extenr "C"
         else if (ratio <= float2ctrl(1))
         {
             buck_boost_duty->dat[buck_phase] = D_buck_max;
-            buck_boost_duty->dat[boost_phase] = ratio - D_buck_max;
+            buck_boost_duty->dat[boost_phase] = ctl_div(ratio - D_buck_max, ratio);
         }
         else if (ratio <= ctl_div(float2ctrl(1), D_buck_max))
         {
-            buck_boost_duty->dat[buck_phase] = D_buck_max;
-            buck_boost_duty->dat[boost_phase] = (float2ctrl(1) - D_buck_max);
+            buck_boost_duty->dat[buck_phase] = ctl_mul(ratio, D_buck_max);
+            buck_boost_duty->dat[boost_phase] = float2ctrl(1) - D_buck_max;
         }
-        else
+        else // ratio > ctl_div(float2ctrl(1), D_buck_max)
         {
             buck_boost_duty->dat[buck_phase] = 0;
             buck_boost_duty->dat[boost_phase] = ctl_div(ratio - float2ctrl(1), ratio);
