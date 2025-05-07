@@ -30,7 +30,7 @@
 
 #include <ctl/component/intrinsic/discrete/feed_forward.h>
 
-#include <ctl/component/intrinsic/discrete/filter.h>
+#include <ctl/component/intrinsic/discrete/discrete_filter.h>
 
 #include <ctl/component/intrinsic/discrete/hcc.h>
 
@@ -38,7 +38,7 @@
 
 #include <ctl/component/intrinsic/discrete/pll.h>
 
-#include <ctl/component/intrinsic/discrete/PZCompensator.h>
+#include <ctl/component/intrinsic/discrete/pole_zero.h>
 
 #include <ctl/component/intrinsic/discrete/saturation.h>
 

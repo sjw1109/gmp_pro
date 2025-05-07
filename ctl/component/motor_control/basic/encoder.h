@@ -13,7 +13,7 @@
 #include "core/std/gmp_cport.h"
 
 #include <ctl/component/intrinsic/discrete/divider.h>
-#include <ctl/component/intrinsic/discrete/filter.h>
+#include <ctl/component/intrinsic/discrete/discrete_filter.h>
 #include <ctl/component/motor_control/basic/motor_universal_interface.h>
 
 #ifndef _FILE_ENCODER_H_

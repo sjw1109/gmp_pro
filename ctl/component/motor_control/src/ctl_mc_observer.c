@@ -1,7 +1,7 @@
 
 #include <gmp_core.h>
 
-#include <ctl/component/intrinsic/discrete/filter.h>
+#include <ctl/component/intrinsic/discrete/discrete_filter.h>
 
 //////////////////////////////////////////////////////////////////////////
 // pmsm smo

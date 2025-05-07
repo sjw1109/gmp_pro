@@ -28,7 +28,7 @@ void ctl_init_divider(ctl_divider_t *obj, uint32_t counter_period)
 //////////////////////////////////////////////////////////////////////////
 // Filter IIR2
 
-#include <ctl/component/intrinsic/discrete/filter.h>
+#include <ctl/component/intrinsic/discrete/discrete_filter.h>
 #include <math.h> // support for sinf and cosf
 
 

@@ -367,7 +367,7 @@ extern "C"
     //////////////////////////////////////////////////////////////////////////
     // ADC bias calibrator
 
-#include <ctl/component/intrinsic/discrete/filter.h>
+#include <ctl/component/intrinsic/discrete/discrete_filter.h>
 
     typedef struct _tag_adc_bias_calibrator_t
     {

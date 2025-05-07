@@ -13,7 +13,7 @@
 
 // PLL module is based on PID module and filter module
 #include <ctl/component/intrinsic/continuous/continuous_pid.h>
-#include <ctl/component/intrinsic/discrete/filter.h>
+#include <ctl/component/intrinsic/discrete/discrete_filter.h>
 
 #ifndef _FILE_PLL_H_
 #define _FILE_PLL_H_
