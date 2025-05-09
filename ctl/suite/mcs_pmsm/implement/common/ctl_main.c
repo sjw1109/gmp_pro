@@ -58,7 +58,7 @@ void ctl_init()
         // set spd calculator parameters
         CONTROLLER_FREQUENCY, 5, MOTOR_PARAM_MAX_SPEED, 1, 150);
 
-    ctl_setup_const_f_controller(&const_f, 20, CONTROLLER_FREQUENCY);
+    ctl_init_const_f_controller(&const_f, 20, CONTROLLER_FREQUENCY);
 
     // attach a speed encoder object with motor controller
     ctl_attach_mtr_velocity(&pmsm_ctrl.mtr_interface, &spd_enc.encif);

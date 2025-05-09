@@ -331,7 +331,7 @@ ctrl_gt ctl_init_const_vf_controller(
     ctrl->target_frequency = frequency / isr_freq;
     ctrl->target_voltage = 0;
 
-#if defined CTRL_GT_IS_FIXED
+#if !defined CTRL_GT_IS_FIXED
     ctrl->v_over_f = float2ctrl(voltage_over_frequency * isr_freq);
 #elif defined CTRL_GT_IS_FLOAT
     ctrl->v_over_f = float2ctrl(voltage_over_frequency * isr_freq / (2 ^ GLOBAL_Q));

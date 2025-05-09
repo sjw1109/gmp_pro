@@ -278,7 +278,7 @@ void ctl_init_discrete_track_pid(
 //////////////////////////////////////////////////////////////////////////
 // Pole-Zero Compensator
 
-#include <ctl/component/intrinsic/discrete/PZCompensator.h>
+#include <ctl/component/intrinsic/discrete/pole_zero.h>
 
 // unit Hz
 void ctl_init_2p2z(

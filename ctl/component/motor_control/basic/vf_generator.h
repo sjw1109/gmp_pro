@@ -10,6 +10,8 @@
  */
 
 #include <ctl/component/intrinsic/continuous/saturation.h>
+#include <ctl/component/intrinsic/discrete/divider.h>
+#include <ctl/component/intrinsic/discrete/slope_lim.h>
 #include <ctl/component/intrinsic/discrete/stimulate.h>
 #include <ctl/component/motor_control/basic/motor_universal_interface.h>
 
@@ -142,7 +144,7 @@ extern "C"
 
         // saturation limit for Voltage
         // [-voltage_bound, volatage bound]
-        ctl_bipolar_saturation_t volt_sat;
+        ctl_saturation_t volt_sat;
 
     } ctl_const_vf_controller;
 
@@ -170,13 +172,15 @@ extern "C"
         ctrl->current_freq = ctl_step_slope_limit(&ctrl->freq_slope, ctrl->target_frequency);
 
         // calculate target voltage
-        if (ctrl->current_freq > freq_deadband)
+        if (ctrl->current_freq > ctrl->freq_deadband)
         {
-            ctrl->target_voltage = ctl_step_saturation(ctrl->v_bias + ctl_mul(ctrl->v_over_f, ctrl->current_freq));
+            ctrl->target_voltage =
+                ctl_step_saturation(&ctrl->volt_sat, ctrl->v_bias + ctl_mul(ctrl->v_over_f, ctrl->current_freq));
         }
-        else if (ctrl->current_freq < -freq_deadband)
+        else if (ctrl->current_freq < -ctrl->freq_deadband)
         {
-            ctrl->target_voltage = ctl_step_saturation(-ctrl->v_bias - ctl_mul(ctrl->v_over_f, ctrl->current_freq));
+            ctrl->target_voltage =
+                ctl_step_saturation(&ctrl->volt_sat, -ctrl->v_bias - ctl_mul(ctrl->v_over_f, ctrl->current_freq));
         }
         // dead band
         else

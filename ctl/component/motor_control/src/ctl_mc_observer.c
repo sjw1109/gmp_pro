@@ -98,12 +98,10 @@ void ctl_init_pmsm_smo_via_consultant(pmsm_smo_observer_t *smo,
                       k_slide, np->rated_speed_rpm, dsn->pole_pair);
 }
 
-
-
 //////////////////////////////////////////////////////////////////////////
-// pmsm smo
+// acm speed calculator (slip observer)
 
-#include <ctl/component/motor_control/observer/pos_calc.im.h>
+#include <ctl/component/motor_control/observer/acm.pos_calc.h>
 
 void ctl_init_im_spd_calc(
     // IM speed calculate object
@@ -114,13 +112,12 @@ void ctl_init_im_spd_calc(
     parameter_gt freq_base, parameter_gt isr_freq)
 {
     //  Rotor time constant (sec)
-    parameter_gt Tr = v.Lr / v.Rr;
+    parameter_gt Tr = Lr / Rr;
 
     // constant using in magnetizing current calculation
-    calc->kr = float2ctrl(1 / isr_freq * v.Tr);
-
+    calc->kr = float2ctrl(1 / isr_freq * Tr);
     calc->kt = float2ctrl(1 / (Tr * 2 * PI * freq_base));
-    calc->ktheta = v.freq_base / isr_freq;
+    calc->ktheta = freq_base / isr_freq;
 
     // clear parameters
     calc->imds = 0;
