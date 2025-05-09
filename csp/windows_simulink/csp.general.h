@@ -39,3 +39,6 @@
 // Simulink Disable/Enable output
 void csp_sl_enable_output(void);
 void csp_sl_disable_output(void);
+
+// Simulink Input Panel PORT
+double csp_sl_get_panel_input(fast_gt channel);

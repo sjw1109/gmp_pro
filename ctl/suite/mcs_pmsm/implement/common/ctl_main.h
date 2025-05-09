@@ -38,8 +38,17 @@ extern "C"
     // PMSM servo objects
     // extern pmsm_fm_t pmsm;
 
+ #if defined OPENLOOP_CONST_FREQUENCY
+
     // PMSM const frequency controller
     extern ctl_const_f_controller const_f;
+
+#else // OPENLOOP_CONST_FREQUENCY
+
+    // PMSM const frequency slope controller
+    extern ctl_slope_f_controller slope_f;
+
+#endif // OPENLOOP_CONST_FREQUENCY
 
     // PMSM controller
     extern pmsm_bare_controller_t pmsm_ctrl;
@@ -60,17 +69,21 @@ extern "C"
         MTR_ADC_IDC
     } adc_index_t;
 
-    //void set_adc_bias_via_channel(fast_gt index, ctrl_gt bias);
+    // void set_adc_bias_via_channel(fast_gt index, ctrl_gt bias);
 
     // periodic callback function things.
     GMP_STATIC_INLINE void ctl_dispatch(void)
     {
         if (flag_enable_adc_calibrator)
         {
-                ctl_step_adc_calibrator(&adc_calibrator, pmsm_ctrl.mtr_interface.uabc->value.dat[index_adc_calibrator]);
+            ctl_step_adc_calibrator(&adc_calibrator, pmsm_ctrl.mtr_interface.uabc->value.dat[index_adc_calibrator]);
         }
 
+#if defined OPENLOOP_CONST_FREQUENCY
         ctl_step_const_f_controller(&const_f);
+#else  // OPENLOOP_CONST_FREQUENCY
+    ctl_step_slope_f(&slope_f);
+#endif // OPENLOOP_CONST_FREQUENCY
 
         ctl_step_spd_calc(&spd_enc);
 

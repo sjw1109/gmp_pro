@@ -26,8 +26,17 @@ pmsm_bare_controller_t pmsm_ctrl;
 // speed encoder
 spd_calculator_t spd_enc;
 
+#if defined OPENLOOP_CONST_FREQUENCY
+
 // PMSM const frequency controller
 ctl_const_f_controller const_f;
+
+#else // OPENLOOP_CONST_FREQUENCY
+
+// PMSM const frequency slope controller
+ctl_slope_f_controller slope_f;
+
+#endif // OPENLOOP_CONST_FREQUENCY
 
 //
 adc_bias_calibrator_t adc_calibrator;
@@ -58,7 +67,14 @@ void ctl_init()
         // set spd calculator parameters
         CONTROLLER_FREQUENCY, 5, MOTOR_PARAM_MAX_SPEED, 1, 150);
 
+#if defined OPENLOOP_CONST_FREQUENCY
     ctl_init_const_f_controller(&const_f, 20, CONTROLLER_FREQUENCY);
+#else // OPENLOOP_CONST_FREQUENCY
+    // frequency target 20 Hz
+    // frequency slope 40 Hz/s
+    ctl_init_const_slope_f_controller(&slope_f, 20.0f, 40.0f, CONTROLLER_FREQUENCY);
+
+#endif // OPENLOOP_CONST_FREQUENCY
 
     // attach a speed encoder object with motor controller
     ctl_attach_mtr_velocity(&pmsm_ctrl.mtr_interface, &spd_enc.encif);
@@ -95,12 +111,21 @@ void ctl_init()
     gmp_base_print(TEXT_STRING("PMSM SERVO struct has been inited, size :%d\r\n"), (int)sizeof(pmsm_ctrl_init));
 
 #if (BUILD_LEVEL == 1)
+#if defined OPENLOOP_CONST_FREQUENCY
     ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &const_f.enc);
+#else // OPENLOOP_CONST_FREQUENCY
+    ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &slope_f.enc);
+#endif // OPENLOOP_CONST_FREQUENCY
+
     ctl_pmsm_ctrl_voltage_mode(&pmsm_ctrl);
     ctl_set_pmsm_ctrl_vdq_ff(&pmsm_ctrl, float2ctrl(0.2), float2ctrl(0.2));
 
 #elif (BUILD_LEVEL == 2)
+#if defined OPENLOOP_CONST_FREQUENCY
     ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &const_f.enc);
+#else  // OPENLOOP_CONST_FREQUENCY
+    ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &slope_f.enc);
+#endif // OPENLOOP_CONST_FREQUENCY
     ctl_pmsm_ctrl_current_mode(&pmsm_ctrl);
     ctl_set_pmsm_ctrl_idq_ff(&pmsm_ctrl, float2ctrl(0.3), float2ctrl(0.1));
 

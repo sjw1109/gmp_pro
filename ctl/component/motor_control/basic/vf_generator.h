@@ -72,12 +72,12 @@ extern "C"
     void ctl_init_const_slope_f_controller(
         // controller object
         ctl_slope_f_controller *ctrl,
-        // ISR frequency
-        parameter_gt isr_freq,
         // target frequency, Hz
         parameter_gt frequency,
         // frequency slope, Hz/s
-        parameter_gt freq_slope);
+        parameter_gt freq_slope,
+        // ISR frequency
+        parameter_gt isr_freq);
 
     // return target voltage amplitude
     GMP_STATIC_INLINE
@@ -92,6 +92,8 @@ extern "C"
         // move to next angle position
         ctrl->enc.elec_position = ctl_step_ramp_gen(&ctrl->rg);
         ctrl->enc.position = ctrl->enc.elec_position;
+
+        return ctrl->enc.elec_position;
     }
 
     // change target frequency

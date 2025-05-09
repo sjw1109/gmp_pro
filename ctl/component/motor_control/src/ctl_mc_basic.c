@@ -275,12 +275,12 @@ void ctl_init_const_f_controller(ctl_const_f_controller *ctrl, parameter_gt freq
 void ctl_init_const_slope_f_controller(
     // controller object
     ctl_slope_f_controller *ctrl,
-    // ISR frequency
-    parameter_gt isr_freq,
     // target frequency, Hz
     parameter_gt frequency,
     // frequency slope, Hz/s
-    parameter_gt freq_slope)
+    parameter_gt freq_slope,
+    // ISR frequency
+    parameter_gt isr_freq)
 {
     ctrl->enc.elec_position = 0;
     ctrl->enc.position = 0;
@@ -290,7 +290,8 @@ void ctl_init_const_slope_f_controller(
 
     ctrl->target_frequency = frequency / isr_freq;
 
-    ctl_init_slope_limit(&ctrl->freq_slope, float2ctrl(freq_slope / isr_freq), -float2ctrl(freq_slope / isr_freq));
+    ctl_init_slope_limit(&ctrl->freq_slope, float2ctrl(freq_slope / isr_freq / isr_freq),
+                         -float2ctrl(freq_slope / isr_freq / isr_freq));
 }
 
 // change target frequency
@@ -310,8 +311,6 @@ void ctl_set_slope_f_freq(
 void ctl_init_const_vf_controller(
     // controller object
     ctl_const_vf_controller *ctrl,
-    // ISR frequency
-    parameter_gt isr_freq,
     // target frequency, Hz
     parameter_gt frequency,
     // frequency slope, Hz/s
@@ -320,7 +319,9 @@ void ctl_init_const_vf_controller(
     ctrl_gt voltage_bound,
     // Voltage Frequency constant
     // unit p.u./Hz, p.u.
-    ctrl_gt voltage_over_frequency, ctrl_gt voltage_bias)
+    ctrl_gt voltage_over_frequency, ctrl_gt voltage_bias,
+    // ISR frequency
+    parameter_gt isr_freq)
 {
     ctrl->enc.elec_position = 0;
     ctrl->enc.position = 0;
@@ -340,7 +341,8 @@ void ctl_init_const_vf_controller(
 #endif // CTRL_GT_IS_XXX
     ctrl->v_bias = voltage_bias;
 
-    ctl_init_slope_limit(&ctrl->freq_slope, float2ctrl(freq_slope / isr_freq), -float2ctrl(freq_slope / isr_freq));
+    ctl_init_slope_limit(&ctrl->freq_slope, float2ctrl(freq_slope / isr_freq / isr_freq),
+                         -float2ctrl(freq_slope / isr_freq / isr_freq));
 
     ctl_init_saturation(&ctrl->volt_sat, voltage_bound, -voltage_bound);
 }

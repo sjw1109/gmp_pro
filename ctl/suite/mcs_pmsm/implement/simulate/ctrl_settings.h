@@ -30,7 +30,7 @@
 // BUILD_LEVEL 2: Current Open loop
 // BUILD_LEVEL 3: Current Open loop with actual position
 // BUILD_LEVEL 4: Speed Close loop
-#define BUILD_LEVEL (4)
+#define BUILD_LEVEL (1)
 
 
 #endif // _FILE_CTRL_SETTINGS_H_

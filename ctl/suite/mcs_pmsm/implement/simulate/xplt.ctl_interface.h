@@ -45,7 +45,7 @@ extern "C"
 
         // Get panel input here.
 #if (BUILD_LEVEL == 1)
-        ctl_set_pmsm_ctrl_vdq_ff(&pmsm_ctrl, float2ctrl(csp_sl_get_panel_input(0)), csp_sl_get_panel_input(1));
+        ctl_set_pmsm_ctrl_vdq_ff(&pmsm_ctrl, float2ctrl(csp_sl_get_panel_input(0)), float2ctrl(csp_sl_get_panel_input(1)));
 
 #endif // BUILD_LEVEL
     }
@@ -73,6 +73,7 @@ extern "C"
 
         simulink_tx_buffer.monitor_port[6] = pmsm_ctrl.mtr_interface.velocity->speed;
         simulink_tx_buffer.monitor_port[7] = pmsm_ctrl.mtr_interface.position->elec_position;
+        simulink_tx_buffer.monitor_port[7] = slope_f.current_freq;
     }
 
     // Enable Motor Controller
