@@ -75,3 +75,50 @@ void ctl_init_track_pid(
     ctl_init_pid(&tp->pid, kp, ki, kd, fs);
     ctl_set_pid_limit(&tp->pid, sat_max, sat_min);
 }
+
+//////////////////////////////////////////////////////////////////////////
+// SOGI controller
+
+#include <ctl/component/intrinsic/continuous/sogi.h>
+
+void ctl_init_sogi_controller(
+    // controller handle
+    ctl_sogi_t *sogi,
+    // gain of this controller
+    parameter_gt gain,
+    // resonant frequency
+    parameter_gt freq_r,
+    // cut frequency
+    parameter_gt freq_c,
+    // controller frequency
+    parameter_gt freq_ctrl)
+{
+    sogi->k_damp = float2ctrl(2 * freq_c / freq_r);
+    sogi->k_r = float2ctrl(2 * PI * freq_r / freq_ctrl);
+    sogi->gain = float2ctrl(gain);
+
+    sogi->integrate_reference = 0;
+    sogi->d_integrate = 0;
+    sogi->q_integrate = 0;
+}
+
+void ctl_init_sogi_controller_with_damp(
+    // controller handle
+    ctl_sogi_t *sogi,
+    // gain of this controller
+    parameter_gt gain,
+    // resonant frequency
+    parameter_gt freq_r,
+    // cut frequency, generally 1.414 is a great choice
+    parameter_gt damp,
+    // controller frequency
+    parameter_gt freq_ctrl)
+{
+    sogi->k_damp = float2ctrl(damp);
+    sogi->k_r = float2ctrl(2 * PI * freq_r / freq_ctrl);
+    sogi->gain = float2ctrl(gain);
+
+    sogi->integrate_reference = 0;
+    sogi->d_integrate = 0;
+    sogi->q_integrate = 0;
+}
