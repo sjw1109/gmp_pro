@@ -43,6 +43,16 @@ void csp_sl_disable_output(void)
     simulink_tx_buffer.enable = 0;
 }
 
+// Simulink Panel Input
+double csp_sl_get_panel_input(fast_gt channel)
+{
+    if (channel <= 3)
+    {
+        return simulink_rx_buffer.panel[channel];
+    }
+    return 0;
+}
+
 // User should invoke this function to get time (system tick).
 time_gt gmp_port_system_tick(void)
 {

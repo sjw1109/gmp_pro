@@ -49,6 +49,17 @@ extern "C"
         return float2ctrl(fc * 2 * PI / fs);
     }
 
+    // get the phase lag caused by the filter
+     GMP_STATIC_INLINE
+    parameter_gt ctl_helper_get_lp_filter_lag_phase(
+        // filter cut frequency 
+        parameter_gt fc, 
+        // input frequency
+        parameter_gt finput)
+    {
+        return atanf(finput / fc);
+    }
+
     // SISO standard interface
     GMP_STATIC_INLINE
     ctrl_gt ctl_step_lowpass_filter(ctl_low_pass_filter_t *lpf, ctrl_gt input)

@@ -307,7 +307,7 @@ void ctl_set_slope_f_freq(
 
 // VF controller
 
-ctrl_gt ctl_init_const_vf_controller(
+void ctl_init_const_vf_controller(
     // controller object
     ctl_const_vf_controller *ctrl,
     // ISR frequency

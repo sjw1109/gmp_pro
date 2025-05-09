@@ -149,7 +149,7 @@ extern "C"
     } ctl_const_vf_controller;
 
     // init const vf controller object
-    ctrl_gt ctl_init_const_vf_controller(
+    void ctl_init_const_vf_controller(
         // controller object
         ctl_const_vf_controller *ctrl,
         // ISR frequency

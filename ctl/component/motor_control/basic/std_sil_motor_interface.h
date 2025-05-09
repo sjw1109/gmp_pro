@@ -15,7 +15,7 @@ typedef struct _tag_mtr_sil_tx_buf
     uint32_t tabc[3];
 
     // monitor port
-    double monitor_port[4];
+    double monitor_port[8];
 } mtr_sil_tx_buf_t;
 #pragma pack()
 
@@ -44,6 +44,9 @@ typedef struct _tag_mtr_sil_rx_buf
 
     // encoder revolution
     int32_t revolution;
+
+    // controller panel
+    double panel[4];
 
 } mtr_sil_rx_buf_t;
 #pragma pack()

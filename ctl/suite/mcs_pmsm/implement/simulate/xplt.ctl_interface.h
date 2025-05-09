@@ -42,6 +42,12 @@ extern "C"
 
         // invoke position encoder routine.
         ctl_step_autoturn_pos_encoder(&pos_enc, simulink_rx_buffer.encoder);
+
+        // Get panel input here.
+#if (BUILD_LEVEL == 1)
+        ctl_set_pmsm_ctrl_vdq_ff(&pmsm_ctrl, float2ctrl(csp_sl_get_panel_input(0)), csp_sl_get_panel_input(1));
+
+#endif // BUILD_LEVEL
     }
 
     // Output Callback
@@ -50,19 +56,23 @@ extern "C"
     {
         ctl_calc_pwm_tri_channel(&pwm_out);
 
+        // PWM output
         simulink_tx_buffer.tabc[phase_A] = pwm_out.value[phase_A];
         simulink_tx_buffer.tabc[phase_B] = pwm_out.value[phase_B];
         simulink_tx_buffer.tabc[phase_C] = pwm_out.value[phase_C];
 
-        // simulink_tx_buffer.monitor_port[0] = pmsm_ctrl.idq0.dat[phase_d];
+        // Monitor Port, 8 channels
         simulink_tx_buffer.monitor_port[0] = pmsm_ctrl.idq_set.dat[phase_q];
         simulink_tx_buffer.monitor_port[1] = pmsm_ctrl.idq0.dat[phase_q];
 
-        simulink_tx_buffer.monitor_port[2] = pmsm_ctrl.vdq_set.dat[phase_d];
-        // simulink_tx_buffer.monitor_port[3] = pmsm_ctrl.vdq_set.dat[phase_q];
+        simulink_tx_buffer.monitor_port[2] = pmsm_ctrl.idq_set.dat[phase_d];
+        simulink_tx_buffer.monitor_port[3] = pmsm_ctrl.idq0.dat[phase_d];
 
-        // simulink_tx_buffer.monitor_port[3] = pmsm_ctrl.mtr_interface.position->elec_position;
-        simulink_tx_buffer.monitor_port[3] = pmsm_ctrl.mtr_interface.velocity->speed;
+        simulink_tx_buffer.monitor_port[4] = pmsm_ctrl.vdq_set.dat[phase_d];
+        simulink_tx_buffer.monitor_port[5] = pmsm_ctrl.vdq_set.dat[phase_q];
+
+        simulink_tx_buffer.monitor_port[6] = pmsm_ctrl.mtr_interface.velocity->speed;
+        simulink_tx_buffer.monitor_port[7] = pmsm_ctrl.mtr_interface.position->elec_position;
     }
 
     // Enable Motor Controller
@@ -141,8 +151,6 @@ extern "C"
         csp_sl_disable_output();
     }
 
-
-
 #endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
 #ifdef __cplusplus
@@ -150,5 +158,3 @@ extern "C"
 #endif // __cplusplus
 
 #endif // _FILE_CTL_INTERFACE_H_
-
-
