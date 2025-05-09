@@ -50,10 +50,10 @@ extern "C"
     }
 
     // get the phase lag caused by the filter
-     GMP_STATIC_INLINE
+    GMP_STATIC_INLINE
     parameter_gt ctl_helper_get_lp_filter_lag_phase(
-        // filter cut frequency 
-        parameter_gt fc, 
+        // filter cut frequency
+        parameter_gt fc,
         // input frequency
         parameter_gt finput)
     {
@@ -73,14 +73,21 @@ extern "C"
         return new_out;
     }
 
+    // clear lowpass filter
+    GMP_STATIC_INLINE
+    ctrl_gt ctl_clear_lowpass_filter(ctl_low_pass_filter_t *lpf)
+    {
+        lpf->out = 0;
+    }
+
     // 2rd order IIR Filter
 
     // Z transfer function:
-    //tex:
+    // tex:
     // $$ H(z) = \frac{b_0 + b_1z^{-1} + b_2z^{-2}}{a_0 + a_1z^{-1} + a_2z^{-2}}$$
 
     // Discrete expression:
-    //tex:
+    // tex:
     // $$ y(n) = \frac{b_0}{a_0} x(n) + \frac{b_1}{a_0} x(n-1) + \frac{b_2}{a_0}x(n-2)
     // -\frac{a_1}{a_0}y(n-1) - \frac{a_2}{a_0}y(n-2)$$
 

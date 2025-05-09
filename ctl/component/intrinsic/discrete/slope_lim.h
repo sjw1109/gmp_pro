@@ -76,6 +76,8 @@ extern "C"
         obj->out = 0;
     }
 
+
+
 #ifdef __cplusplus
 }
 #endif //__cplusplus

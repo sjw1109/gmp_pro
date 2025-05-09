@@ -45,7 +45,6 @@ extern "C"
 
         // Get panel input here.
 #if (BUILD_LEVEL == 1)
-        
         ctl_set_pmsm_ctrl_vdq_ff(&pmsm_ctrl, float2ctrl(csp_sl_get_panel_input(0)), float2ctrl(csp_sl_get_panel_input(1)));
 
 #endif // BUILD_LEVEL

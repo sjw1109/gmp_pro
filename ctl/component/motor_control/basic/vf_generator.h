@@ -44,6 +44,7 @@ extern "C"
         ctrl->enc.position = ctrl->enc.elec_position;
     }
 
+
     //////////////////////////////////////////////////////////////////////////
 
     // This module generate a constant slope frequency generator.
