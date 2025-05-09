@@ -42,6 +42,7 @@ extern "C"
         fast_gt flag_triggered;
     } basic_trigger_t;
 
+    GMP_STATIC_INLINE
     void dsa_init_basic_trigger(basic_trigger_t* trigger, addr32_gt cell_size)
     {
         trigger->target_index = 0;
@@ -74,7 +75,7 @@ extern "C"
         else
         {
             // trigger condition
-            if (trigger->last_data < 0 && trigger->monitor >= 0)
+            if (trigger->last_data < 0 && monitor >= 0)
             {
                 trigger->flag_triggered = 1;
             }
@@ -88,12 +89,12 @@ extern "C"
     GMP_STATIC_INLINE
     addr32_gt dsa_get_trigger_index(basic_trigger_t *trigger)
     {
-        if (trigger->last_tick > trigger->cell_size)
-            trigger->last_tick = 1;
-        else if (trigger->last_tick <= 0)
+        if (trigger->target_index > trigger->cell_size)
+            trigger->target_index = 1;
+        else if (trigger->target_index <= 0)
             return 0;
 
-        return trigger->last_tick - 1;
+        return trigger->target_index - 1;
     }
 
 
