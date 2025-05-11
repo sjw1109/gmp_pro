@@ -322,3 +322,4 @@ void ctl_init_2p2z(
     ctrl->output = 0;
     ctrl->input = 0;
 }
+

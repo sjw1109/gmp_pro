@@ -122,3 +122,22 @@ void ctl_init_sogi_controller_with_damp(
     sogi->d_integrate = 0;
     sogi->q_integrate = 0;
 }
+
+//////////////////////////////////////////////////////////////////////////
+// SMC controller
+#include <ctl/component/intrinsic/continuous/smc.h>
+
+void ctl_init_smc(
+    // SMC controller
+    ctl_smc_t *smc,
+    // SMC controller parameters
+    ctrl_gt eta11, ctrl_gt eta12, ctrl_gt eta21, ctrl_gt eta22, ctrl_gt rho, ctrl_gt lambda)
+{
+    smc->eta11 = eta11;
+    smc->eta12 = eta12;
+    smc->eta21 = eta21;
+    smc->eta22 = eta22;
+
+    smc->rho = rho;
+    smc->lambda = lambda;
+}
