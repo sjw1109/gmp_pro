@@ -33,9 +33,11 @@ void ctl_init_pmsm_smo(
 
     ctl_set_phasor_via_angle(smo->theta_est, &smo->phasor);
 
-    smo->k1 = float2ctrl(1.0f / (init->Ld * init->f_ctrl));
+    //smo->k1 = float2ctrl(1.0f / (init->Ld * init->f_ctrl));
+    smo->k1 = float2ctrl(1.0f / (init->Ld * init->f_ctrl) * init->u_base / init->i_base);
     smo->k2 = float2ctrl(init->Rs / (init->Ld * init->f_ctrl));
-    smo->k3 = float2ctrl((init->Ld - init->Lq) / (init->Ld * init->f_ctrl));
+    //smo->k3 = float2ctrl((init->Ld - init->Lq) / (init->Ld * init->f_ ctrl));
+    smo->k3 = float2ctrl((init->Ld - init->Lq) / (init->Ld));
 
     smo->k_slide = float2ctrl(init->k_slide);
 
@@ -47,7 +49,6 @@ void ctl_init_pmsm_smo(
     ctl_set_pid_limit(&smo->pid_pll, init->spd_max_limit, init->spd_min_limit);
 
     smo->spd_sf = float2ctrl((30.0f / PI) * init->f_ctrl / init->speed_base_rpm / init->pole_pairs);
-    smo->spd_est_pu = 0;
     smo->wr = 0;
 
     smo->theta_compensate = float2ctrl(init->speed_base_rpm / 60.0f / init->fc_e);

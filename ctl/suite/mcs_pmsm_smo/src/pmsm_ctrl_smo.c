@@ -89,6 +89,9 @@ void ctl_init_pmsm_smo_bare_controller(pmsm_smo_bare_controller_t *ctrl, pmsm_sm
 
     smo_init.f_ctrl = init->fs;
 
+    smo_init.u_base = init->u_base;
+    smo_init.i_base = init->i_base;
+
     smo_init.fc_e = init->smo_fc_e;
     smo_init.fc_omega = init->smo_fc_omega;
     smo_init.pid_kp = init->smo_kp;
@@ -102,7 +105,10 @@ void ctl_init_pmsm_smo_bare_controller(pmsm_smo_bare_controller_t *ctrl, pmsm_sm
     // init SMO controller
     ctl_init_pmsm_smo(&ctrl->smo, &smo_init);
 
+    ctrl->ramp_freq_spd_set_sf = float2ctrl(init->fs / init->pole_pairs / init->speed_base_rpm * 60);
+
     ctrl->flag_enable_smo = 0;
+    ctrl->flag_switch_cplt = 0;
 
     // controller intermediate variable
     ctl_vector3_clear(&ctrl->iab0);

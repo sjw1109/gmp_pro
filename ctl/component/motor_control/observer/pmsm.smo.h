@@ -47,6 +47,10 @@ extern "C"
         // Controller ISR frequency
         parameter_gt f_ctrl;
 
+        // per unit base value
+        parameter_gt u_base;
+        parameter_gt i_base;
+
         //
         // SMO Controller Parameters
         //
@@ -91,12 +95,6 @@ extern "C"
         // output estimated theta, unit rad
         // This result does not include phase compensation of the back EMF filter
         ctrl_gt theta_est;
-
-        // output estimated speed, unit p.u.
-        ctrl_gt spd_est_pu;
-
-        // output estimated theta, unit p.u.
-        ctrl_gt theta_est_out;
 
         //
         // intermediate variable section
@@ -239,7 +237,7 @@ extern "C"
 
         // 4. update theta
         smo->theta_est += ctl_mul(smo->wr, GMP_CONST_1_OVER_2PI);
-        ctrl_mod_1(smo->theta_est);
+        smo->theta_est = ctrl_mod_1(smo->theta_est);
 
         // 5. update speed
         smo->spdif.speed = ctl_mul(smo->wr, smo->spd_sf);
@@ -248,7 +246,7 @@ extern "C"
         smo->encif.elec_position =
             smo->theta_est +
             ctl_mul(ctl_atan2(ctl_mul(smo->spdif.speed, smo->theta_compensate), GMP_CONST_1), GMP_CONST_1_OVER_2PI);
-        ctrl_mod_1(smo->encif.elec_position);
+        smo->encif.elec_position = ctrl_mod_1(smo->encif.elec_position);
 
         return smo->encif.elec_position;
     }
