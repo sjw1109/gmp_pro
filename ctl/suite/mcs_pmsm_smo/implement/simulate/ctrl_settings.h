@@ -19,7 +19,8 @@
 #define SPD_CONTROLLER_PWM_DIVISION (5)
 
 // Current sensor
-#define MTR_CTRL_CURRENT_GAIN (10.0)
+#define MTR_CTRL_SAMPLE_RANGE (16.5)
+#define MTR_CTRL_CURRENT_GAIN (MTR_CTRL_SAMPLE_RANGE * 2 / MOTOR_PARAM_MAX_PH_CURRENT)
 #define MTR_CTRL_CURRENT_BIAS (1.65 / ADC_REFERENCE)
 
 // Voltage sensor
@@ -28,9 +29,9 @@
 
 // BUILD_LEVEL 1: Voltage Open loop
 // BUILD_LEVEL 2: Current Open loop
-// BUILD_LEVEL 3: Current Open loop with actual position
+// BUILD_LEVEL 3: SMO with speed loop
 // BUILD_LEVEL 4: Speed Close loop
-#define BUILD_LEVEL (1)
+#define BUILD_LEVEL (3)
 
 
 #endif // _FILE_CTRL_SETTINGS_H_

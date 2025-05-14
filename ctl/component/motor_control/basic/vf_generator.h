@@ -97,6 +97,13 @@ extern "C"
         return ctrl->enc.elec_position;
     }
 
+    GMP_STATIC_INLINE
+    void ctl_clear_slope_f(ctl_slope_f_controller *ctrl)
+    {
+        ctl_clear_limit_slope(&ctrl->freq_slope);
+        
+    }
+
     // change target frequency
     void ctl_set_slope_f_freq(
         // Const VF controller

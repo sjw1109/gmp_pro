@@ -140,6 +140,9 @@ exnter "C"
         // ramp start up
         ctl_slope_f_controller ramp_gen;
 
+        // ramp_frequency to speed set scale factor
+        ctrl_gt ramp_freq_spd_set_sf;
+
         // .....................................................................//
         // controller intermediate variable
         //
@@ -203,6 +206,9 @@ exnter "C"
 
         // enable SMO observer
         fast_gt flag_enable_smo;
+
+        // switch smo completed
+        fast_gt flag_switch_cplt;
 
     } pmsm_smo_bare_controller_t;
 
@@ -339,6 +345,13 @@ exnter "C"
             // else // vab0_set will be output.
 
             //
+            // SMO
+            //
+            ctl_input_pmsm_smo(&ctrl->smo, ctrl->vab0_set.dat[phase_alpha], ctrl->vab0_set.dat[phase_beta],
+                               ctrl->iab0.dat[phase_alpha], ctrl->iab0.dat[phase_beta]);
+            ctl_step_pmsm_smo(&ctrl->smo);
+
+            //
             // SVPWM modulation
             //
 
@@ -371,6 +384,11 @@ exnter "C"
 
     ctl_clear_track_pid(&ctrl->spd_ctrl);
 #endif // PMSM_CTRL_USING_DISCRETE_CTRL
+
+        ctl_attach_mtr_position(&ctrl->mtr_interface, &ctrl->ramp_gen.enc);
+        ctl_clear_slope_f(&ctrl->ramp_gen);
+
+        ctrl->flag_switch_cplt = 0;
     }
 
     // .....................................................................//
@@ -491,11 +509,44 @@ exnter "C"
     //
 
     GMP_STATIC_INLINE
+    void ctl_enable_pmsm_smo(pmsm_smo_bare_controller_t * ctrl)
+    {
+        ctrl->flag_enable_smo = 1;
+    }
+
+    GMP_STATIC_INLINE
     void ctl_switch_pmsm_smo_ctrl_using_smo(pmsm_smo_bare_controller_t * ctrl)
     {
-        ctl_attach_mtr_position(&ctrl->mtr_interface, &ctrl->smo.encif);
+        ctl_vector2_t phasor;
+        vector3_gt udq0;
+        vector3_gt idq0;
 
-        //....
+        if ((ctrl->flag_enable_smo) && (!ctrl->flag_switch_cplt))
+        {
+            ctl_attach_mtr_position(&ctrl->mtr_interface, &ctrl->smo.encif);
+            ctl_pmsm_smo_ctrl_velocity_mode(ctrl);
+            ctl_set_pmsm_smo_ctrl_speed(ctrl, ctl_mul(ctrl->ramp_gen.target_frequency, ctrl->ramp_freq_spd_set_sf));
+
+            ctl_set_phasor_via_angle(ctrl->smo.encif.elec_position, &phasor);
+            ctl_ct_park(&ctrl->vab0_set, &phasor, &udq0);
+            ctl_ct_park(&ctrl->iab0, &phasor, &idq0);
+
+                        ctrl->idq_ff.dat[phase_q] = 0;
+            ctrl->idq_ff.dat[phase_d] = 0;
+
+#ifdef PMSM_CTRL_USING_DISCRETE_CTRL
+            ctrl->spd_ctrl.pid.output_1 = idq0.dat[phase_q];
+
+            ctrl->current_ctrl[phase_d].output_1 = udq0.dat[phase_d];
+            ctrl->current_ctrl[phase_q].output_1 = udq0.dat[phase_q];
+#else  // using continuous controller
+        ctrl->idq_set.dat[phase_q] =
+            ctl_step_track_pid(&ctrl->spd_ctrl, ctrl->speed_set, ctl_get_mtr_velocity(&ctrl->mtr_interface)) +
+            ctrl->idq_ff.dat[phase_q];
+#endif // PMSM_CTRL_USING_DISCRETE_CTRL
+
+            ctrl->flag_switch_cplt = 1;
+        }
     }
 
     // .....................................................................//
@@ -559,6 +610,10 @@ exnter "C"
         parameter_gt Lq;
 
         uint16_t pole_pairs;
+
+        // per unit base value
+        parameter_gt u_base;
+        parameter_gt i_base;
 
         // Base speed RPM
         parameter_gt speed_base_rpm;
