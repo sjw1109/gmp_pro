@@ -21,22 +21,7 @@
 #include <xplt.peripheral.h>
 
 // PMSM controller
-pmsm_bare_controller_smo_t pmsm_ctrl;
-
-// speed encoder
-spd_calculator_t spd_enc;
-
-#if defined OPENLOOP_CONST_FREQUENCY
-
-// PMSM const frequency controller
-ctl_const_f_controller const_f;
-
-#else // OPENLOOP_CONST_FREQUENCY
-
-// PMSM const frequency slope controller
-ctl_slope_f_controller slope_f;
-
-#endif // OPENLOOP_CONST_FREQUENCY
+pmsm_smo_bare_controller_t pmsm_ctrl;
 
 //
 adc_bias_calibrator_t adc_calibrator;
@@ -60,27 +45,9 @@ void ctl_init()
 
     falg_enable_system = 0;
 
-    // create a speed observer by position encoder
-    ctl_init_spd_calculator(
-        // attach position with speed encoder
-        &spd_enc, pmsm_ctrl.mtr_interface.position,
-        // set spd calculator parameters
-        CONTROLLER_FREQUENCY, 5, MOTOR_PARAM_MAX_SPEED, 1, 150);
-
-#if defined OPENLOOP_CONST_FREQUENCY
-    ctl_init_const_f_controller(&const_f, 20, CONTROLLER_FREQUENCY);
-#else // OPENLOOP_CONST_FREQUENCY
-    // frequency target 20 Hz
-    // frequency slope 40 Hz/s
-    ctl_init_const_slope_f_controller(&slope_f, 20.0f, 40.0f, CONTROLLER_FREQUENCY);
-
-#endif // OPENLOOP_CONST_FREQUENCY
-
-    // attach a speed encoder object with motor controller
-    ctl_attach_mtr_velocity(&pmsm_ctrl.mtr_interface, &spd_enc.encif);
 
     // set pmsm_ctrl parameters
-    pmsm_bare_controller_init_t pmsm_ctrl_init;
+    pmsm_smo_bare_controller_init_t pmsm_ctrl_init;
 
     pmsm_ctrl_init.fs = CONTROLLER_FREQUENCY;
 
@@ -104,40 +71,50 @@ void ctl_init()
     pmsm_ctrl_init.acc_limit_min = -150.0f;
     pmsm_ctrl_init.acc_limit_max = 150.0f;
 
+    // Motor parameters
+    pmsm_ctrl_init.Ld = MOTOR_PARAM_LS;
+    pmsm_ctrl_init.Lq = MOTOR_PARAM_LS;
+    pmsm_ctrl_init.Rs = MOTOR_PARAM_RS;
+    pmsm_ctrl_init.pole_pairs = MOTOR_PARAM_POLE_PAIRS;
+
+    // SMO controller parameters
+    pmsm_ctrl_init.speed_base_rpm = MOTOR_PARAM_MAX_SPEED;
+    pmsm_ctrl_init.smo_fc_e = 10.0 * 6.28;
+    pmsm_ctrl_init.smo_fc_omega = 10.0 * 6.28;
+    pmsm_ctrl_init.smo_k_slide = float2ctrl(1);
+    pmsm_ctrl_init.smo_kp = float2ctrl(4);
+    pmsm_ctrl_init.smo_Ti = float2ctrl(0.0075);
+    pmsm_ctrl_init.smo_Td = 0;
+
+    // VF/IF slope controller
+    pmsm_ctrl_init.ramp_target_freq = 20.0f;
+    pmsm_ctrl_init.ramp_target_freq_slope = 40.0f;
+
     // init the PMSM controller
-    ctl_init_pmsm_bare_controller(&pmsm_ctrl, &pmsm_ctrl_init);
+    ctl_init_pmsm_smo_bare_controller(&pmsm_ctrl, &pmsm_ctrl_init);
 
     // BUG TI cannot print out sizeof() result if no type is specified.
     gmp_base_print(TEXT_STRING("PMSM SERVO struct has been inited, size :%d\r\n"), (int)sizeof(pmsm_ctrl_init));
 
 #if (BUILD_LEVEL == 1)
-#if defined OPENLOOP_CONST_FREQUENCY
-    ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &const_f.enc);
-#else // OPENLOOP_CONST_FREQUENCY
-    ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &slope_f.enc);
-#endif // OPENLOOP_CONST_FREQUENCY
 
-    ctl_pmsm_ctrl_voltage_mode(&pmsm_ctrl);
-    ctl_set_pmsm_ctrl_vdq_ff(&pmsm_ctrl, float2ctrl(0.2), float2ctrl(0.2));
+    ctl_pmsm_smo_ctrl_voltage_mode(&pmsm_ctrl);
+    ctl_set_pmsm_smo_ctrl_vdq_ff(&pmsm_ctrl, float2ctrl(0.2), float2ctrl(0.2));
 
 #elif (BUILD_LEVEL == 2)
-#if defined OPENLOOP_CONST_FREQUENCY
-    ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &const_f.enc);
-#else  // OPENLOOP_CONST_FREQUENCY
-    ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &slope_f.enc);
-#endif // OPENLOOP_CONST_FREQUENCY
-    ctl_pmsm_ctrl_current_mode(&pmsm_ctrl);
-    ctl_set_pmsm_ctrl_idq_ff(&pmsm_ctrl, float2ctrl(0.3), float2ctrl(0.1));
+
+    ctl_pmsm_smo_ctrl_current_mode(&pmsm_ctrl);
+    ctl_set_pmsm_smo_ctrl_idq_ff(&pmsm_ctrl, float2ctrl(0.3), float2ctrl(0.1));
 
 #elif (BUILD_LEVEL == 3)
 
-    ctl_pmsm_ctrl_current_mode(&pmsm_ctrl);
-    ctl_set_pmsm_ctrl_idq_ff(&pmsm_ctrl, float2ctrl(0.1), float2ctrl(0.05));
+    ctl_pmsm_smo_ctrl_current_mode(&pmsm_ctrl);
+    ctl_set_pmsm_smo_ctrl_idq_ff(&pmsm_ctrl, float2ctrl(0.1), float2ctrl(0.05));
 
 #elif (BUILD_LEVEL == 4)
 
-    ctl_pmsm_ctrl_velocity_mode(&pmsm_ctrl);
-    ctl_set_pmsm_ctrl_speed(&pmsm_ctrl, float2ctrl(0.25));
+    ctl_pmsm_smo_ctrl_velocity_mode(&pmsm_ctrl);
+    ctl_set_pmsm_smo_ctrl_speed(&pmsm_ctrl, float2ctrl(0.25));
 #endif // BUILD_LEVEL
 
     // if in simulation mode, enable system
@@ -151,7 +128,7 @@ void ctl_init()
     ctl_enable_output();
 
     // Debug mode online the controller
-    ctl_enable_pmsm_ctrl(&pmsm_ctrl);
+    ctl_enable_pmsm_smo_ctrl(&pmsm_ctrl);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -163,7 +140,7 @@ void ctl_mainloop(void)
 {
     int spd_target = gmp_base_get_system_tick() / 100;
 
-    ctl_set_pmsm_ctrl_speed(&pmsm_ctrl, float2ctrl(0.1) * spd_target - float2ctrl(1.0));
+    ctl_set_pmsm_smo_ctrl_speed(&pmsm_ctrl, float2ctrl(0.1) * spd_target - float2ctrl(1.0));
 
     //
     if (flag_enable_adc_calibrator)
