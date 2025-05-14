@@ -102,7 +102,7 @@ exnter "C"
     //  Note: you should call function @ctl_clear_pmsm_ctrl before controller is switch on.
     //
 
-    typedef struct _tag_pmsm_bare_controller_smo
+    typedef struct _tag_pmsm_smo_bare_controller
     {
 
         // .....................................................................//
@@ -170,10 +170,6 @@ exnter "C"
         // controller set parameters
         //
 
-        // position target, turns and position in [0,1]
-        int32_t revolution_set;
-        ctrl_gt pos_set;
-
         // speed target, p.u.
         ctrl_gt speed_set;
 
@@ -208,18 +204,23 @@ exnter "C"
         // enable SMO observer
         fast_gt flag_enable_smo;
 
-    } pmsm_bare_controller_smo_t;
+    } pmsm_smo_bare_controller_t;
 
     // This function should be called in MainISR.
     // This function implement a universal PMSM controller
     GMP_STATIC_INLINE
-    void ctl_step_pmsm_ctrl(pmsm_bare_controller_smo_t * ctrl)
+    void ctl_step_pmsm_smo_ctrl(pmsm_smo_bare_controller_t * ctrl)
     {
         ctl_vector2_t phasor;
         ctrl_gt etheta;
 
         if (ctrl->flag_enable_controller)
         {
+            //
+            // const slope frequency controller
+            //
+            ctl_step_slope_f(&ctrl->ramp_gen);
+
             //
             // Clark Transformation
             //
@@ -355,7 +356,7 @@ exnter "C"
     }
 
     GMP_STATIC_INLINE
-    void ctl_clear_pmsm_ctrl(pmsm_bare_controller_smo_t * ctrl)
+    void ctl_clear_pmsm_smo_ctrl(pmsm_smo_bare_controller_t * ctrl)
     {
 #ifdef PMSM_CTRL_USING_DISCRETE_CTRL
         // clear controller intermediate variables
@@ -378,14 +379,14 @@ exnter "C"
 
     // enable PMSM controller
     GMP_STATIC_INLINE
-    void ctl_enable_pmsm_ctrl(pmsm_bare_controller_smo_t * ctrl)
+    void ctl_enable_pmsm_smo_ctrl(pmsm_smo_bare_controller_t * ctrl)
     {
         ctrl->flag_enable_controller = 1;
     }
 
     // disable PMSM controller
     GMP_STATIC_INLINE
-    void ctl_disable_pmsm_ctrl(pmsm_bare_controller_smo_t * ctrl)
+    void ctl_disable_pmsm_smo_ctrl(pmsm_smo_bare_controller_t * ctrl)
     {
         ctrl->flag_enable_controller = 0;
     }
@@ -397,7 +398,7 @@ exnter "C"
     // PMSM controller run in valpha vbeta mode,
     // user should specify valpha and vbeta by function ctl_set_pmsm_ctrl_valphabeta
     GMP_STATIC_INLINE
-    void ctl_pmsm_ctrl_valphabeta_mode(pmsm_bare_controller_smo_t * ctrl)
+    void ctl_pmsm_smo_ctrl_valphabeta_mode(pmsm_smo_bare_controller_t * ctrl)
     {
         ctrl->flag_enable_output = 1;
         ctrl->flag_enable_modulation = 0;
@@ -408,7 +409,7 @@ exnter "C"
     // Set motor target v alpha and v beta.
     // only in valphabeta mode this function counts.
     GMP_STATIC_INLINE
-    void ctl_set_pmsm_ctrl_valphabeta(pmsm_bare_controller_smo_t * ctrl, ctrl_gt valpha, ctrl_gt vbeta)
+    void ctl_set_pmsm_smo_ctrl_valphabeta(pmsm_smo_bare_controller_t * ctrl, ctrl_gt valpha, ctrl_gt vbeta)
     {
         ctrl->vab0_set.dat[phase_A] = valpha;
         ctrl->vab0_set.dat[phase_B] = vbeta;
@@ -422,7 +423,7 @@ exnter "C"
     // PMSM controller run in valpha vbeta mode
     // user should specify udq0 by function ctl_set_pmsm_ctrl_vdq
     GMP_STATIC_INLINE
-    void ctl_pmsm_ctrl_voltage_mode(pmsm_bare_controller_smo_t * ctrl)
+    void ctl_pmsm_smo_ctrl_voltage_mode(pmsm_smo_bare_controller_t * ctrl)
     {
         ctrl->flag_enable_output = 1;
         ctrl->flag_enable_modulation = 1;
@@ -433,7 +434,7 @@ exnter "C"
     // this function set vdq reference for vdq mode.
     // PMSM controller run in vdq mode this function counts.
     GMP_STATIC_INLINE
-    void ctl_set_pmsm_ctrl_vdq_ff(pmsm_bare_controller_smo_t * ctrl, ctrl_gt vd, ctrl_gt vq)
+    void ctl_set_pmsm_smo_ctrl_vdq_ff(pmsm_smo_bare_controller_t * ctrl, ctrl_gt vd, ctrl_gt vq)
     {
         ctrl->vdq_ff.dat[phase_d] = vd;
         ctrl->vdq_ff.dat[phase_q] = vq;
@@ -446,7 +447,7 @@ exnter "C"
 
     // this function set pmsm controller run in current mode.
     GMP_STATIC_INLINE
-    void ctl_pmsm_ctrl_current_mode(pmsm_bare_controller_smo_t * ctrl)
+    void ctl_pmsm_smo_ctrl_current_mode(pmsm_smo_bare_controller_t * ctrl)
     {
         ctrl->flag_enable_output = 1;
         ctrl->flag_enable_modulation = 1;
@@ -457,7 +458,7 @@ exnter "C"
     // this function set pmsm idq feed forward.
     // in current mode this value means idq reference.
     GMP_STATIC_INLINE
-    void ctl_set_pmsm_ctrl_idq_ff(pmsm_bare_controller_smo_t * ctrl, ctrl_gt id, ctrl_gt iq)
+    void ctl_set_pmsm_smo_ctrl_idq_ff(pmsm_smo_bare_controller_t * ctrl, ctrl_gt id, ctrl_gt iq)
     {
         ctrl->idq_ff.dat[phase_d] = id;
         ctrl->idq_ff.dat[phase_q] = iq;
@@ -470,7 +471,7 @@ exnter "C"
 
     // this function set pmsm controller run in speed mode.
     GMP_STATIC_INLINE
-    void ctl_pmsm_ctrl_velocity_mode(pmsm_bare_controller_smo_t * ctrl)
+    void ctl_pmsm_smo_ctrl_velocity_mode(pmsm_smo_bare_controller_t * ctrl)
     {
         ctrl->flag_enable_output = 1;
         ctrl->flag_enable_modulation = 1;
@@ -480,31 +481,21 @@ exnter "C"
 
     // this fucntion set pmsm target speed.
     GMP_STATIC_INLINE
-    void ctl_set_pmsm_ctrl_speed(pmsm_bare_controller_smo_t * ctrl, ctrl_gt spd)
+    void ctl_set_pmsm_smo_ctrl_speed(pmsm_smo_bare_controller_t * ctrl, ctrl_gt spd)
     {
         ctrl->speed_set = spd;
     }
 
     // .....................................................................//
-    // position mode
+    // SMO relatied function
     //
 
-    // this function set pmsm controller run in position mode.
     GMP_STATIC_INLINE
-    void ctl_pmsm_ctrl_position_mode(pmsm_bare_controller_smo_t * ctrl)
+    void ctl_switch_pmsm_smo_ctrl_using_smo(pmsm_smo_bare_controller_t * ctrl)
     {
-        ctrl->flag_enable_output = 1;
-        ctrl->flag_enable_modulation = 1;
-        ctrl->flag_enable_current_ctrl = 1;
-        ctrl->flag_enable_velocity_ctrl = 1;
-    }
+        ctl_attach_mtr_position(&ctrl->mtr_interface, &ctrl->smo.encif);
 
-    // This function set pmsm target position
-    GMP_STATIC_INLINE
-    void set_pmsm_ctrl_position(pmsm_bare_controller_smo_t * ctrl, int32_t revolution, ctrl_gt pos)
-    {
-        ctrl->revolution_set = revolution;
-        ctrl->pos_set = pos;
+        //....
     }
 
     // .....................................................................//
@@ -559,16 +550,46 @@ exnter "C"
         uint32_t spd_ctrl_div;
 
         // .....................................................................//
-        // position controller
+        // SMO controller
         //
 
-    } pmsm_bare_controller_init_t;
+        // Motor parameters, unit SI
+        parameter_gt Rs;
+        parameter_gt Ld;
+        parameter_gt Lq;
+
+        uint16_t pole_pairs;
+
+        // Base speed RPM
+        parameter_gt speed_base_rpm;
+
+        // EMF filter cut frequency, Hz
+        parameter_gt smo_fc_e;
+        // Speed filter cut frequency, Hz
+        parameter_gt smo_fc_omega;
+        // PLL PI controller parameters
+        ctrl_gt smo_kp;
+        ctrl_gt smo_Ti;
+        ctrl_gt smo_Td;
+        ctrl_gt smo_k_slide;
+
+        // .....................................................................//
+        // Ramp Generator
+        //
+
+        // target frequency, Hz
+        parameter_gt ramp_target_freq;
+
+        // target frequency slope, Hz/s
+        parameter_gt ramp_target_freq_slope;
+
+    } pmsm_smo_bare_controller_init_t;
 
     // init pmsm_bare_controller struct
-    void ctl_init_pmsm_bare_controller(pmsm_bare_controller_smo_t * ctrl, pmsm_bare_controller_init_t * init);
+    void ctl_init_pmsm_smo_bare_controller(pmsm_smo_bare_controller_t * ctrl, pmsm_smo_bare_controller_init_t * init);
 
     // attach to output port
-    void ctl_attach_pmsm_bare_output(pmsm_bare_controller_smo_t * ctrl, tri_pwm_ift * pwm_out);
+    void ctl_attach_pmsm_smo_bare_output(pmsm_smo_bare_controller_t * ctrl, tri_pwm_ift * pwm_out);
 
 #ifdef __cplsuplus
 }

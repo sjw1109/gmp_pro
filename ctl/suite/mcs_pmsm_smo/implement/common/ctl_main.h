@@ -32,26 +32,8 @@ extern "C"
 {
 #endif // __cplusplus
 
-    // speed encoder
-    extern spd_calculator_t spd_enc;
-
-    // PMSM servo objects
-    // extern pmsm_fm_t pmsm;
-
- #if defined OPENLOOP_CONST_FREQUENCY
-
-    // PMSM const frequency controller
-    extern ctl_const_f_controller const_f;
-
-#else // OPENLOOP_CONST_FREQUENCY
-
-    // PMSM const frequency slope controller
-    extern ctl_slope_f_controller slope_f;
-
-#endif // OPENLOOP_CONST_FREQUENCY
-
     // PMSM controller
-    extern pmsm_bare_controller_smo_t pmsm_ctrl;
+    extern pmsm_smo_bare_controller_t pmsm_ctrl;
 
     extern adc_bias_calibrator_t adc_calibrator;
     extern fast_gt flag_enable_adc_calibrator;
@@ -79,15 +61,9 @@ extern "C"
             ctl_step_adc_calibrator(&adc_calibrator, pmsm_ctrl.mtr_interface.uabc->value.dat[index_adc_calibrator]);
         }
 
-#if defined OPENLOOP_CONST_FREQUENCY
-        ctl_step_const_f_controller(&const_f);
-#else  // OPENLOOP_CONST_FREQUENCY
-    ctl_step_slope_f(&slope_f);
-#endif // OPENLOOP_CONST_FREQUENCY
+        // ctl_step_spd_calc(&spd_enc);
 
-        ctl_step_spd_calc(&spd_enc);
-
-        ctl_step_pmsm_ctrl(&pmsm_ctrl);
+        ctl_step_pmsm_smo_ctrl(&pmsm_ctrl);
     }
 
 #ifndef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
