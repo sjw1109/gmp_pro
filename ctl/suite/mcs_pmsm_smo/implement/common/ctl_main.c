@@ -113,7 +113,7 @@ void ctl_init()
 #elif (BUILD_LEVEL == 3)
 
     ctl_pmsm_smo_ctrl_current_mode(&pmsm_ctrl);
-    ctl_set_pmsm_smo_ctrl_idq_ff(&pmsm_ctrl, float2ctrl(0), float2ctrl(0.01));
+    ctl_set_pmsm_smo_ctrl_idq_ff(&pmsm_ctrl, float2ctrl(0), float2ctrl(0.015));
 
     ctl_enable_pmsm_smo(&pmsm_ctrl);
 
