@@ -31,4 +31,12 @@
 // BUILD_LEVEL 4: Speed Close loop
 #define BUILD_LEVEL (1)
 
+//
+// Controller Settings
+//
+
+// Use discrete PID controller
+// Discrete controller may bring more smooth response.
+// #define PMSM_CTRL_USING_DISCRETE_CTRL
+
 #endif // _FILE_CTRL_SETTINGS_H_

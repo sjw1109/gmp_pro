@@ -39,10 +39,3 @@
 // #define SPECIFY_CTRL_GT_TYPE USING_DOUBLE_FPU
 #define SPECIFY_CTRL_GT_TYPE USING_FLOAT_FPU
 // #define SPECIFY_CTRL_GT_TYPE USING_FIXED_TI_IQ_LIBRARY
-
-//////////////////////////////////////////////////////////////////////////
-// DSP C28x Simulate platform config
-
-// Use discrete PID controller
-// Discrete controller may bring more smooth response.
-// #define PMSM_CTRL_USING_DISCRETE_CTRL

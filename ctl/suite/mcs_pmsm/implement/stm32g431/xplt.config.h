@@ -43,6 +43,4 @@
 //////////////////////////////////////////////////////////////////////////
 // DSP C28x Simulate platform config
 
-// Use discrete PID controller
-// Discrete controller may bring more smooth response.
-// #define PMSM_CTRL_USING_DISCRETE_CTRL
+

@@ -185,6 +185,11 @@ typedef struct _tag_pmsm_bare_controller
     // .....................................................................//
     // flag stack
     //
+    fast16_gt isr_tick;
+
+    // .....................................................................//
+    // flag stack
+    //
 
     // enable whole controller
     fast_gt flag_enable_controller;
@@ -213,6 +218,9 @@ void ctl_step_pmsm_ctrl(pmsm_bare_controller_t *ctrl)
 {
     ctl_vector2_t phasor;
     ctrl_gt etheta;
+
+    // update controller ISR tick
+    ctrl->isr_tick += 1;
 
     if (ctrl->flag_enable_controller)
     {
@@ -354,6 +362,11 @@ void ctl_step_pmsm_ctrl(pmsm_bare_controller_t *ctrl)
             ctrl->pwm_out->value.dat[phase_B] = 0;
             ctrl->pwm_out->value.dat[phase_C] = 0;
         }
+    }
+    // if this controller isn't enable clear the controller
+    else
+    {
+        ctl_clear_pmsm_ctrl(ctrl);
     }
 }
 
