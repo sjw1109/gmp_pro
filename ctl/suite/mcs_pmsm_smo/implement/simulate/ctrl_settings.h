@@ -5,7 +5,6 @@
 // invoke motor parameters
 #include <ctl/component/motor_control/motor_preset/GBM2804H_100T.h>
 
-
 // Given 3.3V voltage reference
 #define ADC_REFERENCE ((3.3))
 
@@ -32,6 +31,5 @@
 // BUILD_LEVEL 3: SMO with speed loop
 // BUILD_LEVEL 4: Speed Close loop
 #define BUILD_LEVEL (3)
-
 
 #endif // _FILE_CTRL_SETTINGS_H_

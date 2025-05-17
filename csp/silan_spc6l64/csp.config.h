@@ -1,12 +1,12 @@
 /**
  * @file csp.config.h
  * @author Javnson (javnson@zju.edu.cn)
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2024-09-30
- * 
+ *
  * @copyright Copyright GMP(c) 2024
- * 
+ *
  */
 
 // This file provide a Chip Support Package configuration for SPC6L64B
@@ -25,18 +25,14 @@
 // disable CSP exit callback
 #define SPECIFY_DISABLE_CSP_EXIT
 
-
-//#include "IQmathLib.h"
-//#include "uart1.h"
+// #include "IQmathLib.h"
+// #include "uart1.h"
 
 // System config
 
 // REPAIR Necessary Constants
-#define PI             3.14159265358979
-#define SQRT3          1.732050807568877
-#define SQRT2          1.414213562373095
-
-
+#define PI    3.14159265358979
+#define SQRT3 1.732050807568877
+#define SQRT2 1.414213562373095
 
 #endif // _FILE_SPC6L64B_CSP_CONFIG_H_
-

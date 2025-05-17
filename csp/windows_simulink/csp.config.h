@@ -1,12 +1,12 @@
 /**
  * @file csp.config.h
  * @author Javnson (javnson@zju.edu.cn)
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2024-09-30
- * 
+ *
  * @copyright Copyright GMP(c) 2024
- * 
+ *
  */
 
 // This file provide a Chip Support Package configuration for an example device
@@ -15,14 +15,13 @@
 #define SPECIFY_PC_ENVIRONMENT
 
 // Max iteration
-#ifndef PC_ENV_MAX_ITERATION 
+#ifndef PC_ENV_MAX_ITERATION
 #define PC_ENV_MAX_ITERATION ((100000000))
 #endif
 
 // Controller tick per main loop tick
 // controller routine would be called when every N mainloop tick happened.
 #define GMP_PC_CONTROLLER_DIV_PER_MAINLOOP ((5))
-
 
 // Speicfy Simulink communication TX structure type
 #define GMP_PC_SIMULINK_TX_STRUCT tx_buf_t
@@ -34,7 +33,7 @@
 #define GMP_ASIO_CONFIG_JSON "network.json"
 
 // Specify enable "Stop Command"
-#define GMP_ASIO_ENABLE_STOP_CMD 
+#define GMP_ASIO_ENABLE_STOP_CMD
 
 // Default handle of GMP base print function
 #ifndef GMP_BASE_PRINT_DEFAULT_HANDLE_TYPE
@@ -58,22 +57,21 @@
 #endif // SPECIFY_DISABLE_GMP_LOGO
 
 // Enable GMP CTL
-//#ifndef SPECIFY_ENABLE_GMP_CTL
-//#define SPECIFY_ENABLE_GMP_CTL
-//#endif // SPECIFY_ENABLE_GMP_CTL
+// #ifndef SPECIFY_ENABLE_GMP_CTL
+// #define SPECIFY_ENABLE_GMP_CTL
+// #endif // SPECIFY_ENABLE_GMP_CTL
 
 // Enable GMP CTL Controller Framework Nano
-//#ifndef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
-//#define SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
-//#endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+// #ifndef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+// #define SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+// #endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
 // Simulation condition stop
-// if connection is setup but no message comes in 2 sec, 
+// if connection is setup but no message comes in 2 sec,
 // stop simulation.
 #ifndef PC_SIMULATE_STOP_CONDITION
 #define PC_SIMULATE_STOP_CONDITION
 #endif // PC_SIMULATE_STOP_CONDITION
 
 // Simulation will not stop automatically.
-//#define DISABLE_ASIO_HELPER_TIMEOUT_OPTION
-
+// #define DISABLE_ASIO_HELPER_TIMEOUT_OPTION

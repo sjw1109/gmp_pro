@@ -2,14 +2,11 @@
 
 // TODO: 为每一个头文件(模块)补充一个简单的说明，方便用户可以快速在这个文件中找到需要的模块
 
-
 // basic includes
 
-//#include <ctl/ctl_core.h>
-
+// #include <ctl/ctl_core.h>
 
 #ifndef GMP_CTL_DISABLE_COM_INTRINSIC
-
 
 //////////////////////////////////////////////////////////////////////////
 #ifndef GMP_CTL_DISABLE_COM_INTRINSIC_INTERFACE
@@ -21,7 +18,6 @@
 #include <ctl/component/intrinsic/interface/pwm_channel.h>
 
 #endif // GMP_CTL_DISABLE_COM_INTRINSIC_INTERFACE
-
 
 //////////////////////////////////////////////////////////////////////////
 #ifndef GMP_CTL_DISABLE_COM_INTRINSIC_DISCRETE
@@ -46,10 +42,9 @@
 
 #include <ctl/component/intrinsic/discrete/stimulate.h>
 
-//#include <ctl/component/intrinsic/discrete/z_function.h>
+// #include <ctl/component/intrinsic/discrete/z_function.h>
 
 #endif // GMP_CTL_DISABLE_COM_INTRINSIC_DISCRETE
-
 
 //////////////////////////////////////////////////////////////////////////
 #ifndef GMP_CTL_DISABLE_COM_INTRINSIC_PROTECT
@@ -60,7 +55,6 @@
 
 #endif // GMP_CTL_DISABLE_COM_INTRINSIC_PROTECT
 
-
 //////////////////////////////////////////////////////////////////////////
 #ifndef GMP_CTL_DISABLE_COM_INTRINSIC_ADVANCE
 
@@ -70,7 +64,6 @@
 
 #endif // GMP_CTL_DISABLE_COM_INTRINSIC_ADVANCE
 
-
 //////////////////////////////////////////////////////////////////////////
 #ifndef GMP_CTL_DISABLE_COM_INTRINSIC_COMBO
 
@@ -78,7 +71,4 @@
 
 #endif // GMP_CTL_DISABLE_COM_INTRINSIC_COMBO
 
-
 #endif // GMP_CTL_DISABLE_COM_INTRINSIC
-
-

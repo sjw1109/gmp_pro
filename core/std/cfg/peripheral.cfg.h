@@ -3,9 +3,6 @@
 #ifndef _FILE_PERIPHERAL_CFG_H_
 #define _FILE_PERIPHERAL_CFG_H_
 
-
-
-
 //////////////////////////////////////////////////////////////////////////
 // Step I peripheral handle type
 //
@@ -22,11 +19,11 @@ typedef GMP_PORT_UART_T uart_halt;
 // ....................................................................//
 // handle of USART (Universal Synchronous/Asynchronous Receiver/Transmitter)
 //
-//#ifndef GMP_PORT_USART_T
-//#define GMP_PORT_USART_T void *
-//#endif // GMP_PORT_USART_T
+// #ifndef GMP_PORT_USART_T
+// #define GMP_PORT_USART_T void *
+// #endif // GMP_PORT_USART_T
 //
-//typedef GMP_PORT_USART_T usart_halt;
+// typedef GMP_PORT_USART_T usart_halt;
 
 // ....................................................................//
 // handle of IIC (Inter-Integrated Circuit)
@@ -78,10 +75,8 @@ typedef GMP_PORT_CAN_T can_halt;
 
 typedef GMP_PORT_GPIO_T gpio_halt;
 
-
 //////////////////////////////////////////////////////////////////////////
 // Step II peripheral functions
 //
-
 
 #endif //_FILE_PERIPHERAL_CFG_H_

@@ -14,8 +14,6 @@
 // user main header
 #include "user_main.h"
 
-
-
 //////////////////////////////////////////////////////////////////////////
 // definitions of peripheral
 //
@@ -28,7 +26,7 @@ tri_ptr_adc_channel_t iabc;
 ptr_adc_channel_t udc;
 ptr_adc_channel_t idc;
 
-//pos_autoturn_encoder_t pos_enc;
+// pos_autoturn_encoder_t pos_enc;
 
 pwm_tri_channel_t pwm_out;
 
@@ -40,7 +38,6 @@ adc_gt idc_raw;
 
 // Encoder Interface
 ext_as5048a_encoder_t pos_enc;
-
 
 /////////////////////////////////////////////////////////////////////////
 // peripheral setup function
@@ -89,7 +86,7 @@ void setup_peripheral(void)
         // ADC resolution, IQN
         12, 24);
 
-    //ctl_init_autoturn_pos_encoder(&pos_enc, MOTOR_PARAM_POLE_PAIRS, ((uint32_t)1 << 14) - 1);
+    // ctl_init_autoturn_pos_encoder(&pos_enc, MOTOR_PARAM_POLE_PAIRS, ((uint32_t)1 << 14) - 1);
     ctl_init_as5048a_pos_encoder(&pos_enc, MOTOR_PARAM_POLE_PAIRS, SPI_ENCODER_BASE, SPI_ENCODER_NCS);
 
     // bind peripheral to motor controller
@@ -114,8 +111,7 @@ void setup_peripheral(void)
 // interrupt functions and callback functions here
 
 // ADC interrupt
-interrupt
-void MainISR(void)
+interrupt void MainISR(void)
 {
 
     //
@@ -131,7 +127,7 @@ void MainISR(void)
     //
     // Check if overflow has occurred
     //
-    if(true == ADC_getInterruptOverflowStatus(ADC_A_BASE, ADC_INT_NUMBER1))
+    if (true == ADC_getInterruptOverflowStatus(ADC_A_BASE, ADC_INT_NUMBER1))
     {
         ADC_clearInterruptOverflowStatus(ADC_A_BASE, ADC_INT_NUMBER1);
         ADC_clearInterruptStatus(ADC_A_BASE, ADC_INT_NUMBER1);
@@ -141,13 +137,9 @@ void MainISR(void)
     // Acknowledge the interrupt
     //
     Interrupt_clearACKGroup(INT_ADC_A_1_INTERRUPT_ACK_GROUP);
-
 }
 
-interrupt
-void INT_EPWMU_ISR(void)
+interrupt void INT_EPWMU_ISR(void)
 {
-    //Interrupt_clearACKGroup(INT_EPWMU_INTERRUPT_ACK_GROUP);
-
+    // Interrupt_clearACKGroup(INT_EPWMU_INTERRUPT_ACK_GROUP);
 }
-

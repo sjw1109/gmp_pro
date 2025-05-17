@@ -34,20 +34,19 @@ extern "C"
 // encoder
 #include <ext/encoder/as5048/as5048a.h>
 
-
-    // buffer for rx & tx
+// buffer for rx & tx
 //    extern gmp_pc_simulink_rx_buffer_t simulink_rx_buffer;
 //    extern gmp_pc_simulink_tx_buffer_t simulink_tx_buffer;
 
-    extern tri_ptr_adc_channel_t uabc;
-    extern tri_ptr_adc_channel_t iabc;
+extern tri_ptr_adc_channel_t uabc;
+extern tri_ptr_adc_channel_t iabc;
 
-    extern ptr_adc_channel_t udc;
-    extern ptr_adc_channel_t idc;
+extern ptr_adc_channel_t udc;
+extern ptr_adc_channel_t idc;
 
-    extern ext_as5048a_encoder_t pos_enc;
+extern ext_as5048a_encoder_t pos_enc;
 
-    extern pwm_tri_channel_t pwm_out;
+extern pwm_tri_channel_t pwm_out;
 
 #ifdef __cplusplus
 }

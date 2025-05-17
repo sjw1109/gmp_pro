@@ -22,9 +22,7 @@
 
 #define SPECIFY_CTRL_GT_TYPE USING_FLOAT_CLA_LIBRARY
 
-
 #endif // __TMS320C28XX_CLA__
-
 
 // FIX controller configuration
 #if SPECIFY_CTRL_GT_TYPE == USING_FIXED_TI_IQ_LIBRARY
@@ -67,8 +65,6 @@
 #include <ctl/math_block/ctrl_gt/float_macros.h>
 
 #endif
-
-
 
 // ....................................................................//
 // basic type of Controller
@@ -155,9 +151,7 @@ typedef GMP_PORT_CTRL_T ctrl_gt;
 
 #endif // SPECIFY_CTRL_GT_TYPE
 
-
 typedef GMP_PORT_PARAMETER_T parameter_gt;
-
 
 //////////////////////////////////////////////////////////////////////////
 // Extension Types

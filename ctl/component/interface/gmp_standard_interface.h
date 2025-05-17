@@ -37,5 +37,4 @@ typedef struct _tag_std_ctrl_rx_port
     double sensor_port[24];
 };
 
-
 #endif // _FILE_GMP_STANDARD_INTERFACE_H_

@@ -22,144 +22,144 @@ extern "C"
 {
 #endif // __cplusplus
 
-    //////////////////////////////////////////////////////////////////////////
-    // device related functions
-    // Controller interface
-    //
+//////////////////////////////////////////////////////////////////////////
+// device related functions
+// Controller interface
+//
 
-    // Functions without controller nano framework.
+// Functions without controller nano framework.
 #ifndef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
-    // Input Callback
-    GMP_STATIC_INLINE
-    void ctl_input_callback(void)
-    {
-        // invoke ADC p.u. routine
-        ctl_step_tri_ptr_adc_channel(&iabc);
-        ctl_step_tri_ptr_adc_channel(&uabc);
-        ctl_step_ptr_adc_channel(&idc);
-        ctl_step_ptr_adc_channel(&udc);
+// Input Callback
+GMP_STATIC_INLINE
+void ctl_input_callback(void)
+{
+    // invoke ADC p.u. routine
+    ctl_step_tri_ptr_adc_channel(&iabc);
+    ctl_step_tri_ptr_adc_channel(&uabc);
+    ctl_step_ptr_adc_channel(&idc);
+    ctl_step_ptr_adc_channel(&udc);
 
-        // invoke position encoder routine.
-        ctl_step_autoturn_pos_encoder(&pos_enc, simulink_rx_buffer.encoder);
+    // invoke position encoder routine.
+    ctl_step_autoturn_pos_encoder(&pos_enc, simulink_rx_buffer.encoder);
 
-        // Get panel input here.
+    // Get panel input here.
 #if (BUILD_LEVEL == 1)
-        ctl_set_pmsm_smo_ctrl_vdq_ff(&pmsm_ctrl, float2ctrl(csp_sl_get_panel_input(0)),
-                                     float2ctrl(csp_sl_get_panel_input(1)));
+    ctl_set_pmsm_smo_ctrl_vdq_ff(&pmsm_ctrl, float2ctrl(csp_sl_get_panel_input(0)),
+                                 float2ctrl(csp_sl_get_panel_input(1)));
 
 #endif // BUILD_LEVEL
-    }
+}
 
-    // Output Callback
-    GMP_STATIC_INLINE
-    void ctl_output_callback(void)
-    {
-        ctl_calc_pwm_tri_channel(&pwm_out);
+// Output Callback
+GMP_STATIC_INLINE
+void ctl_output_callback(void)
+{
+    ctl_calc_pwm_tri_channel(&pwm_out);
 
-        // PWM output
-        simulink_tx_buffer.tabc[phase_A] = pwm_out.value[phase_A];
-        simulink_tx_buffer.tabc[phase_B] = pwm_out.value[phase_B];
-        simulink_tx_buffer.tabc[phase_C] = pwm_out.value[phase_C];
+    // PWM output
+    simulink_tx_buffer.tabc[phase_A] = pwm_out.value[phase_A];
+    simulink_tx_buffer.tabc[phase_B] = pwm_out.value[phase_B];
+    simulink_tx_buffer.tabc[phase_C] = pwm_out.value[phase_C];
 
-        // Monitor Port, 8 channels
-        simulink_tx_buffer.monitor_port[0] = pmsm_ctrl.idq_set.dat[phase_q];
-        simulink_tx_buffer.monitor_port[1] = pmsm_ctrl.idq0.dat[phase_q];
+    // Monitor Port, 8 channels
+    simulink_tx_buffer.monitor_port[0] = pmsm_ctrl.idq_set.dat[phase_q];
+    simulink_tx_buffer.monitor_port[1] = pmsm_ctrl.idq0.dat[phase_q];
 
-        simulink_tx_buffer.monitor_port[2] = pmsm_ctrl.idq_set.dat[phase_d];
-        simulink_tx_buffer.monitor_port[3] = pmsm_ctrl.idq0.dat[phase_d];
+    simulink_tx_buffer.monitor_port[2] = pmsm_ctrl.idq_set.dat[phase_d];
+    simulink_tx_buffer.monitor_port[3] = pmsm_ctrl.idq0.dat[phase_d];
 
-        simulink_tx_buffer.monitor_port[2] = pmsm_ctrl.smo.u_alpha;
-        simulink_tx_buffer.monitor_port[3] = pmsm_ctrl.smo.u_beta;
+    simulink_tx_buffer.monitor_port[2] = pmsm_ctrl.smo.u_alpha;
+    simulink_tx_buffer.monitor_port[3] = pmsm_ctrl.smo.u_beta;
 
-        simulink_tx_buffer.monitor_port[4] = pmsm_ctrl.smo.i_alpha;
-        simulink_tx_buffer.monitor_port[5] = pmsm_ctrl.smo.i_beta;
+    simulink_tx_buffer.monitor_port[4] = pmsm_ctrl.smo.i_alpha;
+    simulink_tx_buffer.monitor_port[5] = pmsm_ctrl.smo.i_beta;
 
-        // simulink_tx_buffer.monitor_port[2] = pmsm_ctrl.smo.e_alpha_est;
-        // simulink_tx_buffer.monitor_port[3] = pmsm_ctrl.smo.e_beta_est;
+    // simulink_tx_buffer.monitor_port[2] = pmsm_ctrl.smo.e_alpha_est;
+    // simulink_tx_buffer.monitor_port[3] = pmsm_ctrl.smo.e_beta_est;
 
-        // simulink_tx_buffer.monitor_port[4] = pmsm_ctrl.smo.encif.elec_position;
-        // simulink_tx_buffer.monitor_port[5] = pmsm_ctrl.smo.e_error;
+    // simulink_tx_buffer.monitor_port[4] = pmsm_ctrl.smo.encif.elec_position;
+    // simulink_tx_buffer.monitor_port[5] = pmsm_ctrl.smo.e_error;
 
-        simulink_tx_buffer.monitor_port[6] = pmsm_ctrl.mtr_interface.velocity->speed * MOTOR_PARAM_MAX_SPEED / 9.55;
-        simulink_tx_buffer.monitor_port[7] = pmsm_ctrl.mtr_interface.position->elec_position;
-    }
+    simulink_tx_buffer.monitor_port[6] = pmsm_ctrl.mtr_interface.velocity->speed * MOTOR_PARAM_MAX_SPEED / 9.55;
+    simulink_tx_buffer.monitor_port[7] = pmsm_ctrl.mtr_interface.position->elec_position;
+}
 
-    // Enable Motor Controller
-    // Enable Output
-    GMP_STATIC_INLINE
-    void ctl_enable_output()
-    {
-        csp_sl_enable_output();
-    }
+// Enable Motor Controller
+// Enable Output
+GMP_STATIC_INLINE
+void ctl_enable_output()
+{
+    csp_sl_enable_output();
+}
 
-    // Disable Output
-    GMP_STATIC_INLINE
-    void ctl_disable_output()
-    {
-        csp_sl_disable_output();
-    }
+// Disable Output
+GMP_STATIC_INLINE
+void ctl_disable_output()
+{
+    csp_sl_disable_output();
+}
 
 #endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
-    // Functions with controller nano framework
+// Functions with controller nano framework
 
 #ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
-    // Controller Nano input stage routine
-    GMP_STATIC_INLINE
-    void ctl_fmif_input_stage_routine(ctl_object_nano_t *pctl_obj)
-    {
-        // invoke ADC p.u. routine
-        ctl_step_tri_ptr_adc_channel(&iabc);
-        ctl_step_tri_ptr_adc_channel(&uabc);
-        ctl_step_ptr_adc_channel(&idc);
-        ctl_step_ptr_adc_channel(&udc);
+// Controller Nano input stage routine
+GMP_STATIC_INLINE
+void ctl_fmif_input_stage_routine(ctl_object_nano_t *pctl_obj)
+{
+    // invoke ADC p.u. routine
+    ctl_step_tri_ptr_adc_channel(&iabc);
+    ctl_step_tri_ptr_adc_channel(&uabc);
+    ctl_step_ptr_adc_channel(&idc);
+    ctl_step_ptr_adc_channel(&udc);
 
-        // invoke position encoder routine.
-        ctl_step_autoturn_pos_encoder(&pos_enc, simulink_rx_buffer.encoder);
-    }
+    // invoke position encoder routine.
+    ctl_step_autoturn_pos_encoder(&pos_enc, simulink_rx_buffer.encoder);
+}
 
-    // Controller Nano output stage routine
-    GMP_STATIC_INLINE
-    void ctl_fmif_output_stage_routine(ctl_object_nano_t *pctl_obj)
-    {
-        ctl_calc_pwm_tri_channel(&pwm_out);
+// Controller Nano output stage routine
+GMP_STATIC_INLINE
+void ctl_fmif_output_stage_routine(ctl_object_nano_t *pctl_obj)
+{
+    ctl_calc_pwm_tri_channel(&pwm_out);
 
-        simulink_tx_buffer.tabc[phase_A] = pwm_out.value[phase_A];
-        simulink_tx_buffer.tabc[phase_B] = pwm_out.value[phase_B];
-        simulink_tx_buffer.tabc[phase_C] = pwm_out.value[phase_C];
+    simulink_tx_buffer.tabc[phase_A] = pwm_out.value[phase_A];
+    simulink_tx_buffer.tabc[phase_B] = pwm_out.value[phase_B];
+    simulink_tx_buffer.tabc[phase_C] = pwm_out.value[phase_C];
 
-        // simulink_tx_buffer.monitor_port[0] = pmsm_ctrl.idq0.dat[phase_d];
-        simulink_tx_buffer.monitor_port[0] = pmsm_ctrl.idq_set.dat[phase_q];
-        simulink_tx_buffer.monitor_port[1] = pmsm_ctrl.idq0.dat[phase_q];
+    // simulink_tx_buffer.monitor_port[0] = pmsm_ctrl.idq0.dat[phase_d];
+    simulink_tx_buffer.monitor_port[0] = pmsm_ctrl.idq_set.dat[phase_q];
+    simulink_tx_buffer.monitor_port[1] = pmsm_ctrl.idq0.dat[phase_q];
 
-        simulink_tx_buffer.monitor_port[2] = pmsm_ctrl.vdq_set.dat[phase_d];
-        // simulink_tx_buffer.monitor_port[3] = pmsm_ctrl.vdq_set.dat[phase_q];
+    simulink_tx_buffer.monitor_port[2] = pmsm_ctrl.vdq_set.dat[phase_d];
+    // simulink_tx_buffer.monitor_port[3] = pmsm_ctrl.vdq_set.dat[phase_q];
 
-        // simulink_tx_buffer.monitor_port[3] = pmsm_ctrl.mtr_interface.position->elec_position;
-        simulink_tx_buffer.monitor_port[3] = pmsm_ctrl.mtr_interface.velocity->speed;
-    }
+    // simulink_tx_buffer.monitor_port[3] = pmsm_ctrl.mtr_interface.position->elec_position;
+    simulink_tx_buffer.monitor_port[3] = pmsm_ctrl.mtr_interface.velocity->speed;
+}
 
-    // Controller Request stage
-    GMP_STATIC_INLINE
-    void ctl_fmif_request_stage_routine(ctl_object_nano_t *pctl_obj)
-    {
-    }
+// Controller Request stage
+GMP_STATIC_INLINE
+void ctl_fmif_request_stage_routine(ctl_object_nano_t *pctl_obj)
+{
+}
 
-    // Enable Output
-    GMP_STATIC_INLINE
-    void ctl_fmif_output_enable(ctl_object_nano_t *pctl_obj)
-    {
-        csp_sl_enable_output();
-    }
+// Enable Output
+GMP_STATIC_INLINE
+void ctl_fmif_output_enable(ctl_object_nano_t *pctl_obj)
+{
+    csp_sl_enable_output();
+}
 
-    // Disable Output
-    GMP_STATIC_INLINE
-    void ctl_fmif_output_disable(ctl_object_nano_t *pctl_obj)
-    {
-        csp_sl_disable_output();
-    }
+// Disable Output
+GMP_STATIC_INLINE
+void ctl_fmif_output_disable(ctl_object_nano_t *pctl_obj)
+{
+    csp_sl_disable_output();
+}
 
 #endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 

@@ -2,10 +2,8 @@
 
 #include <ctl/component/motor_control/basic/motor_unit_calculator.h>
 
-
 #ifndef _FILE_MOTOR_PARAM_GBM2804H_100T_H_
 #define _FILE_MOTOR_PARAM_GBM2804H_100T_H_
-
 
 //
 // Information Source:
@@ -22,7 +20,6 @@
 // GND white
 // +5V red
 //
-
 
 //////////////////////////////////////////////////////////////////////////
 // Basic parameters
@@ -68,7 +65,7 @@
 
 // Maximum Speed, unit rpm
 #define MOTOR_PARAM_MAX_SPEED ((2180))
-//#define MOTOR_PARAM_MAX_SPEED ((1000))
+// #define MOTOR_PARAM_MAX_SPEED ((1000))
 
 // Maximum DC bus voltage, unit V
 #define MOTOR_PARAM_MAX_DC_VOLTAGE ((14.2))
@@ -77,4 +74,3 @@
 #define MOTOR_PARAM_MAX_PH_CURRENT ((5.0))
 
 #endif // _FILE_MOTOR_PARAM_GBM2804H_100T_H_
-

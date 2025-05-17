@@ -3,6 +3,11 @@
 #ifndef _FILE_SMC_H_
 #define _FILE_SMC_H_
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif // __cplusplus
+
 typedef struct _tag_smc_t_
 {
     // input
@@ -74,5 +79,9 @@ ctrl_gt ctl_step_smc(ctl_smc_t *smc, ctrl_gt input, ctrl_gt input_diff)
 
     return smc->output;
 }
+
+#ifdef __cplusplus
+}
+#endif // __cplusplus
 
 #endif // _FILE_SMC_H_

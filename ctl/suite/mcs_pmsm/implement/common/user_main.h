@@ -6,8 +6,6 @@
 // WARNING: This file must be kept in the include search path during compilation.
 //
 
-
-
 #ifndef _FILE_USER_MAIN_H_
 #define _FILE_USER_MAIN_H_
 
@@ -16,36 +14,34 @@ extern "C"
 {
 #endif
 
-    //////////////////////////////////////////////////////////////////////////
-    // Handle Type definition, copy from <main.c>
-    //
-    //
+//////////////////////////////////////////////////////////////////////////
+// Handle Type definition, copy from <main.c>
+//
+//
 
 #ifndef SPECIFY_PC_TEST_ENV
 
 #endif // SPECIFY_PC_TEST_ENV
 
-    //////////////////////////////////////////////////////////////////////////
-    // functions
+//////////////////////////////////////////////////////////////////////////
+// functions
 
-    // User should implement this 3 functions at least
-    //
-    void init(void);
-    void mainloop(void);
-    void setup_peripheral(void);
+// User should implement this 3 functions at least
+//
+void init(void);
+void mainloop(void);
+void setup_peripheral(void);
 
-    // For Controller projects user should implement the following functions
-    //
-    void ctl_init(void);
-    void ctl_mainloop(void);
+// For Controller projects user should implement the following functions
+//
+void ctl_init(void);
+void ctl_mainloop(void);
 
-    //////////////////////////////////////////////////////////////////////////
-    // Additionally functions prototypes
+//////////////////////////////////////////////////////////////////////////
+// Additionally functions prototypes
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif // _FILE_USER_MAIN_H_
-
-

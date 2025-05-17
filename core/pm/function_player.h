@@ -5,9 +5,7 @@
 
 typedef(time_gt) (*tick_fn)(void);
 
-
 typedef(gmp_error_t)(functional_gt)(gmp_fp_functional *param);
-
 
 typedef struct _tag_gmp_fp_functional
 {
@@ -17,7 +15,7 @@ typedef struct _tag_gmp_fp_functional
 
     // parameter for callback
     // 可以通过继承关系获得灵活性
-    //void *param;
+    // void *param;
 
     // last invoke time
     // for time counting and delta-time mode programming
@@ -29,17 +27,17 @@ typedef struct _tag_gmp_fp_functional
     // 形成链表，具体链表应当是什么形式，未知，目的在于做调度
     gmp_fp_functional *next;
 
-}gmp_fp_functional;
+} gmp_fp_functional;
 
 // utilities for fp_functional type
-// 
+//
 
 // 这个函数将会被player的响应函数调用
 ec_gt invoke_fp_functional(gmp_fp_functional *fp_obj)
 {
     fp_obj->callback();
 
-    //更新结构体中其他数据项
+    // 更新结构体中其他数据项
 }
 
 typedef struct _tag_function_player
@@ -53,6 +51,6 @@ typedef struct _tag_function_player
     // list to functional
     vector<gmp_fp_functional> function_pointer_list;
 
-}gmp_function_player;
+} gmp_function_player;
 
 // 注册一个新的functional

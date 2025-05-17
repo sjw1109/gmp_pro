@@ -17,10 +17,10 @@
 #define MOTOR_PARAM_LS ((25.0e-6))
 
 // Inertia, unit nMms2
-//#define MOTOR_PARAM_INERTIA ((497.0))
+// #define MOTOR_PARAM_INERTIA ((497.0))
 
 // Friction unit nNms
-//#define MOTOR_PARAM_FRICTION ((755.0))
+// #define MOTOR_PARAM_FRICTION ((755.0))
 
 // Flux linkage, unit Wb
 #define MOTOR_PARAM_FLUX ((0.0023))

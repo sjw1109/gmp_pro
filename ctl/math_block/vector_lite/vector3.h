@@ -7,18 +7,18 @@ extern "C"
 {
 #endif
 
-    typedef struct _tag_ctl_vector3_t
-    {
-        ctrl_gt dat[3];
-    } ctl_vector3_t, vector3_gt;
+typedef struct _tag_ctl_vector3_t
+{
+    ctrl_gt dat[3];
+} ctl_vector3_t, vector3_gt;
 
-    GMP_STATIC_INLINE
-    void ctl_vector3_clear(ctl_vector3_t *vec)
-    {
-        vec->dat[0] = 0;
-        vec->dat[1] = 0;
-        vec->dat[2] = 0;
-    }
+GMP_STATIC_INLINE
+void ctl_vector3_clear(ctl_vector3_t *vec)
+{
+    vec->dat[0] = 0;
+    vec->dat[1] = 0;
+    vec->dat[2] = 0;
+}
 
 #ifdef __cplusplus
 }

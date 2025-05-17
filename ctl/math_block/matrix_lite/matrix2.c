@@ -5,7 +5,7 @@
 
 #include <ctl/math_block/matrix_lite/matrix2.h>
 
-void ctl_matrix2_clear(ctl_matrix2_t* matrix)
+void ctl_matrix2_clear(ctl_matrix2_t *matrix)
 {
     matrix->dat[0] = 0;
     matrix->dat[1] = 0;
@@ -14,7 +14,7 @@ void ctl_matrix2_clear(ctl_matrix2_t* matrix)
 }
 
 // copy src to dup matrix
-void ctl_matrix2_copy(ctl_matrix2_t* dup, ctl_matrix2_t* src)
+void ctl_matrix2_copy(ctl_matrix2_t *dup, ctl_matrix2_t *src)
 {
     dup->dat[0] = src->dat[0];
     dup->dat[1] = src->dat[1];
@@ -43,7 +43,7 @@ void ctl_matrix2_mul(ctl_matrix2_t *result, ctl_matrix2_t *src1, ctl_matrix2_t *
 }
 
 // result = src1(i,j) * src2(i,j)
-void ctl_matrix2_product(ctl_matrix2_t* result, ctl_matrix2_t* src1, ctl_matrix2_t* src2)
+void ctl_matrix2_product(ctl_matrix2_t *result, ctl_matrix2_t *src1, ctl_matrix2_t *src2)
 {
     result->dat[0] = ctl_mul(src1->dat[0], src2->dat[0]);
     result->dat[1] = ctl_mul(src1->dat[1], src2->dat[1]);

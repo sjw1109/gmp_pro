@@ -1,12 +1,11 @@
 #ifndef _FILE_ARM_M_GENERAL_H_
 #define _FILE_ARM_M_GENERAL_H_
 
-//#define ARCH_NAME "ARM_M"
-
+// #define ARCH_NAME "ARM_M"
 
 //////////////////////////////////////////////////////////////////////////'
 // Type definition
-// 
+//
 // 2 bytes for each sizeof() result.
 #define SIZEOF_UNIT (1)
 
@@ -97,21 +96,20 @@
 // + core_cm33.h
 // + core_cm35.h
 
-
-// When applied to a function declaration or definition that returns a pointer type, 
-// restrict tells the compiler that the function returns an object that is not aliased, 
-// that is, referenced by any other pointers. 
+// When applied to a function declaration or definition that returns a pointer type,
+// restrict tells the compiler that the function returns an object that is not aliased,
+// that is, referenced by any other pointers.
 // This allows the compiler to perform additional optimizations.
 //
 #define GMP_PARAM_RESTRICT __RESTRICT
 
 // This macro define the default static inline behavior.
-#define GMP_STATIC_INLINE  __STATIC_INLINE
+#define GMP_STATIC_INLINE __STATIC_INLINE
 
-// The following macro will create a section of struct, 
-// 
+// The following macro will create a section of struct,
+//
 #define GMP_PARAM_STRACK_PACK __PACKED
-#define GMP_PARAM_STRACK_PACK_RELEASE 
+#define GMP_PARAM_STRACK_PACK_RELEASE
 
 // This macro will create a section of code.
 // The compiler will not perform out of order memory access operations on this interval
@@ -119,7 +117,7 @@
 
 //// This macro should clear all the I cache
 ////
-//#define GMP_FLUSH_ICACHE   __ISB()
-//#define GMP_FLUSH_DCACHE   __DSB()
+// #define GMP_FLUSH_ICACHE   __ISB()
+// #define GMP_FLUSH_DCACHE   __DSB()
 
 #endif // _FILE_ARM_M_GENERAL_H_

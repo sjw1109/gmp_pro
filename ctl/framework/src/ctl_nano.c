@@ -378,37 +378,37 @@ uint32_t ctl_fm_controller_inspection(ctl_object_nano_t *pctl_obj)
 //// init controller object
 //// User should call this function in init process
 //// BEFORE all the other control object is inited.
-//void ctl_fm_init_nano_header(ctl_object_nano_t *ctl_obj)
+// void ctl_fm_init_nano_header(ctl_object_nano_t *ctl_obj)
 //{
-//    ctl_obj->isr_tick = 0;
+//     ctl_obj->isr_tick = 0;
 //
-//    ctl_obj->state_machine = CTL_SM_PENDING;
-//    //	ctl_obj->state_machine = CTL_SM_READY;
-//    ctl_obj->switch_calibrate_stage = 1;
-//    ctl_obj->switch_runup_stage = 0;
-//    ctl_obj->switch_security_routine = 1;
+//     ctl_obj->state_machine = CTL_SM_PENDING;
+//     //	ctl_obj->state_machine = CTL_SM_READY;
+//     ctl_obj->switch_calibrate_stage = 1;
+//     ctl_obj->switch_runup_stage = 0;
+//     ctl_obj->switch_security_routine = 1;
 //
-//    // finally set the endorsement
-//    ctl_obj->security_endorse = GMP_CTL_ENDORSE;
+//     // finally set the endorsement
+//     ctl_obj->security_endorse = GMP_CTL_ENDORSE;
 //
-//    ctl_obj->control_law_CPU_usage_tick = 0;
-//    ctl_obj->mainloop_CPU_usage_tick = 0;
+//     ctl_obj->control_law_CPU_usage_tick = 0;
+//     ctl_obj->mainloop_CPU_usage_tick = 0;
 //
-//    // Monitor divider
-//    ctl_init_divider(&ctl_obj->div_monitor);
-//    ctl_setup_divider(&ctl_obj->div_monitor, 20);
+//     // Monitor divider
+//     ctl_init_divider(&ctl_obj->div_monitor);
+//     ctl_setup_divider(&ctl_obj->div_monitor, 20);
 //
-//    return;
-//}
+//     return;
+// }
 //
-//void ctl_fm_setup_nano_header(ctl_object_nano_t *ctl_obj,
-//                              uint32_t ctrl_freq // the frequency of the control law, unit Hz
+// void ctl_fm_setup_nano_header(ctl_object_nano_t *ctl_obj,
+//                               uint32_t ctrl_freq // the frequency of the control law, unit Hz
 //)
 //{
-//    ctl_obj->ctrl_freq = ctrl_freq;
+//     ctl_obj->ctrl_freq = ctrl_freq;
 //
-//    return;
-//}
+//     return;
+// }
 
 // init controller object
 // User should call this function in init process

@@ -1,11 +1,8 @@
 // This file provide series of macros options definition.
 
-
-
 // Specify chip byte endian type
 #define GMP_CHIP_LITTLE_ENDIAN ((0x01))
 #define GMP_CHIP_BIG_ENDIAN    ((0x02))
-
 
 // Selections of Memory controller functions
 #define USING_DEFAULT_SYSTEM_DEFAULT_FUNCTION ((0x01))
@@ -22,5 +19,3 @@
 #define USING_DOUBLE_FPU                ((0x82))
 
 #define USING_FLOAT_CLA_LIBRARY         ((0xAA))
-
-

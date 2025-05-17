@@ -10,30 +10,29 @@
 // GMP core config module
 
 // Disable CSP
-//#define SPECIFY_DISABLE_CSP
+// #define SPECIFY_DISABLE_CSP
 
 // Disable Base print function
-//#define SPECIFY_BASE_PRINT_NOT_IMPL
+// #define SPECIFY_BASE_PRINT_NOT_IMPL
 
 // using user specified default log print function
-//#define USER_SPECIFIED_PRINT_FUNCTION printf_s
+// #define USER_SPECIFIED_PRINT_FUNCTION printf_s
 
 // Disable GMP startup screen
-//#define SPECIFY_DISABLE_GMP_LOGO
-
+// #define SPECIFY_DISABLE_GMP_LOGO
 
 //////////////////////////////////////////////////////////////////////////
 // CTL config module
-// 
+//
 
 // Disable GMP CTL module
-//#define SPECIFY_DISABLE_GMP_CTL
+// #define SPECIFY_DISABLE_GMP_CTL
 
 // Specify enable CTL library
 #define SPECIFY_ENABLE_GMP_CTL
 
 // Specify enable CTL framework nano
-//#define SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+// #define SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
 // Specify GMP CTL default type
 
@@ -41,12 +40,9 @@
 #define SPECIFY_CTRL_GT_TYPE USING_FLOAT_FPU
 // #define SPECIFY_CTRL_GT_TYPE USING_FIXED_TI_IQ_LIBRARY
 
-
 //////////////////////////////////////////////////////////////////////////
 // DSP C28x Simulate platform config
 
-
-
 // Use discrete PID controller
 // Discrete controller may bring more smooth response.
-//#define PMSM_CTRL_USING_DISCRETE_CTRL
+// #define PMSM_CTRL_USING_DISCRETE_CTRL

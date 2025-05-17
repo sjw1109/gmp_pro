@@ -1,12 +1,12 @@
 /**
  * @file svpwm.h
  * @author Javnson (javnson@zju.edu.cn), GUO Qichen
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2024-09-30
- * 
+ *
  * @copyright Copyright GMP(c) 2024
- * 
+ *
  */
 
 // Space Vector Pulse Width Modulation, SVPWM module
@@ -36,7 +36,6 @@ typedef struct _tag_svpwm_channel_t
 
 } ctl_svpwm_channel_t;
 
-
 void ctl_init_svpwm(ctl_svpwm_channel_t *svpwm);
 
 void ctl_setup_svpwm(ctl_svpwm_channel_t *svpwm, pwm_gt pwm_period);
@@ -59,8 +58,8 @@ void ctl_svpwm_calc(ctl_svpwm_channel_t *svpwm)
     ctrl_gt Ualpha_tmp = -ctl_div2(svpwm->Ualpha);
     ctrl_gt Ubeta_tmp = ctl_mul(svpwm->Ubeta, GMP_CONST_SQRT_3_OVER_2);
 
-    //tex: $$
-    //U_a = U_\alpha, \\
+    // tex: $$
+    // U_a = U_\alpha, \\
     //U_b = -U_\alpha /2 + \sqrt{3}/2\cdot U_\beta, \\
     //U_c = -U_\alpha /2 - \sqrt{3}/2\cdot U_\beta,
     //$$
@@ -95,7 +94,6 @@ void ctl_svpwm_calc(ctl_svpwm_channel_t *svpwm)
     svpwm->T[2] = Uc - Ucom;
 }
 
-
 // SVPWM calculation stage I
 // another formal algorithm
 // alpha-beta -> Tabc
@@ -106,7 +104,7 @@ void ctl_svpwm_calc2(ctl_svpwm_channel_t *svpwm)
     // u2s: Ualpha ,Ubeta
     ctrl_gt X, Y, Z, T1, T2, Ta, Tb, Tc;
     uint16_t N;
-    ctrl_gt Uabc[3] = { 0 };
+    ctrl_gt Uabc[3] = {0};
 
     Uabc[0] = svpwm->Ubeta;
     Uabc[1] = ctl_mul(GMP_CONST_SQRT_3_OVER_2, svpwm->Ualpha) - ctl_div2(svpwm->Ubeta);
@@ -149,7 +147,7 @@ void ctl_svpwm_calc2(ctl_svpwm_channel_t *svpwm)
     }
     if ((T1 + T2) > GMP_CONST_1)
     {
-        T1 = ctl_div(T1 , (T1 + T2));
+        T1 = ctl_div(T1, (T1 + T2));
         T2 = GMP_CONST_1 - T1;
     }
     Ta = ctl_div4(GMP_CONST_1 - T1 - T2);
@@ -225,10 +223,9 @@ void ctl_svpwm_modulation(ctl_svpwm_channel_t *svpwm)
     ctrl_gt pwm_data; // -pwm
     pwm_gt pwm_output;
 
-
     for (i = 0; i < 3; ++i)
     {
-        //pwm_data = ctl_mul(svpwm->T[i], CTRL_T(-1.0)) + CTRL_T(0.5f);
+        // pwm_data = ctl_mul(svpwm->T[i], CTRL_T(-1.0)) + CTRL_T(0.5f);
         pwm_data = svpwm->T[i] + float2ctrl(0.5f);
         pwm_data = pwm_data < 0 ? 0 : pwm_data; // prevent data error
         pwm_output = (pwm_gt)ctl_mul(pwm_data, svpwm->pwm_period);
@@ -247,7 +244,6 @@ void ctl_svpwm_inv_modulation(ctl_svpwm_channel_t *svpwm)
     ctrl_gt pwm_data; // -pwm
     pwm_gt pwm_output;
 
-
     for (i = 0; i < 3; ++i)
     {
         // change modulation direction
@@ -261,10 +257,8 @@ void ctl_svpwm_inv_modulation(ctl_svpwm_channel_t *svpwm)
     }
 }
 
-
 #ifdef __cplusplus
 }
-#endif
-
+#endif // __cplusplus
 
 #endif // _FILE_SVPWM_H_

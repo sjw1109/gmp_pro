@@ -1,13 +1,12 @@
 // This math file is for Silan Motor Controller
 
-
 // #ifndef GLOBAL_Q
 //// Specify global Q value
 // #define GLOBAL_Q (24)
 // #endif // GLOBAL_Q
 
 // include iqmath library
-//#include <third_party/iqmath/IQmathLib.h>
+// #include <third_party/iqmath/IQmathLib.h>
 
 #ifndef _FILE_IQMATH_MACROS_H_
 #define _FILE_IQMATH_MACROS_H_
@@ -52,7 +51,3 @@
 #define CTRL_GT_IS_FIXED
 
 #endif // _FILE_IQMATH_MACROS_H_
-
-
-
-
