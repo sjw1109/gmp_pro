@@ -17,15 +17,25 @@ extern "C"
 {
 #endif // __cplusplus
 
+// clang-format off
+// 
+
 // 1rd order lowpass IIR filter
 // Z transfer function:
-// tex: $R(s) = \frac{\omega_c}{s+\omega_c},R(z) = \frac{1-e^{-\omega_c T_s}}{1-e^{-\omega_c T_s}\cdot z^{-1}}$
+//tex: 
+// $R(s) = \frac{\omega_c}{s+\omega_c},R(z) = \frac{1-e^{-\omega_c T_s}}{1-e^{-\omega_c T_s}\cdot z^{-1}}$
 
 // where,
-// tex: $1-e^{-\omega_c T_s}\approx \omega_c*T_s$
+//tex: 
+// $1-e^{-\omega_c T_s}\approx \omega_c*T_s$
 
 // So,
-// tex: $Y = a\cdot X(n) + (1-a) Y(n-1)$
+//tex: 
+// $Y = a\cdot X(n) + (1-a) Y(n-1)$
+
+//
+// clang-format on
+
 typedef struct _tag_low_pass_filter_t
 {
     // parameters
@@ -80,16 +90,22 @@ ctrl_gt ctl_clear_lowpass_filter(ctl_low_pass_filter_t *lpf)
     lpf->out = 0;
 }
 
+// clang-format off
+// 
+
 // 2rd order IIR Filter
 
 // Z transfer function:
-// tex:
+//tex:
 // $$ H(z) = \frac{b_0 + b_1z^{-1} + b_2z^{-2}}{a_0 + a_1z^{-1} + a_2z^{-2}}$$
 
 // Discrete expression:
-// tex:
+//tex:
 // $$ y(n) = \frac{b_0}{a_0} x(n) + \frac{b_1}{a_0} x(n-1) + \frac{b_2}{a_0}x(n-2)
 // -\frac{a_1}{a_0}y(n-1) - \frac{a_2}{a_0}y(n-2)$$
+
+//
+// clang-format on
 
 typedef struct _tag_filter_IIR2_t
 {

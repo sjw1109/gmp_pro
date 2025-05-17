@@ -19,19 +19,25 @@ extern "C"
 {
 #endif // __cplusplus
 
+//
+// clang-format off
+
 // PID transfer function
-// tex:
+//tex:
 // $$ G(s) = k_p + \frac{k_i}{s} + k_d s $$
 // where, $$ T_i = \frac{k_p}{k_i} $$ ,
 // $$T_d = \frac{k_d}{k_p}$$
 
 // using Tustin/Trapezoidal Transformation
-// tex:
+//tex:
 // $$ s = 2f_s\frac{1-z^{-1}}{1+z^{-1}}$$
 
 // for integral item use backward Euler Transformation
-// tex:
+//tex:
 // $$ s = f_s (1-z^{-1})$$
+
+//
+// clang-format on
 
 typedef struct _tag_discrete_pid_tuning_t
 {

@@ -8,21 +8,24 @@ extern "C"
 {
 #endif // __cplusplus
 
+// clang-format off
+// 
 // assume input is R(s)
 //
 // d_integrate is D(s), which is a band pass filter, then
-// tex:
+//tex:
 // $$
 // \frac{D(s)}{Q(s)}=\frac{k\omega_0 s}{s^2+k\omega_0 s+\omega_0^2}
 // $$
 //
 
 // q_integrate is Q(s), which is a low pass filter, then
-// tex:
+//tex:
 // $$
 // \frac{D(s)}{Q(s)}=\frac{k\omega_0^2}{s^2+k\omega_0 s+\omega_0^2}
 // $$
 //
+// clang-format on
 
 typedef struct _tag_sogi
 {

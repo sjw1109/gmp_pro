@@ -8,6 +8,28 @@ extern "C"
 {
 #endif // __cplusplus
 
+// clang-format off
+// 
+
+// Controller input x1 is controlled variables, x2 is differential of x1
+
+
+// Sliding model controller
+// sliding model surface:
+//tex:
+//$$
+// s = \lambda x_1 + x_2
+//$$
+
+// Sliding model controller output
+//tex:
+//$$
+// out = \eta_1 x_1 + \eta_2 x_2 + \rho \;\text{sng}\; (s)
+//$$
+
+// clang-format on
+//
+
 typedef struct _tag_smc_t_
 {
     // input

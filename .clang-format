@@ -27,3 +27,7 @@ AlignConsecutiveMacros:
 #BraceWrapping.AfterExternBlock: false
 
 IndentExternBlock: NoIndent
+
+# math equations
+# CommentPragmas (//tex:)
+

@@ -1,14 +1,27 @@
+
+// clang-format off
+// 
+
 // Proportional Resonant Control
-// tex:
+//tex:
 // $$
 // G_{QPR} = K_p +K_r \frac{2s}{s^2 + \omega_r^2}
 // $$
+
+//
+// clang-format on
+
+// clang-format off
+// 
 
 // Quasi-Proportional Resonant Control
 //tex:
 // $$
 // G_{PR} = K_p +K_r \frac{2\omega_c s}{s^2 + 2\omega_c s + \omega_r^2}
 // $$
+
+//
+// clang-format on
 
 #ifndef _FILE_PROPORTIONAL_RESONANT_CONTROLLER_H_
 #define _FILE_PROPORTIONAL_RESONANT_CONTROLLER_H_
