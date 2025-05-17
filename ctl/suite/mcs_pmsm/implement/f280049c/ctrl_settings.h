@@ -25,6 +25,9 @@
 #define MTR_CTRL_VOLTAGE_GAIN (0.1)
 #define MTR_CTRL_VOLTAGE_BIAS (0.0)
 
+// Use QEP encoder
+#define USE_QEP_ENCODER
+
 // BUILD_LEVEL 1: Voltage Open loop
 // BUILD_LEVEL 2: Current Open loop
 // BUILD_LEVEL 3: Current Open loop with actual position

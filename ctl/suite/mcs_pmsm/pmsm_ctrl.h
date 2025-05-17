@@ -16,7 +16,7 @@
 #ifndef _FILE_PMSM_CTRL_BARE_H_
 #define _FILE_PMSM_CTRL_BARE_H_
 
-#ifdef __cplsuplus
+#ifdef __cplusplus
 extern "C"
 {
 #endif // __cplsuplus

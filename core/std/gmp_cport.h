@@ -16,7 +16,7 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif
+#endif // __cplusplus
 
 //////////////////////////////////////////////////////////////////////////
 // Step I: User function prototypes

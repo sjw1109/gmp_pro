@@ -2,7 +2,7 @@
 //
 
 #include <iostream>
-#include <gmp_core.h>
+#include <gmp_core.hpp>
 
 int main()
 {
