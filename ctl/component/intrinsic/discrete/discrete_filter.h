@@ -85,7 +85,7 @@ ctrl_gt ctl_step_lowpass_filter(ctl_low_pass_filter_t *lpf, ctrl_gt input)
 
 // clear lowpass filter
 GMP_STATIC_INLINE
-ctrl_gt ctl_clear_lowpass_filter(ctl_low_pass_filter_t *lpf)
+void ctl_clear_lowpass_filter(ctl_low_pass_filter_t *lpf)
 {
     lpf->out = 0;
 }

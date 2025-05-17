@@ -211,6 +211,26 @@ typedef struct _tag_pmsm_bare_controller
 
 } pmsm_bare_controller_t;
 
+
+// Clear Controller
+GMP_STATIC_INLINE
+void ctl_clear_pmsm_ctrl(pmsm_bare_controller_t *ctrl)
+{
+#ifdef PMSM_CTRL_USING_DISCRETE_CTRL
+    // clear controller intermediate variables
+    ctl_clear_discrete_pid(&ctrl->current_ctrl[phase_d]);
+    ctl_clear_discrete_pid(&ctrl->current_ctrl[phase_q]);
+
+    ctl_clear_discrete_track_pid(&ctrl->spd_ctrl);
+#else  // continuous controller
+       // clear controller intermediate variables
+    ctl_clear_pid(&ctrl->current_ctrl[phase_d]);
+    ctl_clear_pid(&ctrl->current_ctrl[phase_q]);
+
+    ctl_clear_track_pid(&ctrl->spd_ctrl);
+#endif // PMSM_CTRL_USING_DISCRETE_CTRL
+}
+
 // This function should be called in MainISR.
 // This function implement a universal PMSM controller
 GMP_STATIC_INLINE
@@ -370,23 +390,6 @@ void ctl_step_pmsm_ctrl(pmsm_bare_controller_t *ctrl)
     }
 }
 
-GMP_STATIC_INLINE
-void ctl_clear_pmsm_ctrl(pmsm_bare_controller_t *ctrl)
-{
-#ifdef PMSM_CTRL_USING_DISCRETE_CTRL
-    // clear controller intermediate variables
-    ctl_clear_discrete_pid(&ctrl->current_ctrl[phase_d]);
-    ctl_clear_discrete_pid(&ctrl->current_ctrl[phase_q]);
-
-    ctl_clear_discrete_track_pid(&ctrl->spd_ctrl);
-#else  // continuous controller
-       // clear controller intermediate variables
-    ctl_clear_pid(&ctrl->current_ctrl[phase_d]);
-    ctl_clear_pid(&ctrl->current_ctrl[phase_q]);
-
-    ctl_clear_track_pid(&ctrl->spd_ctrl);
-#endif // PMSM_CTRL_USING_DISCRETE_CTRL
-}
 
 // .....................................................................//
 // enable and disable

@@ -5,8 +5,8 @@
 // invoke motor parameters
 #include <ctl/component/motor_control/motor_preset/GBM2804H_100T.h>
 
-// Given 3.3V voltage reference
-#define ADC_REFERENCE ((3.3))
+// invoke motor controller parameters
+#include <ctl/component/motor_control/controller_preset/TI_3PH_GAN_INV.h>
 
 // Controller Frequency
 #define CONTROLLER_FREQUENCY (10000)
@@ -18,15 +18,12 @@
 #define SPD_CONTROLLER_PWM_DIVISION (5)
 
 // Current sensor
-#define MTR_CTRL_CURRENT_GAIN (10.0)
-#define MTR_CTRL_CURRENT_BIAS (1.65 / ADC_REFERENCE)
+#define MTR_CTRL_CURRENT_GAIN ((2 * ADC_FULLSCALE_CURRENT / MOTOR_PARAM_MAX_PH_CURRENT))
+#define MTR_CTRL_CURRENT_BIAS (ADC_CURRENT_REFERENCE_VOLTAGE / ADC_REFERENCE)
 
 // Voltage sensor
-#define MTR_CTRL_VOLTAGE_GAIN (0.1)
-#define MTR_CTRL_VOLTAGE_BIAS (0.0)
-
-// Use QEP encoder
-#define USE_QEP_ENCODER
+#define MTR_CTRL_VOLTAGE_GAIN ((2 * ADC_FULLSCALE_VOLTAGE / MOTOR_PARAM_MAX_DC_VOLTAGE))
+#define MTR_CTRL_VOLTAGE_BIAS ((ADC_VOLTAGE_REFERENCE_VOLTAGE / ADC_REFERENCE))
 
 // BUILD_LEVEL 1: Voltage Open loop
 // BUILD_LEVEL 2: Current Open loop
@@ -42,5 +39,7 @@
 // Discrete controller may bring more smooth response.
 #define PMSM_CTRL_USING_DISCRETE_CTRL
 
+// Use QEP as Encoder input
+#define PMSM_CTRL_USING_QEP_ENCODER
 
 #endif // _FILE_CTRL_SETTINGS_H_

@@ -202,6 +202,8 @@ ctrl_gt ctl_step_const_vf(ctl_const_vf_controller *ctrl)
     // move to next angle position
     ctrl->enc.elec_position = ctl_step_ramp_gen(&ctrl->rg);
     ctrl->enc.position = ctrl->enc.elec_position;
+
+    return ctrl->enc.elec_position;
 }
 
 // change target frequency

@@ -1,9 +1,9 @@
 /**
  * These arguments were used when this file was generated. They will be automatically applied on subsequent loads
  * via the GUI or CLI. Run CLI with '--help' for additional information on how to override these arguments.
- * @cliArgs --device "F28004x" --part "F28004x_100PZ" --package "F28004x_100PZ" --context "system" --product "C2000WARE@5.03.00.00"
- * @v2CliArgs --device "TMS320F280041C" --package "100PZ" --context "system" --product "C2000WARE@5.03.00.00"
- * @versions {"tool":"1.22.0+3893"}
+ * @cliArgs --device "F28004x" --part "F28004x_100PZ" --package "F28004x_100PZ" --context "system" --product "gmp_pro@1.00.00.05" --product "C2000WARE@5.03.00.00"
+ * @v2CliArgs --device "TMS320F280041C" --package "100PZ" --context "system" --product "gmp_pro@1.00.00.05" --product "C2000WARE@5.03.00.00"
+ * @versions {"tool":"1.21.0+3721"}
  */
 
 /**
@@ -21,6 +21,8 @@ const epwm           = scripting.addModule("/driverlib/epwm.js", {}, false);
 const epwm1          = epwm.addInstance();
 const epwm2          = epwm.addInstance();
 const epwm3          = epwm.addInstance();
+const eqep           = scripting.addModule("/driverlib/eqep.js", {}, false);
+const eqep1          = eqep.addInstance();
 const gpio           = scripting.addModule("/driverlib/gpio.js", {}, false);
 const gpio1          = gpio.addInstance();
 const gpio2          = gpio.addInstance();
@@ -173,6 +175,23 @@ epwm3.epwm.$assign                                               = "EPWM2";
 epwm3.epwm.epwm_aPin.$assign                                     = "GPIO2";
 epwm3.epwm.epwm_bPin.$assign                                     = "GPIO3";
 
+eqep1.$name                      = "EQEP_Encoder";
+eqep1.positionCounterMax         = 10000;
+eqep1.enableModule               = true;
+eqep1.registerInterrupts         = true;
+eqep1.enableInterrupt            = true;
+eqep1.interruptSources           = ["EQEP_INT_INDEX_EVNT_LATCH"];
+eqep1.emulationMode              = "EQEP_EMULATIONMODE_RUNFREE";
+eqep1.useCase                    = "NO STROBE";
+eqep1.aQual.qualMode             = "GPIO_QUAL_3SAMPLE";
+eqep1.bQual.qualMode             = "GPIO_QUAL_3SAMPLE";
+eqep1.indexQual.qualMode         = "GPIO_QUAL_3SAMPLE";
+eqep1.eqepInt.enableInterrupt    = true;
+eqep1.eqep.$assign               = "EQEP2";
+eqep1.eqep.eqep_aPin.$assign     = "GPIO14";
+eqep1.eqep.eqep_bPin.$assign     = "GPIO15";
+eqep1.eqep.eqep_indexPin.$assign = "GPIO26";
+
 gpio1.$name           = "LEDR";
 gpio1.direction       = "GPIO_DIR_MODE_OUT";
 gpio1.gpioPin.$assign = "GPIO23_VSW";
@@ -198,12 +217,12 @@ spi1.dataWidth               = "8";
 spi1.transferProtocol        = "SPI_PROT_POL0PHA1";
 spi1.useCase                 = "CUSTOM";
 spi1.useInterfacePins        = ["SPI@_CLK","SPI@_SIMO","SPI@_SOMI"];
-spi1.picoQual.$name          = "myGPIOQUAL0";
-spi1.pociQual.$name          = "myGPIOQUAL1";
 spi1.spi.spi_picoPin.$assign = "GPIO24";
 spi1.spi.spi_pociPin.$assign = "GPIO31";
 spi1.spi.spi_clkPin.$assign  = "GPIO22_VFBSW";
 spi1.clkQual.$name           = "myGPIOQUAL2";
+spi1.picoQual.$name          = "myGPIOQUAL0";
+spi1.pociQual.$name          = "myGPIOQUAL1";
 
 /**
  * Pinmux solution for unlocked pins/peripherals. This ensures that minor changes to the automatic solver in a future

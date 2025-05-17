@@ -39,6 +39,8 @@ adc_gt idc_raw;
 // Encoder Interface
 ext_as5048a_encoder_t pos_enc;
 
+
+
 /////////////////////////////////////////////////////////////////////////
 // peripheral setup function
 //
@@ -139,7 +141,9 @@ interrupt void MainISR(void)
     Interrupt_clearACKGroup(INT_ADC_A_1_INTERRUPT_ACK_GROUP);
 }
 
-interrupt void INT_EPWMU_ISR(void)
+// EQEP index interrupt
+interrupt void INT_EQEP_Encoder_ISR(void)
 {
-    // Interrupt_clearACKGroup(INT_EPWMU_INTERRUPT_ACK_GROUP);
+
+    Interrupt_clearACKGroup(INT_EQEP_Encoder_INTERRUPT_ACK_GROUP);
 }
