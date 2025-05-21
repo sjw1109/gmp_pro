@@ -8,4 +8,6 @@
  * @copyright Copyright GMP(c) 2024
  * 
  */
+
+#include <gmp_core.h>
  

@@ -62,14 +62,18 @@ class asio_udp_helper
   public:
     asio_udp_helper(const std::string ip_addr, uint32_t recv_port, uint32_t trans_port, uint32_t cmd_recv_port,
                     uint32_t cmd_trans_port)
-        : /*ecVAR(),*/ recv_terminal(boost::asio::ip::make_address(ip_addr), recv_port),
-          tran_terminal(boost::asio::ip::make_address(ip_addr), trans_port),
-          cmd_recv_terminal(boost::asio::ip::make_address(ip_addr), cmd_recv_port),
-          cmd_tran_terminal(boost::asio::ip::make_address(ip_addr), cmd_trans_port), recv_context(), tran_context(),
-          cmd_recv_context(), cmd_tran_context(), recv_socket(recv_context), tran_socket(tran_context),
-          cmd_recv_socket(cmd_recv_context), cmd_tran_socket(cmd_tran_context), recv_port(recv_port),
-          trans_port(trans_port), cmd_recv_port(cmd_recv_port), cmd_trans_port(cmd_trans_port), ip_addr(ip_addr),
-          cmd_recv_buf(1024, '\0'), stop_cmd_received(0), start_cmd_received(0), recv_counter(0), tran_counter(0)
+        : /*ecVAR(),*/ recv_terminal(boost::asio::ip::make_address(ip_addr),
+                                     static_cast<boost::asio::ip::port_type>(recv_port)),
+          tran_terminal(boost::asio::ip::make_address(ip_addr), static_cast<boost::asio::ip::port_type>(trans_port)),
+          cmd_recv_terminal(boost::asio::ip::make_address(ip_addr),
+                            static_cast<boost::asio::ip::port_type>(cmd_recv_port)),
+          cmd_tran_terminal(boost::asio::ip::make_address(ip_addr),
+                            static_cast<boost::asio::ip::port_type>(cmd_trans_port)),
+          recv_context(), tran_context(), cmd_recv_context(), cmd_tran_context(), recv_socket(recv_context),
+          tran_socket(tran_context), cmd_recv_socket(cmd_recv_context), cmd_tran_socket(cmd_tran_context),
+          recv_port(recv_port), trans_port(trans_port), cmd_recv_port(cmd_recv_port), cmd_trans_port(cmd_trans_port),
+          ip_addr(ip_addr), cmd_recv_buf(1024, '\0'), stop_cmd_received(0), start_cmd_received(0), recv_counter(0),
+          tran_counter(0)
     {
     }
 
@@ -157,7 +161,7 @@ class asio_udp_helper
                 typedef boost::asio::detail::socket_option::integer<SOL_SOCKET, SO_RCVTIMEO> rcv_timeout_option;
                 recv_socket.set_option(rcv_timeout_option{2000}); // 2000 s \approx 33 min
             }
-#else 
+#else
             // Default Mode: Clent mode
 
             // if receive has setup, stop timeout
@@ -230,7 +234,7 @@ class asio_udp_helper
                         start_cmd_received = 1;
                     }
 
-                    std::fill(cmd_recv_buf.begin(), cmd_recv_buf.end(), 0);
+                    std::fill(cmd_recv_buf.begin(), cmd_recv_buf.end(), static_cast<std::string::value_type>(0));
                 }
 
                 this->server_ack_cmd();

@@ -36,11 +36,11 @@ typedef uint32_t ec_gt;
 // This variable may save the last error (not fatal) code.
 // These code may help developer locate faults rapidly.
 //
-extern ec_gt last_error;
+extern ec_gt gmp_last_error;
 
 // This variable may save the last fatal (not error) code.
 // These code may help developer locate faults rapidly.
-extern ec_gt last_fatal;
+extern ec_gt gmp_last_fatal;
 
 //////////////////////////////////////////////////////////////////////////
 // Step III Error code definitions

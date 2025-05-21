@@ -56,3 +56,5 @@
 #define gmp_pc_simulink_rx_buffer_t mtr_sil_rx_buf_t
 #define gmp_pc_simulink_tx_buffer_t mtr_sil_tx_buf_t
 
+// invoke controller settings
+#include <ctrl_settings.h>
