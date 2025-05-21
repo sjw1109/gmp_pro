@@ -194,7 +194,7 @@ ec_gt windows_print_function(uint32_t *handle, half_duplex_ift *port)
     return GMP_EC_OK;
 }
 
-// Windows simulink system tick function
+// Windows Simulink system tick function
 time_gt gmp_base_get_system_tick()
 {
     return (time_gt)(simulink_rx_buffer.time * SPECIFY_SYSTEM_TICK_FREQUENCY);

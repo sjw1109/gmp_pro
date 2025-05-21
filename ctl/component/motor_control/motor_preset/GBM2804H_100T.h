@@ -54,8 +54,14 @@
 // Rated voltage, unit V
 #define MOTOR_PARAM_RATED_VOLTAGE ((10))
 
+// Rated Current, unit A
+#define MOTOR_PARAM_RATED_CURRENT ((4.5))
+
 // no load current, unit A
 #define MOTOR_PARAM_NO_LOAD_CURRENT ((0.01))
+
+// Rated Frequency, unit Hz
+#define MOTOR_PARAM_RATED_FREQUENCY ((250.0))
 
 //////////////////////////////////////////////////////////////////////////
 // Maximum parameters
