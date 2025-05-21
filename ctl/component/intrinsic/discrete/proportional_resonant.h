@@ -1,4 +1,13 @@
 
+
+#ifndef _FILE_PROPORTIONAL_RESONANT_CONTROLLER_H_
+#define _FILE_PROPORTIONAL_RESONANT_CONTROLLER_H_
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif // __cplusplus
+
 // clang-format off
 // 
 
@@ -8,8 +17,109 @@
 // G_{QPR} = K_p +K_r \frac{2s}{s^2 + \omega_r^2}
 // $$
 
+// Discrete PR controller
+//
+//tex:
+// $$
+// G_{PR} = k_p + k_r \frac{4f_s}{4f_s^2+\omega_r^2} \cdot \frac{1-z^{-2}}{1-2\frac{4f_s^2-\omega_r^2}{4f_s^2+\omega_r^2}z^{-1}+z^{-2}}
+// $$
+    
 //
 // clang-format on
+
+typedef struct _tag_ctl_pr_controller
+{
+    //
+    // input section
+    //
+
+    //
+    // output section
+    //
+
+    // controller output
+    ctrl_gt output;
+
+    //
+    // intermediate section
+    //
+
+    ctrl_gt input_1;
+
+    ctrl_gt input_2;
+
+    ctrl_gt output_1;
+
+    ctrl_gt output_2;
+
+    //
+    // parameter section
+    //
+
+    // gain of whole controller
+    ctrl_gt kpg;
+
+    // gain of resonant frequency
+    // this is discrete gain, not the continuous controller gain.
+    ctrl_gt krg;
+
+    // resonant coefficient
+    ctrl_gt kr;
+
+} pr_ctrl_t;
+
+void ctl_init_pr_controller(
+    // handle of PR controller
+    pr_ctrl_t *pr,
+    // Kp
+    parameter_gt kp,
+    // gain of resonant frequency
+    parameter_gt kr,
+    // resonant frequency, unit Hz
+    parameter_gt freq_resonant,
+    // controller frequency
+    parameter_gt fs);
+
+GMP_STATIC_INLINE
+void ctl_clear_pr_controller(
+    // handle of PR controller
+    pr_ctrl_t *pr)
+{
+    pr->output = 0;
+    pr->output_2 = 0;
+    pr->output_1 = 0;
+
+    pr->input_2 = 0;
+    pr->input_1 = 0;
+}
+
+GMP_STATIC_INLINE
+ctrl_gt ctl_step_pr_controller(
+    // handle of PR controller
+    pr_ctrl_t *pr,
+    // input of PR controller
+    ctrl_gt input)
+{
+    ctrl_gt output = 0;
+    ctrl_gt input_diff = 0;
+
+    // P controller for PR controller
+    output = ctl_mul(pr->kpg, input);
+
+    // R controller for PR controller
+    input_diff = input - pr->input_2;
+    output += ctl_mul(pr->krg, input_diff) + ctl_mul(pr->kr, pr->output_1) - pr->output_2;
+
+    // move to next position
+    pr->input_2 = pr->input_1;
+    pr->input_1 = input;
+
+    pr->output_2 = pr->output_1;
+    pr->output_1 = output;
+    pr->output = output;
+
+    return output;
+}
 
 // clang-format off
 // 
@@ -23,17 +133,37 @@
 //
 // clang-format on
 
-#ifndef _FILE_PROPORTIONAL_RESONANT_CONTROLLER_H_
-#define _FILE_PROPORTIONAL_RESONANT_CONTROLLER_H_
-
-#ifdef __cplusplus
-extern "C"
+typedef struct _tag_ctl_qpr_controller
 {
-#endif // __cplusplus
+    //
+    // input section
+    //
 
-typedef struct _tag_ctl_pr_controller
-{
-};
+    //
+    // output section
+    //
+
+    // controller output
+    ctrl_gt output;
+
+    //
+    // intermediate section
+    //
+
+    ctrl_gt input_1;
+
+    ctrl_gt input_2;
+
+    ctrl_gt output_1;
+
+    ctrl_gt output_2;
+
+    //
+    // parameter section
+    //
+
+
+} qpr_ctrl_t;
 
 #ifdef __cplusplus
 }

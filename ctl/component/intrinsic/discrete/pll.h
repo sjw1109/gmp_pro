@@ -38,7 +38,7 @@ typedef struct _tag_pll
     ctrl_gt output_freq;
 
     // error controller
-    ctl_pid_t pid;
+    pid_regular_t pid;
 
     // freq filter
     ctl_low_pass_filter_t filter;
@@ -49,13 +49,18 @@ typedef struct _tag_pll
 
 } ctl_pll_t;
 
-ec_gt ctl_init_pll(ctl_pll_t *pll);
+void ctl_init_pll(
+    // PLL Controller Object
+    ctl_pll_t *pll,
+    // PID parameter
+    parameter_gt kp, parameter_gt Ti, parameter_gt Td,
+    // PID output limit
+    ctrl_gt out_min, ctrl_gt out_max,
+    // cutoff frequency
+    parameter_gt fc,
+    // Sample frequency
+    parameter_gt fs);
 
-ec_gt ctl_setup_pll(ctl_pll_t *pll, ctrl_gt kp, ctrl_gt ki, ctrl_gt kd, // PID parameter
-                    ctrl_gt out_min, ctrl_gt out_max,                   // PID output limit
-                    parameter_gt fs,                                    // Sample frequency
-                    parameter_gt fc                                     // cutoff frequency
-);
 
 GMP_STATIC_INLINE
 void ctl_step_pll(ctl_pll_t *pll)

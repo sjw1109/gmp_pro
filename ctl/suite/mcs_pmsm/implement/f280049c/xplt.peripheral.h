@@ -29,7 +29,7 @@ extern "C"
 // select SIL package
 #include <ctl/component/motor_control/basic/motor_universal_interface.h>
 
-#include <ctl/component/motor_control/basic/std_sil_motor_interface.h>
+//#include <ctl/component/motor_control/basic/std_sil_motor_interface.h>
 
 // encoder
 #include <ext/encoder/as5048/as5048a.h>
