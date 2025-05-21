@@ -225,15 +225,16 @@ ctrl_gt ctl_surf_lut_interp2(surf_lut_t *lut, ctrl_gt dim1_target, ctrl_gt dim2_
     {
         return lut->surface[0][0];
     }
-    else if ((dim1_index == lut->dim1_lut.lut_size - 1) && (dim2_index == -1))
+    else if ((dim1_index == (diff_gt)(lut->dim1_lut.lut_size - 1)) && (dim2_index == -1))
     {
         return lut->surface[lut->dim1_lut.lut_size - 1][0];
     }
-    else if ((dim1_index == -1) && (dim2_index == lut->dim2_lut.lut_size - 1))
+    else if ((dim1_index == -1) && (dim2_index == (diff_gt)(lut->dim2_lut.lut_size - 1)))
     {
         return lut->surface[0][lut->dim1_lut.lut_size - 1];
     }
-    else if ((dim1_index == lut->dim1_lut.lut_size - 1) && (dim2_index == lut->dim2_lut.lut_size - 1))
+    else if ((dim1_index == (diff_gt)(lut->dim1_lut.lut_size - 1)) &&
+             (dim2_index == (diff_gt)(lut->dim2_lut.lut_size - 1)))
     {
         return lut->surface[lut->dim1_lut.lut_size - 1][lut->dim2_lut.lut_size - 1];
     }
@@ -253,7 +254,7 @@ ctrl_gt ctl_surf_lut_interp2(surf_lut_t *lut, ctrl_gt dim1_target, ctrl_gt dim2_
 
         output = ctl_mul(original, dim2_weight) + ctl_mul(dim2_next, (float2ctrl(1.0) - dim2_weight));
     }
-    else if (dim1_index == lut->dim1_lut.lut_size - 1)
+    else if (dim1_index == (diff_gt)(lut->dim1_lut.lut_size - 1))
     {
         original = lut->surface[lut->dim1_lut.lut_size - 1][dim2_index];
         dim2_next = lut->surface[lut->dim1_lut.lut_size - 1][dim2_index + 1];
@@ -267,7 +268,7 @@ ctrl_gt ctl_surf_lut_interp2(surf_lut_t *lut, ctrl_gt dim1_target, ctrl_gt dim2_
 
         output = ctl_mul(original, dim1_weight) + ctl_mul(dim1_next, (float2ctrl(1.0) - dim1_weight));
     }
-    else if (dim2_index == lut->dim2_lut.lut_size - 1)
+    else if (dim2_index == (diff_gt)(lut->dim2_lut.lut_size - 1))
     {
         original = lut->surface[dim1_index][lut->dim2_lut.lut_size - 1];
         dim1_next = lut->surface[dim1_index + 1][lut->dim2_lut.lut_size - 1];
