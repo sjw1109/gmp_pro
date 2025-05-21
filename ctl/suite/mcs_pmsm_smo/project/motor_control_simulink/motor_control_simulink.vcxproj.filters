@@ -101,17 +101,17 @@
     <ClInclude Include="..\..\implement\simulate\ctrl_settings.h">
       <Filter>implement_interface</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\implement\simulate\xplt.ctl_interface.h">
-      <Filter>implement_common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\implement\simulate\xplt.peripheral.h">
-      <Filter>implement_common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\implement\simulate\xplt.config.h">
-      <Filter>implement_common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\pmsm_ctrl_smo.h">
       <Filter>motor_driver_bare_SMO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\implement\simulate\xplt.config.h">
+      <Filter>implement_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\implement\simulate\xplt.ctl_interface.h">
+      <Filter>implement_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\implement\simulate\xplt.peripheral.h">
+      <Filter>implement_interface</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

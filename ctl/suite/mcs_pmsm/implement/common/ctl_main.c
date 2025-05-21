@@ -85,20 +85,20 @@ void ctl_init()
     pmsm_ctrl_init.fs = CONTROLLER_FREQUENCY;
 
     // current pid controller parameters
-    pmsm_ctrl_init.current_pid_gain = 2.15f;
-    // pmsm_ctrl_init.current_Ti = 1.0f / 500;
-    pmsm_ctrl_init.current_Ti = 1.0f / 500;
+    pmsm_ctrl_init.current_pid_gain = (parameter_gt)(MOTOR_PARAM_LS * MTR_CTRL_CURRENT_LOOP_BW * 2 * PI *
+                                                     MTR_CTRL_VOLTAGE_BASE / MTR_CTRL_CURRENT_BASE);
+    pmsm_ctrl_init.current_Ti = (parameter_gt)(MOTOR_PARAM_LS / MOTOR_PARAM_RS);
     pmsm_ctrl_init.current_Td = 0;
-    pmsm_ctrl_init.voltage_limit_min = float2ctrl(-0.45);
-    pmsm_ctrl_init.voltage_limit_max = float2ctrl(0.45);
+    pmsm_ctrl_init.voltage_limit_min = float2ctrl(-1.0);
+    pmsm_ctrl_init.voltage_limit_max = float2ctrl(1.0);
 
     // speed pid controller parameters
     pmsm_ctrl_init.spd_ctrl_div = SPD_CONTROLLER_PWM_DIVISION;
-    pmsm_ctrl_init.spd_pid_gain = 3.5f;
-    pmsm_ctrl_init.spd_Ti = 1.0f / 100;
+    pmsm_ctrl_init.spd_pid_gain = (parameter_gt)(3.5);
+    pmsm_ctrl_init.spd_Ti = (parameter_gt)(4.0f / MTR_CTRL_SPEED_LOOP_BW);
     pmsm_ctrl_init.spd_Td = 0;
-    pmsm_ctrl_init.current_limit_min = float2ctrl(-0.6);
-    pmsm_ctrl_init.current_limit_max = float2ctrl(0.6);
+    pmsm_ctrl_init.current_limit_min = float2ctrl(-0.45);
+    pmsm_ctrl_init.current_limit_max = float2ctrl(0.45);
 
     // accelerator parameters
     pmsm_ctrl_init.acc_limit_min = -150.0f;

@@ -5,8 +5,8 @@
 // invoke motor parameters
 #include <ctl/component/motor_control/motor_preset/GBM2804H_100T.h>
 
-// Given 3.3V voltage reference
-#define ADC_REFERENCE ((3.3))
+// invoke motor controller parameters
+#include <ctl/component/motor_control/controller_preset/TI_3PH_GAN_INV.h>
 
 // Controller Frequency
 #define CONTROLLER_FREQUENCY (10000)
@@ -17,19 +17,30 @@
 // Speed controller Division
 #define SPD_CONTROLLER_PWM_DIVISION (5)
 
-// Current sensor
-#define MTR_CTRL_CURRENT_GAIN (10.0)
-#define MTR_CTRL_CURRENT_BIAS (1.65 / ADC_REFERENCE)
+// Controller Base Voltage and Base Current
+#define MTR_CTRL_VOLTAGE_BASE ((MOTOR_PARAM_MAX_DC_VOLTAGE))
+#define MTR_CTRL_CURRENT_BASE ((MOTOR_PARAM_RATED_CURRENT))
 
-// Voltage sensor
-#define MTR_CTRL_VOLTAGE_GAIN (0.1)
-#define MTR_CTRL_VOLTAGE_BIAS (0.0)
+// Current ADC module default per unit parameter
+#define MTR_CTRL_CURRENT_GAIN (ADC_FULLSCALE_CURRENT * 2 / MTR_CTRL_CURRENT_BASE)
+#define MTR_CTRL_CURRENT_BIAS (ADC_FULLSCALE_CURRENT / ADC_REFERENCE)
+
+
+// Voltage ADC module default per unit parameter
+#define MTR_CTRL_VOLTAGE_GAIN ((ADC_FULLSCALE_VOLTAGE / MTR_CTRL_VOLTAGE_BASE))
+#define MTR_CTRL_VOLTAGE_BIAS ((0.0))
+
+// Current Bandwidth
+#define MTR_CTRL_CURRENT_LOOP_BW ((100))
+
+// Speed Bandwidth
+#define MTR_CTRL_SPEED_LOOP_BW ((20))
 
 // BUILD_LEVEL 1: Voltage Open loop
 // BUILD_LEVEL 2: Current Open loop
-// BUILD_LEVEL 3: Current Open loop with actual position
+// BUILD_LEVEL 3: Actual Current loop
 // BUILD_LEVEL 4: Speed Close loop
-#define BUILD_LEVEL (1)
+#define BUILD_LEVEL (3)
 
 // 
 // Controller Settings

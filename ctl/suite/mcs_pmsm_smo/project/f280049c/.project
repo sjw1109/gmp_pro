@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>PMSM_CTRL_F280049C</name>
+	<name>PMSM_CTRL_F280049C_Sensorless_SMO</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -481,14 +481,19 @@
 			<locationURI>COM_TI_C2000WARE_INSTALL_DIR/device_support/f28004x/common/source/f28004x_usdelay.asm</locationURI>
 		</link>
 		<link>
-			<name>pmsmDrv/pmsm_ctrl.c</name>
+			<name>pmsmDrv/pmsm_ctrl_smo.c</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/src/pmsm_ctrl.c</locationURI>
+			<locationURI>COM_TI_COM_GMP_CORE_C28X_SDK_INSTALL_DIR/ctl/suite/mcs_pmsm_smo/src/pmsm_ctrl_smo.c</locationURI>
 		</link>
 		<link>
-			<name>pmsmDrv/pmsm_ctrl.h</name>
+			<name>pmsmDrv/pmsm_ctrl_smo.h</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/pmsm_ctrl.h</locationURI>
+			<locationURI>COM_TI_COM_GMP_CORE_C28X_SDK_INSTALL_DIR/ctl/suite/mcs_pmsm_smo/pmsm_ctrl_smo.h</locationURI>
+		</link>
+		<link>
+			<name>user/as5048a.c</name>
+			<type>1</type>
+			<locationURI>COM_TI_COM_GMP_CORE_C28X_SDK_INSTALL_DIR/ext/encoder/as5048/as5048a.c</locationURI>
 		</link>
 		<link>
 			<name>user/ctl_main.c</name>
@@ -509,11 +514,6 @@
 			<name>user/user_main.h</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/implement/common/user_main.h</locationURI>
-		</link>
-		<link>
-			<name>xpltGMP/as5048a.c</name>
-			<type>1</type>
-			<locationURI>COM_TI_COM_GMP_CORE_C28X_SDK_INSTALL_DIR/ext/encoder/as5048/as5048a.c</locationURI>
 		</link>
 		<link>
 			<name>xpltGMP/ctrl_settings.h</name>
@@ -541,4 +541,10 @@
 			<locationURI>PARENT-2-PROJECT_LOC/implement/f280049c/xplt.peripheral.h</locationURI>
 		</link>
 	</linkedResources>
+	<variableList>
+		<variable>
+			<name>copy_PARENT</name>
+			<value>$%7BPARENT-3-PROJECT_LOC%7D/lib/gmp_pro/ctl/suite/mcs_pmsm_smo</value>
+		</variable>
+	</variableList>
 </projectDescription>
