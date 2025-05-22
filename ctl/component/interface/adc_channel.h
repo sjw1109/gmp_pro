@@ -453,6 +453,8 @@ void ctl_clear_adc_calibrator(adc_bias_calibrator_t* obj)
 GMP_STATIC_INLINE
 void ctl_step_adc_calibrator(adc_bias_calibrator_t *obj, ctrl_gt adc_value)
 {
+    obj->raw = adc_value;
+
     if (obj->enable_filter)
     {
         ctl_step_filter_iir2(&obj->filter, adc_value);

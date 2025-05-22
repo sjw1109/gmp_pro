@@ -379,9 +379,9 @@ void ctl_step_pmsm_ctrl(pmsm_bare_controller_t *ctrl)
         else
         {
             // Stop PWM output
-            ctrl->pwm_out->value.dat[phase_A] = 0;
-            ctrl->pwm_out->value.dat[phase_B] = 0;
-            ctrl->pwm_out->value.dat[phase_C] = 0;
+            ctrl->pwm_out->value.dat[phase_A] = float2ctrl(0.5);
+            ctrl->pwm_out->value.dat[phase_B] = float2ctrl(0.5);
+            ctrl->pwm_out->value.dat[phase_C] = float2ctrl(0.5);
         }
     }
     // if this controller isn't enable clear the controller
@@ -413,6 +413,20 @@ GMP_STATIC_INLINE
 void ctl_disable_pmsm_ctrl(pmsm_bare_controller_t *ctrl)
 {
     ctrl->flag_enable_controller = 0;
+}
+
+// enable PMSM controller output
+GMP_STATIC_INLINE
+void ctl_enable_pmsm_ctrl_output(pmsm_bare_controller_t *ctrl)
+{
+    ctrl->flag_enable_output = 1;
+}
+
+// disable PMSM controller output
+GMP_STATIC_INLINE
+void ctl_disable_pmsm_ctrl_output(pmsm_bare_controller_t *ctrl)
+{
+    ctrl->flag_enable_output = 0;
 }
 
 // .....................................................................//

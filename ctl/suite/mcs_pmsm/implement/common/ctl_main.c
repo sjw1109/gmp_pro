@@ -23,7 +23,6 @@
 // PMSM controller
 pmsm_bare_controller_t pmsm_ctrl;
 
-
 #ifdef PMSM_CTRL_USING_QEP_ENCODER
 // Auto - turn encoder
 pos_autoturn_encoder_t pos_enc;
@@ -82,7 +81,7 @@ void ctl_init()
 
 #if defined OPENLOOP_CONST_FREQUENCY
     ctl_init_const_f_controller(&const_f, 20, CONTROLLER_FREQUENCY);
-#else // OPENLOOP_CONST_FREQUENCY
+#else  // OPENLOOP_CONST_FREQUENCY
     // frequency target 20 Hz, frequency slope 40 Hz/s
     ctl_init_const_slope_f_controller(&slope_f, 20.0f, 40.0f, CONTROLLER_FREQUENCY);
 #endif // OPENLOOP_CONST_FREQUENCY
@@ -124,7 +123,7 @@ void ctl_init()
 #if (BUILD_LEVEL == 1)
 #if defined OPENLOOP_CONST_FREQUENCY
     ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &const_f.enc);
-#else // OPENLOOP_CONST_FREQUENCY
+#else  // OPENLOOP_CONST_FREQUENCY
     ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &slope_f.enc);
 #endif // OPENLOOP_CONST_FREQUENCY
 
@@ -155,13 +154,8 @@ void ctl_init()
 #if !defined SPECIFY_PC_ENVIRONMENT
     // stop here and wait for user start the motor controller
     while (falg_enable_system == 0)
-    {}
-
-#if defined SPECIFY_ENABLE_ADC_CALIBRATE
-    // Enable ADC calibrate
-    flag_enable_adc_calibrator = 1;
-    index_adc_calibrator = 0;
-#endif // SPECIFY_ENABLE_ADC_CALIBRATE
+    {
+    }
 
 #endif // SPECIFY_PC_ENVIRONMENT
 
@@ -169,6 +163,16 @@ void ctl_init()
 
     // Debug mode online the controller
     ctl_enable_pmsm_ctrl(&pmsm_ctrl);
+
+#if defined SPECIFY_ENABLE_ADC_CALIBRATE
+    // Enable ADC calibrate
+    flag_enable_adc_calibrator = 1;
+    index_adc_calibrator = 0;
+
+    // Select ADC calibrate
+    ctl_disable_pmsm_ctrl_output(&pmsm_ctrl);
+    ctl_enable_adc_calibrator(&adc_calibrator);
+#endif // SPECIFY_ENABLE_ADC_CALIBRATE
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -182,29 +186,29 @@ void ctl_mainloop(void)
 
     ctl_set_pmsm_ctrl_speed(&pmsm_ctrl, float2ctrl(0.1) * spd_target - float2ctrl(1.0));
 
-    // void set_adc_bias_via_channel(fast_gt index, ctrl_gt bias);
-
-    //
+    // ADC Auto calibrate
     if (flag_enable_adc_calibrator)
     {
         if (ctl_is_adc_calibrator_cmpt(&adc_calibrator) && ctl_is_adc_calibrator_result_valid(&adc_calibrator))
         {
             // set_adc_bias_via_channel(index_adc_calibrator, ctl_get_adc_calibrator_result(&adc_calibrator));
 
-
-
-            if(index_adc_calibrator == 4) // calibrate complete
+            if (index_adc_calibrator == 3) // dc bus calibrate
             {
+                idc.bias = idc.bias + ctl_div(ctl_get_adc_calibrator_result(&adc_calibrator), idc.gain);
+
                 flag_enable_adc_calibrator = 0;
+
+                // enable pmsm controller
+                ctl_enable_pmsm_ctrl_output(&pmsm_ctrl);
             }
-            else if(index_adc_calibrator == 3) // dc bus calibrate
-            {
-                idc.bias = 0;
-            }
-            else //index_adc_calibrator == 2 or index_adc_calibrator == 1 or index_adc_calibrator == 0
+            // index_adc_calibrator == 2 ~ 0, for Iabc 
+            else 
             {
                 // iabc get result
-                iabc.bias[index_adc_calibrator] = ctl_get_adc_calibrator_result(&adc_calibrator);
+                iabc.bias[index_adc_calibrator] =
+                    iabc.bias[index_adc_calibrator] +
+                    ctl_div(ctl_get_adc_calibrator_result(&adc_calibrator), iabc.gain[index_adc_calibrator]);
 
                 // move to next position
                 index_adc_calibrator += 1;
@@ -212,19 +216,9 @@ void ctl_mainloop(void)
                 // clear calibrator
                 ctl_clear_adc_calibrator(&adc_calibrator);
 
-                // clear bias
-                if(index_adc_calibrator <= 2)
-                    iabc.bias[index_adc_calibrator] = 0;
-                else
-                    idc.bias = 0;
-
                 // enable calibrator to next position
                 ctl_enable_adc_calibrator(&adc_calibrator);
-
             }
-
-            index_adc_calibrator += 1;
-
 
             if (index_adc_calibrator > MTR_ADC_IDC)
                 flag_enable_adc_calibrator = 0;

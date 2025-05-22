@@ -30,15 +30,14 @@
 #define MTR_CTRL_VOLTAGE_BIAS ((0.0))
 
 // Current Bandwidth
-#define MTR_CTRL_CURRENT_LOOP_BW ((100))
+#define MTR_CTRL_CURRENT_LOOP_BW ((50))
 
 // Speed Bandwidth
-#define MTR_CTRL_SPEED_LOOP_BW ((20))
+#define MTR_CTRL_SPEED_LOOP_BW ((10))
 
 // BUILD_LEVEL 1: Voltage Open loop
 // BUILD_LEVEL 2: Current Open loop
 // BUILD_LEVEL 3: SMO with speed loop
-// BUILD_LEVEL 4: Speed Close loop
 #define BUILD_LEVEL (3)
 
 //

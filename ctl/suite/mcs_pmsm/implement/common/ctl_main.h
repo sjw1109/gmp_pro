@@ -74,25 +74,25 @@ typedef enum _tag_adc_index
     MTR_ADC_IDC
 } adc_index_t;
 
-
-GMP_STATIC_INLINE
-void ctl_calibrate_adc_routine()
-{
-    if (flag_enable_adc_calibrator)
-    {
-        ctl_step_adc_calibrator(&adc_calibrator, pmsm_ctrl.mtr_interface.uabc->value.dat[index_adc_calibrator]);
-    }
-}
-
 // periodic callback function things.
 GMP_STATIC_INLINE
 void ctl_dispatch(void)
 {
+    if (flag_enable_adc_calibrator)
+    {
+        if (index_adc_calibrator == 3)
+            ctl_step_adc_calibrator(&adc_calibrator, pmsm_ctrl.mtr_interface.idc->value);
+        else
+            ctl_step_adc_calibrator(&adc_calibrator, pmsm_ctrl.mtr_interface.iabc->value.dat[index_adc_calibrator]);
+    }
+    else
+    {
 #if defined OPENLOOP_CONST_FREQUENCY
-    ctl_step_const_f_controller(&const_f);
+        ctl_step_const_f_controller(&const_f);
 #else  // OPENLOOP_CONST_FREQUENCY
-    ctl_step_slope_f(&slope_f);
+        ctl_step_slope_f(&slope_f);
 #endif // OPENLOOP_CONST_FREQUENCY
+    }
 
     ctl_step_spd_calc(&spd_enc);
 

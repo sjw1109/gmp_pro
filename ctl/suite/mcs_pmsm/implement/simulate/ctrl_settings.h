@@ -23,7 +23,7 @@
 
 // Current ADC module default per unit parameter
 #define MTR_CTRL_CURRENT_GAIN (ADC_FULLSCALE_CURRENT * 2 / MTR_CTRL_CURRENT_BASE)
-#define MTR_CTRL_CURRENT_BIAS (ADC_FULLSCALE_CURRENT / ADC_REFERENCE)
+#define MTR_CTRL_CURRENT_BIAS (ADC_CURRENT_REFERENCE_VOLTAGE / ADC_REFERENCE)
 
 
 // Voltage ADC module default per unit parameter
@@ -40,7 +40,7 @@
 // BUILD_LEVEL 2: Current Open loop
 // BUILD_LEVEL 3: Actual Current loop
 // BUILD_LEVEL 4: Speed Close loop
-#define BUILD_LEVEL (3)
+#define BUILD_LEVEL (1)
 
 // 
 // Controller Settings
@@ -50,5 +50,9 @@
 // Discrete controller may bring more smooth response.
 #define PMSM_CTRL_USING_DISCRETE_CTRL
 
+// Enable ADC Calibrate
+#define SPECIFY_ENABLE_ADC_CALIBRATE
+
 
 #endif // _FILE_CTRL_SETTINGS_H_
+ 

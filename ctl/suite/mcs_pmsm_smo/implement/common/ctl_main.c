@@ -100,7 +100,6 @@ void ctl_init()
     // init the PMSM controller
     ctl_init_pmsm_smo_bare_controller(&pmsm_ctrl, &pmsm_ctrl_init);
 
-
     // BUG TI cannot print out sizeof() result if no type is specified.
     gmp_base_print(TEXT_STRING("PMSM SERVO struct has been inited, size :%d\r\n"), (int)sizeof(pmsm_ctrl_init));
 
@@ -119,13 +118,8 @@ void ctl_init()
     ctl_pmsm_smo_ctrl_current_mode(&pmsm_ctrl);
     ctl_set_pmsm_smo_ctrl_idq_ff(&pmsm_ctrl, float2ctrl(0.0), float2ctrl(0.01));
 
-
     ctl_enable_pmsm_smo(&pmsm_ctrl);
 
-#elif (BUILD_LEVEL == 4)
-
-    ctl_pmsm_smo_ctrl_velocity_mode(&pmsm_ctrl);
-    ctl_set_pmsm_smo_ctrl_speed(&pmsm_ctrl, float2ctrl(0.25));
 #endif // BUILD_LEVEL
 
     // if in simulation mode, enable system
@@ -153,11 +147,13 @@ void ctl_mainloop(void)
 
     // ctl_set_pmsm_smo_ctrl_speed(&pmsm_ctrl, float2ctrl(0.1) * spd_target - float2ctrl(1.0));
 
+#if (BUILD_LEVEL == 3)
+    // if build level == 3 switch to SMO controller
     if (gmp_base_get_system_tick() >= 600)
     {
         ctl_switch_pmsm_smo_ctrl_using_smo(&pmsm_ctrl);
     }
-
+#endif // BUILD_LEVEL
 
     if (gmp_base_get_system_tick() >= 1000)
     {
