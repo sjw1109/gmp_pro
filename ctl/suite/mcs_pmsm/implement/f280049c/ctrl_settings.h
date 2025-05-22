@@ -60,4 +60,7 @@
 // Use QEP as Encoder input
 #define PMSM_CTRL_USING_QEP_ENCODER
 
+// Enable ADC Calibrate
+#define SPECIFY_ENABLE_ADC_CALIBRATE
+
 #endif // _FILE_CTRL_SETTINGS_H_

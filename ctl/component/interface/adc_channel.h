@@ -403,11 +403,7 @@ typedef struct _tag_adc_bias_calibrator_t
 
 } adc_bias_calibrator_t;
 
-// ec_gt ctl_init_adc_bias_calibrator(adc_bias_calibrator_t *obj);
-
-// ec_gt ctl_setup_adc_bias_calibrator(adc_bias_calibrator_t *obj, ctl_filter_IIR2_setup_t *filter_parameter);
-
-void ctl_init_adc_bias_calibrator(adc_bias_calibrator_t *obj, ctl_filter_IIR2_setup_t *filter_parameter);
+void ctl_init_adc_calibrator(adc_bias_calibrator_t *obj, ctl_filter_IIR2_setup_t *filter_parameter);
 
 void ctl_enable_adc_calibrator(adc_bias_calibrator_t *obj);
 
@@ -417,6 +413,36 @@ fast_gt ctl_is_adc_calibrator_cmpt(adc_bias_calibrator_t *obj)
 {
     // return ((obj->current_period - obj->start_period) > filter_period) ? 1 : 0;
     return (obj->filter_tick > obj->filter_period) ? 1 : 0;
+}
+
+// judge if current ADC calibrate is enabled
+// 1 is enabled
+// 0 is disabled
+GMP_STATIC_INLINE
+fast_gt ctl_is_adc_calibrator_enabled(adc_bias_calibrator_t *obj)
+{
+    return obj->enable_filter;
+}
+
+// judge if output is valid
+// 1 is valid
+// 0 is invalid
+GMP_STATIC_INLINE
+fast_gt ctl_is_adc_calibrator_result_valid(adc_bias_calibrator_t *obj)
+{
+    return obj->output_valid ;
+}
+
+// clear adc calibrate result, and prepare to next begining
+GMP_STATIC_INLINE
+void ctl_clear_adc_calibrator(adc_bias_calibrator_t* obj)
+{
+    // init parameters
+    obj->filter_tick = 0;
+    obj->raw = 0;
+
+    obj->output_valid = 0;
+    obj->enable_filter = 0;
 }
 
 // This function should called in Main ISR function

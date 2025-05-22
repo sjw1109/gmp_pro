@@ -62,7 +62,7 @@ void ctl_init()
     adc_calibrator_filter.fs = CONTROLLER_FREQUENCY;
     adc_calibrator_filter.gain = 1;
     adc_calibrator_filter.q = 0.707f;
-    // ctl_init_adc_bias_calibrator(&adc_calibrator, &adc_calibrator_filter);
+    ctl_init_adc_calibrator(&adc_calibrator, &adc_calibrator_filter);
 
 #ifdef PMSM_CTRL_USING_QEP_ENCODER
     // init Auto - turn encoder
@@ -155,8 +155,14 @@ void ctl_init()
 #if !defined SPECIFY_PC_ENVIRONMENT
     // stop here and wait for user start the motor controller
     while (falg_enable_system == 0)
-    {
-    }
+    {}
+
+#if defined SPECIFY_ENABLE_ADC_CALIBRATE
+    // Enable ADC calibrate
+    flag_enable_adc_calibrator = 1;
+    index_adc_calibrator = 0;
+#endif // SPECIFY_ENABLE_ADC_CALIBRATE
+
 #endif // SPECIFY_PC_ENVIRONMENT
 
     ctl_enable_output();
@@ -176,13 +182,50 @@ void ctl_mainloop(void)
 
     ctl_set_pmsm_ctrl_speed(&pmsm_ctrl, float2ctrl(0.1) * spd_target - float2ctrl(1.0));
 
+    // void set_adc_bias_via_channel(fast_gt index, ctrl_gt bias);
+
     //
     if (flag_enable_adc_calibrator)
     {
-        if (ctl_is_adc_calibrator_cmpt(&adc_calibrator))
+        if (ctl_is_adc_calibrator_cmpt(&adc_calibrator) && ctl_is_adc_calibrator_result_valid(&adc_calibrator))
         {
             // set_adc_bias_via_channel(index_adc_calibrator, ctl_get_adc_calibrator_result(&adc_calibrator));
+
+
+
+            if(index_adc_calibrator == 4) // calibrate complete
+            {
+                flag_enable_adc_calibrator = 0;
+            }
+            else if(index_adc_calibrator == 3) // dc bus calibrate
+            {
+                idc.bias = 0;
+            }
+            else //index_adc_calibrator == 2 or index_adc_calibrator == 1 or index_adc_calibrator == 0
+            {
+                // iabc get result
+                iabc.bias[index_adc_calibrator] = ctl_get_adc_calibrator_result(&adc_calibrator);
+
+                // move to next position
+                index_adc_calibrator += 1;
+
+                // clear calibrator
+                ctl_clear_adc_calibrator(&adc_calibrator);
+
+                // clear bias
+                if(index_adc_calibrator <= 2)
+                    iabc.bias[index_adc_calibrator] = 0;
+                else
+                    idc.bias = 0;
+
+                // enable calibrator to next position
+                ctl_enable_adc_calibrator(&adc_calibrator);
+
+            }
+
             index_adc_calibrator += 1;
+
+
             if (index_adc_calibrator > MTR_ADC_IDC)
                 flag_enable_adc_calibrator = 0;
         }

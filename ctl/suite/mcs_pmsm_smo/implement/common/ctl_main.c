@@ -151,6 +151,8 @@ void ctl_mainloop(void)
         ctl_switch_pmsm_smo_ctrl_using_smo(&pmsm_ctrl);
     }
 
+    // void set_adc_bias_via_channel(fast_gt index, ctrl_gt bias);
+
     //
     if (flag_enable_adc_calibrator)
     {

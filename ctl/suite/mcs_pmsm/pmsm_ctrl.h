@@ -378,6 +378,7 @@ void ctl_step_pmsm_ctrl(pmsm_bare_controller_t *ctrl)
         }
         else
         {
+            // Stop PWM output
             ctrl->pwm_out->value.dat[phase_A] = 0;
             ctrl->pwm_out->value.dat[phase_B] = 0;
             ctrl->pwm_out->value.dat[phase_C] = 0;
@@ -386,6 +387,11 @@ void ctl_step_pmsm_ctrl(pmsm_bare_controller_t *ctrl)
     // if this controller isn't enable clear the controller
     else
     {
+        // Stop PWM output
+        ctrl->pwm_out->value.dat[phase_A] = 0;
+        ctrl->pwm_out->value.dat[phase_B] = 0;
+        ctrl->pwm_out->value.dat[phase_C] = 0;
+
         ctl_clear_pmsm_ctrl(ctrl);
     }
 }
