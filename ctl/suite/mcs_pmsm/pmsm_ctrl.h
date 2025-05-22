@@ -211,7 +211,6 @@ typedef struct _tag_pmsm_bare_controller
 
 } pmsm_bare_controller_t;
 
-
 // Clear Controller
 GMP_STATIC_INLINE
 void ctl_clear_pmsm_ctrl(pmsm_bare_controller_t *ctrl)
@@ -238,6 +237,8 @@ void ctl_step_pmsm_ctrl(pmsm_bare_controller_t *ctrl)
 {
     ctl_vector2_t phasor;
     ctrl_gt etheta;
+
+    ctrl_gt vq_limit = float2ctrl(1.0);
 
     // update controller ISR tick
     ctrl->isr_tick += 1;
@@ -336,6 +337,9 @@ void ctl_step_pmsm_ctrl(pmsm_bare_controller_t *ctrl)
                                                                ctrl->idq_set.dat[phase_d] - ctrl->idq0.dat[phase_d]) +
                                          ctrl->vdq_ff.dat[phase_d];
 
+            vq_limit = ctl_sqrt(float2ctrl(1.0) - ctl_mul(ctrl->vdq_set.dat[phase_d], ctrl->vdq_set.dat[phase_d]));
+            ctl_set_discrete_pid_limit(&ctrl->current_ctrl[phase_q], vq_limit, -vq_limit);
+
             ctrl->vdq_set.dat[phase_q] = ctl_step_discrete_pid(&ctrl->current_ctrl[phase_q],
                                                                ctrl->idq_set.dat[phase_q] - ctrl->idq0.dat[phase_q]) +
                                          ctrl->vdq_ff.dat[phase_q];
@@ -343,6 +347,9 @@ void ctl_step_pmsm_ctrl(pmsm_bare_controller_t *ctrl)
             ctrl->vdq_set.dat[phase_d] =
                 ctl_step_pid_ser(&ctrl->current_ctrl[phase_d], ctrl->idq_set.dat[phase_d] - ctrl->idq0.dat[phase_d]) +
                 ctrl->vdq_ff.dat[phase_d];
+
+            vq_limit = ctl_sqrt(float2ctrl(1.0) - ctl_mul(ctrl->vdq_set.dat[phase_d], ctrl->vdq_set.dat[phase_d]));
+            ctl_set_pid_limit(&ctrl->current_ctrl[phase_q], vq_limit, -vq_limit);
 
             ctrl->vdq_set.dat[phase_q] =
                 ctl_step_pid_ser(&ctrl->current_ctrl[phase_q], ctrl->idq_set.dat[phase_q] - ctrl->idq0.dat[phase_q]) +
@@ -395,7 +402,6 @@ void ctl_step_pmsm_ctrl(pmsm_bare_controller_t *ctrl)
         ctl_clear_pmsm_ctrl(ctrl);
     }
 }
-
 
 // .....................................................................//
 // enable and disable
