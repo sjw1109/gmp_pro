@@ -51,7 +51,7 @@ void ctl_init_pmsm_smo(
     smo->spd_sf = float2ctrl((30.0f / PI) * init->f_ctrl / init->speed_base_rpm / init->pole_pairs);
     smo->wr = 0;
 
-    smo->theta_compensate = float2ctrl(init->speed_base_rpm / 60.0f / init->fc_e);
+    smo->theta_compensate = float2ctrl(init->speed_base_rpm / 60.0f / init->fc_e * init->pole_pairs);
 }
 
 // void ctl_init_pmsm_smo(ctl_pmsm_smo_observer_t *smo)
