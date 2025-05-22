@@ -198,15 +198,16 @@ void ctl_clear_pmsm_smo(pmsm_smo_t *smo)
     ctl_clear_lowpass_filter(&smo->filter_spd);
 }
 
-GMP_STATIC_INLINE
-ctrl_gt ctl_step_pmsm_smo(pmsm_smo_t *smo)
-{
-    // PMSM Model
-    ctrl_gt delta_i_alpha = ctl_mul(smo->k1, smo->u_alpha - smo->e_alpha_est - smo->z_alpha) -
-                            ctl_mul(smo->k2, smo->i_alpha_est) - ctl_mul(ctl_mul(smo->wr, smo->k3), smo->i_beta_est);
+    GMP_STATIC_INLINE
+    ctrl_gt ctl_step_pmsm_smo(pmsm_smo_t *smo)
+    {
+        // PMSM Model
+        ctrl_gt delta_i_alpha = ctl_mul(smo->k1, smo->u_alpha - smo->z_alpha) -
+                                ctl_mul(smo->k2, smo->i_alpha_est) -
+                                ctl_mul(ctl_mul(smo->wr, smo->k3), smo->i_beta_est);
 
-    ctrl_gt delta_i_beta = ctl_mul(smo->k1, smo->u_beta - smo->e_beta_est - smo->z_beta) -
-                           ctl_mul(smo->k2, smo->i_beta_est) + ctl_mul(ctl_mul(smo->wr, smo->k3), smo->i_alpha_est);
+        ctrl_gt delta_i_beta = ctl_mul(smo->k1, smo->u_beta - smo->z_beta) -
+                               ctl_mul(smo->k2, smo->i_beta_est) + ctl_mul(ctl_mul(smo->wr, smo->k3), smo->i_alpha_est);
 
     // Step i est
     smo->i_alpha_est += delta_i_alpha;
