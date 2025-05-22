@@ -56,7 +56,15 @@ GMP_STATIC_INLINE
 ctrl_gt ctl_step_im_spd_calc(ctl_im_spd_calc_t *calc, ctrl_gt isd, ctrl_gt isq, ctrl_gt omega_r)
 {
     calc->imds += ctl_mul(calc->kr, (isd - calc->imds));
-    calc->slip = ctl_div(ctl_mul(calc->kt, isq), calc->imds);
+
+    if (calc->imds < float2ctrl(0.001))
+    {
+        calc->slip = float2ctrl(1.0);
+    }
+    else
+    {
+        calc->slip = ctl_div(ctl_mul(calc->kt, isq), calc->imds);
+    }
 
     calc->omega_s = omega_r + calc->slip;
     calc->enc.elec_position += ctl_mul(calc->ktheta, calc->omega_s) + GMP_CONST_1;
