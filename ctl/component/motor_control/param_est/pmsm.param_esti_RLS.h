@@ -1,29 +1,24 @@
 /**
  * @file param_esti_RLS.h
  * @author Lin (lammanyee@zju.edu.cn)
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2024-12-31 *
  * @copyright Copyright GMP(c) 2024
  *
  */
 
-
-#include <vector>
 #include <ctl/component/motor_control/basic/motor_current_ctrl.h>
-//#include <gmp_math.h>
+#include <vector>
+// #include <gmp_math.h>
 
-#define GMP_PORT_CTRL_T              float
+#define GMP_PORT_CTRL_T float
 typedef GMP_PORT_CTRL_T ctrl_gt;
 
 // This area to define all infos, warnings or errors.
-#define GMP_EC_OK                       ((0x00000000))
-#define GMP_EC_GENERAL_WARN             ((GMP_EC_WARN_BEGIN  + 1))
-#define GMP_EC_GENERAL_ERROR            ((GMP_EC_ERRO_BEGIN + 1))
-
-
-
-
+#define GMP_EC_OK            ((0x00000000))
+#define GMP_EC_GENERAL_WARN  ((GMP_EC_WARN_BEGIN + 1))
+#define GMP_EC_GENERAL_ERROR ((GMP_EC_ERRO_BEGIN + 1))
 
 // typedef struct _tag_RLS
 // {
@@ -32,39 +27,36 @@ typedef GMP_PORT_CTRL_T ctrl_gt;
 //     // RLS param
 //     RLS_data_t data;
 //     int input_order;  // order of system
-//     int output_order; 
+//     int output_order;
 //     ctrl_gt lambda;  // forgetting factor, regularly 0.998~1
 //     std::vector<std::vector<ec_gt>> weights;  // weight coefficient
 //     std::vector<std::vector<ctrl_gt>> P;  // covariance matrix
 
-
 //     // RLS constructor
 //     _tag_RLS(int input_order, int output_order, ec_gt forgetting_factor)
-//         : input_order(input_order), output_order(output_order), lambda(forgetting_factor) 
+//         : input_order(input_order), output_order(output_order), lambda(forgetting_factor)
 //     {
 //         data_initialize();
-//         param_initialize(); 
+//         param_initialize();
 //     }
 
-
 //     // RLS initialize
-//     ec_gt param_initialize() 
+//     ec_gt param_initialize()
 //     {
 //         lambda = 1;
-//         weights.resize(output_order, std::vector<ec_gt>(input_order, 0.0)); 
+//         weights.resize(output_order, std::vector<ec_gt>(input_order, 0.0));
 //         P = std::vector<std::vector<ec_gt>>(input_order, std::vector<ec_gt>(input_order, 0.0));
 //         for (int i = 0; i < input_order; ++i) {
 //             P[i][i] = 1;        // initialize P as const*I, const regularly as 1~10E5
 //         }
 //         return GMP_EC_OK;
 //     }
-//     ec_gt data_initialize() 
+//     ec_gt data_initialize()
 //     {
-//         data.input_state.resize(input_order, 0.0); 
-//         data.output_state.resize(output_order, 0.0); 
+//         data.input_state.resize(input_order, 0.0);
+//         data.output_state.resize(output_order, 0.0);
 //         return GMP_EC_OK;
 //     }
-
 
 //     // RLS update
 //     ec_gt step(const RLS_data_t& rls_data)
@@ -78,40 +70,40 @@ typedef GMP_PORT_CTRL_T ctrl_gt;
 //         // **** Kn cal
 //         // P(n-1)X(n)
 //         std::vector<ctrl_gt> Px(input_order, 0.0);
-//         for (int i = 0; i < input_order; ++i) 
+//         for (int i = 0; i < input_order; ++i)
 //         {
-//             for (int j = 0; j < input_order; ++j) 
+//             for (int j = 0; j < input_order; ++j)
 //             {
 //                 Px[i] += P[i][j] * data.input_state[j];
 //             }
 //         }
-        
+
 //         // **** for each equation
-//         for (int m = 0; m < output_order; ++m) 
+//         for (int m = 0; m < output_order; ++m)
 //         {
 //             // K(n) = P(n-1)X(n) / ( lamdba + X(n)'P(n-1)X(n) )
 //             ctrl_gt gamma = lambda;
 //             ctrl_gt alpha = 0.0;
-//             for (int i = 0; i < input_order; ++i) 
+//             for (int i = 0; i < input_order; ++i)
 //             {
 //                 alpha += data.input_state[i] * Px[i];
 //             }
 //             alpha = 1.0 / (gamma + alpha);
 
 //             std::vector<ec_gt> K(input_order, 0.0);
-//             for (int i = 0; i < input_order; ++i) 
+//             for (int i = 0; i < input_order; ++i)
 //             {
 //                 K[i] = Px[i] * alpha;
 //             }
 
 //             // error(n) = y(n) - X(n)'w(n-1)
 //             ec_gt error = data.output_state[m];
-//             for (int i = 0; i < input_order; ++i) 
+//             for (int i = 0; i < input_order; ++i)
 //             {
 //                 error -= weights[m][i] * data.input_state[i];
 //             }
 //             // w(n) = w(n-1) + k(n)*error(n)
-//             for (int i = 0; i < input_order; ++i) 
+//             for (int i = 0; i < input_order; ++i)
 //             {
 //                 weights[m][i] += K[i] * error;
 //             }
@@ -119,9 +111,9 @@ typedef GMP_PORT_CTRL_T ctrl_gt;
 //             // **** Pn update
 //             // Pn = (P(n-1)-K(n)X(n)'P(n-1))/lambda
 //             std::vector<std::vector<ec_gt>> P_new(input_order, std::vector<ec_gt>(input_order, 0.0));
-//             for (int i = 0; i < input_order; ++i) 
+//             for (int i = 0; i < input_order; ++i)
 //             {
-//                 for (int j = 0; j < output_order; ++j) 
+//                 for (int j = 0; j < output_order; ++j)
 //                 {
 //                     P_new[i][j] = (P[i][j] - K[i] * Px[j]) / lambda;
 //                 }
@@ -129,7 +121,7 @@ typedef GMP_PORT_CTRL_T ctrl_gt;
 //             // P = P_new;
 //         }
 //         P = P_new;
-//         return GMP_EC_OK; 
+//         return GMP_EC_OK;
 //     }
 
 //     // get weights result
@@ -139,15 +131,11 @@ typedef GMP_PORT_CTRL_T ctrl_gt;
 
 // } RLS_t;
 
-
-
-
 typedef struct _tag_RLS_data
 {
-    std::vector<ctrl_gt> y_vec;  
-    std::vector<std::vector<ctrl_gt>> x_mat;  
+    std::vector<ctrl_gt> y_vec;
+    std::vector<std::vector<ctrl_gt>> x_mat;
 } RLS_data_t;
-
 
 // matrix �?vector 支持2�?�?�?
 // 加法，点乘，数乘
@@ -155,7 +143,6 @@ typedef struct _tag_RLS_data
 // matrix: 逆。乘法，加法，转置，行列式，数乘
 // 清零，赋�?
 // 定义和常数的加法加常数乘以单位矩�?
-
 
 typedef struct _tag_RLS
 {
@@ -178,18 +165,17 @@ typedef struct _tag_RLS
     // RLS param
     // RLS_data_t data;
     // int input_order;  // order of system
-    // int output_order; 
+    // int output_order;
     // ctrl_gt lambda;  // forgetting factor, regularly 0.998~1
     // std::vector<ctrl_gt>  weights;  // weight coefficient
     // std::vector<std::vector<ctrl_gt>> P;  // covariance matrix
 
-
     // // RLS constructor
     // _tag_RLS(int input_order, int output_order, ec_gt forgetting_factor)
-    //     : input_order(input_order), output_order(output_order), lambda(forgetting_factor) 
+    //     : input_order(input_order), output_order(output_order), lambda(forgetting_factor)
     // {
     //     data_initialize();
-    //     param_initialize(); 
+    //     param_initialize();
     // }
 } RLS_t;
 
@@ -202,7 +188,7 @@ void ctl_init_rls(rls_t *rls)
     // rls->covariance.dat[1] = float2ctrl(0);
     // rls->covariance.dat[2] = float2ctrl(0);
     // rls->covariance.dat[3] = float2ctrl(10);
-    ctl_matrix2_set(&rls->covariance, float2ctrl(10),0,0,float2ctrl(10));
+    ctl_matrix2_set(&rls->covariance, float2ctrl(10), 0, 0, float2ctrl(10));
 
     // rls->x.dat[0] = 0;
     // rls->x.dat[1] = 0;
@@ -216,9 +202,7 @@ void ctl_init_rls(rls_t *rls)
     ctl_vector2_clear(&rls->weight);
 }
 
-void ctl_setup_rls(rls_t *rls, ctrl_gt forget_f, ctl_matrix2_t *covariance_0,
-    ctl_vector2_t *weight_0
-)
+void ctl_setup_rls(rls_t *rls, ctrl_gt forget_f, ctl_matrix2_t *covariance_0, ctl_vector2_t *weight_0)
 {
     rls->forgetting_factor = forget_f;
 
@@ -227,11 +211,11 @@ void ctl_setup_rls(rls_t *rls, ctrl_gt forget_f, ctl_matrix2_t *covariance_0,
     ctl_vector2_copy(&rls->weight, weight_0);
 }
 
-    // RLS initialize
-// ec_gt RLS_reset() 
+// RLS initialize
+// ec_gt RLS_reset()
 // {
 //     lambda = 1;
-//     weights.resize(output_order, std::vector<ec_gt>(input_order, 0.0)); 
+//     weights.resize(output_order, std::vector<ec_gt>(input_order, 0.0));
 //     P = std::vector<std::vector<ec_gt>>(input_order, std::vector<ec_gt>(input_order, 0.0));
 //     for (int i = 0; i < input_order; ++i) {
 //         P[i][i] = 1;        // initialize P as const*I, const regularly as 1~10E5
@@ -239,7 +223,7 @@ void ctl_setup_rls(rls_t *rls, ctrl_gt forget_f, ctl_matrix2_t *covariance_0,
 //     return GMP_EC_OK;
 // }
 
-void RLS_clear(rls_t *rls) 
+void RLS_clear(rls_t *rls)
 {
     ctl_vector2_clear(&rls->weight);
     ctl_matrix2_clear(&rls->covariance);
@@ -252,7 +236,7 @@ void ctl_rls_input(rls_t *rls, ctl_vector2_t *x, ctl_matrix2_t *y)
 }
 
 // RLS update
-void ctl_rls_step(rls_t *rls)//,const RLS_data_t& rls_data)
+void ctl_rls_step(rls_t *rls) //,const RLS_data_t& rls_data)
 {
 
     ctl_matrix2_t px;
@@ -299,8 +283,7 @@ void ctl_rls_step(rls_t *rls)//,const RLS_data_t& rls_data)
 
     ctl_matrix2_sub(&rls->covariance, &rls->covariance, &kxtp);
 
-    ctl_matrix2_gain(&rls->covariance, &rls->covariance, 1/rls->forgetting_factor);
-
+    ctl_matrix2_gain(&rls->covariance, &rls->covariance, 1 / rls->forgetting_factor);
 
     // data = rls_data;
     // // // dimension match
@@ -311,41 +294,41 @@ void ctl_rls_step(rls_t *rls)//,const RLS_data_t& rls_data)
     // // **** Kn cal
     // // P(n-1)X(n)
     // std::vector<ctrl_gt> Px(input_order, 0.0);
-    // for (int i = 0; i < input_order; ++i) 
+    // for (int i = 0; i < input_order; ++i)
     // {
-    //     for (int j = 0; j < input_order; ++j) 
+    //     for (int j = 0; j < input_order; ++j)
     //     {
     //         Px[i] += P[i][j] * data.input_state[j];
     //     }
     // }
-    
+
     // **** for each equation
-   
-    // for (int m = 0; m < output_order; ++m) 
+
+    // for (int m = 0; m < output_order; ++m)
     // {
     //      // K(n) = P(n-1)X(n) / ( lamdba + X(n)'P(n-1)X(n) )
     //     ctrl_gt gamma = lambda;
     //     ctrl_gt alpha = 0.0;
-    //     for (int i = 0; i < input_order; ++i) 
+    //     for (int i = 0; i < input_order; ++i)
     //     {
     //         alpha += data.input_state[i] * Px[i];
     //     }
     //     alpha = 1.0 / (gamma + alpha);
 
     //     std::vector<ctrl_gt> K(input_order, 0.0);
-    //     for (int i = 0; i < input_order; ++i) 
+    //     for (int i = 0; i < input_order; ++i)
     //     {
     //         K[i] = Px[i] * alpha;
     //     }
 
     //     // error(n) = y(n) - X(n)'w(n-1)
     //     ctrl_gt error = data.output_state[m];
-    //     for (int i = 0; i < input_order; ++i) 
+    //     for (int i = 0; i < input_order; ++i)
     //     {
     //         error -= weights[m][i] * data.input_state[i];
     //     }
     //     // w(n) = w(n-1) + k(n)*error(n)
-    //     for (int i = 0; i < input_order; ++i) 
+    //     for (int i = 0; i < input_order; ++i)
     //     {
     //         weights[m][i] += K[i] * error;
     //     }
@@ -353,9 +336,9 @@ void ctl_rls_step(rls_t *rls)//,const RLS_data_t& rls_data)
     //     // **** Pn update
     //     // Pn = (P(n-1)-K(n)X(n)'P(n-1))/lambda
     //     std::vector<std::vector<ctrl_gt>> P_new(input_order, std::vector<ctrl_gt>(input_order, 0.0));
-    //     for (int i = 0; i < input_order; ++i) 
+    //     for (int i = 0; i < input_order; ++i)
     //     {
-    //         for (int j = 0; j < output_order; ++j) 
+    //         for (int j = 0; j < output_order; ++j)
     //         {
     //             P_new[i][j] = (P[i][j] - K[i] * Px[j]) / lambda;
     //         }
@@ -365,8 +348,8 @@ void ctl_rls_step(rls_t *rls)//,const RLS_data_t& rls_data)
     // P = P_new;
 }
 
-    // get weights result
-const std::vector<ctrl_gt>& RLS_get_weights(rls_t) const 
+// get weights result
+const std::vector<ctrl_gt> &RLS_get_weights(rls_t) const
 {
     return weights;
 }
@@ -376,41 +359,35 @@ void ctl_get_rls_weight(rls_t *rls, ctl_vector2_t &weight)
     ctl_vector2_copy(rls->weight, weight);
 }
 
-
-
 typedef struct _tag_motor_param
 {
     ctl_motor_current_ctrl_t current_value;
 
-    //param
+    // param
     ctrl_gt Ld;
     ctrl_gt Lq;
     ctrl_gt Rs;
     ctrl_gt Psif;
     ctrl_gt Psif;
 
-    //motion
+    // motion
     ctrl_gt we;
 
     RLS_t rls;
 
 } ctl_motor_param_t;
 
-
-
-
 ec_gt ctl_param_esti_RLS(ctl_motor_param_t *obj)
 {
-    obj->rls.y.dat[0] =  obj->current_value.vdq0[0] -obj->Rs*obj->current_value.idq0[0];
-    obj->rls.y.dat[1] =  obj.current_value.vdq0[1]-obj->Rs*obj.current_value.idq0[1]-obj->we*psi_f;
-    obj->rls.x.dat[0] =  (idq[0]-idq_old[0])/Ts;
-    obj->rls.x.dat[1] =  omega_e*idq[1];
-    obj->rls.x.dat[2] =  omega_e*idq[0];
-    obj->rls.x.dat[3] =  (idq[1]-idq_old[1])/Ts;;
-
+    obj->rls.y.dat[0] = obj->current_value.vdq0[0] - obj->Rs * obj->current_value.idq0[0];
+    obj->rls.y.dat[1] = obj.current_value.vdq0[1] - obj->Rs * obj.current_value.idq0[1] - obj->we * psi_f;
+    obj->rls.x.dat[0] = (idq[0] - idq_old[0]) / Ts;
+    obj->rls.x.dat[1] = omega_e * idq[1];
+    obj->rls.x.dat[2] = omega_e * idq[0];
+    obj->rls.x.dat[3] = (idq[1] - idq_old[1]) / Ts;
+    ;
 
     ctl_vector2_copy(&idq_old, &idq);
-    
 
     return GMP_EC_OK;
 }

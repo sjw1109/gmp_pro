@@ -167,7 +167,7 @@ void ctl_init_im_spd_calc(
 
     // clear parameters
     calc->imds = 0;
-    calc->slip = 0;
+    calc->slip = float2ctrl(1.0);
     calc->omega_s = 0;
     calc->enc.elec_position = 0;
 }

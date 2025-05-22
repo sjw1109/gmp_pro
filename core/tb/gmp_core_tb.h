@@ -5,12 +5,13 @@
 
 #ifdef __cplusplus
 extern "C"
+{
 #endif // __cplusplus
 
-    void gmp_ringbuf_tb(void);
+void gmp_ringbuf_tb(void);
 
 #ifdef __cplusplus
-{
+}
 #endif //__cplusplus
 
 #endif // _FILE_GMP_CORE_TESTBENCH_H_

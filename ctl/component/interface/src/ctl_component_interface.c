@@ -11,7 +11,6 @@
 
 #include <gmp_core.h>
 
-
 //////////////////////////////////////////////////////////////////////////
 // ADC channel
 
@@ -104,10 +103,8 @@ void ctl_init_pwm_channel(pwm_channel_t *pwm_obj, pwm_gt phase, pwm_gt full_scal
     pwm_obj->phase = phase;
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 // PWM dual channel
-
 
 // setup pwm object
 void ctl_init_pwm_dual_channel(pwm_dual_channel_t *pwm_obj, pwm_gt phase, pwm_gt full_scale)
@@ -123,7 +120,6 @@ void ctl_init_pwm_dual_channel(pwm_dual_channel_t *pwm_obj, pwm_gt phase, pwm_gt
     pwm_obj->full_scale = full_scale;
     pwm_obj->phase = phase;
 }
-
 
 //////////////////////////////////////////////////////////////////////////
 // PWM tri channel
@@ -143,7 +139,6 @@ void ctl_init_pwm_tri_channel(pwm_tri_channel_t *pwm_obj, pwm_gt phase, pwm_gt f
     pwm_obj->phase = phase;
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 // ADC ptr channel init functions
 
@@ -160,7 +155,7 @@ void ctl_init_ptr_adc_channel(
 {
     adc->raw = adc_target;
 
-    //adc->raw = 0;
+    // adc->raw = 0;
     adc->bias = bias;
 
     adc->gain = gain;
@@ -170,6 +165,9 @@ void ctl_init_ptr_adc_channel(
     adc->shift_index = iqn - adc_obj->resolution;
 #elif defined CTRL_GT_IS_FLOAT
     adc->per_unit_base = (ctrl_gt)1.0 / (1 << adc->resolution);
+
+    // iqn parameter is not used here
+    UNUSED_PARAMETER(iqn);
 #endif
 
     adc->control_port.value = 0;
@@ -201,6 +199,9 @@ void ctl_init_dual_ptr_adc_channel(
     adc->shift_index = iqn - adc_obj->resolution;
 #elif defined CTRL_GT_IS_FLOAT
     adc->per_unit_base = (ctrl_gt)1.0 / (1 << adc->resolution);
+
+    // iqn parameter is not used here
+    UNUSED_PARAMETER(iqn);
 #endif
 }
 
@@ -230,5 +231,8 @@ void ctl_init_tri_ptr_adc_channel(
     adc->shift_index = iqn - adc_obj->resolution;
 #elif defined CTRL_GT_IS_FLOAT
     adc->per_unit_base = (ctrl_gt)1.0 / (1 << adc->resolution);
+
+    // iqn parameter is not used here
+    UNUSED_PARAMETER(iqn);
 #endif
 }

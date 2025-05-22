@@ -7,20 +7,20 @@
 //
 // Here list all the functions that CLA math provided.
 //
-// standard math function 
-// 
-// + acosf   
-// + asinf   
-// + atanf   
-// + atan2f  
-// + cosf    
-// + expf    
-// + logf    
-// + log10f  
-// + sinf    
-// + sqrtf   
-// + tanf 
-// 
+// standard math function
+//
+// + acosf
+// + asinf
+// + atanf
+// + atan2f
+// + cosf
+// + expf
+// + logf
+// + log10f
+// + sinf
+// + sqrtf
+// + tanf
+//
 // + fmaxf
 // + fminf
 //
@@ -33,7 +33,7 @@
 // + __atan
 // + __atan2
 // + __sinpuf32
-// + __cospuf32 
+// + __cospuf32
 //
 // FPU Intrinsics
 //
@@ -45,7 +45,7 @@
 // + __fmin
 // + __fracf32
 // + __swapf
-// + __swapff     
+// + __swapff
 
 GMP_STATIC_INLINE
 float32_t saturation_static_inline(float32_t in, float32_t min_val, float32_t max_val)
@@ -79,7 +79,7 @@ float multiple_static_inline(float A, float B)
 #define pwm_mul(A, B)        ((pwm_gt)((((float)(A)) * ((float)(B)))))
 #define pwm_sat(A, Pos, Neg) ((pwm_gt)saturation_macro(((float)(A)), ((float)(Pos)), ((float)(Neg))))
 #define ctl_mul(A, B)        ((float)((float)(A) * (B)))
-#define ctl_div(A, B)        ((float32_t)(__divf32((A) , (B))))
+#define ctl_div(A, B)        ((float32_t)(__divf32((A), (B))))
 #define ctl_sat(A, Pos, Neg) saturation_macro((A), (Pos), (Neg))
 
 // #define pwm_mpy(CTRL_RESULT, PWM_SAT) ()
@@ -96,18 +96,16 @@ float multiple_static_inline(float A, float B)
 #define ctl_sub(A, B) ((float32_t)((float32_t)(A) - (B)))
 
 // Nonlinear support
-#define ctl_sin(A)      (__sinpuf32((A))   )
-#define ctl_cos(A)      (__cospuf32((A))   )
+#define ctl_sin(A)      (__sinpuf32((A)))
+#define ctl_cos(A)      (__cospuf32((A)))
 #define ctl_tan(A)      (tanf(2 * PI * (A)))
-#define ctl_atan2(Y, X) (__atan2((Y), (X)) )
-#define ctl_exp(A)      (expf((A))         )
-#define ctl_ln(A)       (logf((A))         )
-#define ctl_sqrt(A)     (CLAsqrt((A))      )
+#define ctl_atan2(Y, X) (__atan2((Y), (X)))
+#define ctl_exp(A)      (expf((A)))
+#define ctl_ln(A)       (logf((A)))
+#define ctl_sqrt(A)     (CLAsqrt((A)))
 #define ctl_isqrt(A)    (__eisqrtf32((A)))
 
 // Specify ctrl_gt is a float number
 #define CTRL_GT_IS_FLOAT
 
 #endif // _FILE_ARM_CMSIS_MACROS_H_
-
-

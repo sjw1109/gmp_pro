@@ -1,17 +1,17 @@
 /**
  * @file cc.c2000.inl
  * @author Javnson (javnson@zju.edu.cn)
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2024-09-30
- * 
+ *
  * @copyright Copyright GMP(c) 2024
- * 
+ *
  */
 
 //////////////////////////////////////////////////////////////////////////
 // Step I language patch
-// 
+//
 // Wrong C++ version
 #ifdef __cplusplus
 
@@ -44,14 +44,14 @@
 // Step III library support macro
 
 // + weak function Modifier
-//#define GMP_WEAK_FUNC_PREFIX __attribute__((weak))
+// #define GMP_WEAK_FUNC_PREFIX __attribute__((weak))
 #define GMP_WEAK_FUNC_PREFIX __attribute((weak))
-//#define GMP_WEAK_FUNC_PREFIX _weak
-//#define GMP_WEAK_FUNC_PREFIX //_Pragma("weak")
+// #define GMP_WEAK_FUNC_PREFIX _weak
+// #define GMP_WEAK_FUNC_PREFIX //_Pragma("weak")
 #define GMP_WEAK_FUNC_SUFFIX //__attribute__((weak))
 
 // + disable optimization
-//#define GMP_NO_OPT_PREFIX _Pragma("FUNCTION_OPTIONS(\"--opt_level=0\")")
+// #define GMP_NO_OPT_PREFIX _Pragma("FUNCTION_OPTIONS(\"--opt_level=0\")")
 #define GMP_NO_OPT_PREFIX _Pragma("FUNC_OPTIMIZE_OPTLEVEL(\"0\")")
 #define GMP_NO_OPT_SUFFIX
 

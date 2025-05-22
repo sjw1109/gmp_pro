@@ -51,40 +51,43 @@ void ctl_init()
     pmsm_ctrl_init.fs = CONTROLLER_FREQUENCY;
 
     // current pid controller parameters
-    //pmsm_ctrl_init.current_pid_gain = 0.096;
-    pmsm_ctrl_init.current_pid_gain = MOTOR_PARAM_LS * 100;  // 100 Hz, discrete
-    pmsm_ctrl_init.current_pid_gain = MOTOR_PARAM_LS * 100*5;  // 100 Hz, discrete
-    // pmsm_ctrl_init.current_Ti = 1.0f / 500;
-    //pmsm_ctrl_init.current_Ti = 1.0f / 1000;
-    pmsm_ctrl_init.current_Ti = MOTOR_PARAM_LS / MOTOR_PARAM_RS;
+    pmsm_ctrl_init.current_pid_gain = (parameter_gt)(MOTOR_PARAM_LS * MTR_CTRL_CURRENT_LOOP_BW * 2 * PI *
+                                                     MTR_CTRL_VOLTAGE_BASE / MTR_CTRL_CURRENT_BASE);
+    pmsm_ctrl_init.current_Ti = (parameter_gt)(MOTOR_PARAM_LS / MOTOR_PARAM_RS);
     pmsm_ctrl_init.current_Td = 0;
-    pmsm_ctrl_init.voltage_limit_min = float2ctrl(-0.45);
-    pmsm_ctrl_init.voltage_limit_max = float2ctrl(0.45);
+    pmsm_ctrl_init.voltage_limit_min = float2ctrl(-1.0);
+    pmsm_ctrl_init.voltage_limit_max = float2ctrl(1.0);
 
     // speed pid controller parameters
     pmsm_ctrl_init.spd_ctrl_div = SPD_CONTROLLER_PWM_DIVISION;
+
     pmsm_ctrl_init.spd_pid_gain = 0.04f;
     pmsm_ctrl_init.spd_Ti = 1.0f / 1000;
+
+    // pmsm_ctrl_init.spd_pid_gain = (parameter_gt)(3.5);
+    // pmsm_ctrl_init.spd_Ti = (parameter_gt)(4.0f / MTR_CTRL_SPEED_LOOP_BW);
+
     pmsm_ctrl_init.spd_Td = 0;
-    pmsm_ctrl_init.current_limit_min = float2ctrl(-0.3);
-    pmsm_ctrl_init.current_limit_max = float2ctrl(0.3);
+    pmsm_ctrl_init.current_limit_min = float2ctrl(-0.45);
+    pmsm_ctrl_init.current_limit_max = float2ctrl(0.45);
 
     // accelerator parameters
     pmsm_ctrl_init.acc_limit_min = -150.0f;
     pmsm_ctrl_init.acc_limit_max = 150.0f;
 
     // Motor parameters
-    pmsm_ctrl_init.Ld = MOTOR_PARAM_LS;
-    pmsm_ctrl_init.Lq = MOTOR_PARAM_LS;
-    pmsm_ctrl_init.Rs = MOTOR_PARAM_RS;
+    pmsm_ctrl_init.Ld = (parameter_gt)(MOTOR_PARAM_LS);
+    pmsm_ctrl_init.Lq = (parameter_gt)(MOTOR_PARAM_LS);
+    pmsm_ctrl_init.Rs = (parameter_gt)(MOTOR_PARAM_RS);
     pmsm_ctrl_init.pole_pairs = MOTOR_PARAM_POLE_PAIRS;
-    pmsm_ctrl_init.u_base = MOTOR_PARAM_MAX_DC_VOLTAGE;
-    pmsm_ctrl_init.i_base = MOTOR_PARAM_MAX_PH_CURRENT;
+    pmsm_ctrl_init.u_base = (parameter_gt)(MTR_CTRL_VOLTAGE_BASE);
+    pmsm_ctrl_init.i_base = (parameter_gt)(MTR_CTRL_CURRENT_BASE);
 
     // SMO controller parameters
-    pmsm_ctrl_init.speed_base_rpm = MOTOR_PARAM_MAX_SPEED;
+    pmsm_ctrl_init.speed_base_rpm = (parameter_gt)(MOTOR_PARAM_MAX_SPEED);
     pmsm_ctrl_init.smo_fc_e = 30.0;
     pmsm_ctrl_init.smo_fc_omega = 50.0;
+
     pmsm_ctrl_init.smo_k_slide = float2ctrl(1);
     pmsm_ctrl_init.smo_kp = float2ctrl(4);
     pmsm_ctrl_init.smo_Ti = float2ctrl(0.0075);
@@ -96,6 +99,7 @@ void ctl_init()
 
     // init the PMSM controller
     ctl_init_pmsm_smo_bare_controller(&pmsm_ctrl, &pmsm_ctrl_init);
+
 
     // BUG TI cannot print out sizeof() result if no type is specified.
     gmp_base_print(TEXT_STRING("PMSM SERVO struct has been inited, size :%d\r\n"), (int)sizeof(pmsm_ctrl_init));
@@ -114,6 +118,7 @@ void ctl_init()
 
     ctl_pmsm_smo_ctrl_current_mode(&pmsm_ctrl);
     ctl_set_pmsm_smo_ctrl_idq_ff(&pmsm_ctrl, float2ctrl(0.0), float2ctrl(0.01));
+
 
     ctl_enable_pmsm_smo(&pmsm_ctrl);
 
@@ -146,7 +151,7 @@ void ctl_mainloop(void)
 {
     int spd_target = gmp_base_get_system_tick() / 100;
 
-    //ctl_set_pmsm_smo_ctrl_speed(&pmsm_ctrl, float2ctrl(0.1) * spd_target - float2ctrl(1.0));
+    // ctl_set_pmsm_smo_ctrl_speed(&pmsm_ctrl, float2ctrl(0.1) * spd_target - float2ctrl(1.0));
 
     if (gmp_base_get_system_tick() >= 600)
     {

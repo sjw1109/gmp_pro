@@ -19,222 +19,222 @@ extern "C"
 {
 #endif // __cplusplus
 
-    //////////////////////////////////////////////////////////////////////////
-    // Single channel PWM channel
-    typedef struct _tag_pwm_channel
+//////////////////////////////////////////////////////////////////////////
+// Single channel PWM channel
+typedef struct _tag_pwm_channel
+{
+    // INPUT raw data from control law
+    pwm_ift raw;
+
+    // param full scale
+    pwm_gt full_scale;
+
+    // param phase shift
+    pwm_gt phase;
+
+    // OUTPUT the PWM output channel
+    pwm_gt value;
+
+} pwm_channel_t;
+
+//// init object function
+// ec_gt ctl_init_pwm_channel(pwm_channel_t *pwm_obj);
+
+//// setup the pwm object
+// ec_gt ctl_setup_pwm_channel(pwm_channel_t *pwm_obj, pwm_gt phase, pwm_gt full_scale);
+
+void ctl_init_pwm_channel(pwm_channel_t *pwm_obj, pwm_gt phase, pwm_gt full_scale);
+
+// calculate function
+GMP_STATIC_INLINE
+pwm_gt ctl_calc_pwm_channel(pwm_channel_t *pwm_obj, ctrl_gt raw)
+{
+    pwm_obj->raw.value = raw;
+
+    pwm_obj->value = pwm_mul(pwm_obj->raw.value, pwm_obj->full_scale) + pwm_obj->phase;
+    pwm_obj->value = pwm_sat(pwm_obj->value, pwm_obj->full_scale, 0);
+
+    return pwm_obj->value;
+}
+
+GMP_STATIC_INLINE
+pwm_gt ctl_calc_pwm_channel_warp(pwm_channel_t *pwm_obj, ctrl_gt raw)
+{
+    pwm_obj->raw.value = raw;
+
+    pwm_obj->value = pwm_mul(pwm_obj->raw.value, pwm_obj->full_scale) + pwm_obj->phase;
+    pwm_obj->value = pwm_obj->value % pwm_obj->full_scale;
+
+    return pwm_obj->value;
+}
+
+GMP_STATIC_INLINE
+pwm_gt ctl_calc_pwm_channel_inv(pwm_channel_t *pwm_obj, ctrl_gt raw)
+{
+    pwm_obj->raw.value = raw;
+
+    pwm_obj->value = pwm_obj->full_scale - pwm_mul(pwm_obj->raw.value, pwm_obj->full_scale);
+    pwm_obj->value = pwm_sat(pwm_obj->value, pwm_obj->full_scale, 0);
+
+    return pwm_obj->value;
+}
+
+// get control port handle
+GMP_STATIC_INLINE
+pwm_ift *ctl_get_pwm_channel_ctrl_port(pwm_channel_t *pwm)
+{
+    return &pwm->raw;
+}
+
+//////////////////////////////////////////////////////////////////////////
+// Dual channel PWM channel
+
+typedef struct _tag_pwm_dual_channel
+{
+    // input raw data from control law
+    dual_pwm_ift raw;
+
+    // param full scale
+    pwm_gt full_scale;
+
+    // param phase shift
+    pwm_gt phase;
+
+    // OUTPUT the PWM output channel
+    pwm_gt value[2];
+
+} pwm_dual_channel_t;
+
+//// init funciton for dual channel PWM channel
+// ec_gt ctl_init_pwm_dual_channel(pwm_dual_channel_t *pwm_obj);
+
+//// setup pwm object
+// ec_gt ctl_setup_pwm_dual_channel(pwm_dual_channel_t *pwm_obj, pwm_gt phase, pwm_gt full_scale);
+
+void ctl_init_pwm_dual_channel(pwm_dual_channel_t *pwm_obj, pwm_gt phase, pwm_gt full_scale);
+
+// calculate function
+GMP_STATIC_INLINE
+void ctl_calc_pwm_dual_channel(pwm_dual_channel_t *pwm_obj, ctl_vector2_t *raw)
+{
+    int i;
+
+    for (i = 0; i < 2; ++i)
     {
-        // INPUT raw data from control law
-        pwm_ift raw;
+        pwm_obj->raw.value.dat[i] = raw->dat[i];
 
-        // param full scale
-        pwm_gt full_scale;
-
-        // param phase shift
-        pwm_gt phase;
-
-        // OUTPUT the PWM output channel
-        pwm_gt value;
-
-    } pwm_channel_t;
-
-    //// init object function
-    // ec_gt ctl_init_pwm_channel(pwm_channel_t *pwm_obj);
-
-    //// setup the pwm object
-    // ec_gt ctl_setup_pwm_channel(pwm_channel_t *pwm_obj, pwm_gt phase, pwm_gt full_scale);
-
-    void ctl_init_pwm_channel(pwm_channel_t *pwm_obj, pwm_gt phase, pwm_gt full_scale);
-
-    // calculate function
-    GMP_STATIC_INLINE
-    pwm_gt ctl_calc_pwm_channel(pwm_channel_t *pwm_obj, ctrl_gt raw)
-    {
-        pwm_obj->raw.value = raw;
-
-        pwm_obj->value = pwm_mul(pwm_obj->raw.value, pwm_obj->full_scale) + pwm_obj->phase;
-        pwm_obj->value = pwm_sat(pwm_obj->value, pwm_obj->full_scale, 0);
-
-        return pwm_obj->value;
+        pwm_obj->value[i] = pwm_mul(pwm_obj->raw.value.dat[i], pwm_obj->full_scale) + pwm_obj->phase;
+        pwm_obj->value[i] = pwm_sat(pwm_obj->value[i], pwm_obj->full_scale, 0);
     }
+}
 
-    GMP_STATIC_INLINE
-    pwm_gt ctl_calc_pwm_channel_warp(pwm_channel_t *pwm_obj, ctrl_gt raw)
+GMP_STATIC_INLINE
+void ctl_calc_pwm_dual_channel_warp(pwm_dual_channel_t *pwm_obj, ctl_vector2_t *raw)
+{
+    int i;
+
+    for (i = 0; i < 2; ++i)
     {
-        pwm_obj->raw.value = raw;
+        pwm_obj->raw.value.dat[i] = raw->dat[i];
 
-        pwm_obj->value = pwm_mul(pwm_obj->raw.value, pwm_obj->full_scale) + pwm_obj->phase;
-        pwm_obj->value = pwm_obj->value % pwm_obj->full_scale;
-
-        return pwm_obj->value;
+        pwm_obj->value[i] = pwm_mul(pwm_obj->raw.value.dat[i], pwm_obj->full_scale) + pwm_obj->phase;
+        pwm_obj->value[i] = pwm_obj->value[i] % pwm_obj->full_scale;
     }
+}
 
-    GMP_STATIC_INLINE
-    pwm_gt ctl_calc_pwm_channel_inv(pwm_channel_t *pwm_obj, ctrl_gt raw)
+GMP_STATIC_INLINE
+void ctl_calc_pwm_dual_channel_inv(pwm_dual_channel_t *pwm_obj, ctl_vector2_t *raw)
+{
+    int i;
+
+    for (i = 0; i < 2; ++i)
     {
-        pwm_obj->raw.value = raw;
+        pwm_obj->raw.value.dat[i] = raw->dat[i];
 
-        pwm_obj->value = pwm_obj->full_scale - pwm_mul(pwm_obj->raw.value, pwm_obj->full_scale);
-        pwm_obj->value = pwm_sat(pwm_obj->value, pwm_obj->full_scale, 0);
-
-        return pwm_obj->value;
+        pwm_obj->value[i] = pwm_obj->full_scale - pwm_mul(pwm_obj->raw.value.dat[i], pwm_obj->full_scale);
+        pwm_obj->value[i] = pwm_sat(pwm_obj->value[i], pwm_obj->full_scale, 0);
     }
+}
 
-    // get control port handle
-    GMP_STATIC_INLINE
-    pwm_ift *ctl_get_pwm_channel_ctrl_port(pwm_channel_t *pwm)
+GMP_STATIC_INLINE
+dual_pwm_ift *ctl_get_dual_pwm_channel_ctrl_port(pwm_dual_channel_t *pwm)
+{
+    return &pwm->raw;
+}
+
+//////////////////////////////////////////////////////////////////////////
+// Tri channel PWM channel
+
+typedef struct _tag_pwm_tri_channel
+{
+    // input raw data from control law
+    tri_pwm_ift raw;
+
+    // param full scale
+    pwm_gt full_scale;
+
+    // param phase shift
+    pwm_gt phase;
+
+    // OUTPUT the PWM output channel
+    pwm_gt value[3];
+
+} pwm_tri_channel_t;
+
+// init function for dual channel PWM channel
+// ec_gt ctl_init_pwm_tri_channel(pwm_tri_channel_t *pwm_obj);
+
+//// setup pwm object
+// ec_gt ctl_setup_pwm_tri_channel(pwm_tri_channel_t *pwm_obj, pwm_gt phase, pwm_gt full_scale);
+
+void ctl_init_pwm_tri_channel(pwm_tri_channel_t *pwm_obj, pwm_gt phase, pwm_gt full_scale);
+
+// calculate function
+GMP_STATIC_INLINE
+void ctl_calc_pwm_tri_channel(pwm_tri_channel_t *pwm_obj)
+{
+    fast_gt i;
+
+    for (i = 0; i < 3; ++i)
     {
-        return &pwm->raw;
+        // pwm_obj->raw.value.dat[i] = raw->dat[i];
+
+        pwm_obj->value[i] = pwm_mul(pwm_obj->raw.value.dat[i], pwm_obj->full_scale) + pwm_obj->phase;
+        pwm_obj->value[i] = pwm_sat(pwm_obj->value[i], pwm_obj->full_scale, 0);
     }
+}
 
-    //////////////////////////////////////////////////////////////////////////
-    // Dual channel PWM channel
+GMP_STATIC_INLINE
+void ctl_calc_pwm_tri_channel_warp(pwm_tri_channel_t *pwm_obj)
+{
+    fast_gt i;
 
-    typedef struct _tag_pwm_dual_channel
+    for (i = 0; i < 3; ++i)
     {
-        // input raw data from control law
-        dual_pwm_ift raw;
+        // pwm_obj->raw.value.dat[i] = raw->dat[i];
 
-        // param full scale
-        pwm_gt full_scale;
-
-        // param phase shift
-        pwm_gt phase;
-
-        // OUTPUT the PWM output channel
-        pwm_gt value[2];
-
-    } pwm_dual_channel_t;
-
-    //// init funciton for dual channel PWM channel
-    // ec_gt ctl_init_pwm_dual_channel(pwm_dual_channel_t *pwm_obj);
-
-    //// setup pwm object
-    // ec_gt ctl_setup_pwm_dual_channel(pwm_dual_channel_t *pwm_obj, pwm_gt phase, pwm_gt full_scale);
-
-    void ctl_init_pwm_dual_channel(pwm_dual_channel_t *pwm_obj, pwm_gt phase, pwm_gt full_scale);
-
-    // calculate function
-    GMP_STATIC_INLINE
-    void ctl_calc_pwm_dual_channel(pwm_dual_channel_t *pwm_obj, ctl_vector2_t *raw)
-    {
-        int i;
-
-        for (i = 0; i < 2; ++i)
-        {
-            pwm_obj->raw.value.dat[i] = raw->dat[i];
-
-            pwm_obj->value[i] = pwm_mul(pwm_obj->raw.value.dat[i], pwm_obj->full_scale) + pwm_obj->phase;
-            pwm_obj->value[i] = pwm_sat(pwm_obj->value[i], pwm_obj->full_scale, 0);
-        }
+        pwm_obj->value[i] = pwm_mul(pwm_obj->raw.value.dat[i], pwm_obj->full_scale) + pwm_obj->phase;
+        pwm_obj->value[i] = pwm_obj->value[i] % pwm_obj->full_scale;
     }
+}
 
-    GMP_STATIC_INLINE
-    void ctl_calc_pwm_dual_channel_warp(pwm_dual_channel_t *pwm_obj, ctl_vector2_t *raw)
+GMP_STATIC_INLINE
+void ctl_calc_pwm_tri_channel_inv(pwm_tri_channel_t *pwm_obj)
+{
+    fast_gt i;
+
+    for (i = 0; i < 3; ++i)
     {
-        int i;
+        // pwm_obj->raw.value.dat[i] = raw->dat[i];
 
-        for (i = 0; i < 2; ++i)
-        {
-            pwm_obj->raw.value.dat[i] = raw->dat[i];
-
-            pwm_obj->value[i] = pwm_mul(pwm_obj->raw.value.dat[i], pwm_obj->full_scale) + pwm_obj->phase;
-            pwm_obj->value[i] = pwm_obj->value[i] % pwm_obj->full_scale;
-        }
+        pwm_obj->value[i] = pwm_obj->full_scale - pwm_mul(pwm_obj->raw.value.dat[i], pwm_obj->full_scale);
+        pwm_obj->value[i] = pwm_sat(pwm_obj->value[i], pwm_obj->full_scale, 0);
     }
+}
 
-    GMP_STATIC_INLINE
-    void ctl_calc_pwm_dual_channel_inv(pwm_dual_channel_t* pwm_obj, ctl_vector2_t* raw)
-    {
-        int i;
-
-        for (i = 0; i < 2; ++i)
-        {
-            pwm_obj->raw.value.dat[i] = raw->dat[i];
-
-            pwm_obj->value[i] = pwm_obj->full_scale - pwm_mul(pwm_obj->raw.value.dat[i], pwm_obj->full_scale);
-            pwm_obj->value[i] = pwm_sat(pwm_obj->value[i], pwm_obj->full_scale, 0);
-        }
-    }
-
-    GMP_STATIC_INLINE
-    dual_pwm_ift *ctl_get_dual_pwm_channel_ctrl_port(pwm_dual_channel_t *pwm)
-    {
-        return &pwm->raw;
-    }
-
-    //////////////////////////////////////////////////////////////////////////
-    // Tri channel PWM channel
-
-    typedef struct _tag_pwm_tri_channel
-    {
-        // input raw data from control law
-        tri_pwm_ift raw;
-
-        // param full scale
-        pwm_gt full_scale;
-
-        // param phase shift
-        pwm_gt phase;
-
-        // OUTPUT the PWM output channel
-        pwm_gt value[3];
-
-    } pwm_tri_channel_t;
-
-    // init function for dual channel PWM channel
-    //ec_gt ctl_init_pwm_tri_channel(pwm_tri_channel_t *pwm_obj);
-
-    //// setup pwm object
-    //ec_gt ctl_setup_pwm_tri_channel(pwm_tri_channel_t *pwm_obj, pwm_gt phase, pwm_gt full_scale);
-
-    void ctl_init_pwm_tri_channel(pwm_tri_channel_t *pwm_obj, pwm_gt phase, pwm_gt full_scale);
-
-    // calculate function
-    GMP_STATIC_INLINE
-    void ctl_calc_pwm_tri_channel(pwm_tri_channel_t* pwm_obj)
-    {
-        fast_gt i;
-
-        for (i = 0; i < 3; ++i)
-        {
-            //pwm_obj->raw.value.dat[i] = raw->dat[i];
-
-            pwm_obj->value[i] = pwm_mul(pwm_obj->raw.value.dat[i], pwm_obj->full_scale) + pwm_obj->phase;
-            pwm_obj->value[i] = pwm_sat(pwm_obj->value[i], pwm_obj->full_scale, 0);
-        }
-    }
-
-    GMP_STATIC_INLINE
-    void ctl_calc_pwm_tri_channel_warp(pwm_tri_channel_t* pwm_obj)
-    {
-        fast_gt i;
-
-        for (i = 0; i < 3; ++i)
-        {
-            //pwm_obj->raw.value.dat[i] = raw->dat[i];
-
-            pwm_obj->value[i] = pwm_mul(pwm_obj->raw.value.dat[i], pwm_obj->full_scale) + pwm_obj->phase;
-            pwm_obj->value[i] = pwm_obj->value[i] % pwm_obj->full_scale;
-        }
-    }
-
-    GMP_STATIC_INLINE
-    void ctl_calc_pwm_tri_channel_inv(pwm_tri_channel_t* pwm_obj)
-    {
-        fast_gt i;
-
-        for (i = 0; i < 3; ++i)
-        {
-            //pwm_obj->raw.value.dat[i] = raw->dat[i];
-
-            pwm_obj->value[i] = pwm_obj->full_scale - pwm_mul(pwm_obj->raw.value.dat[i], pwm_obj->full_scale);
-            pwm_obj->value[i] = pwm_sat(pwm_obj->value[i], pwm_obj->full_scale, 0);
-        }
-    }
-
-    //// stop pwm output
-    // void ctl_stop_pwm_tri_channel(pwm_tri_channel_t *pwm_obj);
-    // void ctl_start_pwm_tri_channel(pwm_tri_channel_t *pwm_obj);
+//// stop pwm output
+// void ctl_stop_pwm_tri_channel(pwm_tri_channel_t *pwm_obj);
+// void ctl_start_pwm_tri_channel(pwm_tri_channel_t *pwm_obj);
 
 #ifdef __cplusplus
 }

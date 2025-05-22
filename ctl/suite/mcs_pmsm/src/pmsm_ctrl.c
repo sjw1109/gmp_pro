@@ -4,7 +4,7 @@
 
 #include <ctl/suite/mcs_pmsm/pmsm_ctrl.h>
 
-//#include "peripheral.h"
+// #include "peripheral.h"
 
 // init pmsm_bare_controller struct
 void ctl_init_pmsm_bare_controller(pmsm_bare_controller_t *ctrl, pmsm_bare_controller_init_t *init)
@@ -102,7 +102,7 @@ void ctl_init_pmsm_bare_controller(pmsm_bare_controller_t *ctrl, pmsm_bare_contr
     ctl_pmsm_ctrl_valphabeta_mode(ctrl);
 }
 
-void ctl_attach_pmsm_bare_output(pmsm_bare_controller_t *ctrl, tri_pwm_ift *pwm_out)
+void ctl_attach_pmsm_bare_output(pmsm_bare_controller_t *ctrl, tri_pwm_ift *pwm)
 {
-    ctrl->pwm_out = pwm_out;
+    ctrl->pwm_out = pwm;
 }

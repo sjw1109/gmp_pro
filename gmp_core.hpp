@@ -44,7 +44,7 @@ extern "C"
 
 
 // invoke chip support package
-#include <csp/chip_port.hpp>
+//#include <csp/chip_port.hpp>
 
 
 //////////////////////////////////////////////////////////////////////////

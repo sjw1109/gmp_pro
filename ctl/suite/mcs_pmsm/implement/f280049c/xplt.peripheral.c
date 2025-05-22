@@ -14,8 +14,6 @@
 // user main header
 #include "user_main.h"
 
-
-
 //////////////////////////////////////////////////////////////////////////
 // definitions of peripheral
 //
@@ -28,7 +26,7 @@ tri_ptr_adc_channel_t iabc;
 ptr_adc_channel_t udc;
 ptr_adc_channel_t idc;
 
-//pos_autoturn_encoder_t pos_enc;
+// pos_autoturn_encoder_t pos_enc;
 
 pwm_tri_channel_t pwm_out;
 
@@ -38,8 +36,12 @@ adc_gt iabc_raw[3];
 adc_gt udc_raw;
 adc_gt idc_raw;
 
+#if !defined PMSM_CTRL_USING_QEP_ENCODER
 // Encoder Interface
 ext_as5048a_encoder_t pos_enc;
+#endif // PMSM_CTRL_USING_QEP_ENCODER
+
+
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -88,9 +90,12 @@ void setup_peripheral(void)
         float2ctrl(MTR_CTRL_VOLTAGE_GAIN), float2ctrl(MTR_CTRL_VOLTAGE_BIAS),
         // ADC resolution, IQN
         12, 24);
-
-    //ctl_init_autoturn_pos_encoder(&pos_enc, MOTOR_PARAM_POLE_PAIRS, ((uint32_t)1 << 14) - 1);
+#if !defined PMSM_CTRL_USING_QEP_ENCODER
+    // init AS5048 encoder
     ctl_init_as5048a_pos_encoder(&pos_enc, MOTOR_PARAM_POLE_PAIRS, SPI_ENCODER_BASE, SPI_ENCODER_NCS);
+    // Set encoder offset
+    ctl_set_as5048a_pos_encoder_offset(&pos_enc, MTR_ENCODER_OFFSET);
+#endif // PMSM_CTRL_USING_QEP_ENCODER
 
     // bind peripheral to motor controller
     ctl_attach_mtr_adc_channels(&pmsm_ctrl.mtr_interface,
@@ -114,8 +119,7 @@ void setup_peripheral(void)
 // interrupt functions and callback functions here
 
 // ADC interrupt
-interrupt
-void MainISR(void)
+interrupt void MainISR(void)
 {
 
     //
@@ -131,7 +135,7 @@ void MainISR(void)
     //
     // Check if overflow has occurred
     //
-    if(true == ADC_getInterruptOverflowStatus(ADC_A_BASE, ADC_INT_NUMBER1))
+    if (true == ADC_getInterruptOverflowStatus(ADC_A_BASE, ADC_INT_NUMBER1))
     {
         ADC_clearInterruptOverflowStatus(ADC_A_BASE, ADC_INT_NUMBER1);
         ADC_clearInterruptStatus(ADC_A_BASE, ADC_INT_NUMBER1);
@@ -141,13 +145,11 @@ void MainISR(void)
     // Acknowledge the interrupt
     //
     Interrupt_clearACKGroup(INT_ADC_A_1_INTERRUPT_ACK_GROUP);
-
 }
 
-interrupt
-void INT_EPWMU_ISR(void)
+// EQEP index interrupt
+interrupt void INT_EQEP_Encoder_ISR(void)
 {
-    //Interrupt_clearACKGroup(INT_EPWMU_INTERRUPT_ACK_GROUP);
 
+    Interrupt_clearACKGroup(INT_EQEP_Encoder_INTERRUPT_ACK_GROUP);
 }
-

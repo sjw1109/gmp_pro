@@ -1,17 +1,17 @@
 /**
  * @file cc.armcc.inl
  * @author Javnson (javnson@zju.edu.cn)
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2024-09-30
- * 
+ *
  * @copyright Copyright GMP(c) 2024
- * 
+ *
  */
 
 //////////////////////////////////////////////////////////////////////////
 // Step I language patch
-// 
+//
 // Wrong C++ version
 #ifdef __cplusplus
 #if __cplusplus < 199711L
@@ -43,14 +43,14 @@
 
 // + weak function Modifier
 #define GMP_WEAK_FUNC_PREFIX __weak
-#define GMP_WEAK_FUNC_SUFFIX 
+#define GMP_WEAK_FUNC_SUFFIX
 
 // + disable optimization
 #define GMP_NO_OPT_PREFIX
 #define GMP_NO_OPT_SUFFIX __attribute__((optnone))
 
 // + variables aligned
-#define GMP_MEM_ALIGN __attribute__((aligned (4)))
+#define GMP_MEM_ALIGN __attribute__((aligned(4)))
 
 // + NOP
 #define GMP_INSTRUCTION_NOP asm("nop")

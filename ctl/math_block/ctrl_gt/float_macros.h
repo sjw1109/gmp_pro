@@ -22,7 +22,7 @@ float multiple_static_inline(float A, float B)
 }
 
 #ifndef saturation_macro
-//#define saturation_macro(_a, _min, _max) (((_a) <= (_min)) ? (_min) : (((_a) >= (_max)) ? (_max) : (_a)))
+// #define saturation_macro(_a, _min, _max) (((_a) <= (_min)) ? (_min) : (((_a) >= (_max)) ? (_max) : (_a)))
 #define saturation_macro(_a, _max, _min) saturation_static_inline(_a, _min, _max)
 #endif
 

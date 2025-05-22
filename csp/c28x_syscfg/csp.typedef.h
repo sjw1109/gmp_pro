@@ -1,36 +1,33 @@
 /**
  * @file csp.typedef.h
  * @author Javnson (javnson@zju.edu.cn)
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2024-09-30
- * 
+ *
  * @copyright Copyright GMP(c) 2024
- * 
+ *
  */
-
 
 #ifndef _FILE_CSP_TYPE_DEF_H_
 #define _FILE_CSP_TYPE_DEF_H_
 
-
 // This file is for C28x series micro controller
 
-
 // C28x BASIC DATA TYPE
-#define GMP_PORT_DATA_T				    int16_t
-#define GMP_PORT_DATA_SIZE_PER_BITS		(16)
-#define GMP_PORT_DATA_SIZE_PER_BYTES    (2)
+#define GMP_PORT_DATA_T              int16_t
+#define GMP_PORT_DATA_SIZE_PER_BITS  (16)
+#define GMP_PORT_DATA_SIZE_PER_BYTES (2)
 
 // FAST TYPES
 
-#define GMP_PORT_FAST8_T                 int16_t
-#define GMP_PORT_FAST8_SIZE_PER_BITS     (16)
-#define GMP_PORT_FAST8_SIZE_PER_BYTES    (2)
-	
-#define GMP_PORT_FAST16_T                int16_t
-#define GMP_PORT_FAST16_SIZE_PER_BITS    (16)
-#define GMP_PORT_FAST16_SIZE_PER_BYTES   (2)
+#define GMP_PORT_FAST8_T               int16_t
+#define GMP_PORT_FAST8_SIZE_PER_BITS   (16)
+#define GMP_PORT_FAST8_SIZE_PER_BYTES  (2)
+
+#define GMP_PORT_FAST16_T              int16_t
+#define GMP_PORT_FAST16_SIZE_PER_BITS  (16)
+#define GMP_PORT_FAST16_SIZE_PER_BYTES (2)
 
 // ....................................................................//
 // basic element data type
@@ -62,13 +59,13 @@
 #define GMP_PORT_PWM_SIZE_PER_BYTES (2)
 #endif // GMP_PORT_PWM_T
 
-// C28x device peripheral 
+// C28x device peripheral
 #ifndef GMP_PORT_UART_T
 #define GMP_PORT_UART_T uint32_t
-#endif // GMP_PORT_UART_T 
+#endif // GMP_PORT_UART_T
 
 #ifndef GMP_PORT_I2C_T
-#define GMP_PORT_I2C_T uint32_t 
+#define GMP_PORT_I2C_T uint32_t
 #endif // GMP_PORT_I2C_T
 
 #ifndef GMP_PORT_SPI_T
@@ -79,6 +76,4 @@
 #define GMP_PORT_CAN_T uint32_t
 #endif // GMP_PORT_CAN_T
 
-#endif 
-
-
+#endif

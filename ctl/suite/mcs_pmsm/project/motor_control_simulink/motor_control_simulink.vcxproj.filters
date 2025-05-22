@@ -21,9 +21,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\implement\simulate\peripheral.c">
-      <Filter>implement_interface</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\implement\common\ctl_main.c">
       <Filter>implement_common</Filter>
     </ClCompile>
@@ -90,25 +87,16 @@
     <ClCompile Include="..\..\src\pmsm_ctrl.c">
       <Filter>motor_driver_bare</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\implement\simulate\xplt.peripheral.c">
+      <Filter>implement_interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\implement\simulate\user.config.h">
-      <Filter>implement_interface</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\implement\common\ctl_main.h">
       <Filter>implement_common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\implement\common\user_main.h">
       <Filter>implement_common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\implement\simulate\ctl_interface.h">
-      <Filter>implement_interface</Filter>
-    </ClInclude>
-    <ClInclude Include="ctrl_settings.h">
-      <Filter>implement_common</Filter>
-    </ClInclude>
-    <ClInclude Include="peripheral.h">
-      <Filter>implement_interface</Filter>
     </ClInclude>
     <ClInclude Include="..\..\pmsm_ctrl.h">
       <Filter>motor_driver_bare</Filter>
@@ -116,7 +104,13 @@
     <ClInclude Include="..\..\implement\simulate\ctrl_settings.h">
       <Filter>implement_interface</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\implement\simulate\peripheral.h">
+    <ClInclude Include="..\..\implement\simulate\xplt.config.h">
+      <Filter>implement_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\implement\simulate\xplt.ctl_interface.h">
+      <Filter>implement_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\implement\simulate\xplt.peripheral.h">
       <Filter>implement_interface</Filter>
     </ClInclude>
   </ItemGroup>

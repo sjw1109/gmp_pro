@@ -306,10 +306,10 @@
 // Controller Template Library Settings
 
 // Specify disable GMP CTL module
-//#define SPECIFY_DISABLE_GMP_CTL
+// #define SPECIFY_DISABLE_GMP_CTL
 
 // Specify enable GMP CTL Nano Framework
-//#define SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+// #define SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
 // Select Default Controller calculating type
 // options reference <options.cfg.h>
@@ -320,9 +320,9 @@
 // + USING_FLOAT_FPU: Float number, using Float FPU
 // + USING_DOUBLE_FPU: Float number, using Double FPU
 #ifndef SPECIFY_CTRL_GT_TYPE
- //#define SPECIFY_CTRL_GT_TYPE USING_DOUBLE_FPU
+// #define SPECIFY_CTRL_GT_TYPE USING_DOUBLE_FPU
 #define SPECIFY_CTRL_GT_TYPE USING_FLOAT_FPU
-//#define SPECIFY_CTRL_GT_TYPE USING_FIXED_TI_IQ_LIBRARY
+// #define SPECIFY_CTRL_GT_TYPE USING_FIXED_TI_IQ_LIBRARY
 #endif // SPECIFY_CTRL_GT_TYPE
 
 // The default macro to define a string.

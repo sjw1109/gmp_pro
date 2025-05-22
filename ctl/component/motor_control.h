@@ -1,8 +1,7 @@
 
 // basic includes
 
-//#include <ctl/ctl_core.h>
-
+// #include <ctl/ctl_core.h>
 
 #ifndef GMP_CTL_DISABLE_COM_MC
 
@@ -10,7 +9,7 @@
 
 #include <ctl/component/motor_control/basic/encoder.h>
 
-//#include <ctl/component/motor_control/basic/encoder_calibrate.h>
+// #include <ctl/component/motor_control/basic/encoder_calibrate.h>
 
 #include <ctl/component/motor_control/basic/encoder_if.h>
 
@@ -40,7 +39,7 @@
 
 #include <ctl/component/motor_control/current_loop/dtc.h>
 
-//#include <ctl/component/motor_control/current_loop/hyh_DPC_current_ctrl.h>
+// #include <ctl/component/motor_control/current_loop/hyh_DPC_current_ctrl.h>
 
 #include <ctl/component/motor_control/current_loop/motor_current_ctrl.h>
 
@@ -70,7 +69,7 @@
 
 #include <ctl/component/motor_control/observer/pmsm.smo.h>
 
-//#include <ctl/component/motor_control/observer/param_esti_RLS.h>
+// #include <ctl/component/motor_control/observer/param_esti_RLS.h>
 
 #endif // GMP_CTL_DISABLE_COM_MC_OBSERVER
 

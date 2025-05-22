@@ -30,7 +30,7 @@ typedef struct _tag_per_unit_consultant_t
 
     parameter_gt base_inst_voltage; // instantaneous voltage: V
 
-    //parameter_gt base_inertia; // H: kg m^2
+    // parameter_gt base_inertia; // H: kg m^2
 
 } ctl_per_unit_consultant_t;
 
@@ -56,12 +56,8 @@ parameter_gt ctl_helper_delta_line_voltage_to_phase(parameter_gt delta_value)
     return delta_value;
 }
 
-
-
-
 #ifdef __cplusplus
 }
 #endif // __cplusplus
-
 
 #endif // _FILE_MOTOR_PER_UNIT_CONSULTANT_H_

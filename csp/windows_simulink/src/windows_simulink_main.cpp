@@ -185,13 +185,16 @@ void gmp_port_system_stuck(void)
 // Windows print function
 ec_gt windows_print_function(uint32_t *handle, half_duplex_ift *port)
 {
+    // allow handle not be referenced.
+    UNUSED_PARAMETER(handle);
+
     for (size_gt i = 0; i < port->length; ++i)
         putchar(port->buf[i]);
 
     return GMP_EC_OK;
 }
 
-// Windows simulink system tick function
+// Windows Simulink system tick function
 time_gt gmp_base_get_system_tick()
 {
     return (time_gt)(simulink_rx_buffer.time * SPECIFY_SYSTEM_TICK_FREQUENCY);

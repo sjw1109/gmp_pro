@@ -50,7 +50,6 @@
 
 #endif
 
-
 #ifndef _FILE_CSP_TYPE_DEF_H_
 #define _FILE_CSP_TYPE_DEF_H_
 
@@ -89,11 +88,10 @@ typedef struct _tag_gpio_model_stm32_t
 // specify the GPIO model to be STM32 model
 #define GMP_PORT_GPIO_T gpio_model_stm32_t *
 
-// specify the UART model 
+// specify the UART model
 #define GMP_PORT_UART_T UART_HandleTypeDef *
 
 // SPI interface
 #define GMP_PORT_SPI_T SPI_HandleTypeDef *
-
 
 #endif

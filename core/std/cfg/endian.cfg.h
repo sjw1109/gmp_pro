@@ -1,4 +1,11 @@
 
+#ifndef _FILE_GMP_ENDIAN_CFG_H_
+#define _FILE_GMP_ENDIAN_CFG_H_
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif // __cplusplus
 
 //////////////////////////////////////////////////////////////////////////
 // big-endian to little-endian
@@ -137,3 +144,9 @@ uint64_t gmp_l2b64(uint64_t data)
 #error("You should specify at least GMP_CHIP_LITTLE_ENDIAN or GMP_CHIP_BIG_ENDIAN")
 
 #endif // LITTLE_ENDIAN
+
+#ifdef __cplusplus
+}
+#endif // __cplusplus
+
+#endif // _FILE_GMP_ENDIAN_CFG_H_

@@ -22,7 +22,7 @@
 #include "clocktree.h"
 
 //
-// C2000Ware SysConfig 
+// C2000Ware SysConfig
 //  - Software - Device Support
 //
 #ifndef _C2000_CSP_DISABLE_DEVICE_SUPPORT_
@@ -34,7 +34,7 @@
 //
 #include "board.h"
 
-// 
+//
 // Linker CMD Tool
 //
 #ifndef _C2000_CSP_DISBALE_LINKER_CMD_TOOL_
@@ -49,14 +49,13 @@
 #endif // _C2000_CSP_DISABLE_C2000WARE_LIBRARY_
 
 //
-// C2000 CLB Configuration Tool 
+// C2000 CLB Configuration Tool
 //
 #ifndef _C2000_CSP_DISABLE_CLB_CONFIG_TOOL_
 #include "clb_config.h"
 #endif // _C2000_CSP_DISABLE_CLB_CONFIG_TOOL_
 
 #include <c28x_peripheral_driver.h>
-
 
 #ifdef __cplusplus
 extern "C"
@@ -72,47 +71,42 @@ extern "C"
 // TMS320C28x CPU and Instruction Set Reference Guide
 // ref: https://www.ti.com.cn/cn/lit/ug/spru430f/spru430f.pdf
 //
-#define GMP_DBG_SWBP    asm(" ESTOP0")
+#define GMP_DBG_SWBP asm(" ESTOP0")
 
-#else 
+#else
 //
 // For CLA debug mode, only this instruction is counted.
 // GMP library Debug Software Break Point Macro for CLA debug
 //
-#define GMP_DBG_SWBP     __mdebugstop()
+#define GMP_DBG_SWBP __mdebugstop()
 
 #endif // __TMS320C28XX_CLA__
 
 //////////////////////////////////////////////////////////////////////////
 // GPIO definition
-//#define GMP_PORT_GPIO_T uint32_t
+// #define GMP_PORT_GPIO_T uint32_t
 
-#define gmp_hal_gpio_write(pin_num, value)  GPIO_writePin((pin_num), (value))
-#define gmp_hal_gpio_read(pin_num)          GPIO_readPin((pin_num))
-#define gmp_hal_gpio_set(pin_num)           GPIO_writePin((pin_num), (1))
-#define gmp_hal_gpio_reset(pin_num)         GPIO_writePin((pin_num), (0))
-#define gmp_hal_gpio_toggle(pin_num)        GPIO_togglePin((pin_num))
-
-
-
+#define gmp_hal_gpio_write(pin_num, value) GPIO_writePin((pin_num), (value))
+#define gmp_hal_gpio_read(pin_num)         GPIO_readPin((pin_num))
+#define gmp_hal_gpio_set(pin_num)          GPIO_writePin((pin_num), (1))
+#define gmp_hal_gpio_reset(pin_num)        GPIO_writePin((pin_num), (0))
+#define gmp_hal_gpio_toggle(pin_num)       GPIO_togglePin((pin_num))
 
 //////////////////////////////////////////////////////////////////////////
 // Watch Dog module
 GMP_STATIC_INLINE
 void gmp_hal_wd_feed(void)
-{}
+{
+}
 
 //////////////////////////////////////////////////////////////////////////
 // SPI module
 
-
 // Debug Print function
 size_gt gmp_base_print_c28xsyscfg(const char *p_fmt, ...);
 
-
 // Step System tick
 void gmp_step_system_tick(void);
-
 
 #ifdef __cplusplus
 }

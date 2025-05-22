@@ -14,6 +14,11 @@
 #ifndef _FILE_COORD_TRANS_H_
 #define _FILE_COORD_TRANS_H_
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif // __cplusplus
+
 #define GMP_CTL_OUTPUT_TAG
 
 enum UVW_ASIX_ENUM
@@ -163,7 +168,7 @@ void ctl_ct_svpwm_calc(ctl_vector3_t *ab0, GMP_CTL_OUTPUT_TAG ctl_vector3_t *Tab
     ctrl_gt Ubeta_tmp = ctl_mul(ab0->dat[phase_beta], GMP_CONST_SQRT_3_OVER_2);
 
     // tex: $$
-    //      U_a = U_\alpha, \\
+    //          U_a = U_\alpha, \\
     //U_b = -U_\alpha /2 + \sqrt{3}/2\cdot U_\beta, \\
     //U_c = -U_\alpha /2 - \sqrt{3}/2\cdot U_\beta,
     //$$
@@ -316,5 +321,9 @@ void ctl_ct_svpwm_calc_theorem(ctl_vector3_t *ab0, GMP_CTL_OUTPUT_TAG ctl_vector
 
     return;
 }
+
+#ifdef __cplusplus
+}
+#endif // __cplusplus
 
 #endif // _FILE_COORD_TRANS_H_

@@ -31,7 +31,6 @@ void ctl_init_divider(ctl_divider_t *obj, uint32_t counter_period)
 #include <ctl/component/intrinsic/discrete/discrete_filter.h>
 #include <math.h> // support for sinf and cosf
 
-
 void ctl_init_lp_filter(ctl_low_pass_filter_t *lpf, parameter_gt fs, parameter_gt fc)
 {
     lpf->out = 0;
@@ -91,30 +90,21 @@ ec_gt ctl_init_filter_iir2(ctl_filter_IIR2_t *obj, ctl_filter_IIR2_setup_t *setu
 
 #include <ctl/component/intrinsic/discrete/pll.h>
 
-ec_gt ctl_init_pll(ctl_pll_t *pll)
+void ctl_init_pll(
+    // PLL Controller Object
+    ctl_pll_t *pll,
+    // PID parameter
+    parameter_gt kp, parameter_gt Ti, parameter_gt Td,
+    // PID output limit
+    ctrl_gt out_min, ctrl_gt out_max,
+    // cutoff frequency
+    parameter_gt fc,
+    // Sample frequency
+    parameter_gt fs)
 {
-    // ctl_init_pid(&pll->pid);
-    // ctl_init_lp_filter(&pll->filter);
-    // pll->input.dat[0] = 0;
-    // pll->input.dat[1] = 0;
-    // pll->output_theta = 0;
-    // pll->output_freq = 0;
-    // pll->freq_sf = float2ctrl(1.0);
-
-    return GMP_EC_OK;
-}
-
-ec_gt ctl_setup_pll(ctl_pll_t *pll, ctrl_gt kp, ctrl_gt ki, ctrl_gt kd, // PID parameter
-                    ctrl_gt out_min, ctrl_gt out_max,                   // PID output limit
-                    parameter_gt fs,                                    // Sample frequency
-                    parameter_gt fc                                     // cutoff frequency
-)
-{
-    // ctl_setup_pid(&pll->pid, kp, ki, kd, out_min, out_max);
-
-    // ctl_setup_lp_filter(&pll->filter, fs, fc);
-
-    return GMP_EC_OK;
+    ctl_init_pid(&pll->pid, kp, Ti, Td, fs);
+    ctl_set_pid_limit(&pll->pid, out_max, out_min);
+    ctl_init_lp_filter(&pll->filter, fs, fc);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -310,6 +300,7 @@ void ctl_init_2p2z(
     ctrl->b0 = float2ctrl(b0);
     ctrl->b1 = float2ctrl(b1);
     ctrl->b2 = float2ctrl(b2);
+    ctrl->gain = float2ctrl(gain_discrete);
 
     ctrl->out_max = float2ctrl(1.0);
     ctrl->out_min = float2ctrl(-1.0);
@@ -323,3 +314,30 @@ void ctl_init_2p2z(
     ctrl->input = 0;
 }
 
+//////////////////////////////////////////////////////////////////////////
+// PR / QPR controller
+
+#include <ctl/component/intrinsic/discrete/proportional_resonant.h>
+
+void ctl_init_pr_controller(
+    // handle of PR controller
+    pr_ctrl_t *pr,
+    // Kp
+    parameter_gt kp,
+    // gain of resonant frequency
+    parameter_gt kr,
+    // resonant frequency, unit Hz
+    parameter_gt freq_resonant,
+    // controller frequency
+    parameter_gt fs)
+{
+    // resonant frequency, unit rad/s
+    parameter_gt omega_r = 2 * PI * freq_resonant;
+
+    pr->kpg = float2ctrl(kp);
+    pr->krg = float2ctrl(kr * (4 * fs) / (4 * fs * fs + omega_r * omega_r));
+    pr->kr = float2ctrl(2 * (4 * fs * fs - omega_r * omega_r) / (4 * fs * fs + omega_r * omega_r));
+
+    // clear temp variables
+    ctl_clear_pr_controller(pr);
+}

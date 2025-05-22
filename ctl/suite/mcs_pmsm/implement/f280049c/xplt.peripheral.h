@@ -29,25 +29,29 @@ extern "C"
 // select SIL package
 #include <ctl/component/motor_control/basic/motor_universal_interface.h>
 
-#include <ctl/component/motor_control/basic/std_sil_motor_interface.h>
-
-// encoder
-#include <ext/encoder/as5048/as5048a.h>
+//#include <ctl/component/motor_control/basic/std_sil_motor_interface.h>
 
 
-    // buffer for rx & tx
+
+// buffer for rx & tx
 //    extern gmp_pc_simulink_rx_buffer_t simulink_rx_buffer;
 //    extern gmp_pc_simulink_tx_buffer_t simulink_tx_buffer;
 
-    extern tri_ptr_adc_channel_t uabc;
-    extern tri_ptr_adc_channel_t iabc;
+extern tri_ptr_adc_channel_t uabc;
+extern tri_ptr_adc_channel_t iabc;
 
-    extern ptr_adc_channel_t udc;
-    extern ptr_adc_channel_t idc;
+extern ptr_adc_channel_t udc;
+extern ptr_adc_channel_t idc;
 
-    extern ext_as5048a_encoder_t pos_enc;
+extern pwm_tri_channel_t pwm_out;
 
-    extern pwm_tri_channel_t pwm_out;
+#if !defined PMSM_CTRL_USING_QEP_ENCODER
+// encoder
+#include <ext/encoder/as5048/as5048a.h>
+
+extern ext_as5048a_encoder_t pos_enc;
+#endif // PMSM_CTRL_USING_QEP_ENCODER
+
 
 #ifdef __cplusplus
 }

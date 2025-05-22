@@ -73,6 +73,9 @@ void gmp_base_show_label(void)
 
 void gmp_base_not_impl(const char *file, uint32_t line)
 {
+    // mark and allow the function parameter can be ignored
+    UNUSED_PARAMETER(file);
+    UNUSED_PARAMETER(line);
 
 #if defined SPECIFY_ENABLE_UNIMPL_FUNC_WARNING
     // print the error information

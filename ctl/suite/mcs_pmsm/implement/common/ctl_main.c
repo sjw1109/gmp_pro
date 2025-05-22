@@ -23,6 +23,12 @@
 // PMSM controller
 pmsm_bare_controller_t pmsm_ctrl;
 
+
+#ifdef PMSM_CTRL_USING_QEP_ENCODER
+// Auto - turn encoder
+pos_autoturn_encoder_t pos_enc;
+#endif // PMSM_CTRL_USING_QEP_ENCODER
+
 // speed encoder
 spd_calculator_t spd_enc;
 
@@ -58,6 +64,13 @@ void ctl_init()
     adc_calibrator_filter.q = 0.707f;
     // ctl_init_adc_bias_calibrator(&adc_calibrator, &adc_calibrator_filter);
 
+#ifdef PMSM_CTRL_USING_QEP_ENCODER
+    // init Auto - turn encoder
+    ctl_init_autoturn_pos_encoder(&pos_enc, MOTOR_PARAM_POLE_PAIRS, MTR_ENCODER_LINES);
+    // Set encoder offset
+    ctl_set_autoturn_pos_encoder_offset(&pos_enc, MTR_ENCODER_OFFSET);
+#endif // PMSM_CTRL_USING_QEP_ENCODER
+
     falg_enable_system = 0;
 
     // create a speed observer by position encoder
@@ -70,10 +83,8 @@ void ctl_init()
 #if defined OPENLOOP_CONST_FREQUENCY
     ctl_init_const_f_controller(&const_f, 20, CONTROLLER_FREQUENCY);
 #else // OPENLOOP_CONST_FREQUENCY
-    // frequency target 20 Hz
-    // frequency slope 40 Hz/s
+    // frequency target 20 Hz, frequency slope 40 Hz/s
     ctl_init_const_slope_f_controller(&slope_f, 20.0f, 40.0f, CONTROLLER_FREQUENCY);
-
 #endif // OPENLOOP_CONST_FREQUENCY
 
     // attach a speed encoder object with motor controller
@@ -85,20 +96,20 @@ void ctl_init()
     pmsm_ctrl_init.fs = CONTROLLER_FREQUENCY;
 
     // current pid controller parameters
-    pmsm_ctrl_init.current_pid_gain = 2.15f;
-    // pmsm_ctrl_init.current_Ti = 1.0f / 500;
-    pmsm_ctrl_init.current_Ti = 1.0f / 500;
+    pmsm_ctrl_init.current_pid_gain = (parameter_gt)(MOTOR_PARAM_LS * MTR_CTRL_CURRENT_LOOP_BW * 2 * PI *
+                                                     MTR_CTRL_VOLTAGE_BASE / MTR_CTRL_CURRENT_BASE);
+    pmsm_ctrl_init.current_Ti = (parameter_gt)(MOTOR_PARAM_LS / MOTOR_PARAM_RS);
     pmsm_ctrl_init.current_Td = 0;
-    pmsm_ctrl_init.voltage_limit_min = float2ctrl(-0.45);
-    pmsm_ctrl_init.voltage_limit_max = float2ctrl(0.45);
+    pmsm_ctrl_init.voltage_limit_min = float2ctrl(-1.0);
+    pmsm_ctrl_init.voltage_limit_max = float2ctrl(1.0);
 
     // speed pid controller parameters
     pmsm_ctrl_init.spd_ctrl_div = SPD_CONTROLLER_PWM_DIVISION;
-    pmsm_ctrl_init.spd_pid_gain = 3.5f;
-    pmsm_ctrl_init.spd_Ti = 1.0f / 100;
+    pmsm_ctrl_init.spd_pid_gain = (parameter_gt)(3.5);
+    pmsm_ctrl_init.spd_Ti = (parameter_gt)(4.0f / MTR_CTRL_SPEED_LOOP_BW);
     pmsm_ctrl_init.spd_Td = 0;
-    pmsm_ctrl_init.current_limit_min = float2ctrl(-0.6);
-    pmsm_ctrl_init.current_limit_max = float2ctrl(0.6);
+    pmsm_ctrl_init.current_limit_min = float2ctrl(-0.45);
+    pmsm_ctrl_init.current_limit_max = float2ctrl(0.45);
 
     // accelerator parameters
     pmsm_ctrl_init.acc_limit_min = -150.0f;

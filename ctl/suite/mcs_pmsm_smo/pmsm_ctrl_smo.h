@@ -19,10 +19,10 @@
 #ifndef _FILE_PMSM_CTRL_BARE_H_
 #define _FILE_PMSM_CTRL_BARE_H_
 
-#ifdef __cplsuplus
-exnter "C"
+#ifdef __cplusplus
+extern "C"
 {
-#endif // __cplsuplus
+#endif // __cplusplus
 
     // .....................................................................//
     // Some config options here.
@@ -531,7 +531,7 @@ exnter "C"
             ctl_ct_park(&ctrl->vab0_set, &phasor, &udq0);
             ctl_ct_park(&ctrl->iab0, &phasor, &idq0);
 
-                        ctrl->idq_ff.dat[phase_q] = 0;
+            ctrl->idq_ff.dat[phase_q] = 0;
             ctrl->idq_ff.dat[phase_d] = 0;
 
 #ifdef PMSM_CTRL_USING_DISCRETE_CTRL
@@ -646,8 +646,8 @@ exnter "C"
     // attach to output port
     void ctl_attach_pmsm_smo_bare_output(pmsm_smo_bare_controller_t * ctrl, tri_pwm_ift * pwm_out);
 
-#ifdef __cplsuplus
+#ifdef __cplusplus
 }
-#endif // __cplsuplus
+#endif // __cplusplus
 
 #endif // _FILE_PMSM_CTRL_BARE_H_

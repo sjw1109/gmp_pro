@@ -2,7 +2,6 @@
 #ifndef _FILE_HBL48ZL40030K_H_
 #define _FILE_HBL48ZL40030K_H_
 
-
 //////////////////////////////////////////////////////////////////////////
 // Basic parameters
 //
@@ -10,10 +9,10 @@
 #define MOTOR_PARAM_POLE_PAIRS ((8))
 
 // Stator Resistance, unit Ohm
-#define MOTOR_PARAM_RS ((0.4/2))
+#define MOTOR_PARAM_RS ((0.4 / 2))
 
 // Stator Inductance, unit H
-#define MOTOR_PARAM_LS ((0.6e-3/2))
+#define MOTOR_PARAM_LS ((0.6e-3 / 2))
 
 // Inertia, unit kg cm m2
 #define MOTOR_PARAM_INERTIA ((0.45))
@@ -22,19 +21,17 @@
 #define MOTOR_PARAM_FRICTION ((0.55))
 
 // constant velocity of a motor, unit rpm/V
-//#define MOTOR_PARAM_KV ((206.2))
+// #define MOTOR_PARAM_KV ((206.2))
 
 // Flux linkage, unit Wb
-//#define MOTOR_PARAM_FLUX ((MOTOR_PARAM_CALCULATE_FLUX_BY_KV(MOTOR_PARAM_KV)))
+// #define MOTOR_PARAM_FLUX ((MOTOR_PARAM_CALCULATE_FLUX_BY_KV(MOTOR_PARAM_KV)))
 
 // Back EMF Voltage, unit V/krpm
-#define MOTOR_PARAM_EMF ((10.5))
+#define MOTOR_PARAM_EMF           ((10.5))
 
-
-#define MOTOR_ENCODER_TYPE ((QEP_ENCODER))
+#define MOTOR_ENCODER_TYPE        ((QEP_ENCODER))
 
 #define MOTOR_ENCODER_LINE_NUMBER ((2500))
-
 
 //////////////////////////////////////////////////////////////////////////
 // Rated parameters
@@ -69,6 +66,5 @@
 
 // Maximum Phase Current RMS, unit A
 #define MOTOR_PARAM_MAX_PH_CURRENT ((33.0))
-
 
 #endif // _FILE_HBL48ZL40030K_H_

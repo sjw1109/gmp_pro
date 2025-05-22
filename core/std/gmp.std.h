@@ -104,8 +104,6 @@ extern "C"
 #include <csp.general.h>
 #endif // SPECIFY_DISABLE_CSP
 
-
-
 // ....................................................................//
 // memory controller
 #include <core/mm/block_mem.h>
@@ -148,11 +146,10 @@ extern "C"
 
 #endif // SPECIFY_ENABLE_GMP_CTL
 
+// ....................................................................//
+// GMP device function
 
-    // ....................................................................//
-    // GMP device function
-
-    // ring buffer for device
+// ring buffer for device
 #include <core/dev/ring_buf.h>
 
 #ifdef __cplusplus

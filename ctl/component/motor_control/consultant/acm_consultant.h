@@ -8,7 +8,6 @@ extern "C"
 {
 #endif // __cplusplus
 
-
 typedef struct _tag_im_dsn_consultant
 {
     // Motor Design parameters, Pole pairs
@@ -46,9 +45,9 @@ typedef struct _tag_im_dsn_consultant
 
 // setup the Inductor motor design consultant object
 // if any parameter is unknown, fill 0, except pole_pair
-void ctl_setup_im_dsn_consultant(im_dsn_consultant_t* im_dsn, uint16_t pole_pair, parameter_gt Rs, parameter_gt Ls,
-    parameter_gt Rr, parameter_gt Lr, parameter_gt Lm, parameter_gt inertia,
-    parameter_gt damp)
+void ctl_setup_im_dsn_consultant(im_dsn_consultant_t *im_dsn, uint16_t pole_pair, parameter_gt Rs, parameter_gt Ls,
+                                 parameter_gt Rr, parameter_gt Lr, parameter_gt Lm, parameter_gt inertia,
+                                 parameter_gt damp)
 {
     im_dsn->pole_pair = pole_pair;
     im_dsn->Rs = Rs;
@@ -65,4 +64,3 @@ void ctl_setup_im_dsn_consultant(im_dsn_consultant_t* im_dsn, uint16_t pole_pair
 #endif // __cplusplus
 
 #endif // _FILE_IM_CONSULTANT_H_
-

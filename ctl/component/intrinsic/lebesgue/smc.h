@@ -3,6 +3,33 @@
 #ifndef _FILE_SMC_H_
 #define _FILE_SMC_H_
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif // __cplusplus
+
+// clang-format off
+// 
+
+// Controller input x1 is controlled variables, x2 is differential of x1
+
+
+// Sliding model controller
+// sliding model surface:
+//tex:
+//$$
+// s = \lambda x_1 + x_2
+//$$
+
+// Sliding model controller output
+//tex:
+//$$
+// out = \eta_1 x_1 + \eta_2 x_2 + \rho \;\text{sng}\; (s)
+//$$
+
+// clang-format on
+//
+
 typedef struct _tag_smc_t_
 {
     // input
@@ -74,5 +101,9 @@ ctrl_gt ctl_step_smc(ctl_smc_t *smc, ctrl_gt input, ctrl_gt input_diff)
 
     return smc->output;
 }
+
+#ifdef __cplusplus
+}
+#endif // __cplusplus
 
 #endif // _FILE_SMC_H_

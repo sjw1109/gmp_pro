@@ -21,3 +21,13 @@ AlignConsecutiveMacros:
 
 # EOF with new line
 #InsertNewlineAtEOF: true
+
+# disable extern "C" Indent
+#IndentExternBlock: AfterExternBlock
+#BraceWrapping.AfterExternBlock: false
+
+IndentExternBlock: NoIndent
+
+# math equations
+# CommentPragmas (//tex:)
+

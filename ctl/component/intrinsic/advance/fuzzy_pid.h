@@ -19,4 +19,3 @@ typedef surf_lut_t fuzzy_ctrl_t;
 #endif // __cplusplus
 
 #endif // _FILE_FUZZY_CTRL_H_
-
