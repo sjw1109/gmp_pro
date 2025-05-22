@@ -60,8 +60,13 @@ void ctl_init()
 
     // speed pid controller parameters
     pmsm_ctrl_init.spd_ctrl_div = SPD_CONTROLLER_PWM_DIVISION;
-    pmsm_ctrl_init.spd_pid_gain = (parameter_gt)(3.5);
-    pmsm_ctrl_init.spd_Ti = (parameter_gt)(4.0f / MTR_CTRL_SPEED_LOOP_BW);
+
+    pmsm_ctrl_init.spd_pid_gain = 0.04f;
+    pmsm_ctrl_init.spd_Ti = 1.0f / 1000;
+
+    // pmsm_ctrl_init.spd_pid_gain = (parameter_gt)(3.5);
+    // pmsm_ctrl_init.spd_Ti = (parameter_gt)(4.0f / MTR_CTRL_SPEED_LOOP_BW);
+
     pmsm_ctrl_init.spd_Td = 0;
     pmsm_ctrl_init.current_limit_min = float2ctrl(-0.45);
     pmsm_ctrl_init.current_limit_max = float2ctrl(0.45);
@@ -80,8 +85,9 @@ void ctl_init()
 
     // SMO controller parameters
     pmsm_ctrl_init.speed_base_rpm = (parameter_gt)(MOTOR_PARAM_MAX_SPEED);
-    pmsm_ctrl_init.smo_fc_e = 20.0f;
-    pmsm_ctrl_init.smo_fc_omega = 50.0f;
+    pmsm_ctrl_init.smo_fc_e = 30.0;
+    pmsm_ctrl_init.smo_fc_omega = 50.0;
+
     pmsm_ctrl_init.smo_k_slide = float2ctrl(1);
     pmsm_ctrl_init.smo_kp = float2ctrl(4);
     pmsm_ctrl_init.smo_Ti = float2ctrl(0.0075);
@@ -111,7 +117,8 @@ void ctl_init()
 #elif (BUILD_LEVEL == 3)
 
     ctl_pmsm_smo_ctrl_current_mode(&pmsm_ctrl);
-    ctl_set_pmsm_smo_ctrl_idq_ff(&pmsm_ctrl, float2ctrl(0), float2ctrl(0.015));
+    ctl_set_pmsm_smo_ctrl_idq_ff(&pmsm_ctrl, float2ctrl(0.0), float2ctrl(0.01));
+
 
     ctl_enable_pmsm_smo(&pmsm_ctrl);
 
@@ -146,9 +153,19 @@ void ctl_mainloop(void)
 
     // ctl_set_pmsm_smo_ctrl_speed(&pmsm_ctrl, float2ctrl(0.1) * spd_target - float2ctrl(1.0));
 
-    if (gmp_base_get_system_tick() >= 1000)
+    if (gmp_base_get_system_tick() >= 600)
     {
         ctl_switch_pmsm_smo_ctrl_using_smo(&pmsm_ctrl);
+    }
+
+    if (gmp_base_get_system_tick() >= 1000)
+    {
+        ctl_set_pmsm_smo_ctrl_speed(&pmsm_ctrl, float2ctrl(0.3));
+    }
+
+    if (gmp_base_get_system_tick() >= 1400)
+    {
+        ctl_set_pmsm_smo_ctrl_speed(&pmsm_ctrl, float2ctrl(0.8));
     }
 
     //

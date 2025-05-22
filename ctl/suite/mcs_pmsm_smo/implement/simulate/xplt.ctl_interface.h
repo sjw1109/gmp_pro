@@ -72,17 +72,14 @@ void ctl_output_callback(void)
     simulink_tx_buffer.monitor_port[2] = pmsm_ctrl.smo.u_alpha;
     simulink_tx_buffer.monitor_port[3] = pmsm_ctrl.smo.u_beta;
 
-    simulink_tx_buffer.monitor_port[4] = pmsm_ctrl.smo.i_alpha;
-    simulink_tx_buffer.monitor_port[5] = pmsm_ctrl.smo.i_beta;
-
-    // simulink_tx_buffer.monitor_port[2] = pmsm_ctrl.smo.e_alpha_est;
-    // simulink_tx_buffer.monitor_port[3] = pmsm_ctrl.smo.e_beta_est;
-
-    // simulink_tx_buffer.monitor_port[4] = pmsm_ctrl.smo.encif.elec_position;
+        // simulink_tx_buffer.monitor_port[4] = pmsm_ctrl.smo.encif.elec_position;
     // simulink_tx_buffer.monitor_port[5] = pmsm_ctrl.smo.e_error;
 
-    simulink_tx_buffer.monitor_port[6] = pmsm_ctrl.mtr_interface.velocity->speed * MOTOR_PARAM_MAX_SPEED / 9.55;
-    simulink_tx_buffer.monitor_port[7] = pmsm_ctrl.mtr_interface.position->elec_position;
+        simulink_tx_buffer.monitor_port[4] = pmsm_ctrl.speed_set * MOTOR_PARAM_MAX_SPEED / 9.55;
+        simulink_tx_buffer.monitor_port[5] = pmsm_ctrl.mtr_interface.position->elec_position;
+
+        simulink_tx_buffer.monitor_port[6] = pmsm_ctrl.mtr_interface.velocity->speed * MOTOR_PARAM_MAX_SPEED / 9.55;
+        simulink_tx_buffer.monitor_port[7] = pmsm_ctrl.smo.encif.elec_position;
 }
 
 // Enable Motor Controller
