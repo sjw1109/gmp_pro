@@ -23,6 +23,12 @@
 // PMSM controller
 pmsm_bare_controller_t pmsm_ctrl;
 
+
+#ifdef PMSM_CTRL_USING_QEP_ENCODER
+// Auto - turn encoder
+pos_autoturn_encoder_t pos_enc;
+#endif // PMSM_CTRL_USING_QEP_ENCODER
+
 // speed encoder
 spd_calculator_t spd_enc;
 
@@ -58,6 +64,13 @@ void ctl_init()
     adc_calibrator_filter.q = 0.707f;
     // ctl_init_adc_bias_calibrator(&adc_calibrator, &adc_calibrator_filter);
 
+#ifdef PMSM_CTRL_USING_QEP_ENCODER
+    // init Auto - turn encoder
+    ctl_init_autoturn_pos_encoder(&pos_enc, MOTOR_PARAM_POLE_PAIRS, MTR_ENCODER_LINES);
+    // Set encoder offset
+    ctl_set_autoturn_pos_encoder_offset(&pos_enc, MTR_ENCODER_OFFSET);
+#endif // PMSM_CTRL_USING_QEP_ENCODER
+
     falg_enable_system = 0;
 
     // create a speed observer by position encoder
@@ -70,10 +83,8 @@ void ctl_init()
 #if defined OPENLOOP_CONST_FREQUENCY
     ctl_init_const_f_controller(&const_f, 20, CONTROLLER_FREQUENCY);
 #else // OPENLOOP_CONST_FREQUENCY
-    // frequency target 20 Hz
-    // frequency slope 40 Hz/s
+    // frequency target 20 Hz, frequency slope 40 Hz/s
     ctl_init_const_slope_f_controller(&slope_f, 20.0f, 40.0f, CONTROLLER_FREQUENCY);
-
 #endif // OPENLOOP_CONST_FREQUENCY
 
     // attach a speed encoder object with motor controller

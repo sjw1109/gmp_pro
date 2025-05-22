@@ -94,6 +94,7 @@ void ctl_init()
     // init the PMSM controller
     ctl_init_pmsm_smo_bare_controller(&pmsm_ctrl, &pmsm_ctrl_init);
 
+
     // BUG TI cannot print out sizeof() result if no type is specified.
     gmp_base_print(TEXT_STRING("PMSM SERVO struct has been inited, size :%d\r\n"), (int)sizeof(pmsm_ctrl_init));
 

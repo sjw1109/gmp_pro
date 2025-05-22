@@ -50,6 +50,11 @@ extern ctl_slope_f_controller slope_f;
 
 #endif // OPENLOOP_CONST_FREQUENCY
 
+#ifdef PMSM_CTRL_USING_QEP_ENCODER
+// Auto - turn encoder
+extern pos_autoturn_encoder_t pos_enc;
+#endif // PMSM_CTRL_USING_QEP_ENCODER
+
 // PMSM controller
 extern pmsm_bare_controller_t pmsm_ctrl;
 

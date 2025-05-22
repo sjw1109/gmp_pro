@@ -36,8 +36,11 @@ adc_gt iabc_raw[3];
 adc_gt udc_raw;
 adc_gt idc_raw;
 
+#if !defined PMSM_CTRL_USING_QEP_ENCODER
 // Encoder Interface
 ext_as5048a_encoder_t pos_enc;
+#endif // PMSM_CTRL_USING_QEP_ENCODER
+
 
 
 
@@ -87,9 +90,12 @@ void setup_peripheral(void)
         float2ctrl(MTR_CTRL_VOLTAGE_GAIN), float2ctrl(MTR_CTRL_VOLTAGE_BIAS),
         // ADC resolution, IQN
         12, 24);
-
-    // ctl_init_autoturn_pos_encoder(&pos_enc, MOTOR_PARAM_POLE_PAIRS, ((uint32_t)1 << 14) - 1);
+#if !defined PMSM_CTRL_USING_QEP_ENCODER
+    // init AS5048 encoder
     ctl_init_as5048a_pos_encoder(&pos_enc, MOTOR_PARAM_POLE_PAIRS, SPI_ENCODER_BASE, SPI_ENCODER_NCS);
+    // Set encoder offset
+    ctl_set_as5048a_pos_encoder_offset(&pos_enc, MTR_ENCODER_OFFSET);
+#endif // PMSM_CTRL_USING_QEP_ENCODER
 
     // bind peripheral to motor controller
     ctl_attach_mtr_adc_channels(&pmsm_ctrl.mtr_interface,

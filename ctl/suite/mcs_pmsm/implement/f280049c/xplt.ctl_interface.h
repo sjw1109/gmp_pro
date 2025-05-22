@@ -63,9 +63,15 @@ void ctl_input_callback(void)
     ctl_step_ptr_adc_channel(&idc);
     ctl_step_ptr_adc_channel(&udc);
 
+#ifdef PMSM_CTRL_USING_QEP_ENCODER
+    // Step auto turn pos encoder
+    ctl_step_autoturn_pos_encoder(&pos_enc, EQEP_getPosition(EQEP_Encoder_BASE));
+#else // PMSM_CTRL_USING_QEP_ENCODER
     // invoke position encoder routine.
-    //        ctl_step_autoturn_pos_encoder(&pos_enc, simulink_rx_buffer.encoder);
     ctl_step_as5048a_pos_encoder(&pos_enc);
+#endif // PMSM_CTRL_USING_QEP_ENCODER
+
+
 }
 
 // Output Callback

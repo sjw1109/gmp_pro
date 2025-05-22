@@ -15,6 +15,12 @@
 // PWM depth
 #define CONTROLLER_PWM_CMP_MAX (6000)
 
+// Encoder lines
+#define MTR_ENCODER_LINES  ((10000))
+
+// Encoder Offset
+#define MTR_ENCODER_OFFSET ((1000))
+
 // Speed controller Division
 #define SPD_CONTROLLER_PWM_DIVISION (5)
 
