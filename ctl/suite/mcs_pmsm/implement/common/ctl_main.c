@@ -104,7 +104,7 @@ void ctl_init()
 
     // speed pid controller parameters
     pmsm_ctrl_init.spd_ctrl_div = SPD_CONTROLLER_PWM_DIVISION;
-    pmsm_ctrl_init.spd_pid_gain = (parameter_gt)(3.5);
+    pmsm_ctrl_init.spd_pid_gain = (parameter_gt)(0.2);
     pmsm_ctrl_init.spd_Ti = (parameter_gt)(4.0f / MTR_CTRL_SPEED_LOOP_BW);
     pmsm_ctrl_init.spd_Td = 0;
     pmsm_ctrl_init.current_limit_min = float2ctrl(-0.45);
@@ -137,7 +137,7 @@ void ctl_init()
     ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &slope_f.enc);
 #endif // OPENLOOP_CONST_FREQUENCY
     ctl_pmsm_ctrl_current_mode(&pmsm_ctrl);
-    ctl_set_pmsm_ctrl_idq_ff(&pmsm_ctrl, float2ctrl(0.3), float2ctrl(0.1));
+    ctl_set_pmsm_ctrl_idq_ff(&pmsm_ctrl, float2ctrl(0.1), float2ctrl(0.1));
 
 #elif (BUILD_LEVEL == 3)
 
@@ -182,7 +182,7 @@ uint16_t sgen_out = 0;
 
 void ctl_mainloop(void)
 {
-    int spd_target = gmp_base_get_system_tick() / 100;
+    int spd_target = gmp_base_get_system_tick() / 100 - 4;
 
     ctl_set_pmsm_ctrl_speed(&pmsm_ctrl, float2ctrl(0.1) * spd_target - float2ctrl(1.0));
 

@@ -337,8 +337,8 @@ void ctl_step_pmsm_ctrl(pmsm_bare_controller_t *ctrl)
                                                                ctrl->idq_set.dat[phase_d] - ctrl->idq0.dat[phase_d]) +
                                          ctrl->vdq_ff.dat[phase_d];
 
-            vq_limit = ctl_sqrt(float2ctrl(1.0) - ctl_mul(ctrl->vdq_set.dat[phase_d], ctrl->vdq_set.dat[phase_d]));
-            ctl_set_discrete_pid_limit(&ctrl->current_ctrl[phase_q], vq_limit, -vq_limit);
+            //vq_limit = ctl_sqrt(float2ctrl(1.0) - ctl_mul(ctrl->vdq_set.dat[phase_d], ctrl->vdq_set.dat[phase_d]));
+            //ctl_set_discrete_pid_limit(&ctrl->current_ctrl[phase_q], vq_limit, -vq_limit);
 
             ctrl->vdq_set.dat[phase_q] = ctl_step_discrete_pid(&ctrl->current_ctrl[phase_q],
                                                                ctrl->idq_set.dat[phase_q] - ctrl->idq0.dat[phase_q]) +

@@ -31,16 +31,16 @@
 #define MTR_CTRL_VOLTAGE_BIAS ((0.0))
 
 // Current Bandwidth
-#define MTR_CTRL_CURRENT_LOOP_BW ((100))
+#define MTR_CTRL_CURRENT_LOOP_BW ((50))
 
 // Speed Bandwidth
-#define MTR_CTRL_SPEED_LOOP_BW ((20))
+#define MTR_CTRL_SPEED_LOOP_BW ((1))
 
 // BUILD_LEVEL 1: Voltage Open loop
 // BUILD_LEVEL 2: Current Open loop
 // BUILD_LEVEL 3: Actual Current loop
 // BUILD_LEVEL 4: Speed Close loop
-#define BUILD_LEVEL (1)
+#define BUILD_LEVEL (4)
 
 // 
 // Controller Settings
@@ -48,7 +48,10 @@
 
 // Use discrete PID controller
 // Discrete controller may bring more smooth response.
-#define PMSM_CTRL_USING_DISCRETE_CTRL
+//#define PMSM_CTRL_USING_DISCRETE_CTRL
+
+// Enable Discrete PID controller anti-saturation algorithm
+#define _USE_DEBUG_DISCRETE_PID
 
 // Enable ADC Calibrate
 #define SPECIFY_ENABLE_ADC_CALIBRATE
