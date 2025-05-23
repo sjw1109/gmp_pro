@@ -51,15 +51,28 @@ A set of invoke examples is defined in `implement` folder. `impelement/user_comm
 
 
 
- You may change motor config in `impelement/user_common/ctl_main.h`.
+ You may change motor config in `impelement/<platform>/ctrl_settings.h`.
 
-| MACROS               | Notes                                                    |
-| -------------------- | -------------------------------------------------------- |
-| BUILD_LEVEL          | Select Build Level. Open loop, Current loop, Speed loop. |
-| CONTROLLER_FREQUENCY | Select Controller Frequency.                             |
+| MACROS                   | Notes                                                    |
+| ------------------------ | -------------------------------------------------------- |
+| BUILD_LEVEL              | Select Build Level. Open loop, Current loop, Speed loop. |
+| CONTROLLER_FREQUENCY     | Select Controller Frequency.                             |
+| CONTROLLER_PWM_CMP_MAX   | 比较器最大值                                             |
+| MTR_ENCODER_LINES        | 编码器线数                                               |
+| MTR_ENCODER_OFFSET       | 编码器偏置                                               |
+| MTR_CTRL_CURRENT_LOOP_BW | 控制器电流带宽                                           |
+| MTR_CTRL_SPEED_LOOP_BW   | 控制器速度带宽                                           |
 
-You may change PID config in `impelement/user_common/ctl_main.c`, the time invoke function `ctl_setup_pmsm_servo_framework`.
+控制器参数还通过电机预设和控制器预设读入。
 
+``` C
+// invoke motor parameters
+#include <ctl/component/motor_control/motor_preset/GBM2804H_100T.h>
+
+// invoke motor controller parameters
+#include <ctl/component/motor_control/controller_preset/TI_3PH_GAN_INV.h>
+```
+下一步计划：增加弱磁控制的代码
 
 
 

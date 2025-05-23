@@ -46,6 +46,6 @@
 
 // Use discrete PID controller
 // Discrete controller may bring more smooth response.
-#define PMSM_CTRL_USING_DISCRETE_CTRL
+//#define PMSM_CTRL_USING_DISCRETE_CTRL
 
 #endif // _FILE_CTRL_SETTINGS_H_

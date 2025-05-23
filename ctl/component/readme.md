@@ -11,8 +11,7 @@ GMP CTL Components Root Directory.
 
 | Function                                                     | Note                                                         | Comment           |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------------- |
-| `ec_gt ctl_init_<component>(<component handle>)`             | 初始化函数，只是初始化基础的内存空间，同时验证指针是否可用，或者分配内存。将原件初始化至clear的状态。 |                   |
-| `ec_gt ctl_setup_<component>(<component handle>, <parameters>)` | 启动函数，将对象赋予初值，有必要的话进行参数计算。不执行任何的内存分配任务。在不需要执行参数检查的情况下通常直接返回OK。 |                   |
+| `void ctl_init_<component>(<component handle>)`              | 初始化函数，只是初始化基础的内存空间，验证指针是否可用，或者分配内存。将原件初始化至clear的状态。 |                   |
 | `<ret type> ctl_step_<component>(<component handle>. <input target>)` | 让元件运行一步。返回值为运算结果，通常返回值只对标量返回值有效。 | GMP_STATIC_INLINE |
 
 
@@ -25,6 +24,8 @@ GMP CTL Components Root Directory.
 | `<ret type> ctl_helper_<component>(<parameters>)`            | helper function用来进行器件的中间步骤计算。                  |                   |
 | `<ret value> ctl_get_<component>_<param>(<component handle>)` | 得到特定器件的特定参数，通过返回值得到标量参数，通过参数指针返回向量参数。 |                   |
 | `void ctl_set_<component>_<param>(<component handle>, target)` | 设定特定器件的特定参数，在有必要的情况下对参数范围进行检查。 |                   |
+| `fast_gt ctl_is_<component>_<flag>(<component handle>)`      | 判定控制器的某个标志位是否置位                               |                   |
+| `void ctl_attach_<component>_<port>(<component handle>, <interface type pointer>)` | 将某一个接口类型绑定在控制器上，主要引用于成套的控制器       |                   |
 
 
 
