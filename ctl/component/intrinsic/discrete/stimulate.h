@@ -38,10 +38,10 @@ typedef struct _tag_sine_generator_t
 //                            ctrl_gt step_angle); // rad
 
 void ctl_init_sincos_gen(ctl_src_sg_t *sg,
-                         ctrl_gt init_angle,  // rad
-                         ctrl_gt step_angle); // rad
+                         parameter_gt init_angle,  // pu
+                         parameter_gt step_angle); // pu
 
-GMP_STATIC_INLINE
+    GMP_STATIC_INLINE
 void ctl_step_sincos_gen(ctl_src_sg_t *sg)
 {
     ctrl_gt sin_new = sg->ph_sin * sg->ph_cos_delta + sg->ph_cos * sg->ph_sin_delta;
@@ -49,6 +49,18 @@ void ctl_step_sincos_gen(ctl_src_sg_t *sg)
 
     sg->ph_sin = sin_new;
     sg->ph_cos = cos_new;
+}
+
+GMP_STATIC_INLINE
+void ctl_get_sg_sin(ctl_src_sg_t *sg)
+{
+    return sg->ph_sin;
+}
+
+GMP_STATIC_INLINE
+void ctl_get_sg_cos(ctl_src_sg_t *sg)
+{
+    return sg->ph_cos;
 }
 
 //////////////////////////////////////////////////////////////////////////

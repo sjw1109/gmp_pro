@@ -171,3 +171,58 @@ void ctl_init_im_spd_calc(
     calc->omega_s = 0;
     calc->enc.elec_position = 0;
 }
+
+
+
+
+//////////////////////////////////////////////////////////////////////////
+// pmsm hfi
+
+#include <ctl/component/motor_control/observer/pmsm.hfi.h>
+
+void ctl_init_pmsm_hfi(
+    // HFI handle
+    pmsm_hfi_t *hfi,
+    // HFI Initialize object
+    ctl_hfi_init_t *init)
+{
+ 
+    //
+    //hfi output/intermediate section initiate
+    //
+    hfi->ud_inj = 0; 
+    hfi->iq_demodulate = 0; 
+    hfi->theta_error = 0; 
+    hfi->wr = 0; 
+    
+
+    //
+    // hfi control entity initiate
+    //
+    
+    //modulation
+    ctl_init_sincos_gen(&hfi->hfi_sincos_gen,
+                        0, // pu
+                        init->f_hfi / init->f_ctrl); //pu
+    hfi->hfi_inj_amp = init->u_amp_hfi;
+    
+    //iq lowpass filter
+    ctl_filter_IIR2_setup_t iq_lp_setup;
+    iq_lp_setup.fc = init->iq_lp_fc;
+    iq_lp_setup.filter_type = FILTER_IIR2_TYPE_LOWPASS;
+    iq_lp_setup.fs = init->f_ctrl;
+    iq_lp_setup.gain = 1; 
+    iq_lp_setup.q = 1/ init->iq_lp_damp / 2;
+
+    ctl_init_filter_iir2(&hfi->iq_lp_filter, &iq_lp_setup);
+    
+    //PLL
+    ctl_init_pid(&hfi->pid_pll, init->pid_kp, init->pid_Ti, init->pid_Td, init->f_ctrl);
+    ctl_set_pid_limit(&hfi->pid_pll, init->spd_max_limit, init->spd_min_limit);
+    
+    hfi->spd_sf = float2ctrl((30.0f / PI) * init->f_ctrl / init->speed_base_rpm);
+    hfi->pole_pairs = init->pole_pairs;
+    hfi->theta_r_est = 0;
+
+
+}

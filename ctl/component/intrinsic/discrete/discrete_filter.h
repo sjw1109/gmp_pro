@@ -188,7 +188,7 @@ typedef struct _tag_filter_IIR2_setup_t
 } ctl_filter_IIR2_setup_t;
 
 // Design a 2rd Order IIR filter based on center frequency and Q
-ec_gt ctl_init_filter_iir2(ctl_filter_IIR2_t *obj, ctl_filter_IIR2_setup_t *setup_obj);
+void ctl_init_filter_iir2(ctl_filter_IIR2_t *obj, ctl_filter_IIR2_setup_t *setup_obj);
 
 //////////////////////////////////////////////////////////////////////////
 // FIR filter
