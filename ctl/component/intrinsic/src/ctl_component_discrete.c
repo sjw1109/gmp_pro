@@ -37,7 +37,7 @@ void ctl_init_lp_filter(ctl_low_pass_filter_t *lpf, parameter_gt fs, parameter_g
     lpf->a = ctl_helper_lp_filter(fs, fc);
 }
 
-ec_gt ctl_init_filter_iir2(ctl_filter_IIR2_t *obj, ctl_filter_IIR2_setup_t *setup_obj)
+void ctl_init_filter_iir2(ctl_filter_IIR2_t *obj, ctl_filter_IIR2_setup_t *setup_obj)
 {
     // center frequency
     // tex: $$ f_0 = f_c * 2Q$$
@@ -82,7 +82,6 @@ ec_gt ctl_init_filter_iir2(ctl_filter_IIR2_t *obj, ctl_filter_IIR2_setup_t *setu
 
     obj->out = 0;
 
-    return GMP_EC_OK;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -126,14 +125,14 @@ void ctl_init_slope_limit(ctl_slope_lim_t *obj, ctrl_gt slope_max, ctrl_gt slope
 #include <ctl/component/intrinsic/discrete/stimulate.h>
 
 void ctl_init_sincos_gen(ctl_src_sg_t *sg,
-                         ctrl_gt init_angle, // rad
-                         ctrl_gt step_angle) // rad
+                         parameter_gt init_angle, // pu
+                         parameter_gt step_angle) // pu
 {
-    sg->ph_cos = ctl_cos(init_angle);
-    sg->ph_sin = ctl_sin(init_angle);
+    sg->ph_cos = float2ctrl(cos(init_angle));
+    sg->ph_sin = float2ctrl(sin(init_angle));
 
-    sg->ph_sin_delta = ctl_sin(step_angle);
-    sg->ph_cos_delta = ctl_cos(step_angle);
+    sg->ph_sin_delta = float2ctrl(sin(step_angle));
+    sg->ph_cos_delta = float2ctrl(cos(step_angle));
 }
 
 void ctl_init_ramp_gen(ctl_src_rg_t *rg, ctrl_gt slope, parameter_gt amp_pos, parameter_gt amp_neg)
