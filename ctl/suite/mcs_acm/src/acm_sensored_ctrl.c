@@ -2,12 +2,14 @@
 
 #include <gmp_core.h>
 
-#include <ctl/suite/mcs_pmsm/pmsm_ctrl.h>
+#include <ctl/suite/mcs_acm/acm_sensored_ctrl.h>
 
-// #include "peripheral.h"
-
-// init pmsm_bare_controller struct
-void ctl_init_pmsm_bare_controller(pmsm_bare_controller_t *ctrl, pmsm_bare_controller_init_t *init)
+// init acm_sensored_bare_controller_t struct
+void ctl_init_acm_sensored_bare_controller(
+    // ACM Controller handle
+    acm_sensored_bare_controller_t *ctrl,
+    // ACM initialize structure
+    acm_sensored_bare_controller_init_t *init)
 {
 #ifdef PMSM_CTRL_USING_DISCRETE_CTRL
     // controller implement
@@ -79,6 +81,18 @@ void ctl_init_pmsm_bare_controller(pmsm_bare_controller_t *ctrl, pmsm_bare_contr
 
 #endif // PMSM_CTRL_USING_DISCRETE_CTRL
 
+    // flux estimate
+    ctl_init_im_spd_calc(
+        // IM speed calculate object
+        ctrl->flux_calc,
+        // rotor parameters, unit Ohm, H
+        init->Rr, init->Lr,
+        // base electrical frequency(Hz), ISR frequency (Hz)
+        init->base_freq, init->fs);
+
+    // Create position encoder and speed encoder
+
+
     // controller intermediate variable
     ctl_vector3_clear(&ctrl->iab0);
     ctl_vector3_clear(&ctrl->uab0);
@@ -102,7 +116,22 @@ void ctl_init_pmsm_bare_controller(pmsm_bare_controller_t *ctrl, pmsm_bare_contr
     ctl_pmsm_ctrl_valphabeta_mode(ctrl);
 }
 
-void ctl_attach_pmsm_bare_output(pmsm_bare_controller_t *ctrl, tri_pwm_ift *pwm)
+// attach to output port
+void ctl_attach_acm_sensored_bare_output(
+    // ACM Controller handle
+    acm_sensored_bare_controller_t *ctrl,
+    // PWM handle
+    tri_pwm_ift *pwm_out)
 {
     ctrl->pwm_out = pwm;
+}
+
+// attach to rotor speed encoder port
+void ctl_attach_acm_sensored_bare_rotor_postion(
+    // ACM Controller handle
+    acm_sensored_bare_controller_t *ctrl,
+    // rotor position
+    rotation_ift *rotor_enc)
+{
+    ctrl->rotor_pos = rotor_enc;
 }

@@ -2,6 +2,9 @@
 #ifndef _FILE_HBL48ZL40030K_H_
 #define _FILE_HBL48ZL40030K_H_
 
+// PMSM Motor Type
+#define MOTOR_TYPE PMSM_MOTOR
+
 //////////////////////////////////////////////////////////////////////////
 // Basic parameters
 //

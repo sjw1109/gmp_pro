@@ -4,6 +4,9 @@
 #ifndef _FILE_MOTOR_PARAM_TYI5008_KV335_H_
 #define _FILE_MOTOR_PARAM_TYI5008_KV335_H_
 
+// PMSM Motor Type
+#define MOTOR_TYPE PMSM_MOTOR
+
 //////////////////////////////////////////////////////////////////////////
 // Basic parameters
 //

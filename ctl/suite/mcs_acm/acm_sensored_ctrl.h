@@ -59,50 +59,51 @@ extern "C"
 // ACM Bare controller is a x-platform ACM controller.
 //
 // ACM Bare controller usage:
-// + Attach physical interface with pmsm_bare_controller
+// + Attach physical interface with acm_sensored_bare_controller_t
 //  This task should complete in a xPlatform file.
-//  @ctl_attach_pmsm_bare_output function is used to attach pwm interface.
-//  @ctl_attach_mtr_adc_channels function is used to attach adc interface.
-//  @ctl_attach_mtr_position function is used to attach position encoder.
+//  @ctl_attach_acm_sensored_bare_output function is used to attach PWM interface.
+//  @ctl_attach_acm_sensored_bare_rotor_postion function is used to attach rotor position interface.
+//  @ctl_attach_mtr_adc_channels function is used to attach ADC interface.
+//  @ctl_attach_mtr_position function is used to attach flux position encoder.
 //  @ctl_attach_mtr_velocity function is used to attach velocity encoder.
 //  @ctl_attach_mtr_torque function is used to attach torque sensor.
 //
 // + init the controller structure entity
-//  fill struct @pmsm_bare_controller_init_t to specify motor controller parameters.
-//  call function @ctl_init_pmsm_bare_controller to initialize the controller entity, based on the parameters.
+//  fill struct @acm_sensored_bare_controller_init_t to specify motor controller parameters.
+//  call function @ctl_init_acm_sensored_bare_controller to initialize the controller entity, based on the parameters.
 //
 // + select a operating mode and provide a control target
-// PMSM bare controller support the PMSM controller running in the following mode:
+// ACM bare controller support the ACM controller running in the following mode:
 //   - $v_\alpha, v_\beta$ mode
-//   user may call function @ctl_pmsm_ctrl_valphabeta_mode to enter this mode.
-//   user may call function @ctl_set_pmsm_ctrl_valphabeta to provide control target
+//   user may call function @ctl_acm_sensored_ctrl_valphabeta_mode to enter this mode.
+//   user may call function @ctl_set_acm_sensored_ctrl_valphabeta to provide control target
 //
 //   - Voltage mode (vdq mode)
-//   user may call function @ctl_pmsm_ctrl_voltage_mode to enter this mode.
-//   user may call function @ctl_set_pmsm_ctrl_vdq_ff to provide control target.
+//   user may call function @ctl_acm_sensored_ctrl_voltage_mode to enter this mode.
+//   user may call function @ctl_set_acm_sensored_ctrl_vdq_ff to provide control target.
 //
 //   - Current mode (idq mode)
-//   user may call function @ctl_pmsm_ctrl_current_mode to enter current mode.
+//   user may call function @ctl_acm_sensored_ctrl_current_mode to enter current mode.
 //   current controller will active.
-//   user may call function @ctl_set_pmsm_ctrl_idq_ff to provide control target.
+//   user may call function @ctl_set_acm_sensored_ctrl_idq_ff to provide control target.
 //
 //   - Velocity mode (spd mode)
-//   user may call function @ctl_pmsm_ctrl_velocity_mode to enter velocity mode.
+//   user may call function @ctl_acm_sensored_ctrl_velocity_mode to enter velocity mode.
 //   current controller and speed controller will active.
-//   user may call function @ctl_set_pmsm_ctrl_speed to provide control target.
+//   user may call function @ctl_set_acm_sensored_ctrl_speed to provide control target.
 //
 //   Note: These function is just a controller switch, when you need to change controller mode
 //   at time the controller is running you should implement a extra algorithm to ensure switch smoothly.
 //
 // + invoke this controller in Main ISR.
-//  User should call mtr_interface' step function firstly to get correct input.
-//  Then, call @ctl_step_pmsm_ctrl in MainISR function.
+//  User should call mtr_interface step function firstly to get correct input.
+//  Then, call @ctl_step_acm_sensored_ctrl in MainISR function.
 //  Last, call PWM interface to output modulation result.
 //
 // + enable / disable the controller
-//  function @ctl_enable_pmsm_ctrl is to enable the controller or the whole controller will bypass.
-//  function @ctl_disable_pmsm_ctrl is to disable the controller.
-//  Note: you should call function @ctl_clear_pmsm_ctrl before controller is switch on.
+//  function @ctl_enable_acm_sensored_ctrl is to enable the controller or the whole controller will bypass.
+//  function @ctl_disable_acm_sensored_ctrl is to disable the controller.
+//  Note: you should call function @ctl_clear_acm_sensored_ctrl before controller is switch on.
 //
 typedef struct _tag_acm_sensored_bare_controller
 {
@@ -119,7 +120,7 @@ typedef struct _tag_acm_sensored_bare_controller
 
     // input interface
     // rotor position encoder result
-    rotation_ift *rotor;
+    rotation_ift *rotor_pos;
 
     // output interfaces
     tri_pwm_ift *pwm_out;
@@ -448,6 +449,22 @@ void ctl_disable_acm_sensored_ctrl_output(acm_sensored_bare_controller_t *ctrl)
     ctrl->flag_enable_output = 0;
 }
 
+// enable flux speed estimate
+GMP_STATIC_INLINE
+void ctl_enable_acm_sensored_ctrl_flux_est(acm_sensored_bare_controller_t* ctrl)
+{
+    ctrl->flag_enable_flux_est = 1;
+}
+
+// disable flux speed estimate
+GMP_STATIC_INLINE
+void ctl_disable_acm_sensored_ctrl_flux_est(acm_sensored_bare_controller_t *ctrl)
+{
+    ctrl->flag_enable_flux_est = 0;
+}
+
+
+
 // .....................................................................//
 // v alpha & v beta mode
 //
@@ -461,7 +478,6 @@ void ctl_acm_sensored_ctrl_valphabeta_mode(acm_sensored_bare_controller_t *ctrl)
     ctrl->flag_enable_modulation = 0;
     ctrl->flag_enable_current_ctrl = 0;
     ctrl->flag_enable_velocity_ctrl = 0;
-    ctrl->flag_enable_position_ctrl = 0;
 }
 
 // Set motor target v alpha and v beta.
@@ -487,7 +503,6 @@ void ctl_acm_sensored_ctrl_voltage_mode(acm_sensored_bare_controller_t *ctrl)
     ctrl->flag_enable_modulation = 1;
     ctrl->flag_enable_current_ctrl = 0;
     ctrl->flag_enable_velocity_ctrl = 0;
-    ctrl->flag_enable_position_ctrl = 0;
 }
 
 // this function set vdq reference for vdq mode.
@@ -512,7 +527,6 @@ void ctl_acm_sensored_ctrl_current_mode(acm_sensored_bare_controller_t *ctrl)
     ctrl->flag_enable_modulation = 1;
     ctrl->flag_enable_current_ctrl = 1;
     ctrl->flag_enable_velocity_ctrl = 0;
-    ctrl->flag_enable_position_ctrl = 0;
 }
 
 // this function set ACM idq feed forward.
@@ -537,7 +551,6 @@ void ctl_acm_sensored_ctrl_velocity_mode(acm_sensored_bare_controller_t *ctrl)
     ctrl->flag_enable_modulation = 1;
     ctrl->flag_enable_current_ctrl = 1;
     ctrl->flag_enable_velocity_ctrl = 1;
-    ctrl->flag_enable_position_ctrl = 0;
 }
 
 // this function set ACM target speed.
@@ -598,6 +611,18 @@ typedef struct _tag_acm_sensored_bare_controller_init
     // speed controller divider
     uint32_t spd_ctrl_div;
 
+    //////////////////////////////////////////////////////////////////////////
+    // Motor Parameters
+
+    // Ls, unit H
+    parameter_gt Ls;
+
+    // Rs, unit Ohm
+    parameter_gt Rs;
+
+    // Stator Base frequency, unit Hz
+    parameter_gt base_freq;
+
 } acm_sensored_bare_controller_init_t;
 
 // init acm_sensored_bare_controller_t struct
@@ -613,6 +638,13 @@ void ctl_attach_acm_sensored_bare_output(
     acm_sensored_bare_controller_t *ctrl, 
     // PWM handle
     tri_pwm_ift *pwm_out);
+
+// attach to rotor speed encoder port
+void ctl_attach_acm_sensored_bare_rotor_postion(
+    // ACM Controller handle
+    acm_sensored_bare_controller_t *ctrl,
+    // rotor position
+    rotation_ift *rotor_enc);
 
 #ifdef __cplusplus
 }
