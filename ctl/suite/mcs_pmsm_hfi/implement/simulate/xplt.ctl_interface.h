@@ -79,7 +79,7 @@ void ctl_output_callback(void)
 
     simulink_tx_buffer.monitor_port[6] = pmsm_ctrl.mtr_interface.velocity->speed;
     simulink_tx_buffer.monitor_port[7] = pmsm_ctrl.mtr_interface.position->elec_position;
-    simulink_tx_buffer.monitor_port[7] = slope_f.current_freq;
+    simulink_tx_buffer.monitor_port[7] = rg.current_freq;
     simulink_tx_buffer.monitor_port[7] = simulink_rx_buffer.encoder;
 }
 

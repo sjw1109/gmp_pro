@@ -41,12 +41,12 @@ extern spd_calculator_t spd_enc;
 #if defined OPENLOOP_CONST_FREQUENCY
 
 // PMSM const frequency controller
-extern ctl_const_f_controller const_f;
+extern ctl_const_f_controller rg;
 
 #else // OPENLOOP_CONST_FREQUENCY
 
 // PMSM const frequency slope controller
-extern ctl_slope_f_controller slope_f;
+extern ctl_slope_f_controller rg;
 
 #endif // OPENLOOP_CONST_FREQUENCY
 
@@ -88,9 +88,9 @@ void ctl_dispatch(void)
     else
     {
 #if defined OPENLOOP_CONST_FREQUENCY
-        ctl_step_const_f_controller(&const_f);
+        ctl_step_const_f_controller(&rg);
 #else  // OPENLOOP_CONST_FREQUENCY
-        ctl_step_slope_f(&slope_f);
+        ctl_step_slope_f(&rg);
 #endif // OPENLOOP_CONST_FREQUENCY
     }
 

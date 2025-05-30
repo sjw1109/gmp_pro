@@ -16,9 +16,9 @@
 // #include <ctl/component/common/pll.h>
 #include <ctl/component/intrinsic/continuous/continuous_pid.h>
 #include <ctl/component/intrinsic/discrete/discrete_filter.h>
+#include <ctl/component/intrinsic/discrete/stimulate.h>
 #include <ctl/component/motor_control/consultant/motor_driver_consultant.h>
 #include <ctl/component/motor_control/consultant/pmsm_consultant.h>
-#include <ctl/component/intrinsic/discrete/stimulate.h>
 
 // #include <arm_math.h>
 
@@ -53,7 +53,6 @@ typedef struct _tag_ctl_hfi_init_struct
     parameter_gt u_base;
     parameter_gt i_base;
 
-
     //
     // HFI Controller Parameters
     //
@@ -76,14 +75,12 @@ typedef struct _tag_ctl_hfi_init_struct
     ctrl_gt spd_max_limit;
     ctrl_gt spd_min_limit;
 
-   
 } ctl_hfi_init_t;
-
 
 typedef struct _tag_ctl_pmsm_hfi_t
 {
     //
-    //encoder interface, output
+    // encoder interface, output
     //
     rotation_ift encif;
     velocity_ift spdif;
@@ -123,26 +120,19 @@ typedef struct _tag_ctl_pmsm_hfi_t
     // speed scale factor
     // scale factor: rad/tick -> p.u.
     ctrl_gt spd_sf;
-    // Mechanical Position Estimation 
+    // Mechanical Position Estimation
     ctrl_gt theta_r_est;
     // pole pairs
     ctrl_gt pole_pairs;
 
 } pmsm_hfi_t;
 
-
-
 void ctl_input_pmsm_hfi(pmsm_hfi_t *hfi, ctrl_gt iq)
 {
     hfi->iq = iq;
 }
 
-
-
-
-
-
-    GMP_STATIC_INLINE
+GMP_STATIC_INLINE
 ctrl_gt ctl_step_pmsm_hfi(pmsm_hfi_t *hfi)
 {
     // HFI modulation
@@ -163,11 +153,10 @@ ctrl_gt ctl_step_pmsm_hfi(pmsm_hfi_t *hfi)
     hfi->spdif.speed = ctl_mul(hfi->wr, hfi->spd_sf);
     // 4. update encif: output phase, and phase compensate
     hfi->encif.position = hfi->theta_r_est;
-    hfi->encif.elec_position = ctrl_mod_1( hfi->theta_r_est * hfi->pole_pairs ) ;
+    hfi->encif.elec_position = ctrl_mod_1(hfi->theta_r_est * hfi->pole_pairs);
 
     return hfi->ud_inj;
 }
-
 
 #ifdef __cplusplus
 }

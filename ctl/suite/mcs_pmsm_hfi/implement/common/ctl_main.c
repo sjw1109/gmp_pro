@@ -34,12 +34,12 @@ spd_calculator_t spd_enc;
 #if defined OPENLOOP_CONST_FREQUENCY
 
 // PMSM const frequency controller
-ctl_const_f_controller const_f;
+ctl_const_f_controller rg;
 
 #else // OPENLOOP_CONST_FREQUENCY
 
 // PMSM const frequency slope controller
-ctl_slope_f_controller slope_f;
+ctl_slope_f_controller rg;
 
 #endif // OPENLOOP_CONST_FREQUENCY
 
@@ -77,13 +77,13 @@ void ctl_init()
         // attach position with speed encoder
         &spd_enc, pmsm_ctrl.mtr_interface.position,
         // set spd calculator parameters
-        CONTROLLER_FREQUENCY, 5, MOTOR_PARAM_MAX_SPEED, 1, 150);
+        CONTROLLER_FREQUENCY, SPD_CONTROLLER_PWM_DIVISION, MOTOR_PARAM_MAX_SPEED, 1, 150);
 
 #if defined OPENLOOP_CONST_FREQUENCY
-    ctl_init_const_f_controller(&const_f, 20, CONTROLLER_FREQUENCY);
+    ctl_init_const_f_controller(&rg, 20, CONTROLLER_FREQUENCY);
 #else  // OPENLOOP_CONST_FREQUENCY
     // frequency target 20 Hz, frequency slope 40 Hz/s
-    ctl_init_const_slope_f_controller(&slope_f, 20.0f, 40.0f, CONTROLLER_FREQUENCY);
+    ctl_init_const_slope_f_controller(&rg, 20.0f, 40.0f, CONTROLLER_FREQUENCY);
 #endif // OPENLOOP_CONST_FREQUENCY
 
     // attach a speed encoder object with motor controller
@@ -122,9 +122,9 @@ void ctl_init()
 
 #if (BUILD_LEVEL == 1)
 #if defined OPENLOOP_CONST_FREQUENCY
-    ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &const_f.enc);
+    ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &rg.enc);
 #else  // OPENLOOP_CONST_FREQUENCY
-    ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &slope_f.enc);
+    ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &rg.enc);
 #endif // OPENLOOP_CONST_FREQUENCY
 
     ctl_pmsm_ctrl_voltage_mode(&pmsm_ctrl);
@@ -132,9 +132,9 @@ void ctl_init()
 
 #elif (BUILD_LEVEL == 2)
 #if defined OPENLOOP_CONST_FREQUENCY
-    ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &const_f.enc);
+    ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &rg.enc);
 #else  // OPENLOOP_CONST_FREQUENCY
-    ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &slope_f.enc);
+    ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &rg.enc);
 #endif // OPENLOOP_CONST_FREQUENCY
     ctl_pmsm_ctrl_current_mode(&pmsm_ctrl);
     ctl_set_pmsm_ctrl_idq_ff(&pmsm_ctrl, float2ctrl(0.1), float2ctrl(0.1));

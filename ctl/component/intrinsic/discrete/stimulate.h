@@ -52,13 +52,13 @@ void ctl_step_sincos_gen(ctl_src_sg_t *sg)
 }
 
 GMP_STATIC_INLINE
-void ctl_get_sg_sin(ctl_src_sg_t *sg)
+ctrl_gt ctl_get_sg_sin(ctl_src_sg_t *sg)
 {
     return sg->ph_sin;
 }
 
 GMP_STATIC_INLINE
-void ctl_get_sg_cos(ctl_src_sg_t *sg)
+ctrl_gt ctl_get_sg_cos(ctl_src_sg_t *sg)
 {
     return sg->ph_cos;
 }
