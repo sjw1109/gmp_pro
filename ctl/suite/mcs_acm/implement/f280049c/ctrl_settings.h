@@ -9,7 +9,7 @@
 // invoke motor controller parameters
 #include <ctl/component/motor_control/controller_preset/TI_3PH_GAN_INV.h>
 
-// Controller Frequency
+// Controller Frequency, unit Hz
 #define CONTROLLER_FREQUENCY (10000)
 
 // PWM depth
@@ -62,5 +62,11 @@
 
 // Enable ADC Calibrate
 #define SPECIFY_ENABLE_ADC_CALIBRATE
+
+//
+// System Tick subsystem
+// System tick will increase itself every 1ms.
+//
+#define DSP_C2000_DSP_TIME_DIV ((CONTROLLER_FREQUENCY / 1000))
 
 #endif // _FILE_CTRL_SETTINGS_H_
