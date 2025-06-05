@@ -121,6 +121,10 @@ void ctl_init()
     acm_ctrl_init.base_freq = MOTOR_PARAM_RATED_FREQUENCY;
     acm_ctrl_init.base_spd = MOTOR_PARAM_MAX_SPEED;
 
+    // startup speed acc
+    acm_ctrl_init.target_freq = 20.0;
+    acm_ctrl_init.target_freq_slope = 40.0;
+
     // init the PMSM controller
     ctl_init_acm_sensored_bare_controller(&acm_ctrl, &acm_ctrl_init);
 

@@ -258,6 +258,11 @@ void ctl_step_acm_sensored_ctrl(acm_sensored_bare_controller_t *ctrl)
     ctrl->isr_tick += 1;
 
     //
+    // ramp generator
+    //
+    ctl_step_slope_f(&ctrl->rg);
+
+    //
     // Clark Transformation
     //
 

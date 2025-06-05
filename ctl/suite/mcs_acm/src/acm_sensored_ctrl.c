@@ -96,7 +96,6 @@ void ctl_init_acm_sensored_bare_controller(
 
     // Create position encoder and speed encoder
 
-
     // controller intermediate variable
     ctl_vector3_clear(&ctrl->iab0);
     ctl_vector3_clear(&ctrl->uab0);
@@ -115,6 +114,41 @@ void ctl_init_acm_sensored_bare_controller(
 
     // Const Slope ramp generator
     ctl_init_const_slope_f_controller(&ctrl->rg, init->target_freq, init->target_freq_slope, init->fs);
+
+    // connect flux Position encoder with angle generator
+    ctl_attach_mtr_position(&ctrl->mtr_interface, &ctrl->rg.enc);
+
+    // rotor speed controller
+    ctl_init_spd_calculator(
+        // speed calculator objects
+        &ctrl->spd_enc,
+        // link to a position encoder
+        ctrl->rotor_pos,
+        // control law frequency, unit Hz
+        init->fs,
+        // division of control law frequency, unit ticks
+        init->spd_ctrl_div,
+        // Speed per unit base value, unit rpm
+        init->base_spd,
+        // pole pairs, if you pass a elec-angle,
+        init->pole_pairs,
+        // just set this value to 1.
+        // generally, speed_filter_fc approx to speed_calc freq divided by 5
+        150);
+
+    // connect speed with encoder
+    ctl_attach_mtr_velocity(&ctrl->mtr_interface, &ctrl->spd_enc.encif);
+
+    // ramp generator
+    ctl_init_const_slope_f_controller(
+        // controller object
+        &ctrl->rg,
+        // target frequency, Hz
+        init->target_freq,
+        // frequency slope, Hz/s
+        init->target_freq_slope,
+        // ISR frequency
+        init->fs);
 
     // flag stack
     ctl_enable_acm_sensored_ctrl_flux_est(ctrl);
