@@ -33,7 +33,7 @@ extern "C"
 #endif // __cplusplus
 
 // speed encoder
-extern spd_calculator_t spd_enc;
+//extern spd_calculator_t spd_enc;
 
 // PMSM servo objects
 // extern pmsm_fm_t pmsm;
@@ -95,7 +95,7 @@ void ctl_dispatch(void)
     // #endif // OPENLOOP_CONST_FREQUENCY
     // }
 
-    ctl_step_spd_calc(&spd_enc);
+//    ctl_step_spd_calc(&spd_enc);
 
     ctl_step_acm_sensored_ctrl(&acm_ctrl);
 }

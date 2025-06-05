@@ -112,8 +112,8 @@ void ctl_init_acm_sensored_bare_controller(
     ctl_vector2_clear(&ctrl->idq_set);
     ctrl->speed_set = 0;
 
-    // Const Slope ramp generator
-    ctl_init_const_slope_f_controller(&ctrl->rg, init->target_freq, init->target_freq_slope, init->fs);
+    // scale factor for per-unit to RG frequency
+    ctrl->speed_pu_rg_sf = float2ctrl(init->base_spd * init->pole_pairs / 60.0 / init->fs);
 
     // connect flux Position encoder with angle generator
     ctl_attach_mtr_position(&ctrl->mtr_interface, &ctrl->rg.enc);
@@ -131,7 +131,7 @@ void ctl_init_acm_sensored_bare_controller(
         // Speed per unit base value, unit rpm
         init->base_spd,
         // pole pairs, if you pass a elec-angle,
-        init->pole_pairs,
+        1,
         // just set this value to 1.
         // generally, speed_filter_fc approx to speed_calc freq divided by 5
         150);
@@ -144,7 +144,7 @@ void ctl_init_acm_sensored_bare_controller(
         // controller object
         &ctrl->rg,
         // target frequency, Hz
-        init->target_freq,
+        0,
         // frequency slope, Hz/s
         init->target_freq_slope,
         // ISR frequency

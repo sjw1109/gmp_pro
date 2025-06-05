@@ -29,7 +29,7 @@ pos_autoturn_encoder_t pos_enc;
 #endif // PMSM_CTRL_USING_QEP_ENCODER
 
 // speed encoder
-spd_calculator_t spd_enc;
+//spd_calculator_t spd_enc;
 
 //#if defined OPENLOOP_CONST_FREQUENCY
 //
@@ -73,11 +73,11 @@ void ctl_init()
     falg_enable_system = 0;
 
     // create a speed observer by position encoder
-    ctl_init_spd_calculator(
-        // attach position with speed encoder
-        &spd_enc, acm_ctrl.mtr_interface.position,
-        // set spd calculator parameters
-        CONTROLLER_FREQUENCY, 5, MOTOR_PARAM_MAX_SPEED, 1, 150);
+//    ctl_init_spd_calculator(
+//        // attach position with speed encoder
+//        &spd_enc, acm_ctrl.mtr_interface.position,
+//        // set spd calculator parameters
+//        CONTROLLER_FREQUENCY, 5, MOTOR_PARAM_MAX_SPEED, 1, 150);
 
 //#if defined OPENLOOP_CONST_FREQUENCY
 //    ctl_init_const_f_controller(&const_f, 20, CONTROLLER_FREQUENCY);
@@ -87,7 +87,9 @@ void ctl_init()
 //#endif // OPENLOOP_CONST_FREQUENCY
 
     // attach a speed encoder object with motor controller
-    ctl_attach_mtr_velocity(&acm_ctrl.mtr_interface, &spd_enc.encif);
+    //ctl_attach_mtr_velocity(&acm_ctrl.mtr_interface, &spd_enc.encif);
+
+    ctl_attach_acm_sensored_bare_rotor_postion(&acm_ctrl, &pos_enc.encif);
 
     // set acm_ctrl parameters
     acm_sensored_bare_controller_init_t acm_ctrl_init;
@@ -95,16 +97,20 @@ void ctl_init()
     acm_ctrl_init.fs = CONTROLLER_FREQUENCY;
 
     // current pid controller parameters
-    acm_ctrl_init.current_pid_gain = (parameter_gt)((MOTOR_PARAM_L1S + MOTOR_PARAM_LM) * MTR_CTRL_CURRENT_LOOP_BW * 2 * PI *
-                                                    MTR_CTRL_VOLTAGE_BASE / MTR_CTRL_CURRENT_BASE);
-    acm_ctrl_init.current_Ti = (parameter_gt)((MOTOR_PARAM_L1S + MOTOR_PARAM_LM) / MOTOR_PARAM_RS);
+//    acm_ctrl_init.current_pid_gain = (parameter_gt)((MOTOR_PARAM_L1S + MOTOR_PARAM_LM) * MTR_CTRL_CURRENT_LOOP_BW * 2 * PI *
+//                                                    MTR_CTRL_VOLTAGE_BASE / MTR_CTRL_CURRENT_BASE);
+//    acm_ctrl_init.current_Ti = (parameter_gt)((MOTOR_PARAM_L1S + MOTOR_PARAM_LM) / MOTOR_PARAM_RS);
+
+    acm_ctrl_init.current_pid_gain = (parameter_gt)(0.9);
+    acm_ctrl_init.current_Ti = (parameter_gt)(1.0/20);
+
     acm_ctrl_init.current_Td = 0;
-    acm_ctrl_init.voltage_limit_min = float2ctrl(-1.0);
-    acm_ctrl_init.voltage_limit_max = float2ctrl(1.0);
+    acm_ctrl_init.voltage_limit_min = float2ctrl(-0.3);
+    acm_ctrl_init.voltage_limit_max = float2ctrl(0.3);
 
     // speed pid controller parameters
     acm_ctrl_init.spd_ctrl_div = SPD_CONTROLLER_PWM_DIVISION;
-    acm_ctrl_init.spd_pid_gain = (parameter_gt)(0.2);
+    acm_ctrl_init.spd_pid_gain = (parameter_gt)(3.0);
     acm_ctrl_init.spd_Ti = (parameter_gt)(4.0f / MTR_CTRL_SPEED_LOOP_BW);
     acm_ctrl_init.spd_Td = 0;
     acm_ctrl_init.current_limit_min = float2ctrl(-0.45);
@@ -122,8 +128,8 @@ void ctl_init()
     acm_ctrl_init.base_spd = MOTOR_PARAM_MAX_SPEED;
 
     // startup speed acc
-    acm_ctrl_init.target_freq = 20.0;
-    acm_ctrl_init.target_freq_slope = 40.0;
+//    acm_ctrl_init.target_freq = 5.0;
+    acm_ctrl_init.target_freq_slope = 2.5;
 
     // init the PMSM controller
     ctl_init_acm_sensored_bare_controller(&acm_ctrl, &acm_ctrl_init);
@@ -139,7 +145,9 @@ void ctl_init()
 //#endif // OPENLOOP_CONST_FREQUENCY
 
     ctl_acm_sensored_ctrl_voltage_mode(&acm_ctrl);
-    ctl_set_acm_sensored_ctrl_vdq_ff(&acm_ctrl, float2ctrl(0.2), float2ctrl(0.2));
+    ctl_set_acm_sensored_ctrl_vdq_ff(&acm_ctrl, float2ctrl(0.05), float2ctrl(0.05));
+
+    ctl_set_acm_sensored_ctrl_speed(&acm_ctrl, float2ctrl(0.2));
 
 #elif (BUILD_LEVEL == 2)
 //#if defined OPENLOOP_CONST_FREQUENCY
@@ -148,17 +156,17 @@ void ctl_init()
 //    ctl_attach_mtr_position(&acm_ctrl.mtr_interface, &slope_f.enc);
 //#endif // OPENLOOP_CONST_FREQUENCY
     ctl_acm_sensored_ctrl_current_mode(&acm_ctrl);
-    ctl_set_acm_sensored_ctrl_idq_ff(&acm_ctrl, float2ctrl(0.1), float2ctrl(0.1));
+    ctl_set_acm_sensored_ctrl_idq_ff(&acm_ctrl, float2ctrl(0.05), float2ctrl(0.2));
+
+    ctl_set_acm_sensored_ctrl_speed(&acm_ctrl, float2ctrl(0.2));
 
 #elif (BUILD_LEVEL == 3)
 
     ctl_acm_sensored_ctrl_current_mode(&acm_ctrl);
-    ctl_set_acm_sensored_ctrl_idq_ff(&acm_ctrl, float2ctrl(0.1), float2ctrl(0.05));
+    ctl_set_acm_sensored_ctrl_idq_ff(&acm_ctrl, float2ctrl(0.2), float2ctrl(0.2));
 
-#elif (BUILD_LEVEL == 4)
+    ctl_set_acm_sensored_ctrl_speed(&acm_ctrl, float2ctrl(0.3));
 
-    ctl_acm_sensored_ctrl_velocity_mode(&acm_ctrl);
-    ctl_set_acm_sensored_ctrl_speed(&acm_ctrl, float2ctrl(0.25));
 #endif // BUILD_LEVEL
 
     // if in simulation mode, enable system
@@ -236,6 +244,17 @@ void ctl_mainloop(void)
                 flag_enable_adc_calibrator = 0;
         }
     }
+
+    //
+    // Speed Loop switch logic
+    // Current Loop -> Speed Loop
+    //
+
+    if(acm_ctrl.speed_set - ctl_get_mtr_velocity(&acm_ctrl.mtr_interface) < ctl_mul(float2ctrl(0.1),acm_ctrl.speed_set) )
+    {
+        ctl_acm_sensored_ctrl_velocity_mode(&acm_ctrl);
+    }
+
 
     //
     // Add User Control Process Logic here

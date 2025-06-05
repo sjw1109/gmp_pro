@@ -72,7 +72,9 @@ ctrl_gt ctl_step_im_spd_calc(ctl_im_spd_calc_t *calc, ctrl_gt isd, ctrl_gt isq, 
     //     calc->slip = 1;
 
     // calc->omega_s = ctl_mul(ctl_mul(omega_r, calc->kp), GMP_CONST_1 + calc->slip); //»úÐµËÙ¶È
-    calc->omega_s = ctl_mul(omega_r, calc->ksync) + calc->slip;
+    calc->omega_s = ctl_mul(omega_r, calc->ksync) + calc->slip + float2ctrl(0.03);
+
+//    calc->omega_e = calc->omega_s *
 
     calc->enc.elec_position += ctl_mul(calc->ktheta, calc->omega_s) + GMP_CONST_1;
 

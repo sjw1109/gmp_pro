@@ -33,7 +33,7 @@ extern "C"
 // Select 2phase current measurement or 3 phase current measurement
 // Default is 3, user may choose 2 in user config file
 #ifndef MTR_CTRL_CURRENT_MEASUREMENT_PHASES
-#define MTR_CTRL_CURRENT_MEASUREMENT_PHASES ((3))
+#define MTR_CTRL_CURRENT_MEASUREMENT_PHASES ((2))
 #endif // MTR_CTRL_CURRENT_MEASUREMENT_PHASES
 
 // Select 2 phases voltage measurement or 3 phase voltage measurement or disable voltage measurement
@@ -157,6 +157,9 @@ typedef struct _tag_acm_sensored_bare_controller
 
     // ramp generator
     ctl_slope_f_controller rg;
+
+    // scale factor for speed pu -> rg frequency
+    ctrl_gt speed_pu_rg_sf;
 
     // .....................................................................//
     // controller intermediate variable
@@ -327,6 +330,19 @@ void ctl_step_acm_sensored_ctrl(acm_sensored_bare_controller_t *ctrl)
         // }
 
         //
+        // Set target speed
+        //
+        if(ctrl->flag_enable_velocity_ctrl)
+        {
+            ctrl->rg.target_frequency = ctl_mul(ctrl->flux_calc.omega_s, ctrl->speed_pu_rg_sf);
+        }
+        // current loop or voltage loop, pure speed set
+        else
+        {
+            ctrl->rg.target_frequency = ctl_mul(ctrl->speed_set, ctrl->speed_pu_rg_sf);
+        }
+
+        //
         // Velocity Controller
         //
         if (ctrl->flag_enable_velocity_ctrl)
@@ -374,8 +390,8 @@ void ctl_step_acm_sensored_ctrl(acm_sensored_bare_controller_t *ctrl)
                 ctl_step_pid_ser(&ctrl->current_ctrl[phase_d], ctrl->idq_set.dat[phase_d] - ctrl->idq0.dat[phase_d]) +
                 ctrl->vdq_ff.dat[phase_d];
 
-            vq_limit = ctl_sqrt(float2ctrl(1.0) - ctl_mul(ctrl->vdq_set.dat[phase_d], ctrl->vdq_set.dat[phase_d]));
-            ctl_set_pid_limit(&ctrl->current_ctrl[phase_q], vq_limit, -vq_limit);
+//            vq_limit = ctl_sqrt(float2ctrl(1.0) - ctl_mul(ctrl->vdq_set.dat[phase_d], ctrl->vdq_set.dat[phase_d]));
+//            ctl_set_pid_limit(&ctrl->current_ctrl[phase_q], vq_limit, -vq_limit);
 
             ctrl->vdq_set.dat[phase_q] =
                 ctl_step_pid_ser(&ctrl->current_ctrl[phase_q], ctrl->idq_set.dat[phase_q] - ctrl->idq0.dat[phase_q]) +
@@ -641,7 +657,7 @@ typedef struct _tag_acm_sensored_bare_controller_init
     // Open loop Ramp Generator parameters
 
     // init target frequency, unit Hz
-    parameter_gt target_freq;
+    //parameter_gt target_freq;
 
     // frequency slope, unit Hz/s
     parameter_gt target_freq_slope;

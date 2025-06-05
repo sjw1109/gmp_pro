@@ -82,8 +82,18 @@ void ctl_output_callback(void)
 {
     ctl_calc_pwm_tri_channel(&pwm_out);
 
-    DAC_setShadowValue(DAC_A_BASE, pwm_out.value[phase_A] / 2);
+//    DAC_setShadowValue(DAC_A_BASE, pwm_out.value[phase_A] / 2);
     DAC_setShadowValue(DAC_B_BASE, pwm_out.value[phase_B] / 2);
+
+//    DAC_setShadowValue(DAC_A_BASE, acm_ctrl.mtr_interface.iabc->value.dat[phase_A] * 2048*2 + 2048);
+//    DAC_setShadowValue(DAC_B_BASE, acm_ctrl.mtr_interface.iabc->value.dat[phase_B] * 2048*2 + 2048);
+
+//    DAC_setShadowValue(DAC_A_BASE, iabc_raw[phase_A]);
+//    DAC_setShadowValue(DAC_B_BASE, iabc_raw[phase_B]);
+
+
+    DAC_setShadowValue(DAC_A_BASE, acm_ctrl.iab0.dat[phase_A] * 2048 + 2048);
+//    DAC_setShadowValue(DAC_B_BASE, acm_ctrl.vdq0.dat[phase_q] * 2048 + 2048);
 
     //        EPWM_setCounterCompareValue(PHASE_U_PWM_BASE, EPWM_COUNTER_COMPARE_A,
     //                            (uint16_t)((INV_PWM_HALF_TBPRD * pwm1.Vabc_pu[0]) +

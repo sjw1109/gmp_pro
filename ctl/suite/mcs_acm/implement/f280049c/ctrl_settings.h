@@ -7,7 +7,9 @@
 #include <ctl/component/motor_control/motor_preset/ACM_4P24V.h>
 
 // invoke motor controller parameters
-#include <ctl/component/motor_control/controller_preset/TI_3PH_GAN_INV.h>
+#include <ctl/component/motor_control/controller_preset/GMP_3PH_2136SINV_DUAL.h>
+//#include <ctl/component/motor_control/controller_preset/TI_3PH_GAN_INV.h>
+
 
 // Controller Frequency, unit Hz
 #define CONTROLLER_FREQUENCY (10000)
@@ -38,16 +40,15 @@
 #define MTR_CTRL_VOLTAGE_BIAS ((0.0))
 
 // Current Bandwidth
-#define MTR_CTRL_CURRENT_LOOP_BW ((100))
+#define MTR_CTRL_CURRENT_LOOP_BW ((5))
 
 // Speed Bandwidth
-#define MTR_CTRL_SPEED_LOOP_BW ((20))
+#define MTR_CTRL_SPEED_LOOP_BW ((0.1))
 
-// BUILD_LEVEL 1: Voltage Open loop
-// BUILD_LEVEL 2: Current Open loop
-// BUILD_LEVEL 3: Actual Current loop
-// BUILD_LEVEL 4: Speed Close loop
-#define BUILD_LEVEL (1)
+// BUILD_LEVEL 1: Voltage Open loop, VF control
+// BUILD_LEVEL 2: Current Open loop, IF control
+// BUILD_LEVEL 3: Speed Close loop
+#define BUILD_LEVEL (3)
 
 //
 // Controller Settings

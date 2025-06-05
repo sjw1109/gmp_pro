@@ -113,12 +113,12 @@ void ctl_ct_clark_2ph(ctl_vector3_t *ab0, GMP_CTL_OUTPUT_TAG ctl_vector3_t *ab)
 {
     ctrl_gt k_alpha = GMP_CONST_AB02AB_ALPHA;
 
-    // tex:
+    //tex:
     //  $$i_\alpha = i_a $$
     ab->dat[0] = ab0->dat[0];
     // tex:
     //  $$i_\beta = 2/\sqrt{3}\times (i_a/2 + i_b) $$
-    ab->dat[1] = (ctrl_gt)pwm_mul(ctl_div2(ab0->dat[0]) + ab0->dat[1], k_alpha);
+    ab->dat[1] = (ctrl_gt)ctl_mul(ctl_div2(ab0->dat[0]) + ab0->dat[1], k_alpha);
     // tex:
     //  $$ i_0 = 0$$
     //  Restricted degrees of freedom
