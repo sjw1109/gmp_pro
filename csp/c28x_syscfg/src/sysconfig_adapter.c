@@ -11,12 +11,12 @@
 
 // This file provide a set of function that CSP must defined.
 
-#include <c28x_peripheral_driver.h>
 #include <gmp_core.h>
 #include <stdio.h>
 #include <string.h>
 
 #include <ctl/component/intrinsic/discrete/divider.h>
+#include <c28x_peripheral_driver.h>
 
 // System Tick
 time_gt DSPC2000_SystemTick = 0;

@@ -56,6 +56,9 @@
 // Enable ADC Calibrate
 #define SPECIFY_ENABLE_ADC_CALIBRATE
 
+// Enable QEP encoder
+#define ACM_CTRL_USING_QEP_ENCODER
+
 
 #endif // _FILE_CTRL_SETTINGS_H_
  

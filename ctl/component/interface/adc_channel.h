@@ -26,7 +26,7 @@ extern "C"
 typedef struct _tag_adc_channel_t
 {
     // OUTPUT the ADC data in ctrl_gt type
-    // Formal expression: value = gain * (raw - gain);
+    // Formal expression: value = gain * (raw - bias);
     adc_ift control_port;
 
     // INPUT raw data from adc
@@ -113,7 +113,7 @@ adc_ift *ctl_get_adc_channel_ctrl_port(adc_channel_t *adc)
 typedef struct _tag_adc_dual_channel_t
 {
     // OUTPUT the ADC data in ctrl_gt type
-    // Formal expression: value = gain * (raw - gain);
+    // Formal expression: value = gain * (raw - bias);
     dual_adc_ift control_port;
 
     // INPUT raw data from adc
@@ -228,7 +228,7 @@ dual_adc_ift *ctl_get_dual_adc_channel_ctrl_port(dual_adc_channel_t *adc)
 typedef struct _tag_tri_adc_channel_t
 {
     // OUTPUT the ADC data in ctrl_gt type
-    // Formal expression: value = gain * (raw - gain);
+    // Formal expression: value = gain * (raw - bias);
     tri_adc_ift control_port;
 
     // INPUT raw data from adc

@@ -154,16 +154,29 @@ void ctl_init_im_spd_calc(
     ctl_im_spd_calc_t *calc,
     // rotor parameters, unit Ohm, H
     parameter_gt Rr, parameter_gt Lr,
+    // ACM Rotor, per-unit Speed, unit rpm
+    parameter_gt rotor_base,
+    // ACM pole pairs
+    uint16_t pole_pairs,
     // base electrical frequency(Hz), ISR frequency (Hz)
     parameter_gt freq_base, parameter_gt isr_freq)
 {
     //  Rotor time constant (sec)
     parameter_gt Tr = Lr / Rr;
 
+    // ACM flux synchronous speed
+    parameter_gt sync_spd = 60 * freq_base / pole_pairs;
+
     // constant using in magnetizing current calculation
-    calc->kr = float2ctrl(1 / isr_freq * Tr);
-    calc->kt = float2ctrl(1 / (Tr * 2 * PI * freq_base));
-    calc->ktheta = freq_base / isr_freq;
+    //calc->kr = float2ctrl(1 / isr_freq * Tr);
+    calc->kr = float2ctrl(1 / isr_freq + Tr);
+
+    //calc->kt = float2ctrl(1 / (Tr * 2 * PI * freq_base));
+    calc->kt = float2ctrl(1 / (2 * PI * freq_base));
+
+    calc->ktheta = float2ctrl(freq_base / isr_freq);
+
+    calc->ksync = float2ctrl(rotor_base / sync_spd);
 
     // clear parameters
     calc->imds = 0;

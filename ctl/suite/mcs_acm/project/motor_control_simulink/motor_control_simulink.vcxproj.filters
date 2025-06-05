@@ -84,11 +84,11 @@
     <ClCompile Include="gmp_src\gmp_std_port.c">
       <Filter>GMP Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\pmsm_ctrl.c">
-      <Filter>motor_driver_bare</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\implement\simulate\xplt.peripheral.c">
       <Filter>implement_interface</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\acm_sensored_ctrl.c">
+      <Filter>motor_driver_bare</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -97,9 +97,6 @@
     </ClInclude>
     <ClInclude Include="..\..\implement\common\user_main.h">
       <Filter>implement_common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\pmsm_ctrl.h">
-      <Filter>motor_driver_bare</Filter>
     </ClInclude>
     <ClInclude Include="..\..\implement\simulate\ctrl_settings.h">
       <Filter>implement_interface</Filter>
@@ -112,6 +109,9 @@
     </ClInclude>
     <ClInclude Include="..\..\implement\simulate\xplt.peripheral.h">
       <Filter>implement_interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\acm_sensored_ctrl.h">
+      <Filter>motor_driver_bare</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

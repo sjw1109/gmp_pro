@@ -74,15 +74,15 @@ void setup_peripheral(void)
     ctl_init_autoturn_pos_encoder(&pos_enc, MOTOR_PARAM_POLE_PAIRS, ((uint32_t)1 << 14) - 1);
 
     // bind peripheral to motor controller
-    ctl_attach_mtr_adc_channels(&pmsm_ctrl.mtr_interface,
+    ctl_attach_mtr_adc_channels(&acm_ctrl.mtr_interface,
                                 // phase voltage & phase current
                                 &iabc.control_port, &uabc.control_port,
                                 // dc bus voltage & dc bus current
                                 &idc.control_port, &udc.control_port);
 
-    ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &pos_enc.encif);
+    ctl_attach_mtr_position(&acm_ctrl.mtr_interface, &pos_enc.encif);
 
-    ctl_attach_pmsm_bare_output(&pmsm_ctrl, &pwm_out.raw);
+    ctl_attach_acm_sensored_bare_output(&acm_ctrl, &pwm_out.raw);
 
     // output channel
     ctl_init_pwm_tri_channel(&pwm_out, 0, CONTROLLER_PWM_CMP_MAX);
@@ -90,4 +90,3 @@ void setup_peripheral(void)
     // open hardware switch
     // ctl_output_enable();
 }
-

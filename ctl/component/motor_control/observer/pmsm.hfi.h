@@ -92,6 +92,7 @@ typedef struct _tag_ctl_pmsm_hfi_t
 
     //
     // output section
+    //
     ctrl_gt ud_inj;
 
     //

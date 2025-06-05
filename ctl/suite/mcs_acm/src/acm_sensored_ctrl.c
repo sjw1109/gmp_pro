@@ -84,9 +84,13 @@ void ctl_init_acm_sensored_bare_controller(
     // flux estimate
     ctl_init_im_spd_calc(
         // IM speed calculate object
-        ctrl->flux_calc,
+        &ctrl->flux_calc,
         // rotor parameters, unit Ohm, H
         init->Rr, init->Lr,
+        // ACM Rotor, per-unit Speed, unit rpm
+        init->base_spd,
+        // ACM pole pairs
+        init->pole_pairs,
         // base electrical frequency(Hz), ISR frequency (Hz)
         init->base_freq, init->fs);
 
@@ -108,12 +112,14 @@ void ctl_init_acm_sensored_bare_controller(
     ctl_vector3_clear(&ctrl->vdq_set);
     ctl_vector2_clear(&ctrl->idq_set);
     ctrl->speed_set = 0;
-    ctrl->pos_set = 0;
-    ctrl->revolution_set = 0;
+
+    // Const Slope ramp generator
+    ctl_init_const_slope_f_controller(&ctrl->rg, init->target_freq, init->target_freq_slope, init->fs);
 
     // flag stack
-    ctl_disable_pmsm_ctrl(ctrl);
-    ctl_pmsm_ctrl_valphabeta_mode(ctrl);
+    ctl_enable_acm_sensored_ctrl_flux_est(ctrl);
+    ctl_disable_acm_sensored_ctrl(ctrl);
+    ctl_acm_sensored_ctrl_valphabeta_mode(ctrl);
 }
 
 // attach to output port
@@ -123,7 +129,7 @@ void ctl_attach_acm_sensored_bare_output(
     // PWM handle
     tri_pwm_ift *pwm_out)
 {
-    ctrl->pwm_out = pwm;
+    ctrl->pwm_out = pwm_out;
 }
 
 // attach to rotor speed encoder port

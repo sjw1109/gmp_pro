@@ -14,6 +14,7 @@
 // user main header
 #include "user_main.h"
 
+
 //////////////////////////////////////////////////////////////////////////
 // definitions of peripheral
 //
@@ -98,15 +99,15 @@ void setup_peripheral(void)
 #endif // PMSM_CTRL_USING_QEP_ENCODER
 
     // bind peripheral to motor controller
-    ctl_attach_mtr_adc_channels(&pmsm_ctrl.mtr_interface,
+    ctl_attach_mtr_adc_channels(&acm_ctrl.mtr_interface,
                                 // phase voltage & phase current
                                 &iabc.control_port, &uabc.control_port,
                                 // dc bus voltage & dc bus current
                                 &idc.control_port, &udc.control_port);
 
-    ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &pos_enc.encif);
+//    ctl_attach_mtr_position(&acm_ctrl.mtr_interface, &pos_enc.encif);
 
-    ctl_attach_pmsm_bare_output(&pmsm_ctrl, &pwm_out.raw);
+    ctl_attach_acm_sensored_bare_output(&acm_ctrl, &pwm_out.raw);
 
     // output channel
     ctl_init_pwm_tri_channel(&pwm_out, 0, CONTROLLER_PWM_CMP_MAX);

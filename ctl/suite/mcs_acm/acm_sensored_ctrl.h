@@ -105,6 +105,11 @@ extern "C"
 //  function @ctl_disable_acm_sensored_ctrl is to disable the controller.
 //  Note: you should call function @ctl_clear_acm_sensored_ctrl before controller is switch on.
 //
+// + enable / disable the flux estimate
+// function @ctl_enable_acm_sensored_ctrl_flux_est will enable flux estimate,
+// user may get flux result by acm_sensored_bare_controller_t::flux_calc::enc.
+// function @ctl_disable_acm_sensored_ctrl_flux_est will disable flux estimate.
+//
 typedef struct _tag_acm_sensored_bare_controller
 {
 
@@ -151,7 +156,7 @@ typedef struct _tag_acm_sensored_bare_controller
     ctl_im_spd_calc_t flux_calc;
 
     // ramp generator
-    ctl_slope_f_controller slope_f;
+    ctl_slope_f_controller rg;
 
     // .....................................................................//
     // controller intermediate variable
@@ -311,10 +316,10 @@ void ctl_step_acm_sensored_ctrl(acm_sensored_bare_controller_t *ctrl)
             ctl_step_im_spd_calc(&ctrl->flux_calc, ctrl->idq0.dat[phase_d], ctrl->idq0.dat[phase_q],
                                  ctl_get_mtr_velocity(&ctrl->mtr_interface));
         }
-        //else
+        // else
         //{
-        //    ctl_clear_im_spd_calc(&ctrl->flux_calc);
-        //}
+        //     ctl_clear_im_spd_calc(&ctrl->flux_calc);
+        // }
 
         //
         // Velocity Controller
@@ -451,7 +456,7 @@ void ctl_disable_acm_sensored_ctrl_output(acm_sensored_bare_controller_t *ctrl)
 
 // enable flux speed estimate
 GMP_STATIC_INLINE
-void ctl_enable_acm_sensored_ctrl_flux_est(acm_sensored_bare_controller_t* ctrl)
+void ctl_enable_acm_sensored_ctrl_flux_est(acm_sensored_bare_controller_t *ctrl)
 {
     ctrl->flag_enable_flux_est = 1;
 }
@@ -462,8 +467,6 @@ void ctl_disable_acm_sensored_ctrl_flux_est(acm_sensored_bare_controller_t *ctrl
 {
     ctrl->flag_enable_flux_est = 0;
 }
-
-
 
 // .....................................................................//
 // v alpha & v beta mode
@@ -611,17 +614,32 @@ typedef struct _tag_acm_sensored_bare_controller_init
     // speed controller divider
     uint32_t spd_ctrl_div;
 
-    //////////////////////////////////////////////////////////////////////////
+    // .....................................................................//
     // Motor Parameters
 
-    // Ls, unit H
-    parameter_gt Ls;
+    // Rotor inductance, Lr, unit H
+    parameter_gt Lr;
 
-    // Rs, unit Ohm
-    parameter_gt Rs;
+    // Rotor resistance, Rr, unit Ohm
+    parameter_gt Rr;
 
     // Stator Base frequency, unit Hz
     parameter_gt base_freq;
+
+    // Rotor Speed per unit base, unit rpm
+    parameter_gt base_spd;
+
+    // pole pairs
+    uint16_t pole_pairs;
+
+    // .....................................................................//
+    // Open loop Ramp Generator parameters
+
+    // init target frequency, unit Hz
+    parameter_gt target_freq;
+
+    // frequency slope, unit Hz/s
+    parameter_gt target_freq_slope;
 
 } acm_sensored_bare_controller_init_t;
 
@@ -635,7 +653,7 @@ void ctl_init_acm_sensored_bare_controller(
 // attach to output port
 void ctl_attach_acm_sensored_bare_output(
     // ACM Controller handle
-    acm_sensored_bare_controller_t *ctrl, 
+    acm_sensored_bare_controller_t *ctrl,
     // PWM handle
     tri_pwm_ift *pwm_out);
 
