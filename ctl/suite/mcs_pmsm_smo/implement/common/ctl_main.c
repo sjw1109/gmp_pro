@@ -29,7 +29,7 @@ fast_gt flag_enable_adc_calibrator = 0;
 fast_gt index_adc_calibrator = 0;
 
 // enable motor running
-volatile fast_gt falg_enable_system = 0;
+volatile fast_gt flag_enable_system = 0;
 
 // CTL initialize routine
 void ctl_init()
@@ -43,7 +43,7 @@ void ctl_init()
     adc_calibrator_filter.q = 0.707f;
     // ctl_init_adc_bias_calibrator(&adc_calibrator, &adc_calibrator_filter);
 
-    falg_enable_system = 0;
+    flag_enable_system = 0;
 
     // set pmsm_ctrl parameters
     pmsm_smo_bare_controller_init_t pmsm_ctrl_init;
@@ -125,7 +125,7 @@ void ctl_init()
     // if in simulation mode, enable system
 #if !defined SPECIFY_PC_ENVIRONMENT
     // stop here and wait for user start the motor controller
-    while (falg_enable_system == 0)
+    while (flag_enable_system == 0)
     {
     }
 #endif // SPECIFY_PC_ENVIRONMENT
