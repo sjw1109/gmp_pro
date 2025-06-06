@@ -15,6 +15,7 @@
 #include "user_main.h"
 
 
+
 //////////////////////////////////////////////////////////////////////////
 // definitions of peripheral
 //
@@ -42,8 +43,23 @@ adc_gt idc_raw;
 ext_as5048a_encoder_t pos_enc;
 #endif // PMSM_CTRL_USING_QEP_ENCODER
 
+#ifdef DLOG_ENABLE
+// dlog monitor module
+DLOG_4CH_F dlog;
 
+#define DBUFF_SIZE_NUM  200
 
+float32_t DBUFF_4CH1[DBUFF_SIZE_NUM];
+float32_t DBUFF_4CH2[DBUFF_SIZE_NUM];
+float32_t DBUFF_4CH3[DBUFF_SIZE_NUM];
+float32_t DBUFF_4CH4[DBUFF_SIZE_NUM];
+
+float32_t dlogCh1;
+float32_t dlogCh2;
+float32_t dlogCh3;
+float32_t dlogCh4;
+
+#endif // DLOG_ENABLE
 
 /////////////////////////////////////////////////////////////////////////
 // peripheral setup function
@@ -112,8 +128,25 @@ void setup_peripheral(void)
     // output channel
     ctl_init_pwm_tri_channel(&pwm_out, 0, CONTROLLER_PWM_CMP_MAX);
 
-    // open hardware switch
-    // ctl_output_enable();
+#ifdef DLOG_ENABLE
+    // DLOG Module init
+    DLOG_4CH_F_init(&dlog);
+
+    dlog.input_ptr1 = &dlogCh1;    //data value
+    dlog.input_ptr2 = &dlogCh2;
+    dlog.input_ptr3 = &dlogCh3;
+    dlog.input_ptr4 = &dlogCh4;
+
+    dlog.output_ptr1 = &DBUFF_4CH1[0];
+    dlog.output_ptr2 = &DBUFF_4CH2[0];
+    dlog.output_ptr3 = &DBUFF_4CH3[0];
+    dlog.output_ptr4 = &DBUFF_4CH4[0];
+
+    dlog.size = DBUFF_SIZE_NUM;
+    dlog.pre_scalar = 5;
+    dlog.trig_value = 0.01;
+    dlog.status = 2;
+#endif // DLOG_ENABLE
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -154,3 +187,31 @@ interrupt void INT_EQEP_Encoder_ISR(void)
 
     Interrupt_clearACKGroup(INT_EQEP_Encoder_INTERRUPT_ACK_GROUP);
 }
+
+//////////////////////////////////////////////////////////////////////////
+// Secure Function
+
+// Enable Motor Controller
+// Enable Output
+void ctl_enable_output()
+{
+    //        csp_sl_enable_output();
+
+    EPWM_clearTripZoneFlag(PHASE_U_BASE, EPWM_TZ_FLAG_OST);
+    EPWM_clearTripZoneFlag(PHASE_V_BASE, EPWM_TZ_FLAG_OST);
+    EPWM_clearTripZoneFlag(PHASE_W_BASE, EPWM_TZ_FLAG_OST);
+
+}
+
+// Disable Output
+void ctl_disable_output()
+{
+    //        csp_sl_disable_output();
+
+    EPWM_forceTripZoneEvent(PHASE_U_BASE, EPWM_TZ_FORCE_EVENT_OST);
+    EPWM_forceTripZoneEvent(PHASE_V_BASE, EPWM_TZ_FORCE_EVENT_OST);
+    EPWM_forceTripZoneEvent(PHASE_W_BASE, EPWM_TZ_FORCE_EVENT_OST);
+
+}
+
+

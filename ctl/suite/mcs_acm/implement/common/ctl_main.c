@@ -205,6 +205,18 @@ void ctl_mainloop(void)
     time_gt current_tick = gmp_base_get_system_tick();
 
     //
+    // Judge if PWM is enabled
+    //
+    if(acm_ctrl.flag_enable_output)
+    {
+        ctl_enable_output();
+    }
+    else
+    {
+        ctl_disable_output();
+    }
+
+    //
     // ADC Auto calibrate
     //
     if (flag_enable_adc_calibrator)

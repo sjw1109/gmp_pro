@@ -92,21 +92,6 @@ void ctl_output_callback(void)
     EPWM_setCounterCompareValue(PHASE_W_BASE, EPWM_COUNTER_COMPARE_A, pwm_out.value[phase_W]);
 }
 
-// Enable Motor Controller
-// Enable Output
-GMP_STATIC_INLINE
-void ctl_enable_output()
-{
-    //        csp_sl_enable_output();
-}
-
-// Disable Output
-GMP_STATIC_INLINE
-void ctl_disable_output()
-{
-    //        csp_sl_disable_output();
-}
-
 #endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
 // Functions with controller nano framework

@@ -92,7 +92,7 @@ SECTIONS
    .const           : > FLASH_BANK0_SEC4,       PAGE = 0,       ALIGN(4)
 #else
    .pinit           : > FLASH_BANK0_SEC1,       PAGE = 0,       ALIGN(4)
-   .ebss            : > RAMLS5,       PAGE = 1
+   .ebss            : >> RAMLS5 | RAMLS6 | RAMLS7,       PAGE = 1
    .esysmem         : > RAMLS5,       PAGE = 1
    .cio             : > RAMLS0,       PAGE = 0
    .econst          : > FLASH_BANK0_SEC4,    PAGE = 0, ALIGN(4)

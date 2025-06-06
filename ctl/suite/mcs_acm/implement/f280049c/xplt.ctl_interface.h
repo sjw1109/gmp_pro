@@ -10,11 +10,13 @@
 // WARNING: This file must be kept in the include search path during compilation.
 //
 
-//#include <ctl/component/motor_control/basic/std_sil_motor_interface.h>
+// #include <ctl/component/motor_control/basic/std_sil_motor_interface.h>
 
 #include <xplt.peripheral.h>
 
 #include <ext/encoder/as5048/as5048a.h>
+
+#include <ctl/component/dsa/ti_dlog/dlog_4ch_f.h>
 
 #ifndef _FILE_CTL_INTERFACE_H_
 #define _FILE_CTL_INTERFACE_H_
@@ -36,6 +38,17 @@ extern adc_gt udc_raw;
 extern adc_gt idc_raw;
 
 extern pos_autoturn_encoder_t pos_enc;
+
+#ifdef DLOG_ENABLE
+
+// graph module
+extern DLOG_4CH_F dlog;
+
+extern float32_t dlogCh1;
+extern float32_t dlogCh2;
+extern float32_t dlogCh3;
+extern float32_t dlogCh4;
+#endif // DLOG_ENABLE
 
 // Functions without controller nano framework.
 #ifndef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
@@ -68,12 +81,10 @@ void ctl_input_callback(void)
 #ifdef PMSM_CTRL_USING_QEP_ENCODER
     // Step auto turn pos encoder
     ctl_step_autoturn_pos_encoder(&pos_enc, EQEP_getPosition(EQEP_Encoder_BASE));
-#else // PMSM_CTRL_USING_QEP_ENCODER
+#else  // PMSM_CTRL_USING_QEP_ENCODER
     // invoke position encoder routine.
     ctl_step_as5048a_pos_encoder(&pos_enc);
 #endif // PMSM_CTRL_USING_QEP_ENCODER
-
-
 }
 
 // Output Callback
@@ -82,41 +93,33 @@ void ctl_output_callback(void)
 {
     ctl_calc_pwm_tri_channel(&pwm_out);
 
-//    DAC_setShadowValue(DAC_A_BASE, pwm_out.value[phase_A] / 2);
+    EPWM_setCounterCompareValue(PHASE_U_BASE, EPWM_COUNTER_COMPARE_A, pwm_out.value[phase_U]);
+    EPWM_setCounterCompareValue(PHASE_V_BASE, EPWM_COUNTER_COMPARE_A, pwm_out.value[phase_V]);
+    EPWM_setCounterCompareValue(PHASE_W_BASE, EPWM_COUNTER_COMPARE_A, pwm_out.value[phase_W]);
+
+    //    DAC_setShadowValue(DAC_A_BASE, pwm_out.value[phase_A] / 2);
     DAC_setShadowValue(DAC_B_BASE, pwm_out.value[phase_B] / 2);
 
-//    DAC_setShadowValue(DAC_A_BASE, acm_ctrl.mtr_interface.iabc->value.dat[phase_A] * 2048*2 + 2048);
-//    DAC_setShadowValue(DAC_B_BASE, acm_ctrl.mtr_interface.iabc->value.dat[phase_B] * 2048*2 + 2048);
+    //    DAC_setShadowValue(DAC_A_BASE, acm_ctrl.mtr_interface.iabc->value.dat[phase_A] * 2048*2 + 2048);
+    //    DAC_setShadowValue(DAC_B_BASE, acm_ctrl.mtr_interface.iabc->value.dat[phase_B] * 2048*2 + 2048);
 
-//    DAC_setShadowValue(DAC_A_BASE, iabc_raw[phase_A]);
-//    DAC_setShadowValue(DAC_B_BASE, iabc_raw[phase_B]);
-
+    //    DAC_setShadowValue(DAC_A_BASE, iabc_raw[phase_A]);
+    //    DAC_setShadowValue(DAC_B_BASE, iabc_raw[phase_B]);
 
     DAC_setShadowValue(DAC_A_BASE, acm_ctrl.iab0.dat[phase_A] * 2048 + 2048);
-//    DAC_setShadowValue(DAC_B_BASE, acm_ctrl.vdq0.dat[phase_q] * 2048 + 2048);
+    //    DAC_setShadowValue(DAC_B_BASE, acm_ctrl.vdq0.dat[phase_q] * 2048 + 2048);
 
     //        EPWM_setCounterCompareValue(PHASE_U_PWM_BASE, EPWM_COUNTER_COMPARE_A,
     //                            (uint16_t)((INV_PWM_HALF_TBPRD * pwm1.Vabc_pu[0]) +
     //                                        INV_PWM_HALF_TBPRD));
 
-    EPWM_setCounterCompareValue(PHASE_U_BASE, EPWM_COUNTER_COMPARE_A, pwm_out.value[phase_U]);
-    EPWM_setCounterCompareValue(PHASE_V_BASE, EPWM_COUNTER_COMPARE_A, pwm_out.value[phase_V]);
-    EPWM_setCounterCompareValue(PHASE_W_BASE, EPWM_COUNTER_COMPARE_A, pwm_out.value[phase_W]);
-}
+#ifdef DLOG_ENABLE
+    dlogCh1 = acm_ctrl.iab0.dat[phase_A];
 
-// Enable Motor Controller
-// Enable Output
-GMP_STATIC_INLINE
-void ctl_enable_output()
-{
-    //        csp_sl_enable_output();
-}
+    // DLOG module
+    DLOG_4CH_F_MACRO(dlog);
 
-// Disable Output
-GMP_STATIC_INLINE
-void ctl_disable_output()
-{
-    //        csp_sl_disable_output();
+#endif // DLOG_ENABLE
 }
 
 #endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO

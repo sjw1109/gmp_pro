@@ -31,7 +31,10 @@ extern "C"
 
 //#include <ctl/component/motor_control/basic/std_sil_motor_interface.h>
 
+// Secure Function prototype
+void ctl_enable_output();
 
+void ctl_disable_output();
 
 // buffer for rx & tx
 //    extern gmp_pc_simulink_rx_buffer_t simulink_rx_buffer;

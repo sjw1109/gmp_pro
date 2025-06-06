@@ -64,6 +64,9 @@
 // Enable ADC Calibrate
 #define SPECIFY_ENABLE_ADC_CALIBRATE
 
+// Enable DLOG module
+#define DLOG_ENABLE
+
 //
 // System Tick subsystem
 // System tick will increase itself every 1ms.

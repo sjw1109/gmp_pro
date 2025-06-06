@@ -153,3 +153,27 @@ interrupt void INT_EQEP_Encoder_ISR(void)
 
     Interrupt_clearACKGroup(INT_EQEP_Encoder_INTERRUPT_ACK_GROUP);
 }
+
+//////////////////////////////////////////////////////////////////////////
+// Secure Function
+
+// Enable Motor Controller
+// Enable Output
+void ctl_enable_output()
+{
+    //        csp_sl_enable_output();
+
+    EPWM_clearTripZoneFlag(PHASE_U_BASE, EPWM_TZ_FLAG_OST);
+    EPWM_clearTripZoneFlag(PHASE_V_BASE, EPWM_TZ_FLAG_OST);
+    EPWM_clearTripZoneFlag(PHASE_W_BASE, EPWM_TZ_FLAG_OST);
+}
+
+// Disable Output
+void ctl_disable_output()
+{
+    //        csp_sl_disable_output();
+
+    EPWM_forceTripZoneEvent(PHASE_U_BASE, EPWM_TZ_FORCE_EVENT_OST);
+    EPWM_forceTripZoneEvent(PHASE_V_BASE, EPWM_TZ_FORCE_EVENT_OST);
+    EPWM_forceTripZoneEvent(PHASE_W_BASE, EPWM_TZ_FORCE_EVENT_OST);
+}

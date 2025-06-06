@@ -186,7 +186,22 @@ void ctl_mainloop(void)
 
     ctl_set_pmsm_ctrl_speed(&pmsm_ctrl, float2ctrl(0.1) * spd_target - float2ctrl(1.0));
 
+
+    //
+    // Judge if PWM is enabled
+    //
+    if (pmsm_ctrl.flag_enable_output)
+    {
+        ctl_enable_output();
+    }
+    else
+    {
+        ctl_disable_output();
+    }
+
+    //
     // ADC Auto calibrate
+    //
     if (flag_enable_adc_calibrator)
     {
         if (ctl_is_adc_calibrator_cmpt(&adc_calibrator) && ctl_is_adc_calibrator_result_valid(&adc_calibrator))
@@ -224,6 +239,8 @@ void ctl_mainloop(void)
                 flag_enable_adc_calibrator = 0;
         }
     }
+
+
     return;
 }
 
