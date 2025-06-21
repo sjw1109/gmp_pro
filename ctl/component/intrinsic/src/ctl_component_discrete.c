@@ -81,7 +81,6 @@ void ctl_init_filter_iir2(ctl_filter_IIR2_t *obj, ctl_filter_IIR2_setup_t *setup
     }
 
     obj->out = 0;
-
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -339,4 +338,72 @@ void ctl_init_pr_controller(
 
     // clear temp variables
     ctl_clear_pr_controller(pr);
+}
+
+void ctl_init_qpr_controller(
+    // handle of QPR controller
+    qpr_ctrl_t *qpr,
+    // Kp
+    parameter_gt kp,
+    // gain of resonant frequency
+    parameter_gt kr,
+    // resonant frequency, unit Hz
+    parameter_gt freq_resonant,
+    // cut frequency, unit Hz
+    parameter_gt freq_cut,
+    // controller frequency
+    parameter_gt fs)
+{
+    ctl_clear_qpr_controller(qpr);
+
+    parameter_gt omega_r_sqr = 4.0f * PI * PI * freq_resonant * freq_resonant;
+    parameter_gt omega_c_fs = 4.0f * 2.0f * PI * freq_cut * fs;
+
+    parameter_gt kr_suffix = 4.0f * freq_cut * fs / (4.0f * fs * fs + omega_c_fs + omega_r_sqr);
+
+    parameter_gt b1 = 2.0f * (4.0f * fs * fs - omega_r_sqr) / (4.0f * fs * fs + omega_c_fs + omega_r_sqr);
+    parameter_gt b2 = (4.0f * fs * fs - omega_c_fs + omega_r_sqr) / (4.0f * fs * fs + omega_c_fs + omega_r_sqr);
+
+    // Discrete parameters
+    qpr->a0 = float2ctrl(kr_suffix);
+    qpr->b1 = float2ctrl(b1);
+    qpr->b2 = float2ctrl(b2);
+
+    qpr->kp = float2ctrl(kp);
+    qpr->kr = float2ctrl(kr);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+
+#include <ctl/component/intrinsic/discrete/discrete_sogi.h>
+
+void ctl_init_discrete_sogi(
+    // Handle of discrete SOGI object
+    discrete_sogi_t *sogi,
+    // damp coefficient, generally is 0.5
+    parameter_gt k_damp,
+    // center frequency, Hz
+    parameter_gt fn,
+    // isr frequency, Hz
+    parameter_gt fs)
+{
+    ctl_clear_discrete_sogi(sogi);
+
+    parameter_gt osgx, osgy, temp, wn, delta_t;
+    delta_t = 1.0f / fs;
+    wn = fn * 2.0f * 3.14159265f;
+    // wn = fn * GMP_CONST_2_PI;
+
+    osgx = (2.0f * k_damp * wn * delta_t);
+    osgy = (float32_t)(wn * delta_t * wn * delta_t);
+    temp = (float32_t)1.0 / (osgx + osgy + 4.0f);
+
+    sogi->b0 = float2ctrl(osgx * temp);
+    sogi->b2 = -sogi->b0;
+    sogi->a1 = float2ctrl((2.0f * (4.0f - osgy)) * temp);
+    sogi->a2 = float2ctrl((osgx - osgy - 4.0f) * temp);
+    sogi->qb0 = float2ctrl((k_damp * osgy) * temp);
+    sogi->qb1 = float2ctrl(sogi->qb0 * (2.0f));
+    sogi->qb2 = sogi->qb0;
 }

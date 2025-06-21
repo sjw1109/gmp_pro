@@ -126,7 +126,7 @@ void ctl_ct_clark_2ph(ctl_vector3_t *ab0, GMP_CTL_OUTPUT_TAG ctl_vector3_t *ab)
 }
 
 // park coordinate axes transform
-// alpha-beta to dq0
+// alpha-beta-0 to dq0
 GMP_STATIC_INLINE
 void ctl_ct_park(ctl_vector3_t *ab, ctl_vector2_t *phasor, GMP_CTL_OUTPUT_TAG ctl_vector3_t *dq0)
 {
@@ -140,6 +140,20 @@ void ctl_ct_park(ctl_vector3_t *ab, ctl_vector2_t *phasor, GMP_CTL_OUTPUT_TAG ct
     //$$i_0 = i_0$$
     dq0->dat[2] = ab->dat[2];
 }
+
+// park coordinate axes transform
+// alpha-beta to dq
+GMP_STATIC_INLINE
+void ctl_ct_park2(ctl_vector2_t *ab, ctl_vector2_t *phasor, GMP_CTL_OUTPUT_TAG ctl_vector2_t *dq0)
+{
+    // tex:
+    //  $$i_d = i_\alpha \times cos\;(\theta) + i_\beta \times sin\;(\theta) $$
+    dq0->dat[0] = ctl_mul(ab->dat[0], phasor->dat[1]) + ctl_mul(ab->dat[1], phasor->dat[0]);
+    // tex:
+    //$$i_q = - i_\alpha \times sin\;(\theta) + i_\beta \times cos\;(\theta)$$
+    dq0->dat[1] = -ctl_mul(ab->dat[0], phasor->dat[0]) + ctl_mul(ab->dat[1], phasor->dat[1]);
+}
+
 
 // ipark coordinate axes transform
 // DQ to alpha_beta

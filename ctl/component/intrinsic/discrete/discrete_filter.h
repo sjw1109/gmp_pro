@@ -90,6 +90,13 @@ void ctl_clear_lowpass_filter(ctl_low_pass_filter_t *lpf)
     lpf->out = 0;
 }
 
+// Get filter result
+GMP_STATIC_INLINE
+ctrl_gt ctl_get_lowpass_filter_result(ctl_low_pass_filter_t* lpf)
+{
+    return lpf->out;
+}
+
 // clang-format off
 // 
 

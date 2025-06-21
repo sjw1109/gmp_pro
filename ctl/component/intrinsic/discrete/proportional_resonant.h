@@ -130,6 +130,18 @@ ctrl_gt ctl_step_pr_controller(
 // G_{PR} = K_p +K_r \frac{2\omega_c s}{s^2 + 2\omega_c s + \omega_r^2}
 // $$
 
+// Discrete model of QPR controller
+
+//tex:
+//$$
+//G_{QPR}=\mathrm{k}_{p}+k_{r}\frac{4\omega_{c}f_{s}}{4f_{s}^{2}+4\omega_{c}f_{s}
+//+\omega_{r}^{2}}\frac{1-z^{-2}}{1-2\frac{4f_{s}^{2}-\omega_{r}^{2}}{4f_{s}^{2}
+//+4\omega_{c}f_{s}+\omega_{r}^{2}}z^{-1}
+//+\frac{4f_{s}^{2}-4\omega_{c}f_{s}+\omega_{r}^{2}}
+//{4f_{s}^{2}+4\omega_{c}f_{s}+\omega_{r}^{2}}z^{-2}}
+//$$
+//
+
 //
 // clang-format on
 
@@ -162,8 +174,71 @@ typedef struct _tag_ctl_qpr_controller
     // parameter section
     //
 
+    ctrl_gt kr;
+    ctrl_gt kp;
+
+    ctrl_gt b1;
+    ctrl_gt b2;
+    ctrl_gt a0;
 
 } qpr_ctrl_t;
+
+GMP_STATIC_INLINE
+void ctl_clear_qpr_controller(
+    // handle of QPR controller
+    qpr_ctrl_t *qpr)
+{
+    qpr->output = 0;
+    qpr->output_2 = 0;
+    qpr->output_1 = 0;
+
+    qpr->input_2 = 0;
+    qpr->input_1 = 0;
+}
+
+void ctl_init_qpr_controller(
+    // handle of QPR controller
+    qpr_ctrl_t *qpr,
+    // Kp
+    parameter_gt kp,
+    // gain of resonant frequency
+    parameter_gt kr,
+    // resonant frequency, unit Hz
+    parameter_gt freq_resonant,
+    // cut frequency, unit Hz
+    parameter_gt freq_cut,
+    // controller frequency
+    parameter_gt fs);
+
+GMP_STATIC_INLINE
+ctrl_gt ctl_step_qpr_controller(
+    // handle of QPR controller
+    qpr_ctrl_t *pr,
+    // input
+    ctrl_gt input)
+{
+    ctrl_gt output = 0;
+    ctrl_gt input_diff = 0;
+
+    // P controller for PR controller
+    output = ctl_mul(qpr->kpg, input);
+
+    // R controller for QPR controller
+    input_diff = input - qpr->input_2;
+    output += ctl_mul(ctl_mul(qpr->a0, input_diff), qpr->kr);
+    output += ctl_mul(qpr->b1, qpr->output_1);
+    output -= ctl_mul(qpr->b2, qpr->output_2);
+
+    // move to next position
+    qpr->input_2 = qpr->input_1;
+    qpr->input_1 = input;
+
+    qpr->output_2 = qpr->output_1;
+    qpr->output_1 = output;
+    qpr->output = output;
+
+    return output;
+}
 
 #ifdef __cplusplus
 }
