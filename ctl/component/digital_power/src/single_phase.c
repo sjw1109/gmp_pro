@@ -35,7 +35,7 @@ void ctl_init_single_phase_pll(
     ctl_init_discrete_sogi(&spll->sogi, 0.5, fg, fs);
 
     // init filter object
-    ctl_init_lp_filter(&spll->filter_uq, fc);
+    ctl_init_lp_filter(&spll->filter_uq, fs, fc);
 
     // frequency parameters
     spll->frequency_sf = float2ctrl(fg / fs);
