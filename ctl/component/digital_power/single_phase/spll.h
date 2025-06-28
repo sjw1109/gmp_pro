@@ -32,7 +32,7 @@ typedef struct _tag_single_phase_pll
     ctrl_gt theta;
 
     // output: sin theta & cos theta
-    ctrl_gt phasor;
+    vector2_gt phasor;
 
     //
     // Intrinsic Variables
@@ -118,10 +118,10 @@ void ctl_step_single_phase_pll(
     //
     // VCO
     //
-    spll->frequency = 1 + ctl_mul(ctl_get_lowpass_filter_result(&spll->filter_uq), pll_gain);
+    spll->frequency = 1 + ctl_mul(ctl_get_lowpass_filter_result(&spll->filter_uq), spll->pll_gain);
     spll->theta = ctrl_mod_1(spll->theta + GMP_CONST_1 + ctl_mul(spll->frequency, spll->frequency_sf));
 
-    ctl_set_phasor_via_angle(spll->theta, spll->phasor);
+    ctl_set_phasor_via_angle(spll->theta, &spll->phasor);
 }
 
 #ifdef __cplusplus
