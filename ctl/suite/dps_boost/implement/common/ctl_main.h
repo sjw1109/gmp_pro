@@ -33,34 +33,42 @@ extern "C"
 #endif // __cplusplus
 
 //// speed encoder
-//extern spd_calculator_t spd_enc;
+// extern spd_calculator_t spd_enc;
 //
 //// PMSM servo objects
 //// extern pmsm_fm_t pmsm;
 //
-//#if defined OPENLOOP_CONST_FREQUENCY
+// #if defined OPENLOOP_CONST_FREQUENCY
 //
 //// PMSM const frequency controller
-//extern ctl_const_f_controller const_f;
+// extern ctl_const_f_controller const_f;
 //
-//#else // OPENLOOP_CONST_FREQUENCY
+// #else // OPENLOOP_CONST_FREQUENCY
 //
 //// PMSM const frequency slope controller
-//extern ctl_slope_f_controller slope_f;
+// extern ctl_slope_f_controller slope_f;
 //
-//#endif // OPENLOOP_CONST_FREQUENCY
+// #endif // OPENLOOP_CONST_FREQUENCY
 //
-//#ifdef PMSM_CTRL_USING_QEP_ENCODER
+// #ifdef PMSM_CTRL_USING_QEP_ENCODER
 //// Auto - turn encoder
-//extern pos_autoturn_encoder_t pos_enc;
-//#endif // PMSM_CTRL_USING_QEP_ENCODER
+// extern pos_autoturn_encoder_t pos_enc;
+// #endif // PMSM_CTRL_USING_QEP_ENCODER
 //
 //// PMSM controller
-//extern pmsm_bare_controller_t pmsm_ctrl;
+// extern pmsm_bare_controller_t pmsm_ctrl;
 
 extern adc_bias_calibrator_t adc_calibrator;
 extern fast_gt flag_enable_adc_calibrator;
 extern fast_gt index_adc_calibrator;
+
+extern pid_regular_t current_pid, voltage_pid;
+
+extern ctrl_gt pwm_out_pu;
+
+extern ptr_adc_channel_t uin;
+extern ptr_adc_channel_t uout;
+extern ptr_adc_channel_t idc;
 
 typedef enum _tag_adc_index
 {
@@ -78,27 +86,30 @@ typedef enum _tag_adc_index
 GMP_STATIC_INLINE
 void ctl_dispatch(void)
 {
-//    if (flag_enable_adc_calibrator)
-//    {
-//        if (index_adc_calibrator == 3)
-//            ctl_step_adc_calibrator(&adc_calibrator, pmsm_ctrl.mtr_interface.idc->value);
-//        else
-//            ctl_step_adc_calibrator(&adc_calibrator, pmsm_ctrl.mtr_interface.iabc->value.dat[index_adc_calibrator]);
-//    }
-//    else
-//    {
-//#if defined OPENLOOP_CONST_FREQUENCY
-//        ctl_step_const_f_controller(&const_f);
-//#else  // OPENLOOP_CONST_FREQUENCY
-//        ctl_step_slope_f(&slope_f);
-//#endif // OPENLOOP_CONST_FREQUENCY
-//    }
-//
-//    ctl_step_spd_calc(&spd_enc);
-//
-//    ctl_step_pmsm_ctrl(&pmsm_ctrl);
+    ctrl_gt current_ref = ctl_step_pid_ser(&voltage_pid, float2ctrl(0.8) - uout.control_port.value);
+    pwm_out_pu = float2ctrl(1) - ctl_step_pid_ser(&current_pid, current_ref - idc.control_port.value);
+    //pwm_out_pu = float2ctrl(1) - ctl_step_pid_ser(&current_pid, idc.control_port.value - current_ref);
+    //    if (flag_enable_adc_calibrator)
+    //    {
+    //        if (index_adc_calibrator == 3)
+    //            ctl_step_adc_calibrator(&adc_calibrator, pmsm_ctrl.mtr_interface.idc->value);
+    //        else
+    //            ctl_step_adc_calibrator(&adc_calibrator,
+    //            pmsm_ctrl.mtr_interface.iabc->value.dat[index_adc_calibrator]);
+    //    }
+    //    else
+    //    {
+    // #if defined OPENLOOP_CONST_FREQUENCY
+    //        ctl_step_const_f_controller(&const_f);
+    // #else  // OPENLOOP_CONST_FREQUENCY
+    //        ctl_step_slope_f(&slope_f);
+    // #endif // OPENLOOP_CONST_FREQUENCY
+    //    }
+    //
+    //    ctl_step_spd_calc(&spd_enc);
+    //
+    //    ctl_step_pmsm_ctrl(&pmsm_ctrl);
 }
-
 
 #ifdef __cplusplus
 }
