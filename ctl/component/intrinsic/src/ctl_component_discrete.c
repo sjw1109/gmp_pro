@@ -396,8 +396,8 @@ void ctl_init_discrete_sogi(
     // wn = fn * GMP_CONST_2_PI;
 
     osgx = (2.0f * k_damp * wn * delta_t);
-    osgy = (float32_t)(wn * delta_t * wn * delta_t);
-    temp = (float32_t)1.0 / (osgx + osgy + 4.0f);
+    osgy = (parameter_gt)(wn * delta_t * wn * delta_t);
+    temp = (parameter_gt)1.0 / (osgx + osgy + 4.0f);
 
     sogi->b0 = float2ctrl(osgx * temp);
     sogi->b2 = -sogi->b0;

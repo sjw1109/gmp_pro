@@ -35,7 +35,7 @@ typedef struct _tag_discrete_sogi
     //
 
     // input buffer
-    float32_t u[3]; //!< AC input data buffer
+    parameter_gt u[3]; //!< AC input data buffer
 
     //
     // Output Section
@@ -45,11 +45,11 @@ typedef struct _tag_discrete_sogi
     // orthogonal signal generator
     // Low pass Filter
     //
-    float32_t osg_u[3];
+    parameter_gt osg_u[3];
 
     // orthogonal quadrature signal generator
     // Band pass Filter
-    float32_t osg_qu[3];
+    parameter_gt osg_qu[3];
 
     //
     // Parameters Section
@@ -100,9 +100,9 @@ void ctl_step_discrete_sogi(discrete_sogi_t *sogi, ctrl_gt u)
     sogi->osg_u[2] = sogi->osg_u[1];
     sogi->osg_u[1] = sogi->osg_u[0];
 
-    sogi->osg_qu[0] = ctl_mul(sogi->qb0, sogi->u[0]) + ctl_mul(sogi->qb1 * sogi->u[1]) +
-                      ctl_mul(sogi->qb2 * sogi->u[2]) + ctl_mul(sogi->a1 * sogi->osg_qu[1]) +
-                      ctl_mul(sogi->a2 * sogi->osg_qu[2]);
+    sogi->osg_qu[0] = ctl_mul(sogi->qb0, sogi->u[0]) + ctl_mul(sogi->qb1 ,sogi->u[1]) +
+                      ctl_mul(sogi->qb2, sogi->u[2]) + ctl_mul(sogi->a1 ,sogi->osg_qu[1]) +
+                      ctl_mul(sogi->a2, sogi->osg_qu[2]);
 
     sogi->osg_qu[2] = sogi->osg_qu[1];
     sogi->osg_qu[1] = sogi->osg_qu[0];

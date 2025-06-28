@@ -213,7 +213,7 @@ void ctl_init_qpr_controller(
 GMP_STATIC_INLINE
 ctrl_gt ctl_step_qpr_controller(
     // handle of QPR controller
-    qpr_ctrl_t *pr,
+    qpr_ctrl_t *qpr,
     // input
     ctrl_gt input)
 {
@@ -221,7 +221,7 @@ ctrl_gt ctl_step_qpr_controller(
     ctrl_gt input_diff = 0;
 
     // P controller for PR controller
-    output = ctl_mul(qpr->kpg, input);
+    output = ctl_mul(qpr->kp, input);
 
     // R controller for QPR controller
     input_diff = input - qpr->input_2;
