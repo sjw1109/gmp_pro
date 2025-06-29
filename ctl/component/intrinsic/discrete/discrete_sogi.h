@@ -114,13 +114,13 @@ void ctl_step_discrete_sogi(discrete_sogi_t *sogi, ctrl_gt u)
 GMP_STATIC_INLINE
 ctrl_gt ctl_get_discrete_sogi_ds(discrete_sogi_t *sogi)
 {
-    return sogi->osg_u[0];
+    return sogi->osg_qu[0];
 }
 
 GMP_STATIC_INLINE
 ctrl_gt ctl_get_discrete_sogi_qs(discrete_sogi_t *sogi)
 {
-    return sogi->osg_qu[1];
+    return sogi->osg_u[0];
 }
 
 #ifdef __cplusplus

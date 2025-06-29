@@ -3,6 +3,8 @@
 //
 
 #include <ctl/component/intrinsic/discrete/discrete_filter.h>
+// #include <ctl/component/intrinsic/discrete/discrete_pid.h>
+#include <ctl/component/intrinsic/continuous/continuous_pid.h>
 #include <ctl/component/intrinsic/discrete/discrete_sogi.h>
 #include <ctl/math_block/coordinate/coord_trans.h>
 
@@ -47,7 +49,8 @@ typedef struct _tag_single_phase_pll
     ctrl_gt frequency_sf;
 
     // PLL Gain
-    ctrl_gt pll_gain;
+    // ctrl_gt pll_gain;
+    ctrl_gt freq_error;
 
     //
     // Submodules
@@ -55,6 +58,9 @@ typedef struct _tag_single_phase_pll
 
     // u -> ud, uq
     discrete_sogi_t sogi;
+
+    // filter
+    ctl_pid_t spll_ctrl;
 
     // filter for ud&uq
     // ctl_low_pass_filter_t filter_ud;
@@ -67,13 +73,14 @@ void ctl_init_single_phase_pll(
     ctl_single_phase_pll *spll,
     // gain of SPLL module
     parameter_gt gain,
+    // integrate time
+    parameter_gt Ti,
     // filter cut frequency
     parameter_gt fc,
     // Target frequency, grid frequency, Hz
     parameter_gt fg,
     // isr frequency, Hz
     parameter_gt fs);
-
 
 GMP_STATIC_INLINE
 void ctl_clear_single_phase_pll(
@@ -103,8 +110,11 @@ void ctl_step_single_phase_pll(
     // Park Transform from alpha beta to d-q axis
     //
     vector2_gt uab;
-    uab.dat[phase_alpha] = ctl_get_discrete_sogi_ds(&spll->sogi);
+    uab.dat[phase_alpha] = -ctl_get_discrete_sogi_ds(&spll->sogi);
     uab.dat[phase_beta] = ctl_get_discrete_sogi_qs(&spll->sogi);
+
+    //uab.dat[phase_alpha] = ctl_get_discrete_sogi_qs(&spll->sogi);
+    //uab.dat[phase_beta] = ctl_get_discrete_sogi_ds(&spll->sogi);
 
     ctl_ct_park2(&uab, &spll->phasor, &spll->udq);
 
@@ -116,9 +126,14 @@ void ctl_step_single_phase_pll(
     ctl_step_lowpass_filter(&spll->filter_uq, spll->udq.dat[phase_q]);
 
     //
+    // PID controller
+    //
+    spll->freq_error = ctl_step_pid_ser(&spll->spll_ctrl, ctl_get_lowpass_filter_result(&spll->filter_uq));
+
+    //
     // VCO
     //
-    spll->frequency = 1 + ctl_mul(ctl_get_lowpass_filter_result(&spll->filter_uq), spll->pll_gain);
+    spll->frequency = 1 + spll->freq_error;
     spll->theta = ctrl_mod_1(spll->theta + GMP_CONST_1 + ctl_mul(spll->frequency, spll->frequency_sf));
 
     ctl_set_phasor_via_angle(spll->theta, &spll->phasor);

@@ -21,6 +21,8 @@ void ctl_init_single_phase_pll(
     ctl_single_phase_pll *spll,
     // gain of SPLL module
     parameter_gt gain,
+    // integrate time
+    parameter_gt Ti,
     // filter cut frequency
     parameter_gt fc,
     // Target frequency, grid frequency, Hz
@@ -36,10 +38,13 @@ void ctl_init_single_phase_pll(
 
     // init filter object
     ctl_init_lp_filter(&spll->filter_uq, fs, fc);
+    
+    // init PID controller
+    ctl_init_pid(&spll->spll_ctrl, gain, Ti, 0, fs);
 
     // frequency parameters
     spll->frequency_sf = float2ctrl(fg / fs);
 
-    // gain of SPLL
-    spll->pll_gain = float2ctrl(gain);
+    //// gain of SPLL
+    //spll->pll_gain = float2ctrl(gain);
 }

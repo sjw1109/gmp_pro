@@ -110,8 +110,13 @@ void ctl_output_callback(void)
 
     simulink_tx_buffer.monitor[0] = spll.phasor.dat[phase_alpha];
     simulink_tx_buffer.monitor[1] = spll.phasor.dat[phase_beta];
+
     simulink_tx_buffer.monitor[2] = spll.frequency;
     simulink_tx_buffer.monitor[3] = spll.theta;
+
+    simulink_tx_buffer.monitor[4] = spll.sogi.osg_u[0];
+    simulink_tx_buffer.monitor[5] = spll.sogi.osg_qu[0];
+
 
     // simulink_tx_buffer.pwm_cmp[1] = 2500.0 * sin(314.0 / 1000 * gmp_base_get_system_tick());
     // simulink_tx_buffer.pwm_cmp[1] = gmp_base_get_system_tick();

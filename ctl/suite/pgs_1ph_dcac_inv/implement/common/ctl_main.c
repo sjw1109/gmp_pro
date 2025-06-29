@@ -80,7 +80,10 @@ void ctl_init()
         // handle of Single phase PLL object
         &spll,
         // gain of SPLL module
-        10.0f,
+        0.75f,
+        // Time of integrate
+        //0.10f,
+        1000.0f,
         // filter cut frequency
         9.0f,
         // Target frequency, grid frequency, Hz
