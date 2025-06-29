@@ -26,6 +26,9 @@ ctrl_gt pwm_out_pu;
 
 ctl_single_phase_pll spll;
 ctrl_gt ac_input;
+
+ctrl_gt sinv_pwm_pu[2];
+pr_ctrl_t sinv_pr_base;
 //// PMSM controller
 // pmsm_bare_controller_t pmsm_ctrl;
 //
@@ -91,6 +94,7 @@ void ctl_init()
         // isr frequency, Hz
         20e3);
 
+    ctl_init_pr_controller(&sinv_pr_base, 0.005, 1000, 50, 20e3);
 
     //    // setup ADC calibrate
     //    ctl_filter_IIR2_setup_t adc_calibrator_filter;

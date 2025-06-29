@@ -77,9 +77,10 @@ extern ptr_adc_channel_t uin;
 extern ptr_adc_channel_t uout;
 extern ptr_adc_channel_t idc;
 
+extern ptr_adc_channel_t sinv_il;
+
+extern ctrl_gt sinv_pwm_pu[2];
 extern pr_ctrl_t sinv_pr_base;
-
-
 
 typedef enum _tag_adc_index
 {
@@ -106,27 +107,45 @@ void ctl_dispatch(void)
         // input AC value
         ac_input);
 
-    //pwm_out_pu = float2ctrl(1) - ctl_step_pid_ser(&current_pid, idc.control_port.value - current_ref);
-    //    if (flag_enable_adc_calibrator)
-    //    {
-    //        if (index_adc_calibrator == 3)
-    //            ctl_step_adc_calibrator(&adc_calibrator, pmsm_ctrl.mtr_interface.idc->value);
-    //        else
-    //            ctl_step_adc_calibrator(&adc_calibrator,
-    //            pmsm_ctrl.mtr_interface.iabc->value.dat[index_adc_calibrator]);
-    //    }
-    //    else
-    //    {
-    // #if defined OPENLOOP_CONST_FREQUENCY
-    //        ctl_step_const_f_controller(&const_f);
-    // #else  // OPENLOOP_CONST_FREQUENCY
-    //        ctl_step_slope_f(&slope_f);
-    // #endif // OPENLOOP_CONST_FREQUENCY
-    //    }
+    ctrl_gt modulate_target;
+
+    // Voltage Openloop
+    //modulate_target = ctl_mul(spll.phasor.dat[phase_alpha], float2ctrl(0.2));
+
+    // current Loop
+    modulate_target = ctl_step_pr_controller(&sinv_pr_base, ctl_mul(spll.phasor.dat[0], float2ctrl(0.15)) -
+                                                                sinv_il.control_port.value);
+
+    // Unipolar SPWM 1 
+
+    // sinv_pwm_pu[0] = ctl_div2(-modulate_target + float2ctrl(1));
+    // sinv_pwm_pu[1] = ctl_div2(modulate_target + float2ctrl(1));
+
+    // Unipolar SPWM 2 
+    sinv_pwm_pu[0] = -modulate_target;
+    sinv_pwm_pu[1] = modulate_target;
+
+    // pwm_out_pu = float2ctrl(1) - ctl_step_pid_ser(&current_pid, idc.control_port.value - current_ref);
+    //     if (flag_enable_adc_calibrator)
+    //     {
+    //         if (index_adc_calibrator == 3)
+    //             ctl_step_adc_calibrator(&adc_calibrator, pmsm_ctrl.mtr_interface.idc->value);
+    //         else
+    //             ctl_step_adc_calibrator(&adc_calibrator,
+    //             pmsm_ctrl.mtr_interface.iabc->value.dat[index_adc_calibrator]);
+    //     }
+    //     else
+    //     {
+    //  #if defined OPENLOOP_CONST_FREQUENCY
+    //         ctl_step_const_f_controller(&const_f);
+    //  #else  // OPENLOOP_CONST_FREQUENCY
+    //         ctl_step_slope_f(&slope_f);
+    //  #endif // OPENLOOP_CONST_FREQUENCY
+    //     }
     //
-    //    ctl_step_spd_calc(&spd_enc);
+    //     ctl_step_spd_calc(&spd_enc);
     //
-    //    ctl_step_pmsm_ctrl(&pmsm_ctrl);
+    //     ctl_step_pmsm_ctrl(&pmsm_ctrl);
 }
 
 #ifdef __cplusplus
