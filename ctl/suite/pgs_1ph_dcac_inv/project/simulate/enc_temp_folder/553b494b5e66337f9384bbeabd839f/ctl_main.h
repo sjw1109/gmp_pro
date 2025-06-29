@@ -26,8 +26,6 @@
 
 #include <ctl/component/digital_power/single_phase/spll.h>
 
-#include <ctl/component/intrinsic/discrete/proportional_resonant.h>
-
 #ifndef _FILE_CTL_MAIN_H_
 #define _FILE_CTL_MAIN_H_
 
@@ -76,8 +74,6 @@ extern ctrl_gt pwm_out_pu;
 extern ptr_adc_channel_t uin;
 extern ptr_adc_channel_t uout;
 extern ptr_adc_channel_t idc;
-
-extern pr_ctrl_t sinv_pr_base;
 
 
 

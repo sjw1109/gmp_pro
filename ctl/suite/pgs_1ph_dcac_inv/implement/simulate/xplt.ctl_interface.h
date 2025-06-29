@@ -30,7 +30,10 @@ extern "C"
 extern ptr_adc_channel_t uin;
 extern ptr_adc_channel_t uout;
 extern ptr_adc_channel_t idc;
+
 extern pwm_channel_t pwm_out;
+
+extern pwm_channel_t sinv_pwm_out[2];
 
 // Functions without controller nano framework.
 #ifndef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
@@ -99,6 +102,12 @@ void ctl_output_callback(void)
     //    simulink_tx_buffer.monitor_port[7] = simulink_rx_buffer.encoder;
 
     simulink_tx_buffer.pwm_cmp[0] = ctl_calc_pwm_channel(&pwm_out, pwm_out_pu);
+
+    simulink_tx_buffer.pwm_cmp[1] =
+        ctl_calc_pwm_channel(&sinv_pwm_out[0], ctl_div2(ctl_mul(spll.phasor.dat[phase_alpha],float2ctrl(0.5)) + float2ctrl(1)));
+    simulink_tx_buffer.pwm_cmp[2] = ctl_calc_pwm_channel(
+        &sinv_pwm_out[1], ctl_div2(-ctl_mul(spll.phasor.dat[phase_alpha], float2ctrl(0.5)) + float2ctrl(1)));
+
 
     simulink_tx_buffer.enable = 1;
 

@@ -28,7 +28,9 @@
 ptr_adc_channel_t uin;
 ptr_adc_channel_t uout;
 ptr_adc_channel_t idc;
+
 pwm_channel_t pwm_out;
+pwm_channel_t sinv_pwm_out[2];
 
 //
 // pos_autoturn_encoder_t pos_enc;
@@ -70,6 +72,8 @@ void setup_peripheral(void)
         2, 0.5, 12, 24);
 
     ctl_init_pwm_channel(&pwm_out, 0, 5000);
+    ctl_init_pwm_channel(&sinv_pwm_out[0], 0, 5000);
+    ctl_init_pwm_channel(&sinv_pwm_out[1], 0, 5000);
 
     // ctl_init_ptr_adc_channel(
     //     // bind idc channel with idc address
