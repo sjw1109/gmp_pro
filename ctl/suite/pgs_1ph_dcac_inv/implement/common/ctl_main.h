@@ -66,7 +66,7 @@ extern adc_bias_calibrator_t adc_calibrator;
 extern fast_gt flag_enable_adc_calibrator;
 extern fast_gt index_adc_calibrator;
 
-extern pid_regular_t current_pid, voltage_pid;
+extern pid_regular_t current_pid, voltage_pid, sinv_vlotage_pid;
 
 extern ctl_single_phase_pll spll;
 extern ctrl_gt ac_input;
@@ -80,11 +80,15 @@ extern ptr_adc_channel_t sinv_uc;
 
 extern ptr_adc_channel_t sinv_il;
 
+ extern ptr_adc_channel_t sinv_udc;
+
 extern ctrl_gt sinv_pwm_pu[2];
 extern pr_ctrl_t sinv_pr_base;
 extern qpr_ctrl_t sinv_qpr_base;
 
 extern ctrl_gt modulate_target;
+
+extern ctrl_gt sinv_current_ref;
 
 typedef enum _tag_adc_index
 {
@@ -103,6 +107,7 @@ GMP_STATIC_INLINE
 void ctl_dispatch(void)
 {
     ctrl_gt current_ref = ctl_step_pid_ser(&voltage_pid, float2ctrl(0.8) - uout.control_port.value);
+
     pwm_out_pu = float2ctrl(1) - ctl_step_pid_ser(&current_pid, current_ref - idc.control_port.value);
 
     //ctl_step_single_phase_pll(
@@ -121,9 +126,9 @@ void ctl_dispatch(void)
     // Voltage Openloop
     //modulate_target = ctl_mul(spll.phasor.dat[phase_alpha], float2ctrl(0.2));
 
-    // current Loop
-    modulate_target = ctl_step_qpr_controller(&sinv_qpr_base, ctl_mul(spll.phasor.dat[0], float2ctrl(0.2)) -
-                                                                sinv_il.control_port.value);
+    // current Loop,能实现并网逆变功能
+    //modulate_target = ctl_step_qpr_controller(&sinv_qpr_base, ctl_mul(spll.phasor.dat[0], float2ctrl(0.2)) -
+    //                                                            sinv_il.control_port.value);
     // 
     //modulate_target = ctl_step_pr_controller(&sinv_pr_base, ctl_mul(spll.phasor.dat[0], float2ctrl(0.2)) -
     //                                                            sinv_il.control_port.value);
@@ -134,7 +139,12 @@ void ctl_dispatch(void)
     //modulate_target = ctl_step_pr_controller(&sinv_pr_base, ctl_mul(spll.phasor.dat[0], float2ctrl(0.05)) -
     //                                                            sinv_il.control_port.value)+ctl_mul(float2ctrl(0.8),sinv_uc.control_port.value);
     //gird conencted without dc voltage control
-    
+
+    // gird conencted with dc voltage control
+    //电压环输出作为电流给定的幅值，电流给定的相位通过锁相环+功率因素角确定。
+    sinv_current_ref = - ctl_step_pid_ser(&sinv_vlotage_pid, float2ctrl(0.8) - sinv_udc.control_port.value);
+    modulate_target = ctl_step_qpr_controller(&sinv_qpr_base, ctl_mul(spll.phasor.dat[0], sinv_current_ref) -
+                                                                  sinv_il.control_port.value);
 
 
 

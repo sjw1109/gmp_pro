@@ -37,7 +37,10 @@ extern ctrl_gt sinv_pwm_pu[2];
 extern pwm_channel_t sinv_pwm_out[2];
 
 extern ptr_adc_channel_t sinv_il;
+extern ptr_adc_channel_t sinv_ig;
 extern ptr_adc_channel_t sinv_uc;
+
+extern ptr_adc_channel_t sinv_udc;
 
 extern ctrl_gt modulate_target;
 
@@ -52,7 +55,9 @@ void ctl_input_callback(void)
     ctl_step_ptr_adc_channel(&uout);
 
     ctl_step_ptr_adc_channel(&sinv_il);
+    ctl_step_ptr_adc_channel(&sinv_ig);
     ctl_step_ptr_adc_channel(&sinv_uc);
+    ctl_step_ptr_adc_channel(&sinv_udc);
 
     //   ac_input = float2ctrl(simulink_rx_buffer.panel[1]);
 
@@ -93,12 +98,17 @@ void ctl_output_callback(void)
     // simulink_tx_buffer.monitor[5] = sinv_uc.control_port.value;
 
     // simulink_tx_buffer.monitor[4] = spll.phasor.dat[0];
-    simulink_tx_buffer.monitor[4] = ctl_mul(spll.phasor.dat[0], float2ctrl(0.15));
+    //simulink_tx_buffer.monitor[4] = ctl_mul(spll.phasor.dat[0], float2ctrl(0.15));
+    simulink_tx_buffer.monitor[4] = ctl_mul(spll.phasor.dat[0], float2ctrl(0.2));
+
 
     // simulink_tx_buffer.monitor[5] = sinv_pwm_pu[0];
-    simulink_tx_buffer.monitor[5] = modulate_target;
+    //simulink_tx_buffer.monitor[5] = modulate_target;
+    simulink_tx_buffer.monitor[5] = sinv_udc.control_port.value;
 
-    simulink_tx_buffer.monitor[6] = sinv_il.control_port.value;
+    //simulink_tx_buffer.monitor[5] = modulate_target;
+
+    simulink_tx_buffer.monitor[6] = sinv_current_ref;
     simulink_tx_buffer.monitor[7] = ctl_mul(spll.phasor.dat[0], float2ctrl(0.15));
 
     simulink_tx_buffer.monitor[15] = ctl_step_qpr_controller(&qpr_test, float2ctrl(simulink_rx_buffer.panel[2]));

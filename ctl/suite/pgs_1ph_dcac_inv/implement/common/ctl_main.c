@@ -22,6 +22,7 @@
 
 #include <ctl/component/intrinsic/continuous/continuous_pid.h>
 pid_regular_t current_pid, voltage_pid;
+pid_regular_t sinv_vlotage_pid;
 ctrl_gt pwm_out_pu;
 
 ctl_single_phase_pll spll;
@@ -30,6 +31,7 @@ ctrl_gt ac_input;
 ctrl_gt sinv_pwm_pu[2];
 pr_ctrl_t sinv_pr_base;
 qpr_ctrl_t sinv_qpr_base;
+ctrl_gt sinv_current_ref;
 //// PMSM controller
 // pmsm_bare_controller_t pmsm_ctrl;
 //
@@ -70,7 +72,15 @@ void ctl_init()
         // continuous pid handle
         &current_pid,
         // PID parameters
-        1, 0.01, 0,
+        1, 0.002, 0,
+        // controller frequency
+        20e3);
+
+    ctl_init_pid(
+        // continuous pid handle
+        &sinv_vlotage_pid,
+        // PID parameters
+        0.8, 0.1, 0,
         // controller frequency
         20e3);
 
