@@ -98,7 +98,8 @@ void ctl_init()
         20e3);
 
     ctl_init_pr_controller(&sinv_pr_base, 0.0001, 1000, 50, 20e3);
-    ctl_init_qpr_controller(&sinv_qpr_base, 0.0001, 100, 50, 8 ,20e3);
+    ctl_init_qpr_controller(&sinv_qpr_base, 0.00000001, 500, 50, 5 ,20e3);
+    ctl_init_qpr_controller(&qpr_test, 0.01, 0.08, 50, 5, 20e3);
 
     //    // setup ADC calibrate
     //    ctl_filter_IIR2_setup_t adc_calibrator_filter;

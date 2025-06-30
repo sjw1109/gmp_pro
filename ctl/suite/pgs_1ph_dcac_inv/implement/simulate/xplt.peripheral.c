@@ -30,7 +30,7 @@ pwm_channel_t sinv_pwm_out[2];
 ptr_adc_channel_t sinv_il;
 ptr_adc_channel_t sinv_uc;
 
-
+qpr_ctrl_t qpr_test;
 
 //////////////////////////////////////////////////////////////////////////
 // peripheral setup function
