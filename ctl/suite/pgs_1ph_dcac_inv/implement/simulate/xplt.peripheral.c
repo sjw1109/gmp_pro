@@ -79,7 +79,7 @@ void setup_peripheral(void)
         // ptr_adc object
         &sinv_uc,
         // pointer to ADC raw data
-        &simulink_rx_buffer.adc_result[3],
+        &simulink_rx_buffer.adc_result[4],
         // ADC Channel settings.
         // iqn is valid only when ctrl_gt is a fixed point type.
         2, 0.5, 12, 24);

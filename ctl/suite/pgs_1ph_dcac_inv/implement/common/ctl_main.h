@@ -76,11 +76,15 @@ extern ctrl_gt pwm_out_pu;
 extern ptr_adc_channel_t uin;
 extern ptr_adc_channel_t uout;
 extern ptr_adc_channel_t idc;
+extern ptr_adc_channel_t sinv_uc;
 
 extern ptr_adc_channel_t sinv_il;
 
 extern ctrl_gt sinv_pwm_pu[2];
 extern pr_ctrl_t sinv_pr_base;
+extern qpr_ctrl_t sinv_qpr_base;
+
+extern ctrl_gt modulate_target;
 
 typedef enum _tag_adc_index
 {
@@ -101,29 +105,48 @@ void ctl_dispatch(void)
     ctrl_gt current_ref = ctl_step_pid_ser(&voltage_pid, float2ctrl(0.8) - uout.control_port.value);
     pwm_out_pu = float2ctrl(1) - ctl_step_pid_ser(&current_pid, current_ref - idc.control_port.value);
 
+    //ctl_step_single_phase_pll(
+    //    // handle of Single phase PLL object
+    //    &spll,
+    //    // input AC value
+    //    ac_input);
     ctl_step_single_phase_pll(
         // handle of Single phase PLL object
         &spll,
         // input AC value
-        ac_input);
+        sinv_uc.control_port.value);
 
-    ctrl_gt modulate_target;
+ /*   ctrl_gt modulate_target;*/
 
     // Voltage Openloop
     //modulate_target = ctl_mul(spll.phasor.dat[phase_alpha], float2ctrl(0.2));
 
     // current Loop
-    modulate_target = ctl_step_pr_controller(&sinv_pr_base, ctl_mul(spll.phasor.dat[0], float2ctrl(0.15)) -
+    modulate_target = ctl_step_qpr_controller(&sinv_qpr_base, ctl_mul(spll.phasor.dat[0], float2ctrl(0.2)) -
                                                                 sinv_il.control_port.value);
+    // 
+    //modulate_target = ctl_step_pr_controller(&sinv_pr_base, ctl_mul(spll.phasor.dat[0], float2ctrl(0.2)) -
+    //                                                            sinv_il.control_port.value);
 
+    //modulate_target = ctl_step_qpr_controller(&sinv_qpr_base, ctl_mul(spll.phasor.dat[0], float2ctrl(0.2)) -
+    //                                                            sinv_il.control_port.value)+ctl_mul(float2ctrl(0.00001),sinv_uc.control_port.value);
+    
+    //modulate_target = ctl_step_pr_controller(&sinv_pr_base, ctl_mul(spll.phasor.dat[0], float2ctrl(0.05)) -
+    //                                                            sinv_il.control_port.value)+ctl_mul(float2ctrl(0.8),sinv_uc.control_port.value);
+    //gird conencted without dc voltage control
+    
+
+
+
+    // 
     // Unipolar SPWM 1 
 
-    // sinv_pwm_pu[0] = ctl_div2(-modulate_target + float2ctrl(1));
-    // sinv_pwm_pu[1] = ctl_div2(modulate_target + float2ctrl(1));
+     sinv_pwm_pu[0] = ctl_div2(-modulate_target + float2ctrl(1));
+     sinv_pwm_pu[1] = ctl_div2(modulate_target + float2ctrl(1));
 
     // Unipolar SPWM 2 
-    sinv_pwm_pu[0] = -modulate_target;
-    sinv_pwm_pu[1] = modulate_target;
+    //sinv_pwm_pu[0] = -modulate_target;
+    //sinv_pwm_pu[1] = modulate_target;
 
     // pwm_out_pu = float2ctrl(1) - ctl_step_pid_ser(&current_pid, idc.control_port.value - current_ref);
     //     if (flag_enable_adc_calibrator)
