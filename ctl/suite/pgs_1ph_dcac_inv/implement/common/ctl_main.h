@@ -117,7 +117,6 @@ void ctl_dispatch(void)
                                                                 sinv_il.control_port.value);
 
     // Unipolar SPWM 1 
-
     // sinv_pwm_pu[0] = ctl_div2(-modulate_target + float2ctrl(1));
     // sinv_pwm_pu[1] = ctl_div2(modulate_target + float2ctrl(1));
 
