@@ -126,16 +126,16 @@ ec_gt gmp_hal_gpio_clear(gpio_model_stm32_t *hgpio)
  * @param huart handle of UART
  * @param data half_duplex data interface
  */
-ec_gt gmp_hal_uart_send(stm32_uart_t *huart, half_duplex_ift *data)
-{
-    assert(huart != nullptr);
-    assert(huart->uart_handle != nullptr);
-
-    assert(data != nullptr);
-
-    HAL_UART_Transmit(huart->uart_handle, data->buf, data->length, 1);
-    return GMP_EC_OK;
-}
+//ec_gt gmp_hal_uart_send(stm32_uart_t *huart, half_duplex_ift *data)
+//{
+//    assert(huart != nullptr);
+//    assert(huart->uart_handle != nullptr);
+//
+//    assert(data != nullptr);
+//
+//    HAL_UART_Transmit(huart->uart_handle, data->buf, data->length, 1);
+//    return GMP_EC_OK;
+//}
 
 ///**
 // * @brief receive data via UART

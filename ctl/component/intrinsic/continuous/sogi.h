@@ -93,7 +93,7 @@ ctrl_gt ctl_step_sogi_controller(
 }
 
 GMP_STATIC_INLINE
-ctrl_gt ctl_clear_sogi_controller(
+void ctl_clear_sogi_controller(
     // controller handle
     ctl_sogi_t *sogi)
 {
