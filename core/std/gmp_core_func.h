@@ -15,9 +15,6 @@ extern "C"
 GMP_STATIC_INLINE
 void gmp_base_init(void)
 {
-#ifdef SPECIFY_PC_ENVIRONMENT
-    size_t loop_tick;
-#endif // SPECIFY_PC_ENVIRONMENT
 
 #ifndef SPECIFY_DISABLE_CSP
     // CSP Startup function
@@ -99,6 +96,10 @@ void gmp_base_loop(void)
 GMP_STATIC_INLINE
 void gmp_base_entry(void)
 {
+#ifdef SPECIFY_PC_ENVIRONMENT
+    size_t loop_tick;
+#endif // SPECIFY_PC_ENVIRONMENT
+
     gmp_base_init();
 
 #ifdef SPECIFY_PC_ENVIRONMENT
@@ -119,6 +120,7 @@ void gmp_base_entry(void)
     gmp_csp_exit();
 #endif // SPECIFY_DISABLE_CSP_EXIT
 #endif // SPECIFY_DISABLE_CSP
+}
 
 #ifdef __cplusplus
 }

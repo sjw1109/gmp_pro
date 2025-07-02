@@ -16,9 +16,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="digital_power_bare">
-      <UniqueIdentifier>{4a6d68fd-b83a-450b-8884-47debe6a5ba4}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\implement\common\ctl_main.c">
@@ -84,9 +81,6 @@
     <ClCompile Include="..\..\implement\simulate\xplt.peripheral.c">
       <Filter>implement_interface</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\boost_ctrl.c">
-      <Filter>digital_power_bare</Filter>
-    </ClCompile>
     <ClCompile Include="DigialPower_simulink.cpp">
       <Filter>implement_interface</Filter>
     </ClCompile>
@@ -109,9 +103,6 @@
     </ClInclude>
     <ClInclude Include="..\..\implement\simulate\xplt.peripheral.h">
       <Filter>implement_interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\boost_ctrl.h">
-      <Filter>digital_power_bare</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

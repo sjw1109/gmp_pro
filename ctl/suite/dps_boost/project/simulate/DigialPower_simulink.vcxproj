@@ -158,7 +158,6 @@
     <ClCompile Include="..\..\implement\common\ctl_main.c" />
     <ClCompile Include="..\..\implement\common\user_main.c" />
     <ClCompile Include="..\..\implement\simulate\xplt.peripheral.c" />
-    <ClCompile Include="..\..\src\boost_ctrl.c" />
     <ClCompile Include="DigialPower_simulink.cpp" />
     <ClCompile Include="gmp_src\ctl_component_advance.c" />
     <ClCompile Include="gmp_src\ctl_component_continuous.c" />
@@ -180,7 +179,6 @@
     <ClCompile Include="gmp_src\windows_simulink_main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\boost_ctrl.h" />
     <ClInclude Include="..\..\implement\common\ctl_main.h" />
     <ClInclude Include="..\..\implement\common\user_main.h" />
     <ClInclude Include="..\..\implement\simulate\xplt.ctl_interface.h" />

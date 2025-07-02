@@ -22,10 +22,10 @@ typedef struct _tag_std_vip_protection_type
     //
 
     // output voltage
-    adc_ift *uo;
+    adc_ift *adc_uo;
 
     // output current
-    adc_ift *io;
+    adc_ift *adc_io;
 
     //
     // output
@@ -51,8 +51,14 @@ typedef struct _tag_std_vip_protection_type
     // intermediate
     //
 
+    // output voltage
+    ctrl_gt uout;
+
+    // output current
+    ctrl_gt iout;
+
     // output power
-    ctrl_gt po;
+    ctrl_gt pout;
 
     //
     // modules
@@ -60,6 +66,12 @@ typedef struct _tag_std_vip_protection_type
 
     // power measurement filter
     ctl_low_pass_filter_t power_filter;
+
+    // voltage measurement filter
+    ctl_low_pass_filter_t voltage_filter;
+
+    // current measurement filter
+    ctl_low_pass_filter_t current_filter;
 
 } std_vip_protection_t;
 
@@ -71,15 +83,19 @@ void ctl_attach_vip_protection(
     // output current
     adc_ift *io)
 {
-    obj->io = io;
-    obj->uo = uo;
+    obj->adc_io = io;
+    obj->adc_uo = uo;
 }
 
 void ctl_init_vip_protection(
     // Voltage - Current - Power Protection
     std_vip_protection_t *obj,
     // Power measurement filter cut frequency
-    parameter_gt f_cut,
+    parameter_gt power_f_cut,
+    // Voltage measurement filter cut frequency
+    parameter_gt voltage_f_cut,
+    // Current measurement filter cut frequency
+    parameter_gt current_f_cut,
     // voltage maximum, voltage base value
     parameter_gt v_max, parameter_gt v_base,
     // current maximum, current base value
@@ -93,7 +109,9 @@ void ctl_init_vip_protection(
     obj->current_max = float2ctrl(i_max / i_base);
     obj->power_max = float2ctrl(p_max / v_base / i_base);
 
-    ctl_init_lp_filter(&obj->power_filter, fs, f_cut);
+    ctl_init_lp_filter(&obj->power_filter, fs, power_f_cut);
+    ctl_init_lp_filter(&obj->voltage_filter, fs, voltage_f_cut);
+    ctl_init_lp_filter(&obj->current_filter, fs, current_f_cut);
 }
 
 void ctl_clear_vip_protection_error(
@@ -107,17 +125,24 @@ fast_gt ctl_step_vip_protection(
     // Voltage - Current - Power Protection
     std_vip_protection_t *obj)
 {
-    // power calculating and filtering
-    obj->po = ctl_step_lowpass_filter(ctl_mul(obj->io->value, obj->uo->value));
 
-    // error has occorred
+     // current calculating and filtering
+    obj->iout = ctl_step_lowpass_filter(obj->adc_io->value);
+
+    // voltage calculating and filtering
+    obj->uout = ctl_step_lowpass_filter(obj->adc_uo->value);
+
+    // power calculating and filtering
+    obj->pout = ctl_step_lowpass_filter(ctl_mul(obj->iout, obj->uout));
+
+    // error has occurred
     if (obj->flag_error != 0)
     {
         return obj->flag_error;
     }
 
     // danger range
-    if ((obj->io->value > obj->current_max) || (obj->uo->value > obj->voltage_max) || (obj->po > obj->power_max))
+    if ((obj->iout > obj->current_max) || (obj->uout > obj->voltage_max) || (obj->pout > obj->power_max))
     {
         obj->flag_error = 1;
     }
