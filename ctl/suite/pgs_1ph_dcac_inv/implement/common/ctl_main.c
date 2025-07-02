@@ -32,28 +32,8 @@ ctrl_gt sinv_pwm_pu[2];
 pr_ctrl_t sinv_pr_base;
 qpr_ctrl_t sinv_qpr_base;
 ctrl_gt sinv_current_ref;
-//// PMSM controller
-// pmsm_bare_controller_t pmsm_ctrl;
-//
-// #ifdef PMSM_CTRL_USING_QEP_ENCODER
-//// Auto - turn encoder
-// pos_autoturn_encoder_t pos_enc;
-// #endif // PMSM_CTRL_USING_QEP_ENCODER
-//
-//// speed encoder
-// spd_calculator_t spd_enc;
-//
-// #if defined OPENLOOP_CONST_FREQUENCY
-//
-//// PMSM const frequency controller
-// ctl_const_f_controller const_f;
-//
-// #else // OPENLOOP_CONST_FREQUENCY
-//
-//// PMSM const frequency slope controller
-// ctl_slope_f_controller slope_f;
-//
-// #endif // OPENLOOP_CONST_FREQUENCY
+
+ctl_src_rg_t rg;
 
 //
 adc_bias_calibrator_t adc_calibrator;
@@ -61,6 +41,7 @@ fast_gt flag_enable_adc_calibrator = 0;
 fast_gt index_adc_calibrator = 0;
 
 ctrl_gt modulate_target;
+
 
 // enable motor running
 volatile fast_gt flag_enable_system = 0;
@@ -110,6 +91,8 @@ void ctl_init()
     ctl_init_pr_controller(&sinv_pr_base, 0.0001, 1000, 50, 20e3);
     ctl_init_qpr_controller(&sinv_qpr_base, 0.00000001, 500, 50, 5 ,20e3);
     ctl_init_qpr_controller(&qpr_test, 0.01, 0.08, 50, 5, 20e3);
+
+    ctl_init_ramp_gen_via_amp_freq(&rg, 20e3, 50, 1, 0);
 
     //    // setup ADC calibrate
     //    ctl_filter_IIR2_setup_t adc_calibrator_filter;

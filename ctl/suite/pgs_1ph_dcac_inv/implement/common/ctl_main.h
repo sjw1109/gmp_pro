@@ -28,6 +28,8 @@
 
 #include <ctl/component/intrinsic/discrete/proportional_resonant.h>
 
+#include <ctl/component/intrinsic/discrete/stimulate.h>
+
 #ifndef _FILE_CTL_MAIN_H_
 #define _FILE_CTL_MAIN_H_
 
@@ -73,14 +75,14 @@ extern ctrl_gt ac_input;
 
 extern ctrl_gt pwm_out_pu;
 
-extern ptr_adc_channel_t uin;
-extern ptr_adc_channel_t uout;
-extern ptr_adc_channel_t idc;
+// extern ptr_adc_channel_t uin;
+// extern ptr_adc_channel_t uout;
+// extern ptr_adc_channel_t idc;
 extern ptr_adc_channel_t sinv_uc;
 
 extern ptr_adc_channel_t sinv_il;
 
- extern ptr_adc_channel_t sinv_udc;
+extern ptr_adc_channel_t sinv_udc;
 
 extern ctrl_gt sinv_pwm_pu[2];
 extern pr_ctrl_t sinv_pr_base;
@@ -89,6 +91,8 @@ extern qpr_ctrl_t sinv_qpr_base;
 extern ctrl_gt modulate_target;
 
 extern ctrl_gt sinv_current_ref;
+
+extern ctl_src_rg_t rg;
 
 typedef enum _tag_adc_index
 {
@@ -106,79 +110,50 @@ typedef enum _tag_adc_index
 GMP_STATIC_INLINE
 void ctl_dispatch(void)
 {
-    ctrl_gt current_ref = ctl_step_pid_ser(&voltage_pid, float2ctrl(0.8) - uout.control_port.value);
 
-    pwm_out_pu = float2ctrl(1) - ctl_step_pid_ser(&current_pid, current_ref - idc.control_port.value);
-
-    //ctl_step_single_phase_pll(
-    //    // handle of Single phase PLL object
-    //    &spll,
-    //    // input AC value
-    //    ac_input);
     ctl_step_single_phase_pll(
         // handle of Single phase PLL object
         &spll,
         // input AC value
-        sinv_uc.control_port.value);
+        ctl_sin(ctl_step_ramp_gen(&rg)));
 
- /*   ctrl_gt modulate_target;*/
+    // ctl_step_single_phase_pll(
+    //     // handle of Single phase PLL object
+    //     &spll,
+    //     // input AC value
+    //     sinv_uc.control_port.value);
 
     // Voltage Openloop
-    //modulate_target = ctl_mul(spll.phasor.dat[phase_alpha], float2ctrl(0.2));
+    modulate_target = ctl_mul(spll.phasor.dat[phase_alpha], float2ctrl(0.2));
 
     // current Loop,��ʵ�ֲ�����书��
-    //modulate_target = ctl_step_qpr_controller(&sinv_qpr_base, ctl_mul(spll.phasor.dat[0], float2ctrl(0.2)) -
+    // modulate_target = ctl_step_qpr_controller(&sinv_qpr_base, ctl_mul(spll.phasor.dat[0], float2ctrl(0.2)) -
     //                                                            sinv_il.control_port.value);
-    // 
-    //modulate_target = ctl_step_pr_controller(&sinv_pr_base, ctl_mul(spll.phasor.dat[0], float2ctrl(0.2)) -
+    //
+    // modulate_target = ctl_step_pr_controller(&sinv_pr_base, ctl_mul(spll.phasor.dat[0], float2ctrl(0.2)) -
     //                                                            sinv_il.control_port.value);
 
-    //modulate_target = ctl_step_qpr_controller(&sinv_qpr_base, ctl_mul(spll.phasor.dat[0], float2ctrl(0.2)) -
-    //                                                            sinv_il.control_port.value)+ctl_mul(float2ctrl(0.00001),sinv_uc.control_port.value);
-    
-    //modulate_target = ctl_step_pr_controller(&sinv_pr_base, ctl_mul(spll.phasor.dat[0], float2ctrl(0.05)) -
-    //                                                            sinv_il.control_port.value)+ctl_mul(float2ctrl(0.8),sinv_uc.control_port.value);
-    //gird conencted without dc voltage control
+    // modulate_target = ctl_step_qpr_controller(&sinv_qpr_base, ctl_mul(spll.phasor.dat[0], float2ctrl(0.2)) -
+    //                                                             sinv_il.control_port.value)+ctl_mul(float2ctrl(0.00001),sinv_uc.control_port.value);
+
+    // modulate_target = ctl_step_pr_controller(&sinv_pr_base, ctl_mul(spll.phasor.dat[0], float2ctrl(0.05)) -
+    //                                                             sinv_il.control_port.value)+ctl_mul(float2ctrl(0.8),sinv_uc.control_port.value);
+    // gird conencted without dc voltage control
 
     // gird conencted with dc voltage control
-    //��ѹ�������Ϊ���������ķ�ֵ��������������λͨ�����໷+�������ؽ�ȷ����
-    sinv_current_ref = - ctl_step_pid_ser(&sinv_vlotage_pid, float2ctrl(0.8) - sinv_udc.control_port.value);
-    modulate_target = ctl_step_qpr_controller(&sinv_qpr_base, ctl_mul(spll.phasor.dat[0], sinv_current_ref) -
-                                                                  sinv_il.control_port.value);
+    // ��ѹ�������Ϊ���������ķ�ֵ��������������λͨ�����໷+�������ؽ�ȷ����
+    //sinv_current_ref = -ctl_step_pid_ser(&sinv_vlotage_pid, float2ctrl(0.8) - sinv_udc.control_port.value);
+    //modulate_target = ctl_step_qpr_controller(&sinv_qpr_base, ctl_mul(spll.phasor.dat[0], sinv_current_ref) -
+    //                                                              sinv_il.control_port.value);
 
-
-
-    // 
-    // Unipolar SPWM 1 
-     sinv_pwm_pu[0] = ctl_div2(-modulate_target + float2ctrl(1));
-     sinv_pwm_pu[1] = ctl_div2(modulate_target + float2ctrl(1));
-
-
-    // Unipolar SPWM 2 
-    //sinv_pwm_pu[0] = -modulate_target;
-    //sinv_pwm_pu[1] = modulate_target;
-
-    // pwm_out_pu = float2ctrl(1) - ctl_step_pid_ser(&current_pid, idc.control_port.value - current_ref);
-    //     if (flag_enable_adc_calibrator)
-    //     {
-    //         if (index_adc_calibrator == 3)
-    //             ctl_step_adc_calibrator(&adc_calibrator, pmsm_ctrl.mtr_interface.idc->value);
-    //         else
-    //             ctl_step_adc_calibrator(&adc_calibrator,
-    //             pmsm_ctrl.mtr_interface.iabc->value.dat[index_adc_calibrator]);
-    //     }
-    //     else
-    //     {
-    //  #if defined OPENLOOP_CONST_FREQUENCY
-    //         ctl_step_const_f_controller(&const_f);
-    //  #else  // OPENLOOP_CONST_FREQUENCY
-    //         ctl_step_slope_f(&slope_f);
-    //  #endif // OPENLOOP_CONST_FREQUENCY
-    //     }
     //
-    //     ctl_step_spd_calc(&spd_enc);
-    //
-    //     ctl_step_pmsm_ctrl(&pmsm_ctrl);
+    // Unipolar SPWM 1
+    sinv_pwm_pu[0] = ctl_div2(-modulate_target + float2ctrl(1));
+    sinv_pwm_pu[1] = ctl_div2(modulate_target + float2ctrl(1));
+
+    // Unipolar SPWM 2
+    // sinv_pwm_pu[0] = -modulate_target;
+    // sinv_pwm_pu[1] = modulate_target;
 }
 
 #ifdef __cplusplus
