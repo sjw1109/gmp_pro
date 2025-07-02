@@ -84,6 +84,9 @@
     <ClCompile Include="DigialPower_simulink.cpp">
       <Filter>implement_interface</Filter>
     </ClCompile>
+    <ClCompile Include="gmp_src\combo_basic.c">
+      <Filter>GMP Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\implement\common\ctl_main.h">

@@ -9,10 +9,10 @@
 #define ADC_REFERENCE ((3.3))
 
 // Controller Frequency
-#define CONTROLLER_FREQUENCY (10000)
+#define CONTROLLER_FREQUENCY (20e3)
 
 // PWM depth
-#define CONTROLLER_PWM_CMP_MAX (8500)
+#define CONTROLLER_PWM_CMP_MAX (4200-1)
 
 // Speed controller Division
 #define SPD_CONTROLLER_PWM_DIVISION (5)

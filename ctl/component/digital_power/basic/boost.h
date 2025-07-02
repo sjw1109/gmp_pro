@@ -120,8 +120,8 @@ ctrl_gt ctl_step_boost_ctrl(boost_ctrl_t *boost)
 
         if (boost->flag_enable_output)
         {
-            // pwm_out_pu = float2ctrl(1) - voltage_set;
-            boost->pwm_out_pu = (boost->voltage_out - boost->uin->value) / boost->voltage_out;
+             boost->pwm_out_pu = float2ctrl(1) - boost->voltage_out;
+            //boost->pwm_out_pu = (boost->voltage_out - boost->uin->value) / boost->voltage_out;
         }
         else
         {
@@ -133,6 +133,12 @@ ctrl_gt ctl_step_boost_ctrl(boost_ctrl_t *boost)
         boost->pwm_out_pu = float2ctrl(0);
     }
 
+    return boost->pwm_out_pu;
+}
+
+GMP_STATIC_INLINE
+ctrl_gt ctl_get_boost_ctrl_modulation(boost_ctrl_t* boost)
+{
     return boost->pwm_out_pu;
 }
 

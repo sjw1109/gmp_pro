@@ -28,8 +28,8 @@ extern "C"
 // 
 //
 extern ptr_adc_channel_t uin;
-extern ptr_adc_channel_t uout;
-extern ptr_adc_channel_t idc;
+extern ptr_adc_channel_t uc;
+extern ptr_adc_channel_t il;
 extern pwm_channel_t pwm_out;
  
 // Functions without controller nano framework.
@@ -40,68 +40,24 @@ GMP_STATIC_INLINE
 void ctl_input_callback(void)
 {
     //// invoke ADC p.u. routine
-    // ctl_step_tri_ptr_adc_channel(&iabc);
-    // ctl_step_tri_ptr_adc_channel(&uabc);
-    // ctl_step_ptr_adc_channel(&idc);
-    // ctl_step_ptr_adc_channel(&udc);
-    simulink_tx_buffer.monitor[1] = ctl_step_ptr_adc_channel(&idc);
+    simulink_tx_buffer.monitor[1] = ctl_step_ptr_adc_channel(&il);
     simulink_tx_buffer.monitor[2] = ctl_step_ptr_adc_channel(&uin);
-    simulink_tx_buffer.monitor[3] = ctl_step_ptr_adc_channel(&uout);
-    /*
-        simulink_tx_buffer.monitor[1] = simulink_rx_buffer.adc_result[0];
-        simulink_tx_buffer.monitor[2] = simulink_rx_buffer.adc_result[1];
-        simulink_tx_buffer.monitor[3] = simulink_rx_buffer.adc_result[2];
+    simulink_tx_buffer.monitor[3] = ctl_step_ptr_adc_channel(&uc);
 
-       */ // invoke position encoder routine.
-    // ctl_step_autoturn_pos_encoder(&pos_enc, simulink_rx_buffer.encoder);
-
-    // Get panel input here.
-#if (BUILD_LEVEL == 1)
-
-    // ctl_set_pmsm_ctrl_vdq_ff(&pmsm_ctrl, float2ctrl(csp_sl_get_panel_input(0)),
-    // float2ctrl(csp_sl_get_panel_input(1)));
-
-#endif // BUILD_LEVEL
 }
 
 // Output Callback
 GMP_STATIC_INLINE
 void ctl_output_callback(void)
 {
-    // ctl_calc_pwm_tri_channel(&pwm_out);
-
-    //    // PWM output
-    //    simulink_tx_buffer.tabc[phase_A] = pwm_out.value[phase_A];
-    //    simulink_tx_buffer.tabc[phase_B] = pwm_out.value[phase_B];
-    //    simulink_tx_buffer.tabc[phase_C] = pwm_out.value[phase_C];
-    //
-    //    // Monitor Port, 8 channels
-    //    simulink_tx_buffer.monitor_port[0] = pmsm_ctrl.idq_set.dat[phase_q];
-    //    simulink_tx_buffer.monitor_port[1] = pmsm_ctrl.idq0.dat[phase_q];
-    //
-    // #if BUILD_LEVEL <= 3
-    //    simulink_tx_buffer.monitor_port[2] = pmsm_ctrl.idq_set.dat[phase_d];
-    //    simulink_tx_buffer.monitor_port[3] = pmsm_ctrl.idq0.dat[phase_d];
-    // #elif BUILD_LEVEL == 4
-    //    simulink_tx_buffer.monitor_port[2] = pmsm_ctrl.speed_set;
-    //    simulink_tx_buffer.monitor_port[3] = pmsm_ctrl.mtr_interface.velocity->speed;
-    // #endif
-    //
-    //    simulink_tx_buffer.monitor_port[4] = pmsm_ctrl.vdq_set.dat[phase_d];
-    //    simulink_tx_buffer.monitor_port[5] = pmsm_ctrl.vdq_set.dat[phase_q];
-    //
-    //    simulink_tx_buffer.monitor_port[6] = pmsm_ctrl.mtr_interface.velocity->speed;
-    //    simulink_tx_buffer.monitor_port[7] = pmsm_ctrl.mtr_interface.position->elec_position;
-    //    simulink_tx_buffer.monitor_port[7] = slope_f.current_freq;
-    //    simulink_tx_buffer.monitor_port[7] = simulink_rx_buffer.encoder;
-
-    simulink_tx_buffer.pwm_cmp[0] = ctl_calc_pwm_channel(&pwm_out, pwm_out_pu);
+ 
+    simulink_tx_buffer.pwm_cmp[0] = ctl_calc_pwm_channel(&pwm_out, ctl_get_boost_ctrl_modulation(&boost_ctrl));
 
     simulink_tx_buffer.enable = 1;
 
-    simulink_tx_buffer.monitor[0] = idc.control_port.value;
+    simulink_tx_buffer.monitor[0] = il.control_port.value;
     simulink_tx_buffer.monitor[1] = uin.control_port.value;
-    simulink_tx_buffer.monitor[2] = uout.control_port.value;
+    simulink_tx_buffer.monitor[2] = uc.control_port.value;
 
     simulink_tx_buffer.dac[0] = 20;
 

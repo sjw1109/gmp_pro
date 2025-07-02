@@ -9,10 +9,10 @@
 #include <ctl/component/motor_control/controller_preset/TI_3PH_GAN_INV.h>
 
 // Controller Frequency
-#define CONTROLLER_FREQUENCY (10000)
+#define CONTROLLER_FREQUENCY (20000)
 
 // PWM depth
-#define CONTROLLER_PWM_CMP_MAX (6000)
+#define CONTROLLER_PWM_CMP_MAX (4200-1)
 
 // Speed controller Division
 #define SPD_CONTROLLER_PWM_DIVISION (5)

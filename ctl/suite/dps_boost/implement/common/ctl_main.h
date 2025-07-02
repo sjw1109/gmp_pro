@@ -22,6 +22,8 @@
 
 #include <ctl/component/interface/adc_channel.h>
 
+#include <ctl\component\digital_power\basic/boost.h>
+
 #include <xplt.peripheral.h>
 
 #ifndef _FILE_CTL_MAIN_H_
@@ -62,53 +64,43 @@ extern adc_bias_calibrator_t adc_calibrator;
 extern fast_gt flag_enable_adc_calibrator;
 extern fast_gt index_adc_calibrator;
 
-extern pid_regular_t current_pid, voltage_pid;
 
-extern ctrl_gt pwm_out_pu;
+// Boost Controller Suite
+extern boost_ctrl_t boost_ctrl;
 
-extern ptr_adc_channel_t uin;
-extern ptr_adc_channel_t uout;
-extern ptr_adc_channel_t idc;
-
-typedef enum _tag_adc_index
-{
-    MTR_ADC_UA = 0,
-    MTR_ADC_UB,
-    MTR_ADC_UC,
-    MTR_ADC_IA,
-    MTR_ADC_IB,
-    MTR_ADC_IC,
-    MTR_ADC_UDC,
-    MTR_ADC_IDC
-} adc_index_t;
+//extern pid_regular_t current_pid, voltage_pid;
+//
+//extern ctrl_gt pwm_out_pu;
+//
+//extern ptr_adc_channel_t uin;
+//extern ptr_adc_channel_t uout;
+//extern ptr_adc_channel_t idc;
+//
+//typedef enum _tag_adc_index
+//{
+//    MTR_ADC_UA = 0,
+//    MTR_ADC_UB,
+//    MTR_ADC_UC,
+//    MTR_ADC_IA,
+//    MTR_ADC_IB,
+//    MTR_ADC_IC,
+//    MTR_ADC_UDC,
+//    MTR_ADC_IDC
+//} adc_index_t;
 
 // periodic callback function things.
 GMP_STATIC_INLINE
 void ctl_dispatch(void)
 {
-    ctrl_gt current_ref = ctl_step_pid_ser(&voltage_pid, float2ctrl(0.8) - uout.control_port.value);
-    pwm_out_pu = float2ctrl(1) - ctl_step_pid_ser(&current_pid, current_ref - idc.control_port.value);
-    //pwm_out_pu = float2ctrl(1) - ctl_step_pid_ser(&current_pid, idc.control_port.value - current_ref);
-    //    if (flag_enable_adc_calibrator)
-    //    {
-    //        if (index_adc_calibrator == 3)
-    //            ctl_step_adc_calibrator(&adc_calibrator, pmsm_ctrl.mtr_interface.idc->value);
-    //        else
-    //            ctl_step_adc_calibrator(&adc_calibrator,
-    //            pmsm_ctrl.mtr_interface.iabc->value.dat[index_adc_calibrator]);
-    //    }
-    //    else
-    //    {
-    // #if defined OPENLOOP_CONST_FREQUENCY
-    //        ctl_step_const_f_controller(&const_f);
-    // #else  // OPENLOOP_CONST_FREQUENCY
-    //        ctl_step_slope_f(&slope_f);
-    // #endif // OPENLOOP_CONST_FREQUENCY
-    //    }
-    //
-    //    ctl_step_spd_calc(&spd_enc);
-    //
-    //    ctl_step_pmsm_ctrl(&pmsm_ctrl);
+    //ctrl_gt current_ref = ctl_step_pid_ser(&voltage_pid, float2ctrl(0.8) - uout.control_port.value);
+    //pwm_out_pu = float2ctrl(1) - ctl_step_pid_ser(&current_pid, current_ref - idc.control_port.value);
+
+
+    ////pwm_out_pu = float2ctrl(1) - ctl_step_pid_ser(&current_pid, idc.control_port.value - current_ref);
+    /// 
+    
+    ctl_step_boost_ctrl(&boost_ctrl);
+
 }
 
 #ifdef __cplusplus
