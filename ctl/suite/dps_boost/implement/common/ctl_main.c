@@ -30,7 +30,6 @@ ctrl_gt pwm_out_pu;
 // Boost Controller Suite
 boost_ctrl_t boost_ctrl;
 
-
 //
 adc_bias_calibrator_t adc_calibrator;
 fast_gt flag_enable_adc_calibrator = 0;
@@ -42,33 +41,31 @@ volatile fast_gt flag_enable_system = 0;
 // CTL initialize routine
 void ctl_init()
 {
-
     ctl_init_boost_ctrl(
         // Boost controller
         &boost_ctrl,
         // Voltage PID controller
-        1, 0.01, 0,
+        1.5, 0.02, 0,
         // Current PID controller
         1, 0.01, 0,
         // Controller frequency, Hz
         CONTROLLER_FREQUENCY);
 
+#if (BUILD_LEVEL == 1)
+    // Open loop
+    ctl_boost_ctrl_openloop_mode(&boost_ctrl);
+    ctl_set_boost_ctrl_voltage_openloop(&boost_ctrl, float2ctrl(0.5));
+#elif (BUILD_LEVEL == 2)
+    // Current Loop
+    ctl_boost_ctrl_current_mode(&boost_ctrl);
+    ctl_set_boost_ctrl_current(&boost_ctrl, float2ctrl(0.5));
+#else
+    // Voltage loop
+    ctl_boost_ctrl_voltage_mode(&boost_ctrl);
+    ctl_set_boost_ctrl_voltage(&boost_ctrl, float2ctrl(0.8));
+#endif // BUILD_LEVEL
 
-    //ctl_init_pid(
-    //    // continuous pid handle
-    //    &current_pid,
-    //    // PID parameters
-    //    1, 0.01, 0,
-    //    // controller frequency
-    //    20e3);
-
-    //ctl_init_pid(
-    //    // continuous pid handle
-    //    &voltage_pid,
-    //    // PID parameters
-    //    1, 0.01, 0,
-    //    // controller frequency
-    //    20e3);
+    ctl_disable_boost_ctrl_output(&boost_ctrl);
 
     // if in simulation mode, enable system
 #if !defined SPECIFY_PC_ENVIRONMENT
@@ -79,20 +76,18 @@ void ctl_init()
 
 #endif // SPECIFY_PC_ENVIRONMENT
 
+    ctl_enable_boost_ctrl_output(&boost_ctrl);
     ctl_enable_output();
 
-    // Debug mode online the controller
-    // ctl_enable_pmsm_ctrl(&pmsm_ctrl);
-
-#if defined SPECIFY_ENABLE_ADC_CALIBRATE
-    // Enable ADC calibrate
-    flag_enable_adc_calibrator = 1;
-    index_adc_calibrator = 0;
-
-    // Select ADC calibrate
-    // ctl_disable_pmsm_ctrl_output(&pmsm_ctrl);
-    ctl_enable_adc_calibrator(&adc_calibrator);
-#endif // SPECIFY_ENABLE_ADC_CALIBRATE
+//#if defined SPECIFY_ENABLE_ADC_CALIBRATE    
+//    // Enable ADC calibrate
+//    flag_enable_adc_calibrator = 1;
+//    index_adc_calibrator = 0;
+//
+//    // Select ADC calibrate
+//    // ctl_disable_pmsm_ctrl_output(&pmsm_ctrl);
+//    ctl_enable_adc_calibrator(&adc_calibrator);
+//#endif // SPECIFY_ENABLE_ADC_CALIBRATE
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -118,6 +113,5 @@ void ctl_mainloop(void)
     //    ctl_disable_output();
     //}
 
-   
     return;
 }

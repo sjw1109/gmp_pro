@@ -75,17 +75,14 @@ typedef struct _tag_std_vip_protection_type
 
 } std_vip_protection_t;
 
+// Attach ADC interface to
 void ctl_attach_vip_protection(
     // Voltage - Current - Power Protection
     std_vip_protection_t *obj,
     // output voltage
     adc_ift *uo,
     // output current
-    adc_ift *io)
-{
-    obj->adc_io = io;
-    obj->adc_uo = uo;
-}
+    adc_ift *io);
 
 void ctl_init_vip_protection(
     // Voltage - Current - Power Protection
@@ -103,17 +100,9 @@ void ctl_init_vip_protection(
     // power maximum
     parameter_gt p_max,
     // sample frequency
-    parameter_gt fs)
-{
-    obj->voltage_max = float2ctrl(v_max / v_base);
-    obj->current_max = float2ctrl(i_max / i_base);
-    obj->power_max = float2ctrl(p_max / v_base / i_base);
+    parameter_gt fs);
 
-    ctl_init_lp_filter(&obj->power_filter, fs, power_f_cut);
-    ctl_init_lp_filter(&obj->voltage_filter, fs, voltage_f_cut);
-    ctl_init_lp_filter(&obj->current_filter, fs, current_f_cut);
-}
-
+GMP_STATIC_INLINE
 void ctl_clear_vip_protection_error(
     // Voltage - Current - Power Protection
     std_vip_protection_t *obj)
@@ -121,19 +110,20 @@ void ctl_clear_vip_protection_error(
     obj->flag_error = 0;
 }
 
+GMP_STATIC_INLINE
 fast_gt ctl_step_vip_protection(
     // Voltage - Current - Power Protection
     std_vip_protection_t *obj)
 {
 
-     // current calculating and filtering
-    obj->iout = ctl_step_lowpass_filter(obj->adc_io->value);
+    // current calculating and filtering
+    obj->iout = ctl_step_lowpass_filter(&obj->current_filter, obj->adc_io->value);
 
     // voltage calculating and filtering
-    obj->uout = ctl_step_lowpass_filter(obj->adc_uo->value);
+    obj->uout = ctl_step_lowpass_filter(&obj->current_filter, obj->adc_uo->value);
 
     // power calculating and filtering
-    obj->pout = ctl_step_lowpass_filter(ctl_mul(obj->iout, obj->uout));
+    obj->pout = ctl_step_lowpass_filter(&obj->current_filter, ctl_mul(obj->iout, obj->uout));
 
     // error has occurred
     if (obj->flag_error != 0)
@@ -153,6 +143,17 @@ fast_gt ctl_step_vip_protection(
 // + Foldback overcurrent protection
 typedef struct _tag_std_foldback_protection_type
 {
+    //
+    // Controller port
+    //
+
+    // output voltage
+    adc_ift *adc_uo;
+
+    // output current
+    adc_ift *adc_io;
+
+
 
 } std_foldback_protection_t;
 

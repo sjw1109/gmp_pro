@@ -59,12 +59,11 @@ void ctl_output_callback(void)
     simulink_tx_buffer.monitor[1] = uin.control_port.value;
     simulink_tx_buffer.monitor[2] = uc.control_port.value;
 
+    simulink_tx_buffer.monitor[3] = boost_ctrl.voltage_pid.out;
+    simulink_tx_buffer.monitor[4] = boost_ctrl.current_pid.out;
+
+
     simulink_tx_buffer.dac[0] = 20;
-
- 
-
-    // simulink_tx_buffer.pwm_cmp[1] = 2500.0 * sin(314.0 / 1000 * gmp_base_get_system_tick());
-    // simulink_tx_buffer.pwm_cmp[1] = gmp_base_get_system_tick();
 }
 
 // Enable Motor Controller

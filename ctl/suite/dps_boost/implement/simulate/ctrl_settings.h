@@ -37,10 +37,9 @@
 #define MTR_CTRL_SPEED_LOOP_BW ((10))
 
 // BUILD_LEVEL 1: Voltage Open loop
-// BUILD_LEVEL 2: Current Open loop
-// BUILD_LEVEL 3: Actual Current loop
-// BUILD_LEVEL 4: Speed Close loop
-#define BUILD_LEVEL (1)
+// BUILD_LEVEL 2: Current Close loop
+// BUILD_LEVEL 3: Voltage Close loop
+#define BUILD_LEVEL (3)
 
 // 
 // Controller Settings

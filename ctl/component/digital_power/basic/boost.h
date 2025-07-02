@@ -10,6 +10,15 @@ extern "C"
 {
 #endif // __cplusplus
 
+// You may enable this macro to enter debug mode.
+// Duty of Boost will not calculated by Uin.
+#define CTL_BOOST_CTRL_OUTPUT_WITHOUT_UIN
+
+// BOOST CONTROLLER Global parameters
+#ifndef CTL_BOOST_CTRL_UIN_MIN
+#define CTL_BOOST_CTRL_UIN_MIN ((float2ctrl(0.01)))
+#endif // CTL_BOOST_CTRL_UIN_MIN
+
 // Boost Controller
 typedef struct _tag_boost_ctrl_type
 {
@@ -120,26 +129,158 @@ ctrl_gt ctl_step_boost_ctrl(boost_ctrl_t *boost)
 
         if (boost->flag_enable_output)
         {
-             boost->pwm_out_pu = float2ctrl(1) - boost->voltage_out;
-            //boost->pwm_out_pu = (boost->voltage_out - boost->uin->value) / boost->voltage_out;
+#ifdef CTL_BOOST_CTRL_OUTPUT_WITHOUT_UIN
+            // Boost duty is generated without input voltage
+            boost->pwm_out_pu = float2ctrl(1) - boost->voltage_out;
+#else
+            if (boost->uin->value > CTL_BOOST_CTRL_UIN_MIN)
+            {
+                // Boost duty is generated with voltage input
+                boost->pwm_out_pu = (boost->voltage_out - boost->uin->value) / boost->voltage_out;
+            }
+            else
+            {
+                // if boost input is too low, just output.
+                boost->pwm_out_pu = float2ctrl(1);
+            }
+
+#endif // CTL_BOOST_CTRL_OUTPUT_WITHOUT_UIN
         }
         else
         {
-            boost->pwm_out_pu = float2ctrl(0);
+            // For safety design considerations,
+            // it is necessary to make Boost bridge conductive by default.
+            boost->pwm_out_pu = float2ctrl(1);
         }
     }
     else
     {
-        boost->pwm_out_pu = float2ctrl(0);
+        // For safety design considerations,
+        // it is necessary to make Boost bridge conductive by default.
+        boost->pwm_out_pu = float2ctrl(1);
     }
 
     return boost->pwm_out_pu;
 }
 
 GMP_STATIC_INLINE
-ctrl_gt ctl_get_boost_ctrl_modulation(boost_ctrl_t* boost)
+ctrl_gt ctl_get_boost_ctrl_modulation(boost_ctrl_t *boost)
 {
     return boost->pwm_out_pu;
+}
+
+GMP_STATIC_INLINE
+void ctl_disable_boost_ctrl_output(boost_ctrl_t *boost)
+{
+    boost->flag_enable_output = 0;
+}
+
+GMP_STATIC_INLINE
+void ctl_enable_boost_ctrl_output(boost_ctrl_t *boost)
+{
+    boost->flag_enable_output = 1;
+}
+
+GMP_STATIC_INLINE
+void ctl_clear_boost_ctrl(boost_ctrl_t *boost)
+{
+    ctl_clear_pid(&boost->voltage_pid);
+    ctl_clear_pid(&boost->current_pid);
+
+    boost->current_ff = 0;
+    boost->voltage_ff = 0;
+
+    ctl_disable_boost_ctrl_output(boost);
+}
+
+// .....................................................................//
+// Voltage mode
+//
+
+// BOOST controller run in voltage mode,
+// user should specify voltage by function ctl_set_boost_ctrl_voltage
+GMP_STATIC_INLINE
+void ctl_boost_ctrl_voltage_mode(boost_ctrl_t *boost)
+{
+    // enable controller
+    boost->flag_enable_system = 1;
+
+    // enable output
+    // boost->flag_enable_output = 1;
+
+    // enable current controller
+    boost->flag_enable_current_ctrl = 1;
+
+    // enable voltage controller
+    boost->flag_enable_voltage_ctrl = 1;
+}
+
+// Set motor target v alpha and v beta.
+// only in voltage mode this function counts.
+GMP_STATIC_INLINE
+void ctl_set_boost_ctrl_voltage(boost_ctrl_t *boost, ctrl_gt v_set)
+{
+    boost->voltage_set = v_set;
+}
+
+// .....................................................................//
+// Current mode
+//
+
+// BOOST controller run in current mode,
+// user should specify current by function ctl_set_boost_ctrl_current
+GMP_STATIC_INLINE
+void ctl_boost_ctrl_current_mode(boost_ctrl_t *boost)
+{
+    // enable controller
+    boost->flag_enable_system = 1;
+
+    // enable output
+    // boost->flag_enable_output = 1;
+
+    // enable current controller
+    boost->flag_enable_current_ctrl = 1;
+
+    // enable voltage controller
+    boost->flag_enable_voltage_ctrl = 0;
+}
+
+// Set motor target current.
+// only in current mode this function counts.
+GMP_STATIC_INLINE
+void ctl_set_boost_ctrl_current(boost_ctrl_t *boost, ctrl_gt i_set)
+{
+    boost->current_set = i_set;
+}
+
+// .....................................................................//
+// Voltage open loop mode
+//
+
+// BOOST controller run in open loop voltage mode,
+// user should specify voltage by function ctl_set_boost_ctrl_voltage_openloop
+GMP_STATIC_INLINE
+void ctl_boost_ctrl_openloop_mode(boost_ctrl_t *boost)
+{
+    // enable controller
+    boost->flag_enable_system = 1;
+
+    // enable output
+    // boost->flag_enable_output = 1;
+
+    // enable current controller
+    boost->flag_enable_current_ctrl = 0;
+
+    // enable voltage controller
+    boost->flag_enable_voltage_ctrl = 0;
+}
+
+// Set motor target Voltage (Duty).
+// only in Voltage open loop mode this function counts.
+GMP_STATIC_INLINE
+void ctl_set_boost_ctrl_voltage_openloop(boost_ctrl_t *boost, ctrl_gt v_set)
+{
+    boost->voltage_out = v_set;
 }
 
 #ifdef __cplusplus
