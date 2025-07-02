@@ -43,6 +43,8 @@ fast_gt index_adc_calibrator = 0;
 ctrl_gt modulate_target;
 
 
+ctrl_gt v_set = float2ctrl(0.1);
+
 // enable motor running
 volatile fast_gt flag_enable_system = 0;
 

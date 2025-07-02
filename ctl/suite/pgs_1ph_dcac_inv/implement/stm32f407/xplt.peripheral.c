@@ -88,6 +88,15 @@ void setup_peripheral(void)
 	// Step 1 Init all the ADC & PWM standard ports
 	//
 
+    //ctl_init_ptr_adc_channel(
+    //    // ptr_adc object
+    //    &sinv_il,
+    //    // pointer to ADC raw data
+    //    &adc_results[ADC_RESULT_IL],
+    //    // ADC Channel settings.
+    //    // iqn is valid only when ctrl_gt is a fixed point type.
+    //    2, 0.5, 12, 24);
+
     ctl_init_ptr_adc_channel(
         // ptr_adc object
         &sinv_il,
@@ -95,7 +104,7 @@ void setup_peripheral(void)
         &adc_results[ADC_RESULT_IL],
         // ADC Channel settings.
         // iqn is valid only when ctrl_gt is a fixed point type.
-        2, 0.5, 12, 24);
+        2, 0.844238, 12, 24);
 
     ctl_init_ptr_adc_channel(
         // ptr_adc object
