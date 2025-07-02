@@ -29,6 +29,11 @@ extern "C"
 // Controller interface
 //
 
+extern ptr_adc_channel_t uc;
+extern ptr_adc_channel_t uin;
+extern ptr_adc_channel_t il;
+
+
 extern pwm_channel_t pwm_out;
 
 // Functions without controller nano framework.
@@ -42,9 +47,9 @@ void ctl_input_callback(void)
     //
     // deal with all the ADC data
     //
-    ctl_step_ptr_adc_channel(&idc);
+    ctl_step_ptr_adc_channel(&il);
     ctl_step_ptr_adc_channel(&uin);
-    ctl_step_ptr_adc_channel(&uout);
+    ctl_step_ptr_adc_channel(&uc);
 }
 
 // Output Callback
