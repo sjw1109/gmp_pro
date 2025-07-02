@@ -29,6 +29,8 @@ void ctl_init_boost_ctrl(
         i_kp, i_Ti, i_Td,
         // controller frequency
         fs);
+
+    ctl_clear_boost_ctrl(boost);
 }
 
 void ctl_attach_boost_ctrl_input(
@@ -88,6 +90,4 @@ void ctl_init_vip_protection(
     ctl_init_lp_filter(&obj->power_filter, fs, power_f_cut);
     ctl_init_lp_filter(&obj->voltage_filter, fs, voltage_f_cut);
     ctl_init_lp_filter(&obj->current_filter, fs, current_f_cut);
-
-    ctl_clear_boost_ctrl(obj);
 }
