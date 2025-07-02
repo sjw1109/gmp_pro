@@ -18,7 +18,7 @@
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
-  HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
+	HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
 	HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
 	HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
 	
@@ -28,4 +28,22 @@
   /* USER CODE END 2 */
 
 ```
+
+
+
+为了让GMP能够运行在STM32的环境中，需要做如下的配置：
+
+增加include path
+
+增加GMP相关的源文件
+
+如果需要GMP直接托管项目，可以使用函数`gmp_base_entry()`，
+此外需要在主中断中调用`gmp_base_ctl_step()`。
+
+
+如果不需要GMP直接托管项目，对于STM32的应用场景，
+在进入主循环之前调用`gmp_base_init()`
+可以在主循环中额外调用`gmp_base_loop()`,
+在主中断（ADC转换完成回调）中调用`gmp_base_ctl_step()`。
+
 

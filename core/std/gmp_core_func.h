@@ -9,9 +9,11 @@ extern "C"
 
 // extern ctl_object_nano_t *ctl_nano_handle;
 
-// This function should be called when Chip setup is completed.
+// This function is the basic init part of GMP entry.
+// User may call this function to init GMP library.
+// If you need GMP to manage the function call you may not call this function.
 GMP_STATIC_INLINE
-void gmp_base_entry(void)
+void gmp_base_init(void)
 {
 #ifdef SPECIFY_PC_ENVIRONMENT
     size_t loop_tick;
@@ -61,39 +63,54 @@ void gmp_base_entry(void)
     ctl_fm_controller_inspection(ctl_nano_handle);
 #endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 #endif // SPECIFY_DISABLE_GMP_CTL
+}
+
+// This is the loop part of GMP library.
+// This function will return without blockage
+// If you need GMP to manage the function call you may not call this function.
+GMP_STATIC_INLINE
+void gmp_base_loop(void)
+{
+#ifndef SPECIFY_DISABLE_CSP
+    // Call GMP CSP module loop routine
+    //
+    gmp_csp_loop();
+
+#endif // SPECIFY_DISABLE_CSP
+
+#if !defined SPECIFY_DISABLE_GMP_CTL
+#ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+    ctl_fm_state_dispatch(ctl_nano_handle);
+#endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
+#endif // SPECIFY_DISABLE_GMP_CTL
+
+    // Call user general loop routine
+    //
+    mainloop();
+
+#if !defined SPECIFY_DISABLE_GMP_CTL
+    // Call controller loop routine
+    //
+    ctl_mainloop();
+#endif // SPECIFY_DISABLE_GMP_CTL
+}
+
+// This function should be called when Chip setup is completed.
+GMP_STATIC_INLINE
+void gmp_base_entry(void)
+{
+    gmp_base_init();
 
 #ifdef SPECIFY_PC_ENVIRONMENT
     // PC simulate environment, finite iteration
     for (loop_tick = 0; loop_tick < PC_ENV_MAX_ITERATION; ++loop_tick)
 #else  // SPECIFY_PC_ENVIRONMENT
     // real processor routine
-    for (;;)
+    // for (;;)
+    while (1)
 #endif // SPECIFY_PC_ENVIRONMENT
-
     {
-
-#ifndef SPECIFY_DISABLE_CSP
-        // Call GMP CSP module loop routine
-        //
-        gmp_csp_loop();
-
-#endif // SPECIFY_DISABLE_CSP
-
-#if !defined SPECIFY_DISABLE_GMP_CTL
-#ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
-        ctl_fm_state_dispatch(ctl_nano_handle);
-#endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
-#endif // SPECIFY_DISABLE_GMP_CTL
-
-        // Call user general loop routine
-        //
-        mainloop();
-
-#if !defined SPECIFY_DISABLE_GMP_CTL
-        // Call controller loop routine
-        //
-        ctl_mainloop();
-#endif // SPECIFY_DISABLE_GMP_CTL
+        gmp_base_loop();
     }
 
 #if !defined SPECIFY_DISABLE_CSP
@@ -102,7 +119,6 @@ void gmp_base_entry(void)
     gmp_csp_exit();
 #endif // SPECIFY_DISABLE_CSP_EXIT
 #endif // SPECIFY_DISABLE_CSP
-}
 
 #ifdef __cplusplus
 }

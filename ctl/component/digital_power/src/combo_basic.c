@@ -30,3 +30,19 @@ void ctl_init_boost_ctrl(
         fs);
 }
 
+void ctl_attach_boost_ctrl_input(
+    // Boost controller
+    boost_ctrl_t *boost,
+    // output capacitor voltage
+    adc_ift *uc,
+    // inductor current
+    adc_ift *il,
+    // input voltage
+    adc_ift *uin)
+{
+    boost->uc = uc;
+    boost->il = il;
+    boost->uin = uin;
+}
+
+

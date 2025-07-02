@@ -90,6 +90,16 @@ void ctl_init_boost_ctrl(
     // Controller frequency, Hz
     parameter_gt fs);
 
+void ctl_attach_boost_ctrl_input(
+    // Boost controller
+    boost_ctrl_t *boost,
+    // output capacitor voltage
+    adc_ift *uc,
+    // inductor current
+    adc_ift *il,
+    // input voltage
+    adc_ift *uin);
+
 GMP_STATIC_INLINE
 ctrl_gt ctl_step_boost_ctrl(boost_ctrl_t *boost)
 {
