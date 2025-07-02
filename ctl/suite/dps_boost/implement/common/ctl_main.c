@@ -47,7 +47,7 @@ void ctl_init()
         // Voltage PID controller
         1.5, 0.02, 0,
         // Current PID controller
-        1, 0.01, 0,
+        3, 0.01, 0,
         // Controller frequency, Hz
         CONTROLLER_FREQUENCY);
 
