@@ -64,7 +64,7 @@ void ctl_init()
         // continuous pid handle
         &sinv_vlotage_pid,
         // PID parameters
-        0.8, 0.1, 0,
+        0.8/4, 0.1, 0,
         // controller frequency
         20e3);
 
@@ -92,7 +92,7 @@ void ctl_init()
         20e3);
 
     ctl_init_pr_controller(&sinv_pr_base, 0.0001, 1000, 50, 20e3);
-    ctl_init_qpr_controller(&sinv_qpr_base, 0.00000001, 500, 50, 5 ,20e3);
+    ctl_init_qpr_controller(&sinv_qpr_base, 0.00000001, 500/10, 50, 5 ,20e3);
     ctl_init_qpr_controller(&qpr_test, 0.01, 0.08, 50, 5, 20e3);
 
     ctl_init_ramp_gen_via_amp_freq(&rg, 20e3, 50, 1, 0);
@@ -283,7 +283,7 @@ void ctl_mainloop(void)
     //    }
     //}
 		
-		if(sinv_ig.control_port.value>=0.1)
+		if(sinv_ig.control_port.value>=2)
 		{
 			ctl_disable_output();
 		}

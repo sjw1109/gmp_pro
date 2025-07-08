@@ -90,8 +90,8 @@ void ctl_output_callback(void)
     __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, ctl_calc_pwm_channel(&sinv_pwm_out[0], sinv_pwm_pu[0]));
     __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, ctl_calc_pwm_channel(&sinv_pwm_out[1], sinv_pwm_pu[1]));
 		
-		HAL_DAC_SetValue(&hdac, DAC_CHANNEL_2, DAC_ALIGN_12B_R, (sinv_uc.control_port.value + 1) * 1000);
-		HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, (spll.phasor.dat[0] + 1) * 1000);
+		HAL_DAC_SetValue(&hdac, DAC_CHANNEL_2, DAC_ALIGN_12B_R, (ctl_mul(spll.phasor.dat[0], sinv_current_ref) + 1) * 3276/2);
+		HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, (sinv_ig.control_port.value + 1) * 3276/2);
 }
 
 // Enable Motor Controller

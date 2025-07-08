@@ -220,6 +220,11 @@
           <WinNumber>1</WinNumber>
           <ItemText>flag_error</ItemText>
         </Ww>
+        <Ww>
+          <count>14</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>sinv_qpr_base</ItemText>
+        </Ww>
       </WatchWindow1>
       <WatchWindow2>
         <Ww>

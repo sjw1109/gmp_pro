@@ -126,8 +126,8 @@ void setup_peripheral(void)
         // pointer to ADC raw data
         &adc_results[ADC_RESULT_IG],
         // ADC Channel settings.
-        // iqn is valid only when ctrl_gt is a fixed point type.
-        2, 0.36, 12, 24);
+        // iqn is valid only when ctrl_gt is a fixed point type. 2
+        2.2, 0.36, 12, 24);
 
         ctl_init_ptr_adc_channel(
         // ptr_adc object

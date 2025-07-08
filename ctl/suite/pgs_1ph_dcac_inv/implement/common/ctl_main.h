@@ -133,13 +133,18 @@ extern "C"
 			// Voltage Openloop
 			//modulate_target = ctl_mul(spll.phasor.dat[phase_alpha], v_set);
 			//modulate_target = ctl_mul(spll.phasor.dat[0], v_set);
-			
-			// Voltage Closeloop
-			
 
-			// current Loop,��ʵ�ֲ�����书��
-			modulate_target = ctl_step_qpr_controller(&sinv_qpr_base, ctl_mul(spll.phasor.dat[0], float2ctrl(v_set)) +
-				sinv_ig.control_port.value);
+//			// current Loop,ADC sample is negative 
+//			modulate_target = ctl_step_qpr_controller(&sinv_qpr_base, ctl_mul(spll.phasor.dat[0], float2ctrl(v_set)) +
+//				sinv_ig.control_port.value);
+			
+			// DC Voltage Closeloop
+			sinv_current_ref = ctl_step_pid_ser(&sinv_vlotage_pid, float2ctrl(0.42) - sinv_udc.control_port.value);
+			modulate_target = ctl_step_qpr_controller(&sinv_qpr_base, ctl_mul(spll.phasor.dat[0], sinv_current_ref) +
+				sinv_ig.control_port.value);	
+
+
+
 
 			// ADC sample is negative 
 			//modulate_target = ctl_step_qpr_controller(&sinv_qpr_base, ctl_mul(spll.phasor.dat[0], float2ctrl(v_set)) +
