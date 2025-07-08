@@ -69,10 +69,15 @@ uint32_t adc_results[8];
 // ADC RESULT INDEX
 typedef enum _tag_adc_result_nameplate
 {
-	ADC_RESULT_IL = 0,
+	ADC_RESULT_IL = 3,
 	ADC_RESULT_IG = 1,
-	ADC_RESULT_UC = 2,
-	ADC_RESULT_UDC = 3
+	ADC_RESULT_UC = 0,
+	ADC_RESULT_UDC = 2
+
+	//ADC_RESULT_IL = 0,
+	//ADC_RESULT_IG = 1,
+	//ADC_RESULT_UC = 2,
+	//ADC_RESULT_UDC = 3
 }adc_result_nameplate_t;
 
 
@@ -104,7 +109,7 @@ void setup_peripheral(void)
         &adc_results[ADC_RESULT_IL],
         // ADC Channel settings.
         // iqn is valid only when ctrl_gt is a fixed point type.
-        2, 0.844238, 12, 24);
+        2, 0.38, 12, 24);//0.844238
 
     ctl_init_ptr_adc_channel(
         // ptr_adc object
@@ -113,7 +118,7 @@ void setup_peripheral(void)
         &adc_results[ADC_RESULT_UC],
         // ADC Channel settings.
         // iqn is valid only when ctrl_gt is a fixed point type.
-        2, 0.5, 12, 24);
+        2.4646, 0.4, 12, 24);
 
     ctl_init_ptr_adc_channel(
         // ptr_adc object
@@ -122,7 +127,7 @@ void setup_peripheral(void)
         &adc_results[ADC_RESULT_IG],
         // ADC Channel settings.
         // iqn is valid only when ctrl_gt is a fixed point type.
-        2, 0.5, 12, 24);
+        2, 0.36, 12, 24);
 
         ctl_init_ptr_adc_channel(
         // ptr_adc object
@@ -131,7 +136,7 @@ void setup_peripheral(void)
         &adc_results[ADC_RESULT_UDC],
         // ADC Channel settings.
         // iqn is valid only when ctrl_gt is a fixed point type.
-        2, 0.5, 12, 24);
+        2.4646, 0.4, 12, 24);
 	
 	    ctl_init_pwm_channel(&sinv_pwm_out[0], 0, CONTROLLER_PWM_CMP_MAX);
     ctl_init_pwm_channel(&sinv_pwm_out[1], 0, CONTROLLER_PWM_CMP_MAX);
@@ -169,6 +174,7 @@ void setup_peripheral(void)
 	HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
 	HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
 	HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
+	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
 
 	//	HAL_TIM_PWM_Start_IT(&htim1, TIM_CHANNEL_1);
 	//	HAL_TIM_PWM_Start_IT(&htim1, TIM_CHANNEL_2);
@@ -180,6 +186,10 @@ void setup_peripheral(void)
 	// Start ADC Conversion
 	HAL_ADC_Start_DMA(&hadc1, adc_results, 6);
 
+	//HAL_StatusTypeDef HAL_DAC_Start(DAC_HandleTypeDef * hdac, uint32_t Channel);
+	
+	HAL_DAC_Start(&hdac, DAC_CHANNEL_1);
+	HAL_DAC_Start(&hdac, DAC_CHANNEL_2);
 
 }
 
@@ -187,9 +197,11 @@ void setup_peripheral(void)
 // interrupt functions and callback functions here
 
 // ADC interrupt
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
+//void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
 {
 	//if (hadc == &hadc2)
+	if(htim == &htim1)
 	{
 		gmp_base_ctl_step();
 	}

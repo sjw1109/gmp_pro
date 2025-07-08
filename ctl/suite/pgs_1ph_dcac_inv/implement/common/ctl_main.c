@@ -43,10 +43,11 @@ fast_gt index_adc_calibrator = 0;
 ctrl_gt modulate_target;
 
 
-ctrl_gt v_set = float2ctrl(0.1);
+ctrl_gt v_set = float2ctrl(0.02);
 
 // enable motor running
 volatile fast_gt flag_enable_system = 0;
+volatile fast_gt flag_error = 0;
 
 // CTL initialize routine
 void ctl_init()
@@ -195,6 +196,7 @@ void ctl_init()
     // if in simulation mode, enable system
 #if !defined SPECIFY_PC_ENVIRONMENT
     // stop here and wait for user start the motor controller
+		ctl_disable_output();
     while (flag_enable_system == 0)
     {
     }
@@ -280,6 +282,11 @@ void ctl_mainloop(void)
     //            flag_enable_adc_calibrator = 0;
     //    }
     //}
+		
+		if(sinv_ig.control_port.value>=0.1)
+		{
+			ctl_disable_output();
+		}
 
     return;
 }
