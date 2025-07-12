@@ -43,10 +43,11 @@ fast_gt index_adc_calibrator = 0;
 ctrl_gt modulate_target;
 
 
-ctrl_gt v_set = float2ctrl(0.1);
+ctrl_gt v_set = float2ctrl(0.02);
 
 // enable motor running
 volatile fast_gt flag_enable_system = 0;
+volatile fast_gt flag_error = 0;
 
 // CTL initialize routine
 void ctl_init()
@@ -63,7 +64,7 @@ void ctl_init()
         // continuous pid handle
         &sinv_vlotage_pid,
         // PID parameters
-        0.8, 0.1, 0,
+        0.8/4, 0.1, 0,
         // controller frequency
         20e3);
 
@@ -91,7 +92,7 @@ void ctl_init()
         20e3);
 
     ctl_init_pr_controller(&sinv_pr_base, 0.0001, 1000, 50, 20e3);
-    ctl_init_qpr_controller(&sinv_qpr_base, 0.00000001, 500, 50, 5 ,20e3);
+    ctl_init_qpr_controller(&sinv_qpr_base, 0.00000001, 500/10, 50, 5 ,20e3);
     ctl_init_qpr_controller(&qpr_test, 0.01, 0.08, 50, 5, 20e3);
 
     ctl_init_ramp_gen_via_amp_freq(&rg, 20e3, 50, 1, 0);
@@ -195,6 +196,7 @@ void ctl_init()
     // if in simulation mode, enable system
 #if !defined SPECIFY_PC_ENVIRONMENT
     // stop here and wait for user start the motor controller
+		ctl_disable_output();
     while (flag_enable_system == 0)
     {
     }
@@ -280,6 +282,11 @@ void ctl_mainloop(void)
     //            flag_enable_adc_calibrator = 0;
     //    }
     //}
+		
+		if(sinv_ig.control_port.value>=2)
+		{
+			ctl_disable_output();
+		}
 
     return;
 }

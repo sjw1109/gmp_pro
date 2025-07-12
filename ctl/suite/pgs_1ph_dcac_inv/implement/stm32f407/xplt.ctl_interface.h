@@ -65,6 +65,9 @@ void ctl_input_callback(void)
     ctl_step_ptr_adc_channel(&sinv_ig);
     ctl_step_ptr_adc_channel(&sinv_uc);
     ctl_step_ptr_adc_channel(&sinv_udc);
+		
+		HAL_GPIO_TogglePin(Mz_CS_GPIO_Port, Mz_CS_Pin);
+
 }
 
 // Output Callback
@@ -86,6 +89,9 @@ void ctl_output_callback(void)
     // write to compare
     __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, ctl_calc_pwm_channel(&sinv_pwm_out[0], sinv_pwm_pu[0]));
     __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, ctl_calc_pwm_channel(&sinv_pwm_out[1], sinv_pwm_pu[1]));
+		
+		HAL_DAC_SetValue(&hdac, DAC_CHANNEL_2, DAC_ALIGN_12B_R, (ctl_mul(spll.phasor.dat[0], sinv_current_ref) + 1) * 3276/2);
+		HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, (sinv_ig.control_port.value + 1) * 3276/2);
 }
 
 // Enable Motor Controller
@@ -93,7 +99,21 @@ void ctl_output_callback(void)
 GMP_STATIC_INLINE
 void ctl_enable_output()
 {
+	ctl_clear_qpr_controller(&sinv_qpr_base);
+	ctl_clear_pr_controller(&sinv_pr_base);
+	ctl_clear_pid(&current_pid);
+	ctl_clear_pid(&voltage_pid);
+	ctl_clear_pid(&sinv_vlotage_pid);
+
     //        csp_sl_enable_output();
+	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
+	HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
+	HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
+	HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
+	
+	flag_error = 0;
 }
 
 // Disable Output
@@ -101,6 +121,21 @@ GMP_STATIC_INLINE
 void ctl_disable_output()
 {
     //        csp_sl_disable_output();
+//	__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 0);
+//	__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 0);
+//	__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, 0);
+
+	flag_error = 1;
+		
+	HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
+	HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_2);
+	HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_3);
+	HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_1);
+	HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_2);
+	HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_3);
+	
+	HAL_TIM_Base_Start_IT(&htim1);
+	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
 }
 
 #endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO

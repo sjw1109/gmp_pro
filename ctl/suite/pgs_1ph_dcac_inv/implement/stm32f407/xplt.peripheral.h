@@ -39,6 +39,8 @@ extern "C"
 	extern ADC_HandleTypeDef hadc1;
 	extern TIM_HandleTypeDef htim1;
 	extern TIM_HandleTypeDef htim3;
+	
+	extern DAC_HandleTypeDef hdac;
 
 //// ADC Sequence
 //enum ADC1_ITEMS
