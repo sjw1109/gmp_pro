@@ -19,6 +19,11 @@
 #define PC_ENV_MAX_ITERATION ((100000000))
 #endif
 
+// Connection Timeout
+#ifndef GMP_ASIO_UDP_LINK_TIMEOUT
+#define GMP_ASIO_UDP_LINK_TIMEOUT ((10000))
+#endif // GMP_ASIO_UDP_LINK_TIMEOUT
+
 // Controller tick per main loop tick
 // controller routine would be called when every N mainloop tick happened.
 #define GMP_PC_CONTROLLER_DIV_PER_MAINLOOP ((5))

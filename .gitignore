@@ -429,6 +429,18 @@ ctl/suite/**/*.dep
 ctl/suite/**/*.uvguix.*
 ctl/suite/**/MDK-ARM/**/*.htm
 
+# Disable all the STM32 CubeMX generated files, and compiled results
+ctl/training/**/Drivers
+ctl/training/**/*.crf
+ctl/training/**/*.o
+ctl/training/**/*.d
+ctl/training/**/*.lnp
+ctl/training/**/*.map
+ctl/training/**/*.dep
+ctl/training/**/*.uvguix.*
+ctl/training/**/MDK-ARM/**/*.htm
+
+
 # Disable generted GMP source file
 ctl/**/gmp_src/**
 ctl/**/include_paths.txt

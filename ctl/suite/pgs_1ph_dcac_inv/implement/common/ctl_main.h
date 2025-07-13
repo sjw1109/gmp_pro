@@ -145,7 +145,6 @@ extern "C"
 
 
 
-
 			// ADC sample is negative 
 			//modulate_target = ctl_step_qpr_controller(&sinv_qpr_base, ctl_mul(spll.phasor.dat[0], float2ctrl(v_set)) +
 			//	sinv_il.control_port.value);
@@ -153,6 +152,11 @@ extern "C"
 			// 
 	//		modulate_target = ctl_step_qpr_controller(&sinv_qpr_base, ctl_mul(spll.phasor.dat[0], float2ctrl(v_set)) + sinv_ig.control_port.value +
 	//                                sinv_uc.control_port.value + sinv_udc.control_port.value);
+
+		// modulate_target = ctl_step_pr_controller(&sinv_pr_base, ctl_mul(spll.phasor.dat[0], float2ctrl(0.05)) -
+		//                                                             sinv_il.control_port.value)+ctl_mul(float2ctrl(0.8),sinv_uc.control_port.value);
+		// gird connectted without dc voltage control
+
 
 			
 			// modulate_target = ctl_step_pr_controller(&sinv_pr_base, ctl_mul(spll.phasor.dat[0], float2ctrl(0.2)) -

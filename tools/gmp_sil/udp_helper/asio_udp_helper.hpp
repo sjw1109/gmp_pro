@@ -146,8 +146,11 @@ class asio_udp_helper
 #ifdef ASIO_PLAIN_TIMEOUT
             // Fixed timeout mode
             // somewhere in your headers to be used everywhere you need it
+            //typedef boost::asio::detail::socket_option::integer<SOL_SOCKET, SO_RCVTIMEO> rcv_timeout_option;
+            //recv_socket.set_option(rcv_timeout_option{2000});
+
             typedef boost::asio::detail::socket_option::integer<SOL_SOCKET, SO_RCVTIMEO> rcv_timeout_option;
-            recv_socket.set_option(rcv_timeout_option{2000});
+            recv_socket.set_option(rcv_timeout_option{GMP_ASIO_UDP_LINK_TIMEOUT});
 
 #else
 
