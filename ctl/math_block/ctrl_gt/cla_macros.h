@@ -71,6 +71,7 @@ float multiple_static_inline(float A, float B)
 
 // Type conversion function
 #define float2ctrl(x) ((float32_t)(x))
+#define ctrl2float(x) ((float32_t)(x))
 #define int2ctrl(x)   ((float32_t)(x))
 #define ctrl2int(x)   ((int)(x))
 #define ctrl_mod_1(x) ((float32_t)(((float32_t)(x)) - ((int32_t)(x))))
