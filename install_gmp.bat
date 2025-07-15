@@ -79,6 +79,12 @@ if defined ENV_VAR (
 
 echo Environment variable GMP_PRO_LOCATION has been set to: %SCRIPT_DIR%
 
+endlocal
+
+:: Start a new local environment
+setlocal enabledelayedexpansion
+
+
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 
