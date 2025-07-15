@@ -26,9 +26,9 @@ void ctl_init_pid(
     // controller frequency
     parameter_gt fs)
 {
-    hpid->kp = kp;
-    hpid->ki = kp / (fs * Ti);
-    hpid->kd = kp * fs * Td;
+    hpid->kp = float2ctrl(kp);
+    hpid->ki = float2ctrl(kp / (fs * Ti));
+    hpid->kd = float2ctrl(kp * fs * Td);
 
     hpid->out_min = float2ctrl(-1.0f);
     hpid->out_max = float2ctrl(1.0f);
@@ -37,6 +37,50 @@ void ctl_init_pid(
     hpid->dn = 0;
     hpid->sn = 0;
 }
+
+// Init a series PID object
+void ctl_init_pid_ser(
+    // continuous pid handle
+    pid_regular_t *hpid,
+    // PID parameters
+    parameter_gt kp, parameter_gt Ti, parameter_gt Td,
+    // controller frequency
+    parameter_gt fs)
+{
+    hpid->kp = float2ctrl(kp);
+    hpid->ki = float2ctrl(kp / (fs * Ti));
+    hpid->kd = float2ctrl(kp * fs * Td);
+
+    hpid->out_min = float2ctrl(-1.0f);
+    hpid->out_max = float2ctrl(1.0f);
+
+    hpid->out = 0;
+    hpid->dn = 0;
+    hpid->sn = 0;
+}
+
+// init a parallel PID object
+void ctl_init_pid_par(
+    // continuous pid handle
+    pid_regular_t *hpid,
+    // PID parameters
+    parameter_gt kp, parameter_gt Ti, parameter_gt Td,
+    // controller frequency
+    parameter_gt fs)
+{
+    hpid->kp = float2ctrl(kp);
+    hpid->ki = float2ctrl(1.0f / (fs * Ti));
+    hpid->kd = float2ctrl(1.0f * fs * Td);
+
+    hpid->out_min = float2ctrl(-1.0f);
+    hpid->out_max = float2ctrl(1.0f);
+
+    hpid->out = 0;
+    hpid->dn = 0;
+    hpid->sn = 0;
+}
+
+
 
 //////////////////////////////////////////////////////////////////////////
 // Saturation

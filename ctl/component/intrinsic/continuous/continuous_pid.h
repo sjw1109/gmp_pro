@@ -91,6 +91,24 @@ void ctl_init_pid(
     // controller frequency
     parameter_gt fs);
 
+// init a Series PID
+void ctl_init_pid_ser(
+    // continuous pid handle
+    pid_regular_t *hpid,
+    // PID parameters
+    parameter_gt kp, parameter_gt Ti, parameter_gt Td,
+    // controller frequency
+    parameter_gt fs);
+
+// init a paralleling PID
+void ctl_init_pid_par(
+    // continuous pid handle
+    pid_regular_t *hpid,
+    // PID parameters
+    parameter_gt kp, parameter_gt Ti, parameter_gt Td,
+    // controller frequency
+    parameter_gt fs);
+
 GMP_STATIC_INLINE
 void ctl_set_pid_parameter(pid_regular_t *hpid, ctrl_gt kp, ctrl_gt ki, ctrl_gt kd)
 {
