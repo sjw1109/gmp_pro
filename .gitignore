@@ -480,6 +480,7 @@ slib/install_path/R2022b/**
 **/slprj/
 *.asv
 *.autosave
+*.bak
 
 # GMP pro zip file
 gmp_pro.zip

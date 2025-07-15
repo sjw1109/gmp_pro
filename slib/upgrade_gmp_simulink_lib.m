@@ -16,13 +16,23 @@ if(~isfile('simulink_lib_src/gmp_simulink_utilities_src.slx'))
 	return;
 end
 
-if(~isfile('simulink_lib_src/peripheral_utilities_src.slx'))
-	disp('Error: peripheral_utilities.slx Simulink model is missing!');
+if(~isfile('simulink_lib_src/gmp_sil_core_pack_src.slx'))
+	disp('Error: gmp_sil_core_pack_src.slx Simulink model is missing!');
 	return;
 end
 
-if(~isfile('simulink_lib_src/fp_utilities_src.slx'))
-	disp('Error: fp_utilities.slx Simulink model is missing!');
+if(~isfile('simulink_lib_src/gmp_peripheral_utilities_src.slx'))
+	disp('Error: gmp_peripheral_utilities.slx Simulink model is missing!');
+	return;
+end
+
+if(~isfile('simulink_lib_src/gmp_fp_utilities_src.slx'))
+	disp('Error: gmp_fp_utilities.slx Simulink model is missing!');
+	return;
+end
+
+if(~isfile('simulink_lib_src/gmp_std_model_pck_src.slx'))
+	disp('Error: gmp_std_model_pck_src.slx Simulink model is missing!');
 	return;
 end
 
@@ -51,17 +61,21 @@ warning('off','all')
 
 close_system('gmp_simulink_utilities.slx', 0);
 close_system('gmp_simulink_utilities_src.slx', 0);
-close_system('fp_utilities.slx', 0);
-close_system('fp_utilities_src.slx', 0);
-close_system('peripheral_utilities.slx', 0);
-close_system('peripheral_utilities_src.slx', 0);
+close_system('gmp_fp_utilities.slx', 0);
+close_system('gmp_fp_utilities_src.slx', 0);
+close_system('gmp_peripheral_utilities.slx', 0);
+close_system('gmp_peripheral_utilities_src.slx', 0);
 close_system('gmp_sil_core_pack.slx', 0);
 close_system('gmp_sil_core_pack_src.slx', 0);
+close_system('gmp_std_model_pck.slx', 0);
+close_system('gmp_std_model_pck_src.slx', 0);
+
 
 generate_single_slx_lib('gmp_simulink_utilities');
-generate_single_slx_lib('fp_utilities');
-generate_single_slx_lib('peripheral_utilities');
+generate_single_slx_lib('gmp_fp_utilities');
+generate_single_slx_lib('gmp_peripheral_utilities');
 generate_single_slx_lib('gmp_sil_core_pack');
+generate_single_slx_lib('gmp_std_model_pck');
 
 % load_system('simulink_lib_src/gmp_simulink_utilities_src.slx');
 % target_file = append('install_path/',matlab_version.Release,'/gmp_simulink_utilities.slx');
