@@ -317,6 +317,26 @@ void ctl_init_2p2z(
 
 #include <ctl/component/intrinsic/discrete/proportional_resonant.h>
 
+void ctl_init_resonant_controller(
+    // handle of PR controller
+    resonant_ctrl_t* pr,
+    // gain of resonant frequency
+    parameter_gt kr,
+    // resonant frequency, unit Hz
+    parameter_gt freq_resonant,
+    // controller frequency
+    parameter_gt fs)
+{
+    // resonant frequency, unit rad/s
+    parameter_gt omega_r = 2 * PI * freq_resonant;
+
+    pr->krg = float2ctrl(kr * (4 * fs) / (4 * fs * fs + omega_r * omega_r));
+    pr->kr = float2ctrl(2 * (4 * fs * fs - omega_r * omega_r) / (4 * fs * fs + omega_r * omega_r));
+
+    // clear temp variables
+    ctl_clear_resonant_controller(pr);
+}
+
 void ctl_init_pr_controller(
     // handle of PR controller
     pr_ctrl_t *pr,
@@ -338,6 +358,35 @@ void ctl_init_pr_controller(
 
     // clear temp variables
     ctl_clear_pr_controller(pr);
+}
+
+void ctl_init_qr_controller(
+    // handle of QR controller
+    qr_ctrl_t* qr,
+    // gain of resonant frequency
+    parameter_gt kr,
+    // resonant frequency, unit Hz
+    parameter_gt freq_resonant,
+    // cut frequency, unit Hz
+    parameter_gt freq_cut,
+    // controller frequency
+    parameter_gt fs)
+{
+    ctl_clear_qr_controller(qr);
+
+    parameter_gt omega_r_sqr = 4.0f * PI * PI * freq_resonant * freq_resonant;
+    parameter_gt omega_c_fs = 4.0f * 2.0f * PI * freq_cut * fs;
+
+    parameter_gt kr_suffix = 4.0f * freq_cut * fs / (4.0f * fs * fs + omega_c_fs + omega_r_sqr);
+
+    parameter_gt b1 = 2.0f * (4.0f * fs * fs - omega_r_sqr) / (4.0f * fs * fs + omega_c_fs + omega_r_sqr);
+    parameter_gt b2 = (4.0f * fs * fs - omega_c_fs + omega_r_sqr) / (4.0f * fs * fs + omega_c_fs + omega_r_sqr);
+
+    // Discrete parameters
+    qr->a0 = float2ctrl(kr_suffix);
+    qr->b1 = float2ctrl(b1);
+    qr->b2 = float2ctrl(b2);
+    qr->kr = float2ctrl(kr);
 }
 
 void ctl_init_qpr_controller(

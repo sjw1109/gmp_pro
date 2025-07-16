@@ -170,7 +170,6 @@ extern "C"
 			// gird conencted without dc voltage control
 
 			// gird conencted with dc voltage control
-			// ��ѹ�������Ϊ���������ķ�ֵ��������������λͨ�����໷+�������ؽ�ȷ����
 			//sinv_current_ref = -ctl_step_pid_ser(&sinv_vlotage_pid, float2ctrl(0.8) - sinv_udc.control_port.value);
 			//modulate_target = ctl_step_qpr_controller(&sinv_qpr_base, ctl_mul(spll.phasor.dat[0], sinv_current_ref) -
 			//                                                              sinv_il.control_port.value);
