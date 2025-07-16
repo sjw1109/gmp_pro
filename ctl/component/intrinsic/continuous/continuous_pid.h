@@ -36,8 +36,12 @@ typedef struct _tag_pid_regular_inter_t
     ctrl_gt out_max;
 
     // intermediate variables
-    ctrl_gt sn; // sum-up of N
-    ctrl_gt dn; // difference of N
+
+    // sum-up of N
+    ctrl_gt sn;
+
+    // difference of N
+    ctrl_gt dn;
 } pid_regular_t, ctl_pid_t;
 
 // paralleling PID model
@@ -135,6 +139,122 @@ GMP_STATIC_INLINE
 ctrl_gt ctl_get_pid_output(pid_regular_t *hpid)
 {
     return hpid->out;
+}
+
+// PID controller with anti-integral windup
+typedef struct _tag_pid_anti_windup
+{
+    // output
+    ctrl_gt out;
+
+    // parameters
+    ctrl_gt kp;
+    ctrl_gt ki;
+    ctrl_gt kd;
+
+    ctrl_gt out_min;
+    ctrl_gt out_max;
+
+    // Back-Calculation parameters
+    ctrl_gt kc;
+
+    // intermediate variables
+    // sum-up of N
+    ctrl_gt sn;
+
+    // difference of N
+    ctrl_gt dn;
+
+    // output variable without saturation
+    ctrl_gt out_without_sat;
+} pid_aw_t;
+
+// init a Series PID
+void ctl_init_pid_aw_ser(
+    // continuous pid handle
+    pid_aw_t *hpid,
+    // PID parameters
+    parameter_gt kp, parameter_gt Ti, parameter_gt Td,
+    // controller frequency
+    parameter_gt fs);
+
+// init a parallel PID
+void ctl_init_pid_aw_par(
+    // continuous pid handle
+    pid_aw_t *hpid,
+    // PID parameters
+    parameter_gt kp, parameter_gt Ti, parameter_gt Td,
+    // controller frequency
+    parameter_gt fs);
+
+// paralleling PID model
+GMP_STATIC_INLINE
+ctrl_gt ctl_step_pid_aw_par(pid_aw_t *hpid, ctrl_gt input)
+{
+    // I sum up
+    // Bug fix: hpid->sn may overflow
+    hpid->sn = ctl_sat(hpid->sn + ctl_mul(input, (hpid->ki)), hpid->out_max, hpid->out_min);
+
+    // output = P item + I item  + D item
+    hpid->out_without_sat = ctl_mul(input, hpid->kp) + hpid->sn + ctl_mul((input - hpid->dn), hpid->kd);
+
+    // output saturation
+    hpid->out = ctl_sat(hpid->out_without_sat, hpid->out_max, hpid->out_min);
+
+    // back calculation for integrate
+    if (hpid->out_without_sat > hpid->out_max)
+        hpid->sn = hpid->sn - ctl_mul(hpid->out_without_sat - hpid->out, hpid->kc);
+
+    // record input param
+    hpid->dn = input;
+
+    return hpid->out;
+}
+
+// Series PID model
+GMP_STATIC_INLINE
+ctrl_gt ctl_step_pid_aw_ser(pid_aw_t *hpid, ctrl_gt input)
+{
+    // Kp gain firstly, out = P item
+    hpid->out_without_sat = ctl_mul(input, hpid->kp);
+
+    // I sum up
+    // Bug fix: hpid->sn may overflow
+    hpid->sn = ctl_sat(hpid->sn + ctl_mul(hpid->out_without_sat, hpid->ki), hpid->out_max, hpid->out_min);
+
+    // output += I item + D item
+    hpid->out_without_sat += hpid->sn + ctl_mul((input - hpid->dn), hpid->kd);
+
+    // output saturation
+    hpid->out = ctl_sat(hpid->out, hpid->out_max, hpid->out_min);
+
+    // back calculation for integrate
+    if (hpid->out_without_sat > hpid->out_max)
+        hpid->sn = hpid->sn - ctl_mul(hpid->out_without_sat - hpid->out, hpid->kc);
+
+    // record input param
+    hpid->dn = input;
+
+    return hpid->out;
+}
+
+GMP_STATIC_INLINE
+void ctl_clear_pid_aw(pid_aw_t *hpid)
+{
+    hpid->dn = 0;
+    hpid->sn = 0;
+}
+
+GMP_STATIC_INLINE
+ctrl_gt ctl_get_pid_aw_output(pid_aw_t *hpid)
+{
+    return hpid->out;
+}
+
+GMP_STATIC_INLINE
+void ctl_set_pid_aw_back_gain(pid_aw_t *hpid, ctrl_gt back_gain)
+{
+    hpid->kc = back_gain;
 }
 
 #ifdef __cplusplus
