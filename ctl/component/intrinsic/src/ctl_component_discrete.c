@@ -319,7 +319,7 @@ void ctl_init_2p2z(
 
 void ctl_init_resonant_controller(
     // handle of PR controller
-    resonant_ctrl_t* pr,
+    resonant_ctrl_t* r,
     // gain of resonant frequency
     parameter_gt kr,
     // resonant frequency, unit Hz
@@ -330,11 +330,11 @@ void ctl_init_resonant_controller(
     // resonant frequency, unit rad/s
     parameter_gt omega_r = 2 * PI * freq_resonant;
 
-    pr->krg = float2ctrl(kr * (4 * fs) / (4 * fs * fs + omega_r * omega_r));
-    pr->kr = float2ctrl(2 * (4 * fs * fs - omega_r * omega_r) / (4 * fs * fs + omega_r * omega_r));
+    r->krg = float2ctrl(kr * (4 * fs) / (4 * fs * fs + omega_r * omega_r));
+    r->kr = float2ctrl(2 * (4 * fs * fs - omega_r * omega_r) / (4 * fs * fs + omega_r * omega_r));
 
     // clear temp variables
-    ctl_clear_resonant_controller(pr);
+    ctl_clear_resonant_controller(r);
 }
 
 void ctl_init_pr_controller(
