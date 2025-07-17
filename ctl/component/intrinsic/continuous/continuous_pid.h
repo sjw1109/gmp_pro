@@ -35,6 +35,9 @@ typedef struct _tag_pid_regular_inter_t
     ctrl_gt out_min;
     ctrl_gt out_max;
 
+    ctrl_gt integral_min;
+    ctrl_gt integral_max;
+
     // intermediate variables
 
     // sum-up of N
@@ -50,7 +53,7 @@ ctrl_gt ctl_step_pid_par(pid_regular_t *hpid, ctrl_gt input)
 {
     // I sum up
     // Bug fix: hpid->sn may overflow
-    hpid->sn = ctl_sat(hpid->sn + ctl_mul(input, (hpid->ki)), hpid->out_max, hpid->out_min);
+    hpid->sn = ctl_sat(hpid->sn + ctl_mul(input, (hpid->ki)), hpid->integral_max, hpid->integral_min);
 
     // output = P item + I item  + D item
     hpid->out = ctl_mul(input, hpid->kp) + hpid->sn + ctl_mul((input - hpid->dn), hpid->kd);
@@ -73,7 +76,7 @@ ctrl_gt ctl_step_pid_ser(pid_regular_t *hpid, ctrl_gt input)
 
     // I sum up
     // Bug fix: hpid->sn may overflow
-    hpid->sn = ctl_sat(hpid->sn + ctl_mul(hpid->out, hpid->ki), hpid->out_max, hpid->out_min);
+    hpid->sn = ctl_sat(hpid->sn + ctl_mul(hpid->out, hpid->ki), hpid->integral_max, hpid->integral_min);
 
     // output += I item + D item
     hpid->out += hpid->sn + ctl_mul((input - hpid->dn), hpid->kd);
@@ -193,7 +196,7 @@ ctrl_gt ctl_step_pid_aw_par(pid_aw_t *hpid, ctrl_gt input)
 {
     // I sum up
     // Bug fix: hpid->sn may overflow
-    hpid->sn = ctl_sat(hpid->sn + ctl_mul(input, (hpid->ki)), hpid->out_max, hpid->out_min);
+    // hpid->sn = hpid->sn + ctl_mul(input, (hpid->ki));
 
     // output = P item + I item  + D item
     hpid->out_without_sat = ctl_mul(input, hpid->kp) + hpid->sn + ctl_mul((input - hpid->dn), hpid->kd);
@@ -201,9 +204,8 @@ ctrl_gt ctl_step_pid_aw_par(pid_aw_t *hpid, ctrl_gt input)
     // output saturation
     hpid->out = ctl_sat(hpid->out_without_sat, hpid->out_max, hpid->out_min);
 
-    // back calculation for integrate
-    if (hpid->out_without_sat > hpid->out_max)
-        hpid->sn = hpid->sn - ctl_mul(hpid->out_without_sat - hpid->out, hpid->kc);
+    // back calculation and sn update for integrate
+    hpid->sn = hpid->sn + ctl_mul(input, (hpid->ki)) - ctl_mul(hpid->out_without_sat - hpid->out, hpid->kc);
 
     // record input param
     hpid->dn = input;
@@ -216,21 +218,21 @@ GMP_STATIC_INLINE
 ctrl_gt ctl_step_pid_aw_ser(pid_aw_t *hpid, ctrl_gt input)
 {
     // Kp gain firstly, out = P item
-    hpid->out_without_sat = ctl_mul(input, hpid->kp);
+    //hpid->out_without_sat = ctl_mul(input, hpid->kp);
 
     // I sum up
     // Bug fix: hpid->sn may overflow
-    hpid->sn = ctl_sat(hpid->sn + ctl_mul(hpid->out_without_sat, hpid->ki), hpid->out_max, hpid->out_min);
+    // hpid->sn = hpid->sn + ctl_mul(hpid->out_without_sat, hpid->ki);
 
-    // output += I item + D item
-    hpid->out_without_sat += hpid->sn + ctl_mul((input - hpid->dn), hpid->kd);
+    // output = P item + I item + D item
+    hpid->out_without_sat = ctl_mul(input + hpid->sn + ctl_mul((input - hpid->dn), hpid->kd), hpid->kp);
 
     // output saturation
-    hpid->out = ctl_sat(hpid->out, hpid->out_max, hpid->out_min);
+    hpid->out = ctl_sat(hpid->out_without_sat, hpid->out_max, hpid->out_min);
 
     // back calculation for integrate
-    if (hpid->out_without_sat > hpid->out_max)
-        hpid->sn = hpid->sn - ctl_mul(hpid->out_without_sat - hpid->out, hpid->kc);
+    hpid->sn =
+        hpid->sn + ctl_mul(ctl_mul(input, hpid->ki), hpid->kp) - ctl_mul(hpid->out_without_sat - hpid->out, hpid->kc);
 
     // record input param
     hpid->dn = input;

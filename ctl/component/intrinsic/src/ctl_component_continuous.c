@@ -33,6 +33,9 @@ void ctl_init_pid(
     hpid->out_min = float2ctrl(-1.0f);
     hpid->out_max = float2ctrl(1.0f);
 
+    hpid->integral_min = float2ctrl(-0.8f);
+    hpid->integral_max = float2ctrl(0.8f);
+
     hpid->out = 0;
     hpid->dn = 0;
     hpid->sn = 0;
@@ -54,6 +57,9 @@ void ctl_init_pid_ser(
     hpid->out_min = float2ctrl(-1.0f);
     hpid->out_max = float2ctrl(1.0f);
 
+    hpid->integral_min = float2ctrl(-0.8f);
+    hpid->integral_max = float2ctrl(0.8f);
+
     hpid->out = 0;
     hpid->dn = 0;
     hpid->sn = 0;
@@ -74,6 +80,9 @@ void ctl_init_pid_par(
 
     hpid->out_min = float2ctrl(-1.0f);
     hpid->out_max = float2ctrl(1.0f);
+
+    hpid->integral_min = float2ctrl(-0.8f);
+    hpid->integral_max = float2ctrl(0.8f);
 
     hpid->out = 0;
     hpid->dn = 0;
