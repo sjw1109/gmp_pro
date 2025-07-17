@@ -232,7 +232,7 @@ ctrl_gt ctl_step_pid_aw_ser(pid_aw_t *hpid, ctrl_gt input)
 
     // back calculation for integrate
     hpid->sn =
-        hpid->sn + ctl_mul(ctl_mul(input, hpid->ki), hpid->kp) - ctl_mul(hpid->out_without_sat - hpid->out, hpid->kc);
+        hpid->sn + ctl_mul(input, hpid->ki) - ctl_mul(hpid->out_without_sat - hpid->out, hpid->kc);
 
     // record input param
     hpid->dn = input;
