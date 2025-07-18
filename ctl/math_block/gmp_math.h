@@ -154,6 +154,9 @@ typedef GMP_PORT_CTRL_T ctrl_gt;
 typedef GMP_PORT_PARAMETER_T parameter_gt;
 
 //////////////////////////////////////////////////////////////////////////
+// patch for ctrl_gt
+#include <ctl/math_block/ctrl_gt/ctrl_gt_patch.h>
+ 
 // Extension Types
 #include <ctl/math_block/vector_lite/vector2.h>
 #include <ctl/math_block/vector_lite/vector3.h>
