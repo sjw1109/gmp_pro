@@ -48,6 +48,12 @@ enum ALPHA_BETA_ENUM
     phase_beta = 1
 };
 
+enum PHASOR_ENUM
+{
+    phasor_sin = 0,
+    phasor_cos = 1
+};
+
 // phasor
 // dat[0]: sin
 // dat[1]: cos
@@ -113,8 +119,8 @@ void ctl_ct_clark_2ph(ctl_vector3_t *ab0, GMP_CTL_OUTPUT_TAG ctl_vector3_t *ab)
 {
     ctrl_gt k_alpha = GMP_CONST_AB02AB_ALPHA;
 
-    //tex:
-    //  $$i_\alpha = i_a $$
+    // tex:
+    //   $$i_\alpha = i_a $$
     ab->dat[0] = ab0->dat[0];
     // tex:
     //  $$i_\beta = 2/\sqrt{3}\times (i_a/2 + i_b) $$
@@ -154,7 +160,6 @@ void ctl_ct_park2(ctl_vector2_t *ab, ctl_vector2_t *phasor, GMP_CTL_OUTPUT_TAG c
     dq0->dat[1] = -ctl_mul(ab->dat[0], phasor->dat[0]) + ctl_mul(ab->dat[1], phasor->dat[1]);
 }
 
-
 // ipark coordinate axes transform
 // DQ to alpha_beta
 GMP_STATIC_INLINE
@@ -182,7 +187,7 @@ void ctl_ct_svpwm_calc(ctl_vector3_t *ab0, GMP_CTL_OUTPUT_TAG ctl_vector3_t *Tab
     ctrl_gt Ubeta_tmp = ctl_mul(ab0->dat[phase_beta], GMP_CONST_SQRT_3_OVER_2);
 
     // tex: $$
-    //          U_a = U_\alpha, \\
+    //           U_a = U_\alpha, \\
     //U_b = -U_\alpha /2 + \sqrt{3}/2\cdot U_\beta, \\
     //U_c = -U_\alpha /2 - \sqrt{3}/2\cdot U_\beta,
     //$$

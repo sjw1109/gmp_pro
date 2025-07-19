@@ -90,6 +90,7 @@ ctrl_gt ctl_step_pid_ser(pid_regular_t *hpid, ctrl_gt input)
     return hpid->out;
 }
 
+// paralleling PID model
 void ctl_init_pid(
     // continuous pid handle
     pid_regular_t *hpid,
