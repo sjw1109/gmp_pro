@@ -71,6 +71,12 @@ void ctl_set_sl_slope(ctl_slope_lim_t *obj, ctrl_gt slope_min, ctrl_gt slope_max
 }
 
 GMP_STATIC_INLINE
+void ctl_set_slope_limit_current(ctl_slope_lim_t *obj, ctrl_gt current)
+{
+    obj->out = current;
+}
+
+GMP_STATIC_INLINE
 void ctl_clear_limit_slope(ctl_slope_lim_t *obj)
 {
     obj->out = 0;
