@@ -32,7 +32,6 @@ float multiple_static_inline(float A, float B)
 #define int2ctrl(x)   ((float)(x))
 #define ctrl2int(x)   ((int)(x))
 #define ctrl_mod_1(x) ((float)(((float)(x)) - ((int32_t)(x))))
-#define ctl_mod_1(x)  ctrl_mod_1(x)
 
 // Calculation
 #define pwm_mul(A, B)        ((pwm_gt)((((float)(A)) * ((float)(B)))))
