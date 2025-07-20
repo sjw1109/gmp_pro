@@ -873,7 +873,8 @@ static void mdlStart(SimStruct *S)
     sprintf(msg, "\r\n%s: Network Script is generated.\r\n", DRIVER);
     ssPrintf(msg);
 
-    std::fstream network_json_file("network.json", std::ios::in | std::ios::out | std::ios::binary);
+    // BUG FIX: add std::ios::trunc flag to clear the whole file.
+    std::fstream network_json_file("network.json", std::ios::in | std::ios::out | std::ios::binary | std::ios::trunc);
     // network_json_file.clear();
 
     if (!network_json_file.is_open())
