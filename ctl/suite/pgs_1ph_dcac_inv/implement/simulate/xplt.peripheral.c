@@ -32,7 +32,7 @@ ptr_adc_channel_t sinv_ig;
 ptr_adc_channel_t sinv_uc;
 ptr_adc_channel_t sinv_udc;
 
-qpr_ctrl_t qpr_test;
+//qpr_ctrl_t qpr_test;
 
 //////////////////////////////////////////////////////////////////////////
 // peripheral setup function

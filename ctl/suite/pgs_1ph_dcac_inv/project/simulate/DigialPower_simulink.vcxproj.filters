@@ -90,10 +90,16 @@
     <ClCompile Include="..\..\src\dcac_inv_ctrl.c">
       <Filter>digital_power_bare</Filter>
     </ClCompile>
-    <ClCompile Include="gmp_src\combo_basic.c">
+    <ClCompile Include="gmp_src\ctl_dp_basic.c">
       <Filter>GMP Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gmp_src\single_phase.c">
+    <ClCompile Include="gmp_src\ctl_dp_single_phase.c">
+      <Filter>GMP Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gmp_src\ctl_dp_three_phase.c">
+      <Filter>GMP Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gmp_src\ctl_dp_topology_sinv.c">
       <Filter>GMP Source Files</Filter>
     </ClCompile>
   </ItemGroup>

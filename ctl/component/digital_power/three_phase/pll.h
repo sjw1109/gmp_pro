@@ -10,7 +10,7 @@ extern "C"
 
 #include <ctl/component/intrinsic/continuous/continuous_pid.h>
 
-typedef struct _tag_pll
+typedef struct _tag_pll_3ph
 {
     //
     // input variables
@@ -56,7 +56,7 @@ typedef struct _tag_pll
 
 } three_phase_pll_t;
 
-void ctl_init_pll(
+void ctl_init_pll_3ph(
     // controller object
     three_phase_pll_t *pll,
     // per unit frequency base, Hz
@@ -67,7 +67,7 @@ void ctl_init_pll(
     parameter_gt f_ctrl);
 
 GMP_STATIC_INLINE
-void ctl_clear_pll(
+void ctl_clear_pll_3ph(
     // controller object
     three_phase_pll_t *pll)
 {
@@ -81,11 +81,11 @@ void ctl_clear_pll(
 
     ctl_set_phasor_via_angle(pll->theta, &pll->phasor);
 
-    ctl_clear_pid(&smo->pid_pll);
+    ctl_clear_pid(&pll->pid_pll);
 }
 
 GMP_STATIC_INLINE
-ctrl_gt ctl_step_pll(
+ctrl_gt ctl_step_pll_3ph(
     // controller object
     three_phase_pll_t *pll,
     // input alpha & beta axis

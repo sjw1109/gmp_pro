@@ -124,11 +124,11 @@ extern "C"
 			//	// input AC value
 			//	ctl_sin(ctl_step_ramp_gen(&rg)));
 
-			 ctl_step_single_phase_pll(
-					 // handle of Single phase PLL object
-					 &spll,
-					 // input AC value
-					 sinv_uc.control_port.value);
+			 //ctl_step_single_phase_pll(
+				//	 // handle of Single phase PLL object
+				//	 &spll,
+				//	 // input AC value
+				//	 sinv_uc.control_port.value);
 
 			// Voltage Openloop
 			//modulate_target = ctl_mul(spll.phasor.dat[phase_alpha], v_set);
@@ -138,10 +138,10 @@ extern "C"
 //			modulate_target = ctl_step_qpr_controller(&sinv_qpr_base, ctl_mul(spll.phasor.dat[0], float2ctrl(v_set)) +
 //				sinv_ig.control_port.value);
 			
-			// DC Voltage Closeloop
-			sinv_current_ref = ctl_step_pid_ser(&sinv_vlotage_pid, float2ctrl(0.42) - sinv_udc.control_port.value);
-			modulate_target = ctl_step_qpr_controller(&sinv_qpr_base, ctl_mul(spll.phasor.dat[0], sinv_current_ref) +
-				sinv_ig.control_port.value);	
+			//// DC Voltage Closeloop
+			//sinv_current_ref = ctl_step_pid_ser(&sinv_vlotage_pid, float2ctrl(0.42) - sinv_udc.control_port.value);
+			//modulate_target = ctl_step_qpr_controller(&sinv_qpr_base, ctl_mul(spll.phasor.dat[0], sinv_current_ref) +
+			//	sinv_ig.control_port.value);	
 
 
 
@@ -175,9 +175,9 @@ extern "C"
 			//                                                              sinv_il.control_port.value);
 
 			//
-			// Unipolar SPWM 1
-			sinv_pwm_pu[0] = ctl_div2(-modulate_target + float2ctrl(1));
-			sinv_pwm_pu[1] = ctl_div2(modulate_target + float2ctrl(1));
+			//// Unipolar SPWM 1
+			//sinv_pwm_pu[0] = ctl_div2(-modulate_target + float2ctrl(1));
+			//sinv_pwm_pu[1] = ctl_div2(modulate_target + float2ctrl(1));
 
 			// Unipolar SPWM 2
 				//sinv_pwm_pu[0] = -modulate_target;

@@ -160,13 +160,16 @@
     <ClCompile Include="..\..\implement\simulate\xplt.peripheral.c" />
     <ClCompile Include="..\..\src\dcac_inv_ctrl.c" />
     <ClCompile Include="DigialPower_simulink.cpp" />
-    <ClCompile Include="gmp_src\combo_basic.c" />
     <ClCompile Include="gmp_src\ctl_component_advance.c" />
     <ClCompile Include="gmp_src\ctl_component_continuous.c" />
     <ClCompile Include="gmp_src\ctl_component_discrete.c" />
     <ClCompile Include="gmp_src\ctl_component_interface.c" />
     <ClCompile Include="gmp_src\ctl_component_lebesgue.c" />
     <ClCompile Include="gmp_src\ctl_component_protection.c" />
+    <ClCompile Include="gmp_src\ctl_dp_basic.c" />
+    <ClCompile Include="gmp_src\ctl_dp_single_phase.c" />
+    <ClCompile Include="gmp_src\ctl_dp_three_phase.c" />
+    <ClCompile Include="gmp_src\ctl_dp_topology_sinv.c" />
     <ClCompile Include="gmp_src\ctl_mc_basic.c" />
     <ClCompile Include="gmp_src\ctl_mc_consultant.c" />
     <ClCompile Include="gmp_src\ctl_mc_current_loop.c" />
@@ -178,7 +181,6 @@
     <ClCompile Include="gmp_src\gmp_mm_block_memory.c" />
     <ClCompile Include="gmp_src\gmp_std_error_code.c" />
     <ClCompile Include="gmp_src\gmp_std_port.c" />
-    <ClCompile Include="gmp_src\single_phase.c" />
     <ClCompile Include="gmp_src\windows_simulink_main.cpp" />
   </ItemGroup>
   <ItemGroup>

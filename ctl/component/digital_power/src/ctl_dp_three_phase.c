@@ -12,13 +12,11 @@
 
 #include <math.h>
 
-
-
 //////////////////////////////////////////////////////////////////////////
-// Single Phase PLL 
+// Single Phase PLL
 #include <ctl/component/digital_power/three_phase/pll.h>
 
-void ctl_init_pll(
+void ctl_init_pll_3ph(
     // controller object
     three_phase_pll_t *pll,
     // per unit frequency base, Hz
@@ -29,11 +27,11 @@ void ctl_init_pll(
     parameter_gt f_ctrl)
 {
     // init pll pid controller
-    ctl_init_pid(&pll->pid_pll, pid_kp, pid_Ti, pid_Td);
+    ctl_init_pid(&pll->pid_pll, pid_kp, pid_Ti, pid_Td, f_ctrl);
 
     // init parameters
     pll->freq_sf = float2ctrl(f_base / f_ctrl);
 
     // clear controller
-    ctl_clear_pll(&pll);
+    ctl_clear_pll_3ph(pll);
 }

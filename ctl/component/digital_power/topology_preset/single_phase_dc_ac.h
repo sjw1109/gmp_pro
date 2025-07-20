@@ -22,7 +22,7 @@ typedef enum _tag_single_phase_name
 // #define CTL_SINV_CTRL_UNIPOLAR_MODULATION
 
 // DC/AC Converter with LC filter
-typedef struct _tag_sinv_type
+typedef struct _tag_sinv_ctrl_type
 {
     //
     // input port
@@ -79,6 +79,9 @@ typedef struct _tag_sinv_type
     // modulation target
     ctrl_gt modulation;
 
+    // target phase
+    ctrl_gt target_phase;
+
     //
     // Controller object
     //
@@ -102,16 +105,16 @@ typedef struct _tag_sinv_type
     qpr_ctrl_t sinv_qpr_base;
 
     // QR controller for current 3th harmonic
-    qpr_ctrl_t sinv_qr_3;
+    qr_ctrl_t sinv_qr_3;
 
     // QR controller for current 5th harmonic
-    qpr_ctrl_t sinv_qr_5;
+    qr_ctrl_t sinv_qr_5;
 
     // QR controller for current 7th harmonic
-    qpr_ctrl_t sinv_qr_7;
+    qr_ctrl_t sinv_qr_7;
 
     // PID controller for voltage
-    pid_regular_t vlotage_pid;
+    pid_regular_t voltage_pid;
 
     //
     // flag stack
@@ -142,10 +145,10 @@ typedef struct _tag_sinv_type
     // enable single phase PLL
     fast_gt flag_enable_spll;
 
-} sinv_t;
+} sinv_ctrl_t;
 
 GMP_STATIC_INLINE
-void ctl_clear_sinv(sinv_t *sinv)
+void ctl_clear_sinv(sinv_ctrl_t *sinv)
 {
     ctl_clear_pid(&sinv->voltage_pid);
 
@@ -156,16 +159,16 @@ void ctl_clear_sinv(sinv_t *sinv)
 }
 
 GMP_STATIC_INLINE
-void ctl_clear_sinv_with_pll(sinv_t *sinv)
+void ctl_clear_sinv_with_pll(sinv_ctrl_t *sinv)
 {
     ctl_clear_sinv(sinv);
     ctl_clear_single_phase_pll(&sinv->spll);
 }
 
 GMP_STATIC_INLINE
-ctrl_gt ctl_step_sinv(sinv_t *sinv)
+ctrl_gt ctl_step_sinv(sinv_ctrl_t *sinv)
 {
-    ctrl_gt target_phase;
+    //ctrl_gt target_phase;
 
     // Filter for ADC input channel
     ctl_step_lowpass_filter(&sinv->lpf_idc, sinv->adc_idc->value);
@@ -199,15 +202,15 @@ ctrl_gt ctl_step_sinv(sinv_t *sinv)
         // Select ramp generator as angle source
         if (sinv->flag_angle_freerun)
         {
-            target_phase = ctl_mul(ctl_sin(ctl_get_ramp_gen_output(&sinv->rg)), sinv->pf_set) +
+            sinv->target_phase = ctl_mul(ctl_sin(ctl_get_ramp_gen_output(&sinv->rg)), sinv->pf_set) +
                            ctl_mul(ctl_cos(ctl_get_ramp_gen_output(&sinv->rg)),
                                    ctl_sqrt(float2ctrl(1) - ctl_mul(sinv->pf_set, sinv->pf_set)));
         }
         // Select SPLL as angle source
         else
         {
-            target_phase = ctl_mul(sinv->spll.phasor.dat[phasor_sin], sinv->pf_set) +
-                           ctl_mul(sinv->flag_enable_spll.phasor[phasor_cos],
+            sinv->target_phase = ctl_mul(sinv->spll.phasor.dat[phasor_sin], sinv->pf_set) +
+                           ctl_mul(sinv->spll.phasor.dat[phasor_cos],
                                    ctl_sqrt(float2ctrl(1) - ctl_mul(sinv->pf_set, sinv->pf_set)));
         }
 
@@ -218,7 +221,7 @@ ctrl_gt ctl_step_sinv(sinv_t *sinv)
             if (sinv->flag_rectifier_mode)
             {
                 sinv->ig_set =
-                    -ctl_step_pid_ser(&sinv->vlotage_pid, sinv->v_set - ctl_get_lowpass_filter_result(&sinv->lpf_udc));
+                    -ctl_step_pid_ser(&sinv->voltage_pid, sinv->v_set - ctl_get_lowpass_filter_result(&sinv->lpf_udc));
             }
             // Converter DC -> AC mode
             else
@@ -234,7 +237,7 @@ ctrl_gt ctl_step_sinv(sinv_t *sinv)
         // Current Loop
         if (sinv->flag_enable_current_ctrl)
         {
-            sinv->ig_ref = ctl_mul(sinv->phasor.dat[phasor_sin], sinv->ig_set);
+            sinv->ig_ref = ctl_mul(sinv->target_phase, sinv->ig_set);
 
             // enable current loop
             sinv->modulation = ctl_step_qpr_controller(&sinv->sinv_qpr_base,
@@ -254,7 +257,7 @@ ctrl_gt ctl_step_sinv(sinv_t *sinv)
         }
         else
         {
-            sinv->ig_ref = ctl_mul(sinv->phasor.dat[phasor_sin], sinv->ig_set);
+            sinv->ig_ref = ctl_mul(sinv->spll.phasor.dat[phasor_sin], sinv->ig_set);
             sinv->modulation = sinv->ig_ref;
         }
 
@@ -282,7 +285,7 @@ ctrl_gt ctl_step_sinv(sinv_t *sinv)
 
 // VOLTAGE OPEN LOOP
 GMP_STATIC_INLINE
-void ctl_set_sinv_openloop_inverter(sinv_t *sinv)
+void ctl_set_sinv_openloop_inverter(sinv_ctrl_t *sinv)
 {
     // enable the whole controller
     sinv->flag_enable_system = 0;
@@ -314,7 +317,7 @@ void ctl_set_sinv_openloop_inverter(sinv_t *sinv)
 
 // Current controller is on for inverter
 GMP_STATIC_INLINE
-void ctl_set_sinv_current_closeloop_inverter(sinv_t *sinv)
+void ctl_set_sinv_current_closeloop_inverter(sinv_ctrl_t *sinv)
 {
     // enable the whole controller
     sinv->flag_enable_system = 0;
@@ -344,7 +347,7 @@ void ctl_set_sinv_current_closeloop_inverter(sinv_t *sinv)
 
 // Current controller is on for inverter
 GMP_STATIC_INLINE
-void ctl_set_sinv_voltage_closeloop_inverter(sinv_t *sinv)
+void ctl_set_sinv_voltage_closeloop_inverter(sinv_ctrl_t *sinv)
 {
     // enable the whole controller
     sinv->flag_enable_system = 0;
@@ -374,7 +377,7 @@ void ctl_set_sinv_voltage_closeloop_inverter(sinv_t *sinv)
 
 //
 GMP_STATIC_INLINE
-void ctl_set_sinv_voltage_closeloop_rectifier(sinv_t *sinv)
+void ctl_set_sinv_voltage_closeloop_rectifier(sinv_ctrl_t *sinv)
 {
     // enable the whole controller
     sinv->flag_enable_system = 0;
@@ -404,31 +407,31 @@ void ctl_set_sinv_voltage_closeloop_rectifier(sinv_t *sinv)
 
 // set target value
 GMP_STATIC_INLINE
-void ctl_set_sinv_current_ref(sinv_t *sinv, ctrl_gt i_target)
+void ctl_set_sinv_current_ref(sinv_ctrl_t *sinv, ctrl_gt i_target)
 {
     sinv->ig_set = i_target;
 }
 
 GMP_STATIC_INLINE
-void ctl_set_sinv_voltage_ref(sinv_t *sinv, ctrl_gt v_target)
+void ctl_set_sinv_voltage_ref(sinv_ctrl_t *sinv, ctrl_gt v_target)
 {
     sinv->v_set = v_target;
 }
 
 GMP_STATIC_INLINE
-void ctl_set_sinv_power_factor(sinv_t *sinv, ctrl_gt pf)
+void ctl_set_sinv_power_factor(sinv_ctrl_t *sinv, ctrl_gt pf)
 {
     sinv->pf_set = pf;
 }
 
 GMP_STATIC_INLINE
-void ctl_enable_sinv_ctrl(sinv_t *sinv)
+void ctl_enable_sinv_ctrl(sinv_ctrl_t *sinv)
 {
     sinv->flag_enable_system = 1;
 }
 
 GMP_STATIC_INLINE
-void ctl_disable_sinv_ctrl(sinv_t *sinv)
+void ctl_disable_sinv_ctrl(sinv_ctrl_t *sinv)
 {
     sinv->flag_enable_system = 0;
 }
@@ -469,11 +472,12 @@ typedef struct _tag_single_phase_converter_init_t
     parameter_gt f_ctrl;
 } sinv_init_t;
 
-void ctl_upgrade_sinv_param(sinv_t *sinv, sinv_init_t *init);
+void ctl_upgrade_sinv_param(sinv_ctrl_t *sinv, sinv_init_t *init);
 
-void ctl_init_sinv(sinv_t *sinv, sinv_init_t *init);
+void ctl_init_sinv_ctrl(sinv_ctrl_t *sinv, sinv_init_t *init);
 
-void ctl_attach_sinv_with_adc(sinv_t *sinv, adc_ift *udc, adc_ift *idc, adc_ift *il, adc_ift *ugrid, adc_ift *igrid);
+// This function will attach ADC control port to sinv controller
+void ctl_attach_sinv_with_adc(sinv_ctrl_t *sinv, adc_ift *udc, adc_ift *idc, adc_ift *il, adc_ift *ugrid, adc_ift *igrid);
 
 
 #endif // _FILE_SINGLE_PHASE_DC_AC_H_
