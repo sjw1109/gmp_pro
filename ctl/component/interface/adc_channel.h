@@ -12,6 +12,10 @@
 // #include <gmp_core.h>
 #include <ctl/component/interface/interface_base.h>
 
+// help user to calculate ADC bias and gain
+#include <ctl/component/interface/bias_model.h>
+#include <ctl/component/interface/gain_model.h>
+
 #ifndef _FILE_ADC_CHANNEL_H_
 #define _FILE_ADC_CHANNEL_H_
 

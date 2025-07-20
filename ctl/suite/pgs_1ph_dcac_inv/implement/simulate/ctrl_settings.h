@@ -11,41 +11,75 @@
 // BUILD_LEVEL_6:
 #define BUILD_LEVEL (1)
 
-// invoke motor parameters
-#include <ctl/component/motor_control/motor_preset/GBM2804H_100T.h>
-
-// invoke motor controller parameters
-#include <ctl/component/motor_control/controller_preset/TI_3PH_GAN_INV.h>
+#include <ctl/component/digital_power/hardware_preset/diansai_half_bridge_v1.h>
 
 // Controller Frequency
-#define CONTROLLER_FREQUENCY (10000)
+#define CONTROLLER_FREQUENCY (20e3)
 
 // PWM depth
-#define CONTROLLER_PWM_CMP_MAX (6000)
+#define CONTROLLER_PWM_CMP_MAX (4200 - 1)
 
-// Speed controller Division
-#define SPD_CONTROLLER_PWM_DIVISION (5)
+// Voltage per unit base value, 100 V
+#define CTRL_VOLTAGE_BASE (100.0)
 
-// Controller Base Voltage and Base Current
-#define MTR_CTRL_VOLTAGE_BASE ((MOTOR_PARAM_MAX_DC_VOLTAGE))
-#define MTR_CTRL_CURRENT_BASE ((MOTOR_PARAM_RATED_CURRENT))
+// Current Per unit base value, 10 A
+#define CTRL_CURRENT_BASE (10.0)
 
-// Current ADC module default per unit parameter
-#define MTR_CTRL_CURRENT_GAIN (ADC_FULLSCALE_CURRENT * 2 / MTR_CTRL_CURRENT_BASE)
-#define MTR_CTRL_CURRENT_BIAS (ADC_CURRENT_REFERENCE_VOLTAGE / ADC_REFERENCE)
+// Voltage reference, 2.5V
+#define CTRL_ADC_VOLTAGE_REF (2.5)
 
+// ADC resolution
+#define CTRL_ADC_RESOLUTION (12)
 
-// Voltage ADC module default per unit parameter
-#define MTR_CTRL_VOLTAGE_GAIN ((ADC_FULLSCALE_VOLTAGE / MTR_CTRL_VOLTAGE_BASE))
-#define MTR_CTRL_VOLTAGE_BIAS ((0.0))
+// Current BIAS 
+#define CTRL_CURRENT_ADC_BIAS (DSV1_CURRENT_SENSOR_BIAS)
 
-// Current Bandwidth
-#define MTR_CTRL_CURRENT_LOOP_BW ((50))
+// Current Gain
+#define CTRL_CURRENT_ADC_GAIN (DSV1_CURRENT_SENSOR_GAIN)
 
-// Speed Bandwidth
-#define MTR_CTRL_SPEED_LOOP_BW ((10))
+// Voltage BIAS
+#define CTRL_VOLTAGE_ADC_BIAS (DSV1_VOLTAGE_SENSOR_BIAS)
 
+// Voltage Gain
+#define CTRL_VOLTAGE_ADC_GAIN (DSV1_VOLTAGE_SENSOR_GAIN)
+ 
 
+//
+//// invoke motor parameters
+//#include <ctl/component/motor_control/motor_preset/GBM2804H_100T.h>
+//
+//// invoke motor controller parameters
+//#include <ctl/component/motor_control/controller_preset/TI_3PH_GAN_INV.h>
+//
+//// Controller Frequency
+//#define CONTROLLER_FREQUENCY (10000)
+//
+//// PWM depth
+//#define CONTROLLER_PWM_CMP_MAX (6000)
+//
+//// Speed controller Division
+//#define SPD_CONTROLLER_PWM_DIVISION (5)
+//
+//// Controller Base Voltage and Base Current
+//#define MTR_CTRL_VOLTAGE_BASE ((MOTOR_PARAM_MAX_DC_VOLTAGE))
+//#define MTR_CTRL_CURRENT_BASE ((MOTOR_PARAM_RATED_CURRENT))
+//
+//// Current ADC module default per unit parameter
+//#define MTR_CTRL_CURRENT_GAIN (ADC_FULLSCALE_CURRENT * 2 / MTR_CTRL_CURRENT_BASE)
+//#define MTR_CTRL_CURRENT_BIAS (ADC_CURRENT_REFERENCE_VOLTAGE / ADC_REFERENCE)
+//
+//
+//// Voltage ADC module default per unit parameter
+//#define MTR_CTRL_VOLTAGE_GAIN ((ADC_FULLSCALE_VOLTAGE / MTR_CTRL_VOLTAGE_BASE))
+//#define MTR_CTRL_VOLTAGE_BIAS ((0.0))
+//
+//// Current Bandwidth
+//#define MTR_CTRL_CURRENT_LOOP_BW ((50))
+//
+//// Speed Bandwidth
+//#define MTR_CTRL_SPEED_LOOP_BW ((10))
+//
+//
 
 // 
 // Controller Settings

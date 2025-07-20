@@ -15,7 +15,7 @@ parameter_gt ctl_bias_calc_via_Vref_Vbias(parameter_gt Vref, parameter_gt Vbias)
     return Vbias / Vref;
 }
 
-#ifndef __cplusplus
+#ifdef __cplusplus
 }
 #endif // __cplusplus
 

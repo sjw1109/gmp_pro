@@ -15,7 +15,7 @@ extern "C"
 // The voltage of the ADC is obtained from the two ends of a 3.3k resistor.
 // for now Vgain = (3.3 / 203.3) = 0.01623217
 GMP_STATIC_INLINE
-parameter_gt ctl_bias_calc_via_Vref_Vbias(
+parameter_gt ctl_gain_calc_via_gain(
     // ADC reference Voltage, unit V
     parameter_gt Vref, 
     // Gain from Voltage sensor, unit 1
@@ -26,7 +26,7 @@ parameter_gt ctl_bias_calc_via_Vref_Vbias(
     return Vref / Vgain / Vbase;
 }
 
-#ifndef __cplusplus
+#ifdef __cplusplus
 }
 #endif // __cplusplus
 

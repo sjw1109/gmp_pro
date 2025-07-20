@@ -12,6 +12,10 @@
 // #include <gmp_core.h>
 #include <ctl/component/interface/interface_base.h>
 
+// help user to calculate ADC bias and gain
+#include <ctl/component/interface/bias_model.h>
+#include <ctl/component/interface/gain_model.h>
+
 // brief:
 // This file implement a set of ADC post process module.
 // These set of module do not need to pass a adc data to the entity,
