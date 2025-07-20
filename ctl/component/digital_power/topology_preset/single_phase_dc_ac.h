@@ -438,6 +438,30 @@ void ctl_disable_sinv_ctrl(sinv_ctrl_t *sinv)
     sinv->flag_enable_system = 0;
 }
 
+GMP_STATIC_INLINE
+void ctl_set_sinv_freerun(sinv_ctrl_t* sinv)
+{
+    sinv->flag_angle_freerun = 1;
+}
+
+GMP_STATIC_INLINE
+void ctl_set_sinv_pll(sinv_ctrl_t *sinv)
+{
+    sinv->flag_angle_freerun = 0;
+}
+
+GMP_STATIC_INLINE
+void ctl_enable_sinv_harm_ctrl(sinv_ctrl_t *sinv)
+{
+    sinv->flag_enable_harmonic_ctrl = 1;
+}
+
+GMP_STATIC_INLINE
+void ctl_disable_sinv_harm_ctrl(sinv_ctrl_t *sinv)
+{
+    sinv->flag_enable_harmonic_ctrl = 0;
+}
+
 // init structure for sinv
 typedef struct _tag_single_phase_converter_init_t
 {

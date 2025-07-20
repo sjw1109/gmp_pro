@@ -2,6 +2,15 @@
 #ifndef _FILE_CTRL_SETTINGS_H_
 #define _FILE_CTRL_SETTINGS_H_
 
+
+// BUILD_LEVEL 1: inverter, Voltage open loop
+// BUILD_LEVEL 2: inverter, current close loop
+// BUILD_LEVEL 3: inverter, current close loop, with harm control
+// BUILD_LEVEL 4: rectifier, voltage loop, without harm control
+// BUILD_LEVEL_5: rectifier voltage loop, with harm control
+// BUILD_LEVEL_6:
+#define BUILD_LEVEL (1)
+
 // invoke motor parameters
 #include <ctl/component/motor_control/motor_preset/GBM2804H_100T.h>
 
@@ -36,11 +45,7 @@
 // Speed Bandwidth
 #define MTR_CTRL_SPEED_LOOP_BW ((10))
 
-// BUILD_LEVEL 1: Voltage Open loop
-// BUILD_LEVEL 2: Current Open loop
-// BUILD_LEVEL 3: Actual Current loop
-// BUILD_LEVEL 4: Speed Close loop
-#define BUILD_LEVEL (1)
+
 
 // 
 // Controller Settings

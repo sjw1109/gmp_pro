@@ -90,6 +90,10 @@ void setup_peripheral(void)
     ctl_init_pwm_channel(&sinv_pwm_out[0], 0, 5000);
     ctl_init_pwm_channel(&sinv_pwm_out[1], 0, 5000);
 
+    // attach 
+    ctl_attach_sinv_with_adc(&sinv_ctrl, &sinv_adc_udc.control_port, &sinv_adc_idc.control_port,
+                             &sinv_adc_il.control_port, &sinv_adc_ugrid.control_port, &sinv_adc_igrid.control_port);
+
     //// bind peripheral to motor controller
     // ctl_attach_mtr_adc_channels(&pmsm_ctrl.mtr_interface,
     //                             // phase voltage & phase current
