@@ -20,19 +20,13 @@
 // definitions of peripheral
 //
 
-ptr_adc_channel_t uin;
-ptr_adc_channel_t uout;
-ptr_adc_channel_t idc;
+ptr_adc_channel_t sinv_adc_idc;
+ptr_adc_channel_t sinv_adc_udc;
+ptr_adc_channel_t sinv_adc_il;
+ptr_adc_channel_t sinv_adc_igrid;
+ptr_adc_channel_t sinv_adc_ugrid;
 
-pwm_channel_t pwm_out;
 pwm_channel_t sinv_pwm_out[2];
-
-ptr_adc_channel_t sinv_il;
-ptr_adc_channel_t sinv_ig;
-ptr_adc_channel_t sinv_uc;
-ptr_adc_channel_t sinv_udc;
-
-//qpr_ctrl_t qpr_test;
 
 //////////////////////////////////////////////////////////////////////////
 // peripheral setup function
@@ -41,71 +35,58 @@ ptr_adc_channel_t sinv_udc;
 // User should setup all the peripheral in this function.
 void setup_peripheral(void)
 {
-    ctl_init_ptr_adc_channel(
-        // ptr_adc object
-        &idc,
-        // pointer to ADC raw data
-        &simulink_rx_buffer.adc_result[0],
-        // ADC Channel settings.
-        // iqn is valid only when ctrl_gt is a fixed point type.
-        2, 0.5, 12, 24);
+    //
+    // input channel
+    //
 
     ctl_init_ptr_adc_channel(
         // ptr_adc object
-        &uin,
+        &sinv_adc_idc,
         // pointer to ADC raw data
-        &simulink_rx_buffer.adc_result[1],
+        &simulink_rx_buffer.adc_result[SINV_ADC_ID_IDC],
         // ADC Channel settings.
         // iqn is valid only when ctrl_gt is a fixed point type.
         2, 0.5, 12, 24);
 
     ctl_init_ptr_adc_channel(
         // ptr_adc object
-        &uout,
+        &sinv_adc_udc,
         // pointer to ADC raw data
-        &simulink_rx_buffer.adc_result[2],
+        &simulink_rx_buffer.adc_result[SINV_ADC_ID_VDC],
         // ADC Channel settings.
         // iqn is valid only when ctrl_gt is a fixed point type.
         2, 0.5, 12, 24);
 
     ctl_init_ptr_adc_channel(
         // ptr_adc object
-        &sinv_il,
+        &sinv_adc_il,
         // pointer to ADC raw data
-        &simulink_rx_buffer.adc_result[3],
+        &simulink_rx_buffer.adc_result[SINV_ADC_ID_IL],
         // ADC Channel settings.
         // iqn is valid only when ctrl_gt is a fixed point type.
         2, 0.5, 12, 24);
 
     ctl_init_ptr_adc_channel(
         // ptr_adc object
-        &sinv_uc,
+        &sinv_adc_igrid,
         // pointer to ADC raw data
-        &simulink_rx_buffer.adc_result[4],
+        &simulink_rx_buffer.adc_result[SINV_ADC_ID_IG],
         // ADC Channel settings.
         // iqn is valid only when ctrl_gt is a fixed point type.
         2, 0.5, 12, 24);
 
     ctl_init_ptr_adc_channel(
         // ptr_adc object
-        &sinv_ig,
+        &sinv_adc_ugrid,
         // pointer to ADC raw data
-        &simulink_rx_buffer.adc_result[5],
+        &simulink_rx_buffer.adc_result[SINV_ADC_ID_VG],
         // ADC Channel settings.
         // iqn is valid only when ctrl_gt is a fixed point type.
         2, 0.5, 12, 24);
 
-        ctl_init_ptr_adc_channel(
-        // ptr_adc object
-        &sinv_udc,
-        // pointer to ADC raw data
-        &simulink_rx_buffer.adc_result[6],
-        // ADC Channel settings.
-        // iqn is valid only when ctrl_gt is a fixed point type.
-        2, 0.5, 12, 24);
-
-    ctl_init_pwm_channel(&pwm_out, 0, 5000);
-
+    //
+    // output channel
+    //
     ctl_init_pwm_channel(&sinv_pwm_out[0], 0, 5000);
     ctl_init_pwm_channel(&sinv_pwm_out[1], 0, 5000);
 

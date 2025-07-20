@@ -27,47 +27,39 @@ extern "C"
 // Controller interface
 //
 //
-extern ptr_adc_channel_t uin;
-extern ptr_adc_channel_t uout;
-extern ptr_adc_channel_t idc;
 
-extern pwm_channel_t pwm_out;
+extern ptr_adc_channel_t sinv_adc_idc;
+extern ptr_adc_channel_t sinv_adc_udc;
+extern ptr_adc_channel_t sinv_adc_il;
+extern ptr_adc_channel_t sinv_adc_igrid;
+extern ptr_adc_channel_t sinv_adc_ugrid;
 
-extern ctrl_gt sinv_pwm_pu[2];
+typedef enum _tag_sinv_adc_index_items
+{
+
+    SINV_ADC_ID_IL = 0,
+    SINV_ADC_ID_IDC = 1,
+    SINV_ADC_ID_VDC = 2,
+    SINV_ADC_ID_IC = 3,
+    SINV_ADC_ID_VG = 4,
+    SINV_ADC_ID_IG = 5
+
+} sinv_adc_index_items;
+
 extern pwm_channel_t sinv_pwm_out[2];
 
-extern ptr_adc_channel_t sinv_il;
-extern ptr_adc_channel_t sinv_ig;
-extern ptr_adc_channel_t sinv_uc;
+extern sinv_ctrl_t sinv_ctrl;
 
-extern ptr_adc_channel_t sinv_udc;
-
-extern ctrl_gt modulate_target;
-
-extern qpr_ctrl_t qpr_test;
 // Input Callback
 GMP_STATIC_INLINE
 void ctl_input_callback(void)
 {
     //// invoke ADC p.u. routine
-    ctl_step_ptr_adc_channel(&idc);
-    ctl_step_ptr_adc_channel(&uin);
-    ctl_step_ptr_adc_channel(&uout);
-
-    ctl_step_ptr_adc_channel(&sinv_il);
-    ctl_step_ptr_adc_channel(&sinv_ig);
-    ctl_step_ptr_adc_channel(&sinv_uc);
-    ctl_step_ptr_adc_channel(&sinv_udc);
-
-    //   ac_input = float2ctrl(simulink_rx_buffer.panel[1]);
-
-    // Get panel input here.
-#if (BUILD_LEVEL == 1)
-
-    // ctl_set_pmsm_ctrl_vdq_ff(&pmsm_ctrl, float2ctrl(csp_sl_get_panel_input(0)),
-    // float2ctrl(csp_sl_get_panel_input(1)));
-
-#endif // BUILD_LEVEL
+    ctl_step_ptr_adc_channel(&sinv_adc_idc);
+    ctl_step_ptr_adc_channel(&sinv_adc_udc);
+    ctl_step_ptr_adc_channel(&sinv_adc_il);
+    ctl_step_ptr_adc_channel(&sinv_adc_igrid);
+    ctl_step_ptr_adc_channel(&sinv_adc_ugrid);
 }
 
 // Output Callback
@@ -75,43 +67,42 @@ GMP_STATIC_INLINE
 void ctl_output_callback(void)
 {
 
-    //simulink_tx_buffer.pwm_cmp[0] = ctl_calc_pwm_channel(&pwm_out, pwm_out_pu);
+    // simulink_tx_buffer.pwm_cmp[0] = ctl_calc_pwm_channel(&pwm_out, pwm_out_pu);
 
-    //simulink_tx_buffer.pwm_cmp[1] = ctl_calc_pwm_channel(&sinv_pwm_out[0], sinv_pwm_pu[0]);
-    //simulink_tx_buffer.pwm_cmp[2] = ctl_calc_pwm_channel(&sinv_pwm_out[1], sinv_pwm_pu[1]);
+    simulink_tx_buffer.pwm_cmp[1] = ctl_calc_pwm_channel(&sinv_pwm_out[0], sinv_ctrl.sinv_pwm_pu[0]);
+    simulink_tx_buffer.pwm_cmp[2] = ctl_calc_pwm_channel(&sinv_pwm_out[1], sinv_ctrl.sinv_pwm_pu[1]);
 
-    simulink_tx_buffer.enable = 1;
+    //simulink_tx_buffer.enable = 1;
 
     // simulink_tx_buffer.monitor[0] = idc.control_port.value;
     // simulink_tx_buffer.monitor[1] = uin.control_port.value;
     // simulink_tx_buffer.monitor[2] = uout.control_port.value;
 
-    //simulink_tx_buffer.dac[0] = 20;
+    // simulink_tx_buffer.dac[0] = 20;
 
-    //simulink_tx_buffer.monitor[0] = spll.phasor.dat[phase_alpha];
-    //simulink_tx_buffer.monitor[1] = spll.phasor.dat[phase_beta];
+    // simulink_tx_buffer.monitor[0] = spll.phasor.dat[phase_alpha];
+    // simulink_tx_buffer.monitor[1] = spll.phasor.dat[phase_beta];
 
-    //simulink_tx_buffer.monitor[2] = spll.frequency;
-    //simulink_tx_buffer.monitor[3] = spll.theta;
+    // simulink_tx_buffer.monitor[2] = spll.frequency;
+    // simulink_tx_buffer.monitor[3] = spll.theta;
 
     // simulink_tx_buffer.monitor[4] = ctl_div2(ctl_mul(spll.phasor.dat[phase_alpha], float2ctrl(0.2)) + float2ctrl(1));
     // simulink_tx_buffer.monitor[5] = sinv_uc.control_port.value;
 
     // simulink_tx_buffer.monitor[4] = spll.phasor.dat[0];
-    //simulink_tx_buffer.monitor[4] = ctl_mul(spll.phasor.dat[0], float2ctrl(0.15));
-    //simulink_tx_buffer.monitor[4] = ctl_mul(spll.phasor.dat[0], float2ctrl(0.2));
-
+    // simulink_tx_buffer.monitor[4] = ctl_mul(spll.phasor.dat[0], float2ctrl(0.15));
+    // simulink_tx_buffer.monitor[4] = ctl_mul(spll.phasor.dat[0], float2ctrl(0.2));
 
     // simulink_tx_buffer.monitor[5] = sinv_pwm_pu[0];
-    //simulink_tx_buffer.monitor[5] = modulate_target;
-    //simulink_tx_buffer.monitor[5] = sinv_udc.control_port.value;
+    // simulink_tx_buffer.monitor[5] = modulate_target;
+    // simulink_tx_buffer.monitor[5] = sinv_udc.control_port.value;
 
     ////simulink_tx_buffer.monitor[5] = modulate_target;
 
-    //simulink_tx_buffer.monitor[6] = sinv_current_ref;
-    //simulink_tx_buffer.monitor[7] = ctl_mul(spll.phasor.dat[0], float2ctrl(0.15));
+    // simulink_tx_buffer.monitor[6] = sinv_current_ref;
+    // simulink_tx_buffer.monitor[7] = ctl_mul(spll.phasor.dat[0], float2ctrl(0.15));
 
-    //simulink_tx_buffer.monitor[15] = ctl_step_qpr_controller(&qpr_test, float2ctrl(simulink_rx_buffer.panel[2]));
+    // simulink_tx_buffer.monitor[15] = ctl_step_qpr_controller(&qpr_test, float2ctrl(simulink_rx_buffer.panel[2]));
 
     // simulink_tx_buffer.pwm_cmp[1] = 2500.0 * sin(314.0 / 1000 * gmp_base_get_system_tick());
     // simulink_tx_buffer.pwm_cmp[1] = gmp_base_get_system_tick();
@@ -122,6 +113,9 @@ void ctl_output_callback(void)
 GMP_STATIC_INLINE
 void ctl_enable_output()
 {
+    ctl_clear_sinv(&sinv_ctrl);
+    ctl_enable_sinv_ctrl(&sinv_ctrl);
+
     csp_sl_enable_output();
 }
 

@@ -279,6 +279,8 @@ ctrl_gt ctl_step_sinv(sinv_ctrl_t *sinv)
         sinv->sinv_pwm_pu[0] = 0;
         sinv->sinv_pwm_pu[1] = 0;
     }
+
+    return sinv->modulation;
 }
 
 // function set for change controller state
