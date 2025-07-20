@@ -21,6 +21,15 @@ double multiple_static_inline(double A, double B)
     return A * B;
 }
 
+GMP_STATIC_INLINE
+double abs_static_inline(double A)
+{
+    if (A < 0)
+        return (-A);
+    else
+        return A;
+}
+
 #ifndef saturation_macro
 // #define saturation_macro(_a, _min, _max) ((_a) <= (_min)) ? (_min) : (((_a) >= (_max)) ? (_max) : (_a))
 #define saturation_macro(_a, _max, _min) saturation_static_inline(_a, _min, _max)
@@ -36,10 +45,10 @@ double multiple_static_inline(double A, double B)
 // Calculation
 #define pwm_mul(A, B)        ((pwm_gt)((double)(A) * (double)(B)))
 #define pwm_sat(A, Pos, Neg) ((pwm_gt)saturation_macro(((double)(A)), ((double)(Pos)), ((double)(Neg))))
-
 #define ctl_mul(A, B)        ((double)((double)(A) * (B)))
 #define ctl_div(A, B)        ((double)((double)(A) / (B)))
 #define ctl_sat(A, Pos, Neg) saturation_macro((A), (Pos), (Neg))
+#define ctl_abs(A)           abs_static_inline(A)
 
 // Extension Calculation
 #define ctl_div2(A) ((double)((double)(A) / 2))

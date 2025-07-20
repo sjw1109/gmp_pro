@@ -21,6 +21,15 @@ float multiple_static_inline(float A, float B)
     return A * B;
 }
 
+GMP_STATIC_INLINE
+float abs_static_inline(float A)
+{
+    if (A < 0)
+        return (-A);
+    else
+        return A;
+}
+
 #ifndef saturation_macro
 // #define saturation_macro(_a, _min, _max) (((_a) <= (_min)) ? (_min) : (((_a) >= (_max)) ? (_max) : (_a)))
 #define saturation_macro(_a, _max, _min) saturation_static_inline(_a, _min, _max)
@@ -39,6 +48,7 @@ float multiple_static_inline(float A, float B)
 #define ctl_mul(A, B)        ((float)((float)(A) * (B)))
 #define ctl_div(A, B)        ((float)((float)(A) / (B)))
 #define ctl_sat(A, Pos, Neg) saturation_macro((A), (Pos), (Neg))
+#define ctl_abs(A)           abs_static_inline(A)
 
 // #define pwm_mpy(CTRL_RESULT, PWM_SAT) ()
 

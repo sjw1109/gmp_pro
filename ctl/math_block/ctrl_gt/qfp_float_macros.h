@@ -6,6 +6,15 @@
 #define saturation_macro(_a, _min, _max) ((_a) <= (_min)) ? (_min) : (((_a) >= (_max)) ? (_max) : (_a))
 #endif
 
+GMP_STATIC_INLINE
+float abs_static_inline(float A)
+{
+    if (A < 0)
+        return (-A);
+    else
+        return A;
+}
+
 // Type conversion function
 #define float2ctrl(x) ((float)x)
 #define int2ctrl(x)   (qfp_int2float(x))
@@ -16,6 +25,7 @@
 #define pwm_mul(A, B)        (qfp_fmul(A, B))
 #define ctl_div(A, B)        (qfp_fdiv(A, B))
 #define ctl_sat(A, Pos, Neg) saturation_macro(A, Pos, Neg)
+#define ctl_abs(A)           abs_static_inline(A)
 
 // Extension Calculation
 #define ctl_div2(A) (qfp_fdiv(A, 2.0f))

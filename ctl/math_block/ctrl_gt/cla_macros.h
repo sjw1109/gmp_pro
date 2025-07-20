@@ -82,6 +82,8 @@ float multiple_static_inline(float A, float B)
 #define ctl_mul(A, B)        ((float)((float)(A) * (B)))
 #define ctl_div(A, B)        ((float32_t)(__divf32((A), (B))))
 #define ctl_sat(A, Pos, Neg) saturation_macro((A), (Pos), (Neg))
+#define ctl_abs(A)           abs_static_inline(A)
+
 
 // #define pwm_mpy(CTRL_RESULT, PWM_SAT) ()
 

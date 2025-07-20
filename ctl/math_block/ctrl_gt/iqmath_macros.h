@@ -14,6 +14,15 @@
 #define saturation_macro(_a, _min, _max) ((_a) <= (_min)) ? (_min) : (((_a) >= (_max)) ? (_max) : (_a))
 #endif
 
+GMP_STATIC_INLINE
+_iq abs_static_inline(_iq A)
+{
+    if (A < 0)
+        return (-A);
+    else
+        return A;
+}
+
 // Type conversion function
 #define float2ctrl(x) (_IQ(x))
 #define ctrl2float(x) (_IQtoF(x))
@@ -27,6 +36,7 @@
 #define ctl_div(A, B)        (_IQdiv(A, B))
 #define ctl_sat(A, Pos, Neg) saturation_macro((A), (Neg), (Pos))
 #define pwm_sat(A, Pos, Neg) saturation_macro((A), (Neg), (Pos))
+#define ctl_abs(A)           abs_static_inline(A)
 
 // Extension Calculation
 #define ctl_div2(A) (_IQdiv2(A))
