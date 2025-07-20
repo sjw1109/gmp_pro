@@ -69,8 +69,8 @@ void ctl_output_callback(void)
 
     // simulink_tx_buffer.pwm_cmp[0] = ctl_calc_pwm_channel(&pwm_out, pwm_out_pu);
 
-    simulink_tx_buffer.pwm_cmp[1] = ctl_calc_pwm_channel(&sinv_pwm_out[0], sinv_ctrl.sinv_pwm_pu[0]);
-    simulink_tx_buffer.pwm_cmp[2] = ctl_calc_pwm_channel(&sinv_pwm_out[1], sinv_ctrl.sinv_pwm_pu[1]);
+    simulink_tx_buffer.pwm_cmp[0] = ctl_calc_pwm_channel(&sinv_pwm_out[0], sinv_ctrl.sinv_pwm_pu[0]);
+    simulink_tx_buffer.pwm_cmp[1] = ctl_calc_pwm_channel(&sinv_pwm_out[1], sinv_ctrl.sinv_pwm_pu[1]);
 
     //simulink_tx_buffer.enable = 1;
 
