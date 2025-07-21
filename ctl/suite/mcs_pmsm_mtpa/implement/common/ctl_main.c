@@ -51,7 +51,7 @@ fast_gt flag_enable_adc_calibrator = 0;
 fast_gt index_adc_calibrator = 0;
 
 // enable motor running
-volatile fast_gt flag_enable_system = 0;
+volatile fast_gt flag_enable_system = 1;
 
 // CTL initialize routine
 void ctl_init()
@@ -85,7 +85,7 @@ void ctl_init()
     ctl_init_const_f_controller(&const_f, 20, CONTROLLER_FREQUENCY);
 #else  // OPENLOOP_CONST_FREQUENCY
     // frequency target 20 Hz, frequency slope 40 Hz/s
-    ctl_init_const_slope_f_controller(&slope_f, 0.3f, 40.0f, CONTROLLER_FREQUENCY);
+    ctl_init_const_slope_f_controller(&slope_f, 1.0f , 40.0f, CONTROLLER_FREQUENCY);
 #endif // OPENLOOP_CONST_FREQUENCY
 
     // attach a speed encoder object with motor controller
@@ -148,7 +148,7 @@ void ctl_init()
 #endif // OPENLOOP_CONST_FREQUENCY
 
     ctl_pmsm_mtpa_ctrl_voltage_mode(&pmsm_mtpa_ctrl);
-    ctl_set_pmsm_mtpa_ctrl_vdq_ff(&pmsm_mtpa_ctrl, float2ctrl(0.05), float2ctrl(0));
+    ctl_set_pmsm_mtpa_ctrl_vdq_ff(&pmsm_mtpa_ctrl, float2ctrl(6.0 / MTR_CTRL_VOLTAGE_BASE), float2ctrl(0));
 
 #elif (BUILD_LEVEL == 2)
 #if defined OPENLOOP_CONST_FREQUENCY

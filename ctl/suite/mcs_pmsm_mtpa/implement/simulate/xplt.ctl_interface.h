@@ -46,7 +46,7 @@ void ctl_input_callback(void)
     // Get panel input here.
 #if (BUILD_LEVEL == 1)
 
-    ctl_set_pmsm_mtpa_ctrl_vdq_ff(&pmsm_mtpa_ctrl, float2ctrl(csp_sl_get_panel_input(0)), float2ctrl(csp_sl_get_panel_input(1)));
+    //ctl_set_pmsm_mtpa_ctrl_vdq_ff(&pmsm_mtpa_ctrl, float2ctrl(csp_sl_get_panel_input(0)), float2ctrl(csp_sl_get_panel_input(1)));
 
 #endif // BUILD_LEVEL
 }
@@ -63,18 +63,23 @@ void ctl_output_callback(void)
     simulink_tx_buffer.tabc[phase_C] = pwm_out.value[phase_C];
 
     // Monitor Port, 8 channels
-    simulink_tx_buffer.monitor_port[0] = pmsm_mtpa_ctrl.idq_set.dat[phase_q];
-    simulink_tx_buffer.monitor_port[1] = pmsm_mtpa_ctrl.idq0.dat[phase_q];
+    /*simulink_tx_buffer.monitor_port[0] = pmsm_mtpa_ctrl.idq_set.dat[phase_q];
+    simulink_tx_buffer.monitor_port[1] = pmsm_mtpa_ctrl.idq0.dat[phase_q];*/
+    simulink_tx_buffer.monitor_port[0] = pmsm_mtpa_ctrl.vdq_ff.dat[phase_d] * MTR_CTRL_VOLTAGE_BASE;
+    simulink_tx_buffer.monitor_port[1] = pmsm_mtpa_ctrl.vdq_ff.dat[phase_q] * MTR_CTRL_VOLTAGE_BASE;
 
 #if BUILD_LEVEL <= 3
-    simulink_tx_buffer.monitor_port[2] = pmsm_mtpa_ctrl.idq_set.dat[phase_d];
-    simulink_tx_buffer.monitor_port[3] = pmsm_mtpa_ctrl.idq0.dat[phase_d];
+    //simulink_tx_buffer.monitor_port[2] = pmsm_mtpa_ctrl.idq_set.dat[phase_d];
+    //simulink_tx_buffer.monitor_port[3] = pmsm_mtpa_ctrl.idq0.dat[phase_d];
+    simulink_tx_buffer.monitor_port[2] = pmsm_mtpa_ctrl.vab0_set.dat[0] * MTR_CTRL_VOLTAGE_BASE;
+    simulink_tx_buffer.monitor_port[3] = pmsm_mtpa_ctrl.vab0_set.dat[1] * MTR_CTRL_VOLTAGE_BASE;
+    simulink_tx_buffer.monitor_port[4] = pmsm_mtpa_ctrl.mtr_interface.position->elec_position;
 #elif BUILD_LEVEL == 4
     simulink_tx_buffer.monitor_port[2] = pmsm_mtpa_ctrl.speed_set;
     simulink_tx_buffer.monitor_port[3] = pmsm_mtpa_ctrl.mtr_interface.velocity->speed;
 #endif
 
-    simulink_tx_buffer.monitor_port[4] = pmsm_mtpa_ctrl.vdq_set.dat[phase_d];
+    //simulink_tx_buffer.monitor_port[4] = pmsm_mtpa_ctrl.vdq_set.dat[phase_d];
     simulink_tx_buffer.monitor_port[5] = pmsm_mtpa_ctrl.vdq_set.dat[phase_q];
 
     simulink_tx_buffer.monitor_port[6] = pmsm_mtpa_ctrl.mtr_interface.velocity->speed;
