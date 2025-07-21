@@ -84,12 +84,6 @@
     <ClCompile Include="..\..\implement\simulate\xplt.peripheral.c">
       <Filter>implement_interface</Filter>
     </ClCompile>
-    <ClCompile Include="DigialPower_simulink.cpp">
-      <Filter>implement_interface</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\dcac_inv_ctrl.c">
-      <Filter>digital_power_bare</Filter>
-    </ClCompile>
     <ClCompile Include="gmp_src\ctl_dp_basic.c">
       <Filter>GMP Source Files</Filter>
     </ClCompile>
@@ -100,6 +94,9 @@
       <Filter>GMP Source Files</Filter>
     </ClCompile>
     <ClCompile Include="gmp_src\ctl_dp_topology_sinv.c">
+      <Filter>GMP Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DigialPower_simulink.cpp">
       <Filter>GMP Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -121,9 +118,6 @@
     </ClInclude>
     <ClInclude Include="..\..\implement\simulate\xplt.peripheral.h">
       <Filter>implement_interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\dcac_inv_ctrl.h">
-      <Filter>digital_power_bare</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
