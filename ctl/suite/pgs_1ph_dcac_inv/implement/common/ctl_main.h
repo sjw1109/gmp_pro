@@ -28,7 +28,6 @@
 
 #include <ctl/component/digital_power/topology_preset/single_phase_dc_ac.h>
 
-
 #ifndef _FILE_CTL_MAIN_H_
 #define _FILE_CTL_MAIN_H_
 
@@ -36,6 +35,9 @@
 extern "C"
 {
 #endif // __cplusplus
+
+extern volatile fast_gt flag_system_enable;
+extern volatile fast_gt flag_system_running;
 
 // controller objects
 extern sinv_ctrl_t sinv_ctrl;

@@ -36,6 +36,7 @@ void setup_peripheral(void);
 //
 void ctl_init(void);
 void ctl_mainloop(void);
+fast_gt ctl_ready_mainloop(void);
 
 //////////////////////////////////////////////////////////////////////////
 // Additionally functions prototypes

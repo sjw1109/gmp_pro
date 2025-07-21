@@ -63,6 +63,12 @@ void ctl_init(void);
 //
 void ctl_mainloop(void);
 
+
+// This function is a standard interface for testing if the controller meets online criterion.
+// 1 means reached criterion.
+// 0 means don't reached.
+fast_gt ctl_ready_mainloop(void);
+
 // This function would be implemented in ctl_main.c
 // This function would be called in every controller loop
 // This function would be called by `gmp_base_ctl_step`

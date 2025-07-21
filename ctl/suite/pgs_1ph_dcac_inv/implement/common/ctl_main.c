@@ -26,10 +26,12 @@ sinv_ctrl_t sinv_ctrl;
 
 // enable motor running
 #if !defined SPECIFY_PC_ENVIRONMENT
-volatile fast_gt flag_enable_system = 0;
+volatile fast_gt flag_system_enable = 0;
 #else
-volatile fast_gt flag_enable_system = 1;
+volatile fast_gt flag_system_enable = 1;
 #endif // SPECIFY_PC_ENVIRONMENT
+
+volatile fast_gt flag_system_running = 0;
 
 volatile fast_gt flag_error = 0;
 
@@ -132,7 +134,7 @@ void ctl_init()
     // if in simulation mode, enable system automatically
 #if !defined SPECIFY_PC_ENVIRONMENT
 
-    while (flag_enable_system == 0)
+    while (flag_system_enable == 0)
     {
     }
 
@@ -155,30 +157,31 @@ void ctl_mainloop(void)
     // 2. judge if spll theta error convergence has occurred
     // 3. then enable system
 
-    // first time flag
-    if ((flag_enable_system == 1) && firsttime_flag == 0)
+    if (flag_system_enable)
     {
-        tick_bias = gmp_base_get_system_tick();
-        firsttime_flag = 1;
-    }
 
-    // a delay of 500ms
-    if ((flag_enable_system == 1) && (started_flag == 0) && ((gmp_base_get_system_tick() - tick_bias) > 500) &&
-        (startup_flag == 0))
-    {
-        startup_flag = 1;
-    }
+        // first time flag
+        if (firsttime_flag == 0)
+        {
+            tick_bias = gmp_base_get_system_tick();
+            firsttime_flag = 1;
+        }
 
-    // judge if PLL is close to target
-    if ((flag_enable_system == 1) && (started_flag == 0) && (startup_flag == 1) &&
-        ctl_get_spll_error_fbk(&sinv_ctrl.spll) < CTRL_SPLL_EPSILON)
-    {
-        ctl_enable_output();
-        started_flag = 1;
-    }
+        // a delay of 500ms
+        if ((started_flag == 0) && ((gmp_base_get_system_tick() - tick_bias) > 500) && (startup_flag == 0))
+        {
+            startup_flag = 1;
+        }
 
+        // judge if PLL is close to target
+        if ((started_flag == 0) && (startup_flag == 1) && ctl_ready_mainloop())
+        {
+            ctl_enable_output();
+            started_flag = 1;
+        }
+    }
     // if system is disabled
-    if (flag_enable_system == 0)
+    else // (flag_system_enable == 0)
     {
         ctl_disable_output();
 
@@ -190,4 +193,16 @@ void ctl_mainloop(void)
     }
 
     return;
+}
+
+// This mainloop will run again and again to judge if system meets online condition,
+// when flag_system_enable is set.
+// if return 1 the system is ready to enable.
+// if return 0 the system is not ready to enable
+fast_gt ctl_ready_mainloop(void)
+{
+
+    ctl_clear_sinv(&sinv_ctrl);
+
+    return ctl_get_spll_error_fbk(&sinv_ctrl.spll) < CTRL_SPLL_EPSILON;
 }

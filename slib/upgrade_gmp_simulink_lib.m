@@ -113,7 +113,7 @@ if (~exist(append(simulink_lib_path,'/avatars')))
     mkdir(append(simulink_lib_path,'/avatars'));
 end
 
-copyfile('simulink_lib_src/avatars', append(simulink_lib_path,'/avatars'));
+copyfile('simulink_lib_src/avatars', append(simulink_lib_path,'/avatars'), 'f');
 
 
 %% Copy other files
@@ -121,7 +121,7 @@ copyfile('simulink_lib_src/avatars', append(simulink_lib_path,'/avatars'));
 disp('GMP Simulink Library: Other necessary files are copying.');
 
 target_file = append('install_path/',matlab_version.Release,'/slblocks.m');
-copyfile('simulink_lib_src/slblocks.m', target_file);
+copyfile('simulink_lib_src/slblocks.m', target_file, 'f');
 
 % copy all m files
 if (~exist(append(simulink_lib_path,'/src')))
@@ -132,14 +132,14 @@ end
 clear GMP_SIL_Core
 clear MEX_UDP_Helper
 
-copyfile('simulink_lib_src/src', append(simulink_lib_path,'/src'));
+copyfile('simulink_lib_src/src', append(simulink_lib_path,'/src'), 'f');
 
 % copy all icon files
 if (~exist(append(simulink_lib_path,'/icon')))
     mkdir(append(simulink_lib_path,'/icon'));
 end
 
-copyfile('simulink_lib_src/icon', append(simulink_lib_path,'/icon'));
+copyfile('simulink_lib_src/icon', append(simulink_lib_path,'/icon'), 'f');
 
 end % function end
 
