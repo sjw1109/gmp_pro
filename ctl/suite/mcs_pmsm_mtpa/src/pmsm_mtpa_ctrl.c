@@ -2,12 +2,12 @@
 
 #include <gmp_core.h>
 
-#include <ctl/suite/mcs_pmsm/pmsm_ctrl.h>
+#include <ctl/suite/mcs_pmsm_mtpa/pmsm_mtpa_ctrl.h>
 
 // #include "peripheral.h"
 
-// init pmsm_bare_controller struct
-void ctl_init_pmsm_bare_controller(pmsm_bare_controller_t *ctrl, pmsm_bare_controller_init_t *init)
+// init pmsm_mtpa_bare_controller struct
+void ctl_init_pmsm_mtpa_bare_controller(pmsm_mtpa_bare_controller_t *ctrl, pmsm_mtpa_bare_controller_init_t *init)
 {
 #ifdef PMSM_CTRL_USING_DISCRETE_CTRL
     // controller implement
@@ -49,7 +49,7 @@ void ctl_init_pmsm_bare_controller(pmsm_bare_controller_t *ctrl, pmsm_bare_contr
         // d axis current controller
         &ctrl->current_ctrl[phase_d],
         // parameters for current controller
-        init->current_pid_gain, init->current_Ti, init->current_Td,
+        init->current_d_pid_gain, init->current_d_Ti, init->current_d_Td,
         // controller frequency
         init->fs);
     ctl_set_pid_limit(&ctrl->current_ctrl[phase_d], init->voltage_limit_max, init->voltage_limit_min);
@@ -58,7 +58,7 @@ void ctl_init_pmsm_bare_controller(pmsm_bare_controller_t *ctrl, pmsm_bare_contr
         // d axis current controller
         &ctrl->current_ctrl[phase_q],
         // parameters for current controller
-        init->current_pid_gain, init->current_Ti, init->current_Td,
+        init->current_q_pid_gain, init->current_q_Ti, init->current_q_Td,
         // controller frequency
         init->fs);
     ctl_set_pid_limit(&ctrl->current_ctrl[phase_q], init->voltage_limit_max, init->voltage_limit_min);
@@ -98,11 +98,16 @@ void ctl_init_pmsm_bare_controller(pmsm_bare_controller_t *ctrl, pmsm_bare_contr
     ctrl->revolution_set = 0;
 
     // flag stack
-    ctl_disable_pmsm_ctrl(ctrl);
-    ctl_pmsm_ctrl_valphabeta_mode(ctrl);
+    ctl_disable_pmsm_mtpa_ctrl(ctrl);
+    ctl_pmsm_mtpa_ctrl_valphabeta_mode(ctrl);
 }
 
-void ctl_attach_pmsm_bare_output(pmsm_bare_controller_t *ctrl, tri_pwm_ift *pwm)
+void ctl_attach_pmsm_mtpa_bare_output(pmsm_mtpa_bare_controller_t *ctrl, tri_pwm_ift *pwm)
 {
     ctrl->pwm_out = pwm;
+}
+
+void ctl_attach_idq_distributor(pmsm_mtpa_bare_controller_t *ctrl, idq_current_distributor_t *distributor)
+{
+    ctrl->distributor = distributor;
 }

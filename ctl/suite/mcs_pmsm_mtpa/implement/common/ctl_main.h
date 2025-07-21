@@ -16,7 +16,7 @@
 #include <ctl\component\motor_control\basic\encoder.h>
 
 // motor controller
-#include <ctl/suite/mcs_pmsm/pmsm_ctrl.h>
+#include <ctl/suite/mcs_pmsm_mtpa/pmsm_mtpa_ctrl.h>
 
 #include <ctl/component/interface/pwm_channel.h>
 
@@ -56,7 +56,7 @@ extern pos_autoturn_encoder_t pos_enc;
 #endif // PMSM_CTRL_USING_QEP_ENCODER
 
 // PMSM controller
-extern pmsm_bare_controller_t pmsm_ctrl;
+extern pmsm_mtpa_bare_controller_t pmsm_mtpa_ctrl;
 
 extern adc_bias_calibrator_t adc_calibrator;
 extern fast_gt flag_enable_adc_calibrator;
@@ -81,9 +81,9 @@ void ctl_dispatch(void)
     if (flag_enable_adc_calibrator)
     {
         if (index_adc_calibrator == 3)
-            ctl_step_adc_calibrator(&adc_calibrator, pmsm_ctrl.mtr_interface.idc->value);
+            ctl_step_adc_calibrator(&adc_calibrator, pmsm_mtpa_ctrl.mtr_interface.idc->value);
         else
-            ctl_step_adc_calibrator(&adc_calibrator, pmsm_ctrl.mtr_interface.iabc->value.dat[index_adc_calibrator]);
+            ctl_step_adc_calibrator(&adc_calibrator, pmsm_mtpa_ctrl.mtr_interface.iabc->value.dat[index_adc_calibrator]);
     }
     else
     {
@@ -96,7 +96,7 @@ void ctl_dispatch(void)
 
     ctl_step_spd_calc(&spd_enc);
 
-    ctl_step_pmsm_ctrl(&pmsm_ctrl);
+    ctl_step_pmsm_mtpa_ctrl(&pmsm_mtpa_ctrl);
 }
 
 #ifndef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO

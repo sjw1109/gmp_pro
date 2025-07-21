@@ -84,7 +84,7 @@
     <ClCompile Include="gmp_src\gmp_std_port.c">
       <Filter>GMP Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\pmsm_ctrl.c">
+    <ClCompile Include="..\..\src\pmsm_mtpa_ctrl.c">
       <Filter>motor_driver_bare</Filter>
     </ClCompile>
     <ClCompile Include="..\..\implement\simulate\xplt.peripheral.c">
@@ -98,7 +98,7 @@
     <ClInclude Include="..\..\implement\common\user_main.h">
       <Filter>implement_common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\pmsm_ctrl.h">
+    <ClInclude Include="..\..\pmsm_mtpa_ctrl.h">
       <Filter>motor_driver_bare</Filter>
     </ClInclude>
     <ClInclude Include="..\..\implement\simulate\ctrl_settings.h">

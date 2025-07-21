@@ -20,8 +20,10 @@
 
 #include <xplt.peripheral.h>
 
+#include <ctl/component/motor_control/current_loop/current_distributor.h>
+
 // PMSM controller
-pmsm_bare_controller_t pmsm_ctrl;
+pmsm_mtpa_bare_controller_t pmsm_mtpa_ctrl;
 
 #ifdef PMSM_CTRL_USING_QEP_ENCODER
 // Auto - turn encoder
@@ -75,7 +77,7 @@ void ctl_init()
     // create a speed observer by position encoder
     ctl_init_spd_calculator(
         // attach position with speed encoder
-        &spd_enc, pmsm_ctrl.mtr_interface.position,
+        &spd_enc, pmsm_mtpa_ctrl.mtr_interface.position,
         // set spd calculator parameters
         CONTROLLER_FREQUENCY, 5, MOTOR_PARAM_MAX_SPEED, 1, 150);
 
@@ -83,86 +85,104 @@ void ctl_init()
     ctl_init_const_f_controller(&const_f, 20, CONTROLLER_FREQUENCY);
 #else  // OPENLOOP_CONST_FREQUENCY
     // frequency target 20 Hz, frequency slope 40 Hz/s
-    ctl_init_const_slope_f_controller(&slope_f, 20.0f, 40.0f, CONTROLLER_FREQUENCY);
+    ctl_init_const_slope_f_controller(&slope_f, 0.3f, 40.0f, CONTROLLER_FREQUENCY);
 #endif // OPENLOOP_CONST_FREQUENCY
 
     // attach a speed encoder object with motor controller
-    ctl_attach_mtr_velocity(&pmsm_ctrl.mtr_interface, &spd_enc.encif);
+    ctl_attach_mtr_velocity(&pmsm_mtpa_ctrl.mtr_interface, &spd_enc.encif);
 
-    // set pmsm_ctrl parameters
-    pmsm_bare_controller_init_t pmsm_ctrl_init;
+    // set pmsm_mtpa_ctrl parameters
+    pmsm_mtpa_bare_controller_init_t pmsm_mtpa_ctrl_init;
 
-    pmsm_ctrl_init.fs = CONTROLLER_FREQUENCY;
+    pmsm_mtpa_ctrl_init.fs = CONTROLLER_FREQUENCY;
 
     // current pid controller parameters
-    pmsm_ctrl_init.current_pid_gain = (parameter_gt)(MOTOR_PARAM_LS * MTR_CTRL_CURRENT_LOOP_BW * 2 * PI *
-                                                     MTR_CTRL_VOLTAGE_BASE / MTR_CTRL_CURRENT_BASE);
-    pmsm_ctrl_init.current_Ti = (parameter_gt)(MOTOR_PARAM_LS / MOTOR_PARAM_RS);
-    pmsm_ctrl_init.current_Td = 0;
-    pmsm_ctrl_init.voltage_limit_min = float2ctrl(-1.0);
-    pmsm_ctrl_init.voltage_limit_max = float2ctrl(1.0);
+    // pmsm_mtpa_ctrl_init.current_d_pid_gain = (parameter_gt)(MOTOR_PARAM_LD * MTR_CTRL_CURRENT_LOOP_BW * 2 * PI *
+    // MTR_CTRL_VOLTAGE_BASE / MTR_CTRL_CURRENT_BASE);
+    //    pmsm_mtpa_ctrl_init.current_d_pid_gain = (parameter_gt)(MOTOR_PARAM_LD * CONTROLLER_FREQUENCY * 0.3333 *
+    //    MTR_CTRL_VOLTAGE_BASE / MTR_CTRL_CURRENT_BASE);
+    pmsm_mtpa_ctrl_init.current_d_pid_gain = 6;
+    // pmsm_mtpa_ctrl_init.current_d_Ti = (parameter_gt)(3 / CONTROLLER_FREQUENCY / MOTOR_PARAM_RS);  // parallel
+    //    pmsm_mtpa_ctrl_init.current_d_Ti = (parameter_gt)(MOTOR_PARAM_LD / MOTOR_PARAM_RS); // serial
+    pmsm_mtpa_ctrl_init.current_d_Ti = pmsm_mtpa_ctrl_init.current_d_pid_gain / 0.035 / CONTROLLER_FREQUENCY;
+    pmsm_mtpa_ctrl_init.current_d_Td = 0;
+    // pmsm_mtpa_ctrl_init.current_q_pid_gain = (parameter_gt)(MOTOR_PARAM_LQ * MTR_CTRL_CURRENT_LOOP_BW * 2 * PI *
+    //                                                  MTR_CTRL_VOLTAGE_BASE / MTR_CTRL_CURRENT_BASE);
+    //    pmsm_mtpa_ctrl_init.current_q_pid_gain = (parameter_gt)(MOTOR_PARAM_LQ * CONTROLLER_FREQUENCY * 0.3333 *
+    //    MTR_CTRL_VOLTAGE_BASE / MTR_CTRL_CURRENT_BASE);
+    pmsm_mtpa_ctrl_init.current_q_pid_gain = 6;
+    //    pmsm_mtpa_ctrl_init.current_q_Ti = (parameter_gt)(MOTOR_PARAM_LQ / MOTOR_PARAM_RS);
+    pmsm_mtpa_ctrl_init.current_q_Ti = pmsm_mtpa_ctrl_init.current_d_pid_gain / 0.035 / CONTROLLER_FREQUENCY;
+    pmsm_mtpa_ctrl_init.current_q_Td = 0;
+    pmsm_mtpa_ctrl_init.voltage_limit_min = float2ctrl(-1.0);
+    pmsm_mtpa_ctrl_init.voltage_limit_max = float2ctrl(1.0);
 
     // speed pid controller parameters
-    pmsm_ctrl_init.spd_ctrl_div = SPD_CONTROLLER_PWM_DIVISION;
-    pmsm_ctrl_init.spd_pid_gain = (parameter_gt)(0.2);
-    pmsm_ctrl_init.spd_Ti = (parameter_gt)(4.0f / MTR_CTRL_SPEED_LOOP_BW);
-    pmsm_ctrl_init.spd_Td = 0;
-    pmsm_ctrl_init.current_limit_min = float2ctrl(-0.45);
-    pmsm_ctrl_init.current_limit_max = float2ctrl(0.45);
+    pmsm_mtpa_ctrl_init.spd_ctrl_div = SPD_CONTROLLER_PWM_DIVISION;
+    pmsm_mtpa_ctrl_init.spd_pid_gain = (parameter_gt)(0.1);
+    pmsm_mtpa_ctrl_init.spd_Ti = (parameter_gt)(1.0f / MTR_CTRL_SPEED_LOOP_BW);
+    pmsm_mtpa_ctrl_init.spd_Td = 0;
+    pmsm_mtpa_ctrl_init.current_limit_min = float2ctrl(-0.45);
+    pmsm_mtpa_ctrl_init.current_limit_max = float2ctrl(0.45);
 
     // accelerator parameters
-    pmsm_ctrl_init.acc_limit_min = -150.0f;
-    pmsm_ctrl_init.acc_limit_max = 150.0f;
+    pmsm_mtpa_ctrl_init.acc_limit_min = -150.0f;
+    pmsm_mtpa_ctrl_init.acc_limit_max = 150.0f;
 
     // init the PMSM controller
-    ctl_init_pmsm_bare_controller(&pmsm_ctrl, &pmsm_ctrl_init);
+    ctl_init_pmsm_mtpa_bare_controller(&pmsm_mtpa_ctrl, &pmsm_mtpa_ctrl_init);
+
+    // init current distributor
+#ifdef PMSM_CTRL_USING_CURRENT_DISTRIBUTOR
+    ctl_init_idq_current_distributor(&pmsm_mtpa_ctrl.distributor, CONST_ALPHA);
+#endif // PMSM_CTRL_USING_CURRENT_DISTRIBUTOR
 
     // BUG TI cannot print out sizeof() result if no type is specified.
-    gmp_base_print(TEXT_STRING("PMSM SERVO struct has been inited, size :%d\r\n"), (int)sizeof(pmsm_ctrl_init));
+    //    gmp_base_print(TEXT_STRING("PMSM SERVO struct has been inited, size :%d\r\n"), (int)sizeof(pmsm_ctrl_init));
 
 #if (BUILD_LEVEL == 1)
 #if defined OPENLOOP_CONST_FREQUENCY
-    ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &const_f.enc);
+    ctl_attach_mtr_position(&pmsm_mtpa_ctrl.mtr_interface, &const_f.enc);
 #else  // OPENLOOP_CONST_FREQUENCY
-    ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &slope_f.enc);
+    ctl_attach_mtr_position(&pmsm_mtpa_ctrl.mtr_interface, &slope_f.enc);
 #endif // OPENLOOP_CONST_FREQUENCY
 
-    ctl_pmsm_ctrl_voltage_mode(&pmsm_ctrl);
-    ctl_set_pmsm_ctrl_vdq_ff(&pmsm_ctrl, float2ctrl(0.2), float2ctrl(0.2));
+    ctl_pmsm_mtpa_ctrl_voltage_mode(&pmsm_mtpa_ctrl);
+    ctl_set_pmsm_mtpa_ctrl_vdq_ff(&pmsm_mtpa_ctrl, float2ctrl(0.05), float2ctrl(0));
 
 #elif (BUILD_LEVEL == 2)
 #if defined OPENLOOP_CONST_FREQUENCY
-    ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &const_f.enc);
+    ctl_attach_mtr_position(&pmsm_mtpa_ctrl.mtr_interface, &const_f.enc);
 #else  // OPENLOOP_CONST_FREQUENCY
-    ctl_attach_mtr_position(&pmsm_ctrl.mtr_interface, &slope_f.enc);
+    ctl_attach_mtr_position(&pmsm_mtpa_ctrl.mtr_interface, &slope_f.enc);
 #endif // OPENLOOP_CONST_FREQUENCY
-    ctl_pmsm_ctrl_current_mode(&pmsm_ctrl);
-    ctl_set_pmsm_ctrl_idq_ff(&pmsm_ctrl, float2ctrl(0.1), float2ctrl(0.1));
+    ctl_pmsm_mtpa_ctrl_current_mode(&pmsm_mtpa_ctrl);
+    ctl_set_pmsm_mtpa_ctrl_idq_ff(&pmsm_mtpa_ctrl, float2ctrl(0), float2ctrl(0 / MTR_CTRL_CURRENT_BASE));
 
 #elif (BUILD_LEVEL == 3)
 
-    ctl_pmsm_ctrl_current_mode(&pmsm_ctrl);
-    ctl_set_pmsm_ctrl_idq_ff(&pmsm_ctrl, float2ctrl(0.1), float2ctrl(0.05));
+    ctl_pmsm_mtpa_ctrl_current_mode(&pmsm_mtpa_ctrl);
+    ctl_set_pmsm_mtpa_ctrl_idq_ff(&pmsm_mtpa_ctrl, float2ctrl(0 / MTR_CTRL_CURRENT_BASE), float2ctrl(0));
 
 #elif (BUILD_LEVEL == 4)
 
-    ctl_pmsm_ctrl_velocity_mode(&pmsm_ctrl);
-    ctl_set_pmsm_ctrl_speed(&pmsm_ctrl, float2ctrl(0.25));
+    ctl_pmsm_mtpa_ctrl_velocity_mode(&pmsm_mtpa_ctrl);
+    ctl_set_pmsm_mtpa_ctrl_speed(&pmsm_mtpa_ctrl, float2ctrl(0.25));
 #endif // BUILD_LEVEL
 
     // if in simulation mode, enable system
 #if !defined SPECIFY_PC_ENVIRONMENT
     // stop here and wait for user start the motor controller
-    while (flag_enable_system == 0)
-    {
-    }
+    //    while (flag_enable_system == 0)
+    //    {
+    //    }
 
 #endif // SPECIFY_PC_ENVIRONMENT
 
     ctl_enable_output();
 
     // Debug mode online the controller
-    ctl_enable_pmsm_ctrl(&pmsm_ctrl);
+    ctl_enable_pmsm_mtpa_ctrl(&pmsm_mtpa_ctrl);
 
 #if defined SPECIFY_ENABLE_ADC_CALIBRATE
     // Enable ADC calibrate
@@ -170,7 +190,7 @@ void ctl_init()
     index_adc_calibrator = 0;
 
     // Select ADC calibrate
-    ctl_disable_pmsm_ctrl_output(&pmsm_ctrl);
+    ctl_disable_pmsm_mtpa_ctrl_output(&pmsm_mtpa_ctrl);
     ctl_enable_adc_calibrator(&adc_calibrator);
 #endif // SPECIFY_ENABLE_ADC_CALIBRATE
 }
@@ -182,15 +202,11 @@ uint16_t sgen_out = 0;
 
 void ctl_mainloop(void)
 {
-    int spd_target = gmp_base_get_system_tick() / 100 - 4;
-
-    ctl_set_pmsm_ctrl_speed(&pmsm_ctrl, float2ctrl(0.1) * spd_target - float2ctrl(1.0));
-
-
+    
     //
     // Judge if PWM is enabled
     //
-    if (pmsm_ctrl.flag_enable_output)
+    if (pmsm_mtpa_ctrl.flag_enable_output)
     {
         ctl_enable_output();
     }
@@ -215,7 +231,7 @@ void ctl_mainloop(void)
                 flag_enable_adc_calibrator = 0;
 
                 // enable pmsm controller
-                ctl_enable_pmsm_ctrl_output(&pmsm_ctrl);
+                ctl_enable_pmsm_mtpa_ctrl_output(&pmsm_mtpa_ctrl);
             }
             // index_adc_calibrator == 2 ~ 0, for Iabc 
             else 
@@ -244,53 +260,3 @@ void ctl_mainloop(void)
     return;
 }
 
-#ifdef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
-
-void ctl_fmif_monitor_routine(ctl_object_nano_t *pctl_obj)
-{
-    // not implement
-}
-
-// return value:
-// 1 change to next progress
-// 0 keep the same state
-fast_gt ctl_fmif_sm_pending_routine(ctl_object_nano_t *pctl_obj)
-{
-    // not implement
-    return 0;
-}
-
-// return value:
-// 1 change to next progress
-// 0 keep the same state
-fast_gt ctl_fmif_sm_calibrate_routine(ctl_object_nano_t *pctl_obj)
-{
-    return ctl_cb_pmsm_servo_frmework_current_calibrate(&pmsm_servo);
-}
-
-fast_gt ctl_fmif_sm_ready_routine(ctl_object_nano_t *pctl_obj)
-{
-    // not implement
-    return 0;
-}
-
-// Main relay close, power on the main circuit
-fast_gt ctl_fmif_sm_runup_routine(ctl_object_nano_t *pctl_obj)
-{
-    // not implement
-    return 1;
-}
-
-fast_gt ctl_fmif_sm_online_routine(ctl_object_nano_t *pctl_obj)
-{
-    // not implement
-    return 0;
-}
-
-fast_gt ctl_fmif_sm_fault_routine(ctl_object_nano_t *pctl_obj)
-{
-    // not implement
-    return 0;
-}
-
-#endif // SPECIFY_ENABLE_CTL_FRAMEWORK_NANO

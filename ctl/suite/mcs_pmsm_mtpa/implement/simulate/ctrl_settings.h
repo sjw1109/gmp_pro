@@ -3,18 +3,19 @@
 #define _FILE_CTRL_SETTINGS_H_
 
 // invoke motor parameters
-#include <ctl/component/motor_control/motor_preset/GBM2804H_100T.h>
+#include <ctl/component/motor_control/motor_preset/PMSRM_4P_15KW520V.h>
 
 // invoke motor controller parameters
-#include <ctl/component/motor_control/controller_preset/TI_3PH_GAN_INV.h>
+#include <ctl/component/motor_control/controller_preset/SE_PWR_BD.h>
+// #include <ctl/component/motor_control/controller_preset/SE_PWR_BD.h>
 
 // Controller Frequency
-#define CONTROLLER_FREQUENCY (10000)
+#define CONTROLLER_FREQUENCY (16000)
 
 // PWM depth
 #define CONTROLLER_PWM_CMP_MAX (6000)
 
-// Speed controller Division
+// Speed controller Division µçÁ÷»·3-5±¶
 #define SPD_CONTROLLER_PWM_DIVISION (5)
 
 // Controller Base Voltage and Base Current
@@ -24,7 +25,6 @@
 // Current ADC module default per unit parameter
 #define MTR_CTRL_CURRENT_GAIN (ADC_FULLSCALE_CURRENT * 2 / MTR_CTRL_CURRENT_BASE)
 #define MTR_CTRL_CURRENT_BIAS (ADC_CURRENT_REFERENCE_VOLTAGE / ADC_REFERENCE)
-
 
 // Voltage ADC module default per unit parameter
 #define MTR_CTRL_VOLTAGE_GAIN ((ADC_FULLSCALE_VOLTAGE / MTR_CTRL_VOLTAGE_BASE))
@@ -42,20 +42,21 @@
 // BUILD_LEVEL 4: Speed Close loop
 #define BUILD_LEVEL (1)
 
-// 
+//
 // Controller Settings
 //
 
 // Use discrete PID controller
 // Discrete controller may bring more smooth response.
-//#define PMSM_CTRL_USING_DISCRETE_CTRL
+// #define PMSM_CTRL_USING_DISCRETE_CTRL
 
 // Enable Discrete PID controller anti-saturation algorithm
 #define _USE_DEBUG_DISCRETE_PID
 
 // Enable ADC Calibrate
-#define SPECIFY_ENABLE_ADC_CALIBRATE
+// #define SPECIFY_ENABLE_ADC_CALIBRATE
 
+// Enable current distributor
+#define PMSM_CTRL_USING_CURRENT_DISTRIBUTOR
 
 #endif // _FILE_CTRL_SETTINGS_H_
- 
