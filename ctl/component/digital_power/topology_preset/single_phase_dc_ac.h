@@ -3,6 +3,8 @@
 #include <ctl/component/intrinsic/continuous/continuous_pid.h>
 #include <ctl/component/intrinsic/discrete/discrete_filter.h>
 #include <ctl/component/intrinsic/discrete/proportional_resonant.h>
+#include <ctl/component/digital_power/single_phase/spll.h>
+
 
 #ifndef _FILE_SINGLE_PHASE_DC_AC_H_
 #define _FILE_SINGLE_PHASE_DC_AC_H_
@@ -64,7 +66,7 @@ typedef struct _tag_sinv_ctrl_type
     // intermediate variables
     //
 
-    // current set
+    // current set, envelope
     ctrl_gt ig_set;
 
     // current reference is a AC value
@@ -96,10 +98,8 @@ typedef struct _tag_sinv_ctrl_type
     // Single phase PLL
     ctl_single_phase_pll spll;
 
-    // open loop angle source
+    // ramp generator: open loop angle source
     ctl_src_rg_t rg;
-
-    // ramp generator
 
     // QPR controller for current base frequency
     qpr_ctrl_t sinv_qpr_base;
@@ -398,10 +398,10 @@ void ctl_set_sinv_voltage_closeloop_rectifier(sinv_ctrl_t *sinv)
     sinv->flag_rectifier_mode = 1;
 
     // enable ramp generator module
-    sinv->flag_enable_ramp = 1;
+    sinv->flag_enable_ramp = 0;
 
     // select angle source is ramp generator
-    sinv->flag_angle_freerun = 1;
+    sinv->flag_angle_freerun = 0;
 
     // enable single phase PLL
     sinv->flag_enable_spll = 1;

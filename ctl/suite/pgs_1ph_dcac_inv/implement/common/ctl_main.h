@@ -24,10 +24,6 @@
 
 #include <xplt.peripheral.h>
 
-#include <ctl/component/digital_power/single_phase/spll.h>
-
-#include <ctl/component/intrinsic/discrete/proportional_resonant.h>
-
 #include <ctl/component/intrinsic/discrete/stimulate.h>
 
 #include <ctl/component/digital_power/topology_preset/single_phase_dc_ac.h>

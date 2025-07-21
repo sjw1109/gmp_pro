@@ -139,6 +139,15 @@ void ctl_step_single_phase_pll(
     ctl_set_phasor_via_angle(spll->theta, &spll->phasor);
 }
 
+GMP_STATIC_INLINE
+ctrl_gt ctl_get_spll_error_fbk(
+    // handle of Single phase PLL object
+    ctl_single_phase_pll* spll)
+{
+    return ctl_get_lowpass_filter_result(&spll->filter_uq);
+}
+
+
 #ifdef __cplusplus
 }
 #endif // __cplusplus

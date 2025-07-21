@@ -24,34 +24,13 @@
 
 sinv_ctrl_t sinv_ctrl;
 
-//
-// #include <ctl/component/intrinsic/continuous/continuous_pid.h>
-// pid_regular_t current_pid, voltage_pid;
-// pid_regular_t sinv_vlotage_pid;
-// ctrl_gt pwm_out_pu;
-//
-// ctl_single_phase_pll spll;
-// ctrl_gt ac_input;
-//
-// ctrl_gt sinv_pwm_pu[2];
-// pr_ctrl_t sinv_pr_base;
-// qpr_ctrl_t sinv_qpr_base;
-// ctrl_gt sinv_current_ref;
-//
-// ctl_src_rg_t rg;
-//
-////
-// adc_bias_calibrator_t adc_calibrator;
-// fast_gt flag_enable_adc_calibrator = 0;
-// fast_gt index_adc_calibrator = 0;
-//
-// ctrl_gt modulate_target;
-//
-//
-// ctrl_gt v_set = float2ctrl(0.02);
-
 // enable motor running
+#if !defined SPECIFY_PC_ENVIRONMENT
 volatile fast_gt flag_enable_system = 0;
+#else
+volatile fast_gt flag_enable_system = 1;
+#endif // SPECIFY_PC_ENVIRONMENT
+
 volatile fast_gt flag_error = 0;
 
 // CTL initialize routine
@@ -91,7 +70,7 @@ void ctl_init()
     init.adc_filter_fc = 1000.0;
 
     // controller frequency
-    init.f_ctrl = 20e3;
+    init.f_ctrl = CONTROLLER_FREQUENCY;
 
     // init sinv Controller
     ctl_init_sinv_ctrl(&sinv_ctrl, &init);
@@ -171,24 +150,43 @@ time_gt tick_bias = 0;
 
 void ctl_mainloop(void)
 {
+    // When the program is reach here, the following things will happen:
+    // 1. software non-block delay 500ms
+    // 2. judge if spll theta error convergence has occurred
+    // 3. then enable system
+
     // first time flag
-    if (firsttime_flag == 0)
+    if ((flag_enable_system == 1) && firsttime_flag == 0)
     {
         tick_bias = gmp_base_get_system_tick();
         firsttime_flag = 1;
     }
 
     // a delay of 500ms
-    if ((started_flag == 0) && ((gmp_base_get_system_tick() - tick_bias) > 500) && (startup_flag == 0))
+    if ((flag_enable_system == 1) && (started_flag == 0) && ((gmp_base_get_system_tick() - tick_bias) > 500) &&
+        (startup_flag == 0))
     {
         startup_flag = 1;
     }
 
     // judge if PLL is close to target
-    if ((started_flag == 0) && (startup_flag == 1) && sinv_ctrl.spll.spll_ctrl.out < float2ctrl(0.001))
+    if ((flag_enable_system == 1) && (started_flag == 0) && (startup_flag == 1) &&
+        ctl_get_spll_error_fbk(&sinv_ctrl.spll) < CTRL_SPLL_EPSILON)
     {
         ctl_enable_output();
         started_flag = 1;
+    }
+
+    // if system is disabled
+    if (flag_enable_system == 0)
+    {
+        ctl_disable_output();
+
+        // clear all flags
+        firsttime_flag = 0;
+        startup_flag = 0;
+        started_flag = 0;
+        tick_bias = 0;
     }
 
     return;
