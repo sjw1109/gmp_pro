@@ -165,7 +165,7 @@ class asio_udp_helper
                 recv_socket.set_option(rcv_timeout_option{2000}); // 2000 s \approx 33 min
             }
 #else
-            // Default Mode: Clent mode
+            // Default Mode: client mode
 
             // if receive has setup, stop timeout
             if (this->recv_counter > 100)
@@ -178,7 +178,7 @@ class asio_udp_helper
             {
                 // somewhere in your headers to be used everywhere you need it
                 typedef boost::asio::detail::socket_option::integer<SOL_SOCKET, SO_RCVTIMEO> rcv_timeout_option;
-                recv_socket.set_option(rcv_timeout_option{2000});
+                recv_socket.set_option(rcv_timeout_option{GMP_ASIO_UDP_LINK_TIMEOUT});
             }
 
 #endif // PC_SIMULATE_STOP_CONDITION
