@@ -167,13 +167,55 @@ void ctl_ct_ipark(ctl_vector3_t *dq0, ctl_vector2_t *phasor, GMP_CTL_OUTPUT_TAG 
 {
     // tex:
     //$$i_\alpha = i_d \times \cos\;(\theta) - i_q \times \sin\;(\theta) $$
-    ab->dat[0] = ctl_mul(dq0->dat[0], phasor->dat[1]) - ctl_mul(dq0->dat[1], phasor->dat[0]);
+    ab->dat[phase_alpha] = ctl_mul(dq0->dat[0], phasor->dat[1]) - ctl_mul(dq0->dat[1], phasor->dat[0]);
     // tex:
     //  $$ i_\beta = i_d \times \sin\;(\theta) + i_q \times \cos\;(\theta) $$
-    ab->dat[1] = ctl_mul(dq0->dat[0], phasor->dat[0]) + ctl_mul(dq0->dat[1], phasor->dat[1]);
+    ab->dat[phase_beta] = ctl_mul(dq0->dat[0], phasor->dat[0]) + ctl_mul(dq0->dat[1], phasor->dat[1]);
     // tex:
     //$$i_0 = i_0$$
-    ab->dat[2] = dq0->dat[2];
+    ab->dat[phase_0] = dq0->dat[phase_0];
+}
+
+// iClarke coordinate axes transform
+GMP_STATIC_INLINE
+void ctl_ct_iclark(ctl_vector3_t *ab0, GMP_CTL_OUTPUT_TAG ctl_vector3_t *abc)
+{
+    // Pre-calculate intermediate terms for efficiency and clarity.
+    ctrl_gt neg_half_alpha = -ctl_div2(ab0->dat[phase_alpha]);
+    ctrl_gt beta_term = ctl_mul(GMP_CONST_AB2ABC_ALPHA, ab0->dat[phase_beta]);
+
+    // tex:
+    //  $$i_a = i_\alpha + i_0$$
+    abc->dat[phase_A] = ab0->dat[phase_alpha] + ab0->dat[phase_0];
+
+    // tex:
+    // $$i_b = -0.5 \times i_\alpha + \frac{\sqrt{3}}{2} \times i_\beta + i_0$$
+    abc->dat[phase_B] = neg_half_alpha + beta_term + ab0->dat[phase_0];
+
+    // tex:
+    // $$i_c = -0.5 \times i_\alpha - \frac{\sqrt{3}}{2} \times i_\beta + i_0$$
+    abc->dat[phase_C] = neg_half_alpha - beta_term + ab0->dat[phase_0];
+}
+
+// iClarke coordinate axes transform
+GMP_STATIC_INLINE
+void ctl_ct_iclark2(ctl_vector2_t *ab, GMP_CTL_OUTPUT_TAG ctl_vector3_t *abc)
+{
+    // Pre-calculate intermediate terms for efficiency and clarity.
+    ctrl_gt neg_half_alpha = -ctl_div2(ab0->dat[phase_alpha]);
+    ctrl_gt beta_term = ctl_mul(GMP_CONST_AB2ABC_ALPHA, ab0->dat[phase_beta]);
+
+    // tex:
+    //  $$i_a = i_\alpha$$
+    abc->dat[phase_A] = ab0->dat[phase_alpha];
+
+    // tex:
+    // $$i_b = -0.5 \times i_\alpha + \frac{\sqrt{3}}{2} \times i_\beta$$
+    abc->dat[phase_B] = neg_half_alpha + beta_term;
+
+    // tex:
+    // $$i_c = -0.5 \times i_\alpha - \frac{\sqrt{3}}{2} \times i_\beta$$
+    abc->dat[phase_C] = neg_half_alpha - beta_term;
 }
 
 // uab0(alpha-beta-0) to uabc SVPWM modulation result
@@ -187,7 +229,7 @@ void ctl_ct_svpwm_calc(ctl_vector3_t *ab0, GMP_CTL_OUTPUT_TAG ctl_vector3_t *Tab
     ctrl_gt Ubeta_tmp = ctl_mul(ab0->dat[phase_beta], GMP_CONST_SQRT_3_OVER_2);
 
     // tex: $$
-    //           U_a = U_\alpha, \\
+    //                U_a = U_\alpha, \\
     //U_b = -U_\alpha /2 + \sqrt{3}/2\cdot U_\beta, \\
     //U_c = -U_\alpha /2 - \sqrt{3}/2\cdot U_\beta,
     //$$

@@ -10,6 +10,8 @@
 #define GMP_CONST_ABC2AB_BETA  (float2ctrl(0.577350269189626)) // 1/sqrt(3)
 #define GMP_CONST_ABC2AB_GAMMA (float2ctrl(0.333333333333334)) // 1/3
 
+#define GMP_CONST_AB2ABC_ALPHA (float2ctrl(0.8660254)) // sqrt(3)/2
+
 #define GMP_CONST_AB02AB_ALPHA (float2ctrl(1.154700538379252)) // 2/sqrt(3)
 
 // Here're some constants for SVPWM
