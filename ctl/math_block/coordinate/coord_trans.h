@@ -78,9 +78,8 @@ enum PHASOR_ENUM
 // dat[1]: q
 // dat[2]: 0
 
-//
-
-// extern CORDIC_HandleTypeDef hcordic;
+// clang-format off
+// 
 
 // angle to 2-d phasor
 GMP_STATIC_INLINE
@@ -92,15 +91,9 @@ void ctl_set_phasor_via_angle(
 {
     phasor->dat[phasor_sin] = ctl_sin(angle);
     phasor->dat[phasor_cos] = ctl_cos(angle);
-
-    // ctrl_gt theta = ctl_mul(theta, GMP_CONST_1_OVER_2PI);
-
-    // hcordic.Instance->WDATA = theta << (31 - 24);
-    // phasor->dat[0] = (int32_t)(hcordic.Instance->RDATA) >> (31 - 24);
-    // phasor->dat[1] = (int32_t)(hcordic.Instance->RDATA) >> (31 - 24);
 }
 
-// clark coordinate axes transform
+// Clark coordinate axes transform
 // ABC to alpha-beta
 // Constant amplitude transformation
 GMP_STATIC_INLINE
@@ -114,14 +107,14 @@ void ctl_ct_clark(
     ctrl_gt k_beta = GMP_CONST_ABC2AB_BETA;   // 1/sqrt(3)
     ctrl_gt k_gamma = GMP_CONST_ABC2AB_GAMMA; // 1/3
 
-    // tex:
-    //  $$i_\alpha = 2/3\times i_a - 1/3 \times i_b - 1/3 \times i_c $$
+    //tex:
+    // $$i_\alpha = 2/3\times i_a - 1/3 \times i_b - 1/3 \times i_c $$
     ab->dat[phase_alpha] = ctl_mul(k_alpha, abc->dat[phase_A] - ctl_div2(abc->dat[phase_B] + abc->dat[phase_C]));
-    // tex:
-    //  $$i_\beta = \sqrt{3}/3\times i_b - \sqrt{3}/3\times i_c $$
+    //tex:
+    // $$i_\beta = \sqrt{3}/3\times i_b - \sqrt{3}/3\times i_c $$
     ab->dat[phase_beta] = ctl_mul(k_beta, (abc->dat[phase_B] - abc->dat[phase_C]));
-    // tex:
-    //  $$i_\beta = 1/3\times i_a + 1/3\times i_b + 1/3\times i_c $$
+    //tex:
+    // $$i_\beta = 1/3\times i_a + 1/3\times i_b + 1/3\times i_c $$
     ab->dat[phase_0] = ctl_mul(k_gamma, abc->dat[phase_A] + abc->dat[phase_B] + abc->dat[phase_C]);
 }
 
@@ -136,15 +129,15 @@ void ctl_ct_clark_2ph(
 {
     ctrl_gt k_alpha = GMP_CONST_AB02AB_ALPHA;
 
-    // tex:
-    //   $$i_\alpha = i_a $$
+    //tex:
+    //  $$i_\alpha = i_a $$
     ab->dat[phase_alpha] = ab0->dat[phase_A];
-    // tex:
-    //  $$i_\beta = 2/\sqrt{3}\times (i_a/2 + i_b) $$
+    //tex:
+    // $$i_\beta = 2/\sqrt{3}\times (i_a/2 + i_b) $$
     ab->dat[phase_beta] = (ctrl_gt)ctl_mul(ctl_div2(ab0->dat[phase_A]) + ab0->dat[phase_B], k_alpha);
 }
 
-// Clark coorinate axes transform
+// Clark coordinate axes transform
 //  uAB & uBC is line voltage
 GMP_STATIC_INLINE
 void ctl_ct_clark_from_line(
@@ -156,12 +149,12 @@ void ctl_ct_clark_from_line(
     ctrl_gt k_beta = GMP_CONST_ABC2AB_BETA;   // 1/sqrt(3)
     ctrl_gt k_gamma = GMP_CONST_ABC2AB_GAMMA; // 1/3
 
-    // tex:
-    //  $$U_\alpha = \frac{1}{3}(2 U_{ab} + U_{bc})$$
+    //tex:
+    // $$U_\alpha = \frac{1}{3}(2 U_{ab} + U_{bc})$$
     ab->dat[phase_alpha] = ctl_mul(k_gamma, ctl_mul2(u_line->dat[phase_UAB]) + u_line->dat[phase_UBC]);
 
-    // tex:
-    //  $$U_\beta = \frac{1}{\sqrt{3}} U_{bc}$$
+    //tex:
+    // $$U_\beta = \frac{1}{\sqrt{3}} U_{bc}$$
     ab->dat[phase_beta] = ctl_mul(k_beta, u_line->dat[phase_UBC]);
 }
 
@@ -176,16 +169,16 @@ void ctl_ct_park(
     // dq0
     GMP_CTL_OUTPUT_TAG ctl_vector3_t *dq0)
 {
-    // tex:
-    //   $$i_d = i_\alpha \times cos\;(\theta) + i_\beta \times sin\;(\theta) $$
+    //tex:
+    // $$i_d = i_\alpha \times cos\;(\theta) + i_\beta \times sin\;(\theta) $$
     dq0->dat[phase_d] =
         ctl_mul(ab->dat[phase_alpha], phasor->dat[phasor_cos]) + ctl_mul(ab->dat[phase_beta], phasor->dat[phasor_sin]);
-    // tex:
-    //$$i_q = - i_\alpha \times sin\;(\theta) + i_\beta \times cos\;(\theta)$$
+    //tex:
+    // $$i_q = - i_\alpha \times sin\;(\theta) + i_\beta \times cos\;(\theta)$$
     dq0->dat[phase_q] =
         -ctl_mul(ab->dat[phase_alpha], phasor->dat[phasor_sin]) + ctl_mul(ab->dat[phase_beta], phasor->dat[phasor_cos]);
-    // tex:
-    //$$i_0 = i_0$$
+    //tex:
+    // $$i_0 = i_0$$
     dq0->dat[phase_0] = ab->dat[phase_0];
 }
 
@@ -200,12 +193,12 @@ void ctl_ct_park2(
     // dq0
     GMP_CTL_OUTPUT_TAG ctl_vector2_t *dq0)
 {
-    // tex:
-    //  $$i_d = i_\alpha \times cos\;(\theta) + i_\beta \times sin\;(\theta) $$
+    //tex:
+    // $$i_d = i_\alpha \times cos\;(\theta) + i_\beta \times sin\;(\theta) $$
     dq0->dat[phase_d] =
         ctl_mul(ab->dat[phase_alpha], phasor->dat[phasor_cos]) + ctl_mul(ab->dat[phase_beta], phasor->dat[phasor_sin]);
-    // tex:
-    //$$i_q = - i_\alpha \times sin\;(\theta) + i_\beta \times cos\;(\theta)$$
+    //tex:
+    // $$i_q = - i_\alpha \times sin\;(\theta) + i_\beta \times cos\;(\theta)$$
     dq0->dat[phase_q] =
         -ctl_mul(ab->dat[phase_alpha], phasor->dat[phasor_sin]) + ctl_mul(ab->dat[phase_beta], phasor->dat[phasor_cos]);
 }
@@ -221,16 +214,16 @@ void ctl_ct_ipark(
     // alpha beta
     GMP_CTL_OUTPUT_TAG ctl_vector3_t *ab)
 {
-    // tex:
-    //$$i_\alpha = i_d \times \cos\;(\theta) - i_q \times \sin\;(\theta) $$
+    //tex:
+    // $$i_\alpha = i_d \times \cos\;(\theta) - i_q \times \sin\;(\theta) $$
     ab->dat[phase_alpha] =
         ctl_mul(dq0->dat[phase_d], phasor->dat[phasor_cos]) - ctl_mul(dq0->dat[phase_q], phasor->dat[phasor_sin]);
-    // tex:
-    //  $$ i_\beta = i_d \times \sin\;(\theta) + i_q \times \cos\;(\theta) $$
+    //tex:
+    // $$ i_\beta = i_d \times \sin\;(\theta) + i_q \times \cos\;(\theta) $$
     ab->dat[phase_beta] =
         ctl_mul(dq0->dat[phase_d], phasor->dat[phasor_sin]) + ctl_mul(dq0->dat[phase_q], phasor->dat[phasor_cos]);
-    // tex:
-    //$$i_0 = i_0$$
+    //tex:
+    // $$i_0 = i_0$$
     ab->dat[phase_0] = dq0->dat[phase_0];
 }
 
@@ -242,24 +235,24 @@ void ctl_ct_iclark(
     // ABC
     GMP_CTL_OUTPUT_TAG ctl_vector3_t *abc)
 {
-    // Pre-calculate intermediate terms for efficiency and clarity.
+    // calculate intermediate terms for efficiency and clarity.
     ctrl_gt neg_half_alpha = -ctl_div2(ab0->dat[phase_alpha]);
     ctrl_gt beta_term = ctl_mul(GMP_CONST_AB2ABC_ALPHA, ab0->dat[phase_beta]);
 
-    // tex:
-    //  $$i_a = i_\alpha + i_0$$
+    //tex:
+    // $$i_a = i_\alpha + i_0$$
     abc->dat[phase_A] = ab0->dat[phase_alpha] + ab0->dat[phase_0];
 
-    // tex:
+    //tex:
     // $$i_b = -0.5 \times i_\alpha + \frac{\sqrt{3}}{2} \times i_\beta + i_0$$
     abc->dat[phase_B] = neg_half_alpha + beta_term + ab0->dat[phase_0];
 
-    // tex:
+    //tex:
     // $$i_c = -0.5 \times i_\alpha - \frac{\sqrt{3}}{2} \times i_\beta + i_0$$
     abc->dat[phase_C] = neg_half_alpha - beta_term + ab0->dat[phase_0];
 }
 
-// iClarke coordinate axes transform
+// iClark coordinate axes transform
 // sine modulation
 GMP_STATIC_INLINE
 void ctl_ct_iclark2(
@@ -268,23 +261,24 @@ void ctl_ct_iclark2(
     // ABC
     GMP_CTL_OUTPUT_TAG ctl_vector3_t *abc)
 {
-    // Pre-calculate intermediate terms for efficiency and clarity.
+    // calculate intermediate terms for efficiency and clarity.
     ctrl_gt neg_half_alpha = -ctl_div2(ab->dat[phase_alpha]);
     ctrl_gt beta_term = ctl_mul(GMP_CONST_AB2ABC_ALPHA, ab->dat[phase_beta]);
 
-    // tex:
-    //  $$i_a = i_\alpha$$
+    //tex:
+    // $$i_a = i_\alpha$$
     abc->dat[phase_A] = ab->dat[phase_alpha];
 
-    // tex:
+    //tex:
     // $$i_b = -0.5 \times i_\alpha + \frac{\sqrt{3}}{2} \times i_\beta$$
     abc->dat[phase_B] = neg_half_alpha + beta_term;
 
-    // tex:
+    //tex:
     // $$i_c = -0.5 \times i_\alpha - \frac{\sqrt{3}}{2} \times i_\beta$$
     abc->dat[phase_C] = neg_half_alpha - beta_term;
 }
 
+// Clark transformation to Uab and Ubc
 GMP_STATIC_INLINE
 void ctl_ct_iclark_to_line(
     // alpha & beta
@@ -297,15 +291,18 @@ void ctl_ct_iclark_to_line(
     const ctrl_gt k_sqrt3_div_2 = GMP_CONST_SQRT_3_OVER_2; // sqrt(3)/2
     const ctrl_gt k_sqrt3 = GMP_CONST_SQRT_3;              // sqrt(3)
 
-    // tex:
+    //tex:
     // $$U_{ab} = \frac{3}{2} U_\alpha - \frac{\sqrt{3}}{2} U_\beta$$
     u_line->dat[phase_UAB] =
         ctl_sub(ctl_mul(k_three_halves, ab->dat[phase_alpha]), ctl_mul(k_sqrt3_div_2, ab->dat[phase_beta]));
 
-    // tex:
+    //tex:
     // $$U_{bc} = \sqrt{3} U_\beta$$
     u_line->dat[phase_UBC] = ctl_mul(k_sqrt3, ab->dat[phase_beta]);
 }
+
+//
+// clang-format on
 
 // uab0(alpha-beta-0) to uabc SVPWM modulation result
 GMP_STATIC_INLINE
@@ -321,11 +318,12 @@ void ctl_ct_svpwm_calc(
     ctrl_gt Ualpha_tmp = -ctl_div2(ab0->dat[phase_alpha]);
     ctrl_gt Ubeta_tmp = ctl_mul(ab0->dat[phase_beta], GMP_CONST_SQRT_3_OVER_2);
 
-    // tex: $$
-    //                        U_a = U_\alpha, \\
-    //U_b = -U_\alpha /2 + \sqrt{3}/2\cdot U_\beta, \\
-    //U_c = -U_\alpha /2 - \sqrt{3}/2\cdot U_\beta,
-    //$$
+    //tex: 
+    // $$
+    // U_a = U_\alpha, \\
+    // U_b = -U_\alpha /2 + \sqrt{3}/2\cdot U_\beta, \\
+    // U_c = -U_\alpha /2 - \sqrt{3}/2\cdot U_\beta
+    // $$
 
     Ua = ab0->dat[phase_alpha];
     Ub = Ualpha_tmp + Ubeta_tmp;
