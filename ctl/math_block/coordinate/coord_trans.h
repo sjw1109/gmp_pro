@@ -202,12 +202,12 @@ GMP_STATIC_INLINE
 void ctl_ct_iclark2(ctl_vector2_t *ab, GMP_CTL_OUTPUT_TAG ctl_vector3_t *abc)
 {
     // Pre-calculate intermediate terms for efficiency and clarity.
-    ctrl_gt neg_half_alpha = -ctl_div2(ab0->dat[phase_alpha]);
-    ctrl_gt beta_term = ctl_mul(GMP_CONST_AB2ABC_ALPHA, ab0->dat[phase_beta]);
+    ctrl_gt neg_half_alpha = -ctl_div2(ab->dat[phase_alpha]);
+    ctrl_gt beta_term = ctl_mul(GMP_CONST_AB2ABC_ALPHA, ab->dat[phase_beta]);
 
     // tex:
     //  $$i_a = i_\alpha$$
-    abc->dat[phase_A] = ab0->dat[phase_alpha];
+    abc->dat[phase_A] = ab->dat[phase_alpha];
 
     // tex:
     // $$i_b = -0.5 \times i_\alpha + \frac{\sqrt{3}}{2} \times i_\beta$$
