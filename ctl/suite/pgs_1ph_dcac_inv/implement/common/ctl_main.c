@@ -55,18 +55,27 @@ void ctl_init()
     init.pll_ctrl_Ti = 1000.0f;
     init.pll_ctrl_cut_freq = 9.0f;
 
+#if BUILD_LEVEL <= 3
     // current controller parameters
     init.i_ctrl_kp = 0.02f;
     init.i_ctrl_kr = 340.0f;
     init.i_ctrl_cut_freq = 8.0f;
+#elif BUILD_LEVEL <= 5
+    // current controller parameters
+    init.i_ctrl_kp = 1.0e-5f;
+    init.i_ctrl_kr = 80.0f;
+    init.i_ctrl_cut_freq = 8.0f;
+#endif // BUILD_LEVEL
 
     // harmonic controller parameters
     init.harm_ctrl_kr_3 = 1;
     init.harm_ctrl_cut_freq_3 = 5.0f;
     init.harm_ctrl_kr_5 = 3;
     init.harm_ctrl_cut_freq_5 = 5.0f;
-    init.harm_ctrl_kr_7 = 1;
+    init.harm_ctrl_kr_7 = 3;
     init.harm_ctrl_cut_freq_7 = 5.0f;
+    init.harm_ctrl_kr_9 = 6;
+    init.harm_ctrl_cut_freq_9 = 5.0f;
 
     // adc input filter cut frequency
     init.adc_filter_fc = 1000.0;
@@ -103,32 +112,40 @@ void ctl_init()
 
     // rectifier, current loop
     ctl_set_sinv_current_closeloop_inverter(&sinv_ctrl);
-    ctl_set_sinv_current_ref(&sinv_ctrl, float2ctrl(0.1));
+    ctl_set_sinv_current_ref(&sinv_ctrl, float2ctrl(-0.1));
     ctl_set_sinv_pll(&sinv_ctrl);
     ctl_disable_sinv_harm_ctrl(&sinv_ctrl);
 
-#elif BUILD_LEVEL == 4
+#elif BUILD_LEVEL == 5
+
+    // rectifier, current loop, with harm control
+    ctl_set_sinv_current_closeloop_inverter(&sinv_ctrl);
+    ctl_set_sinv_current_ref(&sinv_ctrl, float2ctrl(-0.1));
+    ctl_set_sinv_pll(&sinv_ctrl);
+    ctl_enable_sinv_harm_ctrl(&sinv_ctrl);
+
+#elif BUILD_LEVEL == 6
     // rectifier voltage loop, without harm control
     ctl_set_sinv_voltage_closeloop_rectifier(&sinv_ctrl);
     ctl_set_sinv_voltage_ref(&sinv_ctrl, float2ctrl(0.4));
     ctl_disable_sinv_harm_ctrl(&sinv_ctrl);
     ctl_set_sinv_pll(&sinv_ctrl);
 
-#elif BUILD_LEVEL == 5
+#elif BUILD_LEVEL == 7
     // rectifier voltage loop, with harm control
     ctl_set_sinv_voltage_closeloop_rectifier(&sinv_ctrl);
     ctl_set_sinv_voltage_ref(&sinv_ctrl, float2ctrl(0.4));
     ctl_enable_sinv_harm_ctrl(&sinv_ctrl);
     ctl_set_sinv_pll(&sinv_ctrl);
 
-#elif BUILD_LEVEL == 6
+#elif BUILD_LEVEL == 8
     // inverter voltage loop, without harm control
     ctl_set_sinv_voltage_closeloop_inverter(&sinv_ctrl);
     ctl_set_sinv_voltage_ref(&sinv_ctrl, float2ctrl(0.4));
     ctl_disable_sinv_harm_ctrl(&sinv_ctrl);
     ctl_set_sinv_pll(&sinv_ctrl);
 
-#elif BUILD_LEVEL == 7
+#elif BUILD_LEVEL == 9
     // inverter voltage loop, with harm control
     ctl_set_sinv_voltage_closeloop_inverter(&sinv_ctrl);
     ctl_set_sinv_voltage_ref(&sinv_ctrl, float2ctrl(0.4));

@@ -19,7 +19,7 @@ void ctl_upgrade_sinv_param(sinv_ctrl_t *sinv, sinv_init_t *init)
     ctl_init_single_phase_pll(&sinv->spll, init->pll_ctrl_kp, init->pll_ctrl_Ti, init->pll_ctrl_cut_freq,
                               init->base_freq, init->f_ctrl);
 
- // ctl_init_ramp_gen(&sinv->rg, float2ctrl(1.0f / init->base_freq), 1, 0);
+    // ctl_init_ramp_gen(&sinv->rg, float2ctrl(1.0f / init->base_freq), 1, 0);
     ctl_init_ramp_gen_via_amp_freq(&sinv->rg, init->f_ctrl, init->base_freq, 1, 0);
 
     ctl_init_lp_filter(&sinv->lpf_idc, init->f_ctrl, init->adc_filter_fc);
@@ -38,6 +38,8 @@ void ctl_upgrade_sinv_param(sinv_ctrl_t *sinv, sinv_init_t *init)
     ctl_init_qr_controller(&sinv->sinv_qr_5, init->harm_ctrl_kr_5, init->base_freq * 5.0f, init->harm_ctrl_cut_freq_5,
                            init->f_ctrl);
     ctl_init_qr_controller(&sinv->sinv_qr_7, init->harm_ctrl_kr_7, init->base_freq * 7.0f, init->harm_ctrl_cut_freq_7,
+                           init->f_ctrl);
+    ctl_init_qr_controller(&sinv->sinv_qr_9, init->harm_ctrl_kr_9, init->base_freq * 9.0f, init->harm_ctrl_cut_freq_9,
                            init->f_ctrl);
 }
 

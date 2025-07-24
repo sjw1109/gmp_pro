@@ -107,7 +107,7 @@ void ctl_output_callback(void)
     simulink_tx_buffer.monitor[4] = sinv_adc[SINV_ADC_ID_VG].control_port.value;
     simulink_tx_buffer.monitor[5] = sinv_adc[SINV_ADC_ID_IG].control_port.value;
 
-#elif BUILD_LEVEL == 4
+#elif BUILD_LEVEL == 4 || BUILD_LEVEL == 5
 
     // Scope 1: Current set / fbk
     simulink_tx_buffer.monitor[0] = sinv_ctrl.adc_igrid->value;
@@ -121,9 +121,10 @@ void ctl_output_callback(void)
     simulink_tx_buffer.monitor[4] = sinv_adc[SINV_ADC_ID_IDC].control_port.value;
     simulink_tx_buffer.monitor[5] = sinv_adc[SINV_ADC_ID_VDC].control_port.value;
 
-    // Scope 4
+    // Scope 4 power factor
     simulink_tx_buffer.monitor[6] = sinv_adc[SINV_ADC_ID_VG].control_port.value;
     simulink_tx_buffer.monitor[7] = sinv_adc[SINV_ADC_ID_IG].control_port.value;
+
 
 #endif // BUILD LEVEL
 }

@@ -112,6 +112,9 @@ typedef struct _tag_sinv_ctrl_type
     // QR controller for current 7th harmonic
     qr_ctrl_t sinv_qr_7;
 
+    // QR controller for current 9th harmonic
+    qr_ctrl_t sinv_qr_9;
+
     // PID controller for voltage
     pid_regular_t voltage_pid;
 
@@ -252,6 +255,8 @@ ctrl_gt ctl_step_sinv(sinv_ctrl_t *sinv)
                     ctl_step_qr_controller(&sinv->sinv_qr_5, -ctl_get_lowpass_filter_result(&sinv->lpf_igrid));
                 sinv->modulation +=
                     ctl_step_qr_controller(&sinv->sinv_qr_7, -ctl_get_lowpass_filter_result(&sinv->lpf_igrid));
+                sinv->modulation +=
+                    ctl_step_qr_controller(&sinv->sinv_qr_9, -ctl_get_lowpass_filter_result(&sinv->lpf_igrid));
             }
         }
         else
@@ -495,6 +500,8 @@ typedef struct _tag_single_phase_converter_init_t
     parameter_gt harm_ctrl_cut_freq_5;
     parameter_gt harm_ctrl_kr_7;
     parameter_gt harm_ctrl_cut_freq_7;
+    parameter_gt harm_ctrl_kr_9;
+    parameter_gt harm_ctrl_cut_freq_9;
 
     // adc input filter cut frequency
     parameter_gt adc_filter_fc;
