@@ -1,6 +1,5 @@
 #include <gmp_core.h>
 
-
 //////////////////////////////////////////////////////////////////////////
 // BOOST Control
 #include <ctl/component/digital_power/mppt/PnO_algorithm.h>
@@ -22,7 +21,10 @@ void ctl_init_mppt_PnO_algo(
     parameter_gt freq_ctrl)
 {
     // power filter
-    ctl_init_lp_filter(&mppt->power_filter, f_ctrl, freq_mppt * 6.0f);
+    ctl_init_lp_filter(&mppt->power_filter, freq_ctrl, freq_mppt * 6.0f);
+
+    // divider
+    ctl_init_divider(&mppt->divider, freq_ctrl / freq_mppt);
 
     // initial voltage
     mppt->v_ref = voltage_0;
@@ -40,4 +42,3 @@ void ctl_init_mppt_PnO_algo(
     ctl_disable_mppt_PnO_algo(mppt);
     ctl_enable_adaptive_step_size(mppt);
 }
-

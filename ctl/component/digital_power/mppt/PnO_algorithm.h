@@ -91,7 +91,7 @@ ctrl_gt ctl_step_mppt_PnO_algo(
     // current_current current current measurement result
     ctrl_gt current_current)
 {
-    mppt->current_power = ctl_step_lowpass_filter(mppt->power_filter, ctl_mul(current_voltage, current_current));
+    mppt->current_power = ctl_step_lowpass_filter(&mppt->power_filter, ctl_mul(current_voltage, current_current));
 
     mppt->delta_power = mppt->current_power - mppt->last_power;
     mppt->delta_voltage = current_voltage - mppt->last_voltage;
@@ -109,13 +109,13 @@ ctrl_gt ctl_step_mppt_PnO_algo(
                 {
                     // increase vref
                     mppt->v_ref += mppt->voltage_increment;
-                    mppt_record = mppt_record << 1 + 1;
+                    mppt->mppt_record = (mppt->mppt_record << 1) + 1;
                 }
                 else
                 {
                     // decrease vref
                     mppt->v_ref -= mppt->voltage_increment;
-                    mppt_record = mppt_record << 1;
+                    mppt->mppt_record = mppt->mppt_record << 1;
                 }
             }
             else // if (mppt->delta_power < CTL_MPPT_PNO_EPSILON)
@@ -124,13 +124,13 @@ ctrl_gt ctl_step_mppt_PnO_algo(
                 {
                     // decrease vref
                     mppt->v_ref -= mppt->voltage_increment;
-                    mppt_record = mppt_record << 1;
+                    mppt->mppt_record = mppt->mppt_record << 1;
                 }
                 else
                 {
                     // increase vref
                     mppt->v_ref += mppt->voltage_increment;
-                    mppt_record = mppt_record << 1 + 1;
+                    mppt->mppt_record = (mppt->mppt_record << 1) + 1;
                 }
             }
             // else if (delta_power == 0)
@@ -141,27 +141,51 @@ ctrl_gt ctl_step_mppt_PnO_algo(
                 // if MPPT algorithm reach the oscillating, decrease searching step
                 if (
                     // level I oscillation
-                    ((mppt->mppt_record & 0x07) == 2) || ((mppt->mppt_record & 0x07) == 5) ||
-                    // level II oscillation
-                    ((mppt->mppt_record & 0x0F) == 12) || ((mppt->mppt_record & 0x0F) == 3))
+                    ((mppt->mppt_record & 0x07) == 2) || ((mppt->mppt_record & 0x07) == 5))
                 {
-                    mppt->voltage_increment = ctl_mul(mppt->min_voltage_limit, mppt->inc_attenuation) +
+                    mppt->voltage_increment = ctl_mul(mppt->searching_step_min, mppt->inc_attenuation) +
                                               ctl_mul(mppt->voltage_increment, GMP_CONST_1 - mppt->inc_attenuation);
+                }
+                // level II oscillation - 1
+                else if (((mppt->mppt_record & 0x0F) == 12))
+                {
+                    // backtrack
+                    mppt->v_ref += mppt->voltage_increment;
+
+                    // convergence
+                    mppt->voltage_increment = ctl_mul(mppt->searching_step_min, mppt->inc_attenuation) +
+                                              ctl_mul(mppt->voltage_increment, GMP_CONST_1 - mppt->inc_attenuation);
+
+                    // restore
+                    mppt->v_ref -= mppt->voltage_increment;
+                }
+                // level II oscillation - 2
+                else if (((mppt->mppt_record & 0x0F) == 3))
+                {
+                    // backtrack
+                    mppt->v_ref -= mppt->voltage_increment;
+
+                    // convergence
+                    mppt->voltage_increment = ctl_mul(mppt->searching_step_min, mppt->inc_attenuation) +
+                                              ctl_mul(mppt->voltage_increment, GMP_CONST_1 - mppt->inc_attenuation);
+
+                    // restore
+                    mppt->v_ref += mppt->voltage_increment;
                 }
 
                 // if MPPT algorithm heads straight towards special direction
                 else if (((mppt->mppt_record & 0x0F) == 0x0F) || ((mppt->mppt_record & 0x0F) == 0x00))
                 {
-                    mppt->voltage_increment = mppt->max_voltage_limit;
+                    mppt->voltage_increment = mppt->searching_step_max;
                 }
             }
 
             // voltage limit range
-            mppt->v_ref = ctl_sat(mppt->v_ref, mppt->min_voltage_limit, mppt->max_voltage_limit);
+            mppt->v_ref = ctl_sat(mppt->v_ref, mppt->max_voltage_limit, mppt->min_voltage_limit);
 
             // update last value
             mppt->last_power = mppt->current_power;
-            mppt->last_voltage = mppt->current_voltage;
+            mppt->last_voltage = current_voltage;
         } // end of divider
     }     // end of flag enable MPPT
 
@@ -172,8 +196,8 @@ ctrl_gt ctl_step_mppt_PnO_algo(
 GMP_STATIC_INLINE
 void ctl_clear_mppt_PnO_algo(mppt_PnO_algo_t *mppt)
 {
-    ctl_clear_lowpass_filter(mppt->power_filter);
-    ctl_clear_divider(mppt->divider);
+    ctl_clear_lowpass_filter(&mppt->power_filter);
+    ctl_clear_divider(&mppt->divider);
 
     mppt->voltage_increment = mppt->searching_step_max;
 
