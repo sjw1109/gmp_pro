@@ -46,8 +46,8 @@ void ctl_init()
     init.base_freq = 50.0f;
 
     // voltage controller parameters
-    init.v_ctrl_kp = 0.4f;
-    init.v_ctrl_Ti = 0.2f;
+    init.v_ctrl_kp = 0.8f;
+    init.v_ctrl_Ti = 0.02f;
     init.v_ctrl_Td = 0;
 
     // PLL parameters
@@ -61,6 +61,11 @@ void ctl_init()
     init.i_ctrl_kr = 340.0f;
     init.i_ctrl_cut_freq = 8.0f;
 #elif BUILD_LEVEL <= 5
+    // current controller parameters
+    init.i_ctrl_kp = 1.0e-5f;
+    init.i_ctrl_kr = 80.0f;
+    init.i_ctrl_cut_freq = 8.0f;
+#elif BUILD_LEVEL <= 7
     // current controller parameters
     init.i_ctrl_kp = 1.0e-5f;
     init.i_ctrl_kr = 80.0f;
@@ -125,6 +130,7 @@ void ctl_init()
     ctl_enable_sinv_harm_ctrl(&sinv_ctrl);
 
 #elif BUILD_LEVEL == 6
+
     // rectifier voltage loop, without harm control
     ctl_set_sinv_voltage_closeloop_rectifier(&sinv_ctrl);
     ctl_set_sinv_voltage_ref(&sinv_ctrl, float2ctrl(0.4));
@@ -234,5 +240,5 @@ fast_gt ctl_ready_mainloop(void)
         return 1;
     else
 
-        return ctl_abs(ctl_get_spll_error_fbk(&sinv_ctrl.spll)) < CTRL_SPLL_EPSILON;
+        return (ctl_abs(ctl_get_spll_error_fbk(&sinv_ctrl.spll)) < CTRL_SPLL_EPSILON);
 }

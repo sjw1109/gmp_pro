@@ -8,8 +8,8 @@
 // BUILD_LEVEL 3: inverter, current loop, harmonic control
 // BUILD_LEVEL 4: rectifier, current loop
 // BUILD_LEVEL 5: rectifier, current loop, with harm control
-// BUILD_LEVEL 6: rectifier voltage loop, without harm control
-#define BUILD_LEVEL (5)
+// BUILD_LEVEL 6: rectifier, voltage loop, without harm control
+#define BUILD_LEVEL (6)
 
 // low voltage half bridge parameters
 #include <ctl/component/digital_power/hardware_preset/gmp_lvhb_v1.h>
@@ -45,7 +45,7 @@
 #define CTRL_VOLTAGE_ADC_GAIN (DSV1_VOLTAGE_SENSOR_GAIN)
  
 // SPLL Close loop criteria
-#define CTRL_SPLL_EPSILON ((float2ctrl(0.001)))
+#define CTRL_SPLL_EPSILON ((float2ctrl(0.005)))
 
 // 
 // Controller Settings
