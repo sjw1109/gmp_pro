@@ -56,16 +56,16 @@ void ctl_init()
     init.pll_ctrl_cut_freq = 9.0f;
 
     // current controller parameters
-    init.i_ctrl_kp = 0.00000001f;
-    init.i_ctrl_kr = 20.0f;
+    init.i_ctrl_kp = 0.02f;
+    init.i_ctrl_kr = 340.0f;
     init.i_ctrl_cut_freq = 8.0f;
 
     // harmonic controller parameters
-    init.harm_ctrl_kr_3 = 1.0f;
+    init.harm_ctrl_kr_3 = 1;
     init.harm_ctrl_cut_freq_3 = 5.0f;
-    init.harm_ctrl_kr_5 = 1.0f;
+    init.harm_ctrl_kr_5 = 3;
     init.harm_ctrl_cut_freq_5 = 5.0f;
-    init.harm_ctrl_kr_7 = 1.0f;
+    init.harm_ctrl_kr_7 = 1;
     init.harm_ctrl_cut_freq_7 = 5.0f;
 
     // adc input filter cut frequency
@@ -78,14 +78,14 @@ void ctl_init()
     ctl_init_sinv_ctrl(&sinv_ctrl, &init);
 
 #if BUILD_LEVEL == 1
-    // Voltage open loop
+    // Voltage open loop, inverter
     ctl_set_sinv_openloop_inverter(&sinv_ctrl);
-    ctl_set_sinv_current_ref(&sinv_ctrl, float2ctrl(0.1));
+    ctl_set_sinv_current_ref(&sinv_ctrl, float2ctrl(0.6));
     ctl_set_sinv_freerun(&sinv_ctrl);
     ctl_disable_sinv_harm_ctrl(&sinv_ctrl);
 
 #elif BUILD_LEVEL == 2
-    // current close loop
+    // current close loop, inverter
     ctl_set_sinv_current_closeloop_inverter(&sinv_ctrl);
     ctl_set_sinv_current_ref(&sinv_ctrl, float2ctrl(0.1));
     ctl_set_sinv_freerun(&sinv_ctrl);
@@ -98,6 +98,14 @@ void ctl_init()
     ctl_set_sinv_current_ref(&sinv_ctrl, float2ctrl(0.1));
     ctl_set_sinv_freerun(&sinv_ctrl);
     ctl_enable_sinv_harm_ctrl(&sinv_ctrl);
+
+#elif BUILD_LEVEL == 4
+
+    // rectifier, current loop
+    ctl_set_sinv_current_closeloop_inverter(&sinv_ctrl);
+    ctl_set_sinv_current_ref(&sinv_ctrl, float2ctrl(0.1));
+    ctl_set_sinv_pll(&sinv_ctrl);
+    ctl_disable_sinv_harm_ctrl(&sinv_ctrl);
 
 #elif BUILD_LEVEL == 4
     // rectifier voltage loop, without harm control
@@ -161,6 +169,7 @@ void ctl_mainloop(void)
     {
 
         // first time flag
+        // log the first time enable the system
         if (firsttime_flag == 0)
         {
             tick_bias = gmp_base_get_system_tick();
@@ -204,5 +213,9 @@ fast_gt ctl_ready_mainloop(void)
 
     ctl_clear_sinv(&sinv_ctrl);
 
-    return ctl_get_spll_error_fbk(&sinv_ctrl.spll) < CTRL_SPLL_EPSILON;
+    if (ctl_is_sinv_inverter_mode(&sinv_ctrl))
+        return 1;
+    else
+
+        return ctl_abs(ctl_get_spll_error_fbk(&sinv_ctrl.spll)) < CTRL_SPLL_EPSILON;
 }

@@ -22,21 +22,11 @@
 
 // SIL standard port for Motor control
 
-// tri_ptr_adc_channel_t uabc;
-// tri_ptr_adc_channel_t iabc;
-//
-ptr_adc_channel_t uin;
-ptr_adc_channel_t uc;
-ptr_adc_channel_t il;
+
+ptr_adc_channel_t boost_adc_channel[ADC_BOOST_CHANNEL_NUM];
 pwm_channel_t pwm_out;
 
-// ADC RESULT INDEX
-typedef enum _tag_adc_result_nameplate
-{
-    ADC_RESULT_IL  = 0,
-    ADC_RESULT_UIN = 1,
-    ADC_RESULT_UOUT = 2
-}adc_result_nameplate_t;
+
 
 
 //////////////////////////////////////////////////////////////////////////

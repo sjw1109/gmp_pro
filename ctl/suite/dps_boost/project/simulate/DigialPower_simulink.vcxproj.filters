@@ -84,7 +84,19 @@
     <ClCompile Include="DigialPower_simulink.cpp">
       <Filter>implement_interface</Filter>
     </ClCompile>
-    <ClCompile Include="gmp_src\combo_basic.c">
+    <ClCompile Include="gmp_src\ctl_dp_basic.c">
+      <Filter>GMP Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gmp_src\ctl_dp_single_phase.c">
+      <Filter>GMP Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gmp_src\ctl_dp_mppt.c">
+      <Filter>GMP Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gmp_src\ctl_dp_three_phase.c">
+      <Filter>GMP Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gmp_src\ctl_dp_topology_sinv.c">
       <Filter>GMP Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -25,13 +25,12 @@ extern "C"
 //////////////////////////////////////////////////////////////////////////
 // device related functions
 // Controller interface
-// 
 //
-extern ptr_adc_channel_t uin;
-extern ptr_adc_channel_t uc;
-extern ptr_adc_channel_t il;
+
+extern ptr_adc_channel_t boost_adc_channel[ADC_BOOST_CHANNEL_NUM];
+
 extern pwm_channel_t pwm_out;
- 
+
 // Functions without controller nano framework.
 #ifndef SPECIFY_ENABLE_CTL_FRAMEWORK_NANO
 
@@ -39,29 +38,26 @@ extern pwm_channel_t pwm_out;
 GMP_STATIC_INLINE
 void ctl_input_callback(void)
 {
-    //// invoke ADC p.u. routine
-    simulink_tx_buffer.monitor[1] = ctl_step_ptr_adc_channel(&il);
-    simulink_tx_buffer.monitor[2] = ctl_step_ptr_adc_channel(&uin);
-    simulink_tx_buffer.monitor[3] = ctl_step_ptr_adc_channel(&uc);
-
+    // invoke ADC p.u. routine
+    for (index = 0; index < ADC_BOOST_CHANNEL_NUM; ++index)
+        ctl_step_ptr_adc_channel(&boost_adc_channel[index]);
 }
 
 // Output Callback
 GMP_STATIC_INLINE
 void ctl_output_callback(void)
 {
- 
+
     simulink_tx_buffer.pwm_cmp[0] = ctl_calc_pwm_channel(&pwm_out, ctl_get_boost_ctrl_modulation(&boost_ctrl));
 
     simulink_tx_buffer.enable = 1;
 
-    simulink_tx_buffer.monitor[0] = il.control_port.value;
-    simulink_tx_buffer.monitor[1] = uin.control_port.value;
-    simulink_tx_buffer.monitor[2] = uc.control_port.value;
+    simulink_tx_buffer.monitor[0] = boost_adc_channel[ADC_RESULT_IL].control_port.value;
+    simulink_tx_buffer.monitor[1] = boost_adc_channel[ADC_RESULT_UIN].control_port.value;
+    simulink_tx_buffer.monitor[2] = boost_adc_channel[ADC_RESULT_UOUT].control_port.value;
 
     simulink_tx_buffer.monitor[3] = boost_ctrl.voltage_pid.out;
     simulink_tx_buffer.monitor[4] = boost_ctrl.current_pid.out;
-
 
     simulink_tx_buffer.dac[0] = 20;
 }

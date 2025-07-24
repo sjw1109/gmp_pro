@@ -1,10 +1,9 @@
 ﻿
 
+#include <ctl/component/digital_power/single_phase/spll.h>
 #include <ctl/component/intrinsic/continuous/continuous_pid.h>
 #include <ctl/component/intrinsic/discrete/discrete_filter.h>
 #include <ctl/component/intrinsic/discrete/proportional_resonant.h>
-#include <ctl/component/digital_power/single_phase/spll.h>
-
 
 #ifndef _FILE_SINGLE_PHASE_DC_AC_H_
 #define _FILE_SINGLE_PHASE_DC_AC_H_
@@ -168,7 +167,7 @@ void ctl_clear_sinv_with_pll(sinv_ctrl_t *sinv)
 GMP_STATIC_INLINE
 ctrl_gt ctl_step_sinv(sinv_ctrl_t *sinv)
 {
-    //ctrl_gt target_phase;
+    // ctrl_gt target_phase;
 
     // Filter for ADC input channel
     ctl_step_lowpass_filter(&sinv->lpf_idc, sinv->adc_idc->value);
@@ -203,15 +202,15 @@ ctrl_gt ctl_step_sinv(sinv_ctrl_t *sinv)
         if (sinv->flag_angle_freerun)
         {
             sinv->target_phase = ctl_mul(ctl_sin(ctl_get_ramp_gen_output(&sinv->rg)), sinv->pf_set) +
-                           ctl_mul(ctl_cos(ctl_get_ramp_gen_output(&sinv->rg)),
-                                   ctl_sqrt(float2ctrl(1) - ctl_mul(sinv->pf_set, sinv->pf_set)));
+                                 ctl_mul(ctl_cos(ctl_get_ramp_gen_output(&sinv->rg)),
+                                         ctl_sqrt(float2ctrl(1) - ctl_mul(sinv->pf_set, sinv->pf_set)));
         }
         // Select SPLL as angle source
         else
         {
             sinv->target_phase = ctl_mul(sinv->spll.phasor.dat[phasor_sin], sinv->pf_set) +
-                           ctl_mul(sinv->spll.phasor.dat[phasor_cos],
-                                   ctl_sqrt(float2ctrl(1) - ctl_mul(sinv->pf_set, sinv->pf_set)));
+                                 ctl_mul(sinv->spll.phasor.dat[phasor_cos],
+                                         ctl_sqrt(float2ctrl(1) - ctl_mul(sinv->pf_set, sinv->pf_set)));
         }
 
         // Voltage Loop
@@ -439,7 +438,7 @@ void ctl_disable_sinv_ctrl(sinv_ctrl_t *sinv)
 }
 
 GMP_STATIC_INLINE
-void ctl_set_sinv_freerun(sinv_ctrl_t* sinv)
+void ctl_set_sinv_freerun(sinv_ctrl_t *sinv)
 {
     sinv->flag_angle_freerun = 1;
 }
@@ -460,6 +459,12 @@ GMP_STATIC_INLINE
 void ctl_disable_sinv_harm_ctrl(sinv_ctrl_t *sinv)
 {
     sinv->flag_enable_harmonic_ctrl = 0;
+}
+
+GMP_STATIC_INLINE
+fast_gt ctl_is_sinv_inverter_mode(sinv_ctrl_t *sinv)
+{
+    return (sinv->flag_rectifier_mode == 0);
 }
 
 // init structure for sinv
@@ -503,7 +508,7 @@ void ctl_upgrade_sinv_param(sinv_ctrl_t *sinv, sinv_init_t *init);
 void ctl_init_sinv_ctrl(sinv_ctrl_t *sinv, sinv_init_t *init);
 
 // This function will attach ADC control port to sinv controller
-void ctl_attach_sinv_with_adc(sinv_ctrl_t *sinv, adc_ift *udc, adc_ift *idc, adc_ift *il, adc_ift *ugrid, adc_ift *igrid);
-
+void ctl_attach_sinv_with_adc(sinv_ctrl_t *sinv, adc_ift *udc, adc_ift *idc, adc_ift *il, adc_ift *ugrid,
+                              adc_ift *igrid);
 
 #endif // _FILE_SINGLE_PHASE_DC_AC_H_
