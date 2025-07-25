@@ -1,8 +1,8 @@
 #include <ctl/component/interface/interface_base.h>
 #include <ctl/component/intrinsic/continuous/continuous_pid.h>
 
-#ifndef _FILE_BOOST_CTRL_H_
-#define _FILE_BOOST_CTRL_H_
+#ifndef _FILE_BUCK_CTRL_H_
+#define _FILE_BUCK_CTRL_H_
 
 #ifdef __cplusplus
 extern "C"
@@ -224,4 +224,4 @@ void ctl_disable_buck_ctrl(buck_ctrl_t *buck)
 }
 #endif // __cplusplus
 
-#endif // _FILE_BOOST_CTRL_H_
+#endif // _FILE_BUCK_CTRL_H_
