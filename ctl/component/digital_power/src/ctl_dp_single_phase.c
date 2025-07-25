@@ -48,3 +48,24 @@ void ctl_init_single_phase_pll(
     //// gain of SPLL
     //spll->pll_gain = float2ctrl(gain);
 }
+
+//////////////////////////////////////////////////////////////////////////
+// Single Phase PLL
+#include <ctl/component/digital_power/single_phase/sp_modulation.h>
+
+void ctl_init_single_phase_H_modulation(
+    // handle of modulation object
+    single_phase_H_modulation_t *bridge,
+    // PWM depth
+    pwm_gt pwm_full_scale,
+    // PWM dead band real value
+    pwm_gt pwm_deadband,
+    // current dead band
+    ctrl_gt current_deadband)
+{
+    bridge->pwm_full_scale = pwm_full_scale;
+    bridge->pwm_deadband = pwm_deadband / 2;
+    bridge->current_deadband = current_deadband;
+
+    ctl_clear_single_phase_H_modulation(bridge);
+}

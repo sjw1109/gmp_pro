@@ -13,7 +13,7 @@
 #include <math.h>
 
 //////////////////////////////////////////////////////////////////////////
-// Single Phase PLL
+// three Phase PLL
 #include <ctl/component/digital_power/three_phase/pll.h>
 
 void ctl_init_pll_3ph(
@@ -34,4 +34,25 @@ void ctl_init_pll_3ph(
 
     // clear controller
     ctl_clear_pll_3ph(pll);
+}
+
+//////////////////////////////////////////////////////////////////////////
+// three phase modulation
+#include <ctl/component/digital_power/three_phase/tp_modulation.h>
+
+void ctl_init_three_phase_bridge_modulation(
+    // three phase bridge handle
+    three_phase_bridge_modulation_t *bridge,
+    // full scale pwm compare
+    pwm_gt pwm_full_scale,
+    // deadband of PWM compare
+    pwm_gt pwm_deadband,
+    // current deadband
+    ctrl_gt current_deadband)
+{
+    bridge->pwm_full_scale = pwm_full_scale;
+    bridge->pwm_deadband = pwm_deadband;
+    bridge->current_deadband = current_deadband;
+
+    ctl_clear_three_phase_bridge_modulation(bridge);
 }
