@@ -67,10 +67,12 @@ void ctl_init()
     // Open loop
     ctl_boost_ctrl_openloop_mode(&boost_ctrl);
     ctl_set_boost_ctrl_voltage_openloop(&boost_ctrl, float2ctrl(0.5));
+
 #elif (BUILD_LEVEL == 2)
     // Current Loop
     ctl_boost_ctrl_current_mode(&boost_ctrl);
     ctl_set_boost_ctrl_current(&boost_ctrl, float2ctrl(0.5));
+
 #elif (BUILD_LEVEL == 3)
     // Voltage loop
     ctl_boost_ctrl_voltage_mode(&boost_ctrl);
