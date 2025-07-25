@@ -27,6 +27,16 @@
 pid_regular_t current_pid, voltage_pid;
 ctrl_gt pwm_out_pu;
 
+// enable controller
+#if !defined SPECIFY_PC_ENVIRONMENT
+volatile fast_gt flag_system_enable = 0;
+#else
+volatile fast_gt flag_system_enable = 1;
+#endif // SPECIFY_PC_ENVIRONMENT
+
+volatile fast_gt flag_system_running = 0;
+volatile fast_gt flag_error = 0;
+
 // Boost Controller Suite
 boost_ctrl_t boost_ctrl;
 
@@ -45,11 +55,11 @@ void ctl_init()
         // Boost controller
         &boost_ctrl,
         // Voltage PID controller
-        1.5, 0.02, 0,
+        1.5f, 0.02f, 0,
         // Current PID controller
-        3, 0.01, 0,
+        3.0f, 0.01f, 0,
         // valid voltage output range
-        0.1, 1,
+        0.1f, 1,
         // Controller frequency, Hz
         CONTROLLER_FREQUENCY);
 
@@ -74,17 +84,16 @@ void ctl_init()
 
 #endif // BUILD_LEVEL
 
-    // if in simulation mode, enable system
+    ctl_disable_output();
+
+    // if in simulation mode, enable system automatically
 #if !defined SPECIFY_PC_ENVIRONMENT
-    // stop here and wait for user start the motor controller
-    while (flag_enable_system == 0)
+
+    while (flag_system_enable == 0)
     {
     }
 
 #endif // SPECIFY_PC_ENVIRONMENT
-
-    ctl_enable_output();
-
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -92,8 +101,62 @@ void ctl_init()
 
 uint16_t sgen_out = 0;
 
+fast_gt firsttime_flag = 0;
+fast_gt startup_flag = 0;
+fast_gt started_flag = 0;
+time_gt tick_bias = 0;
+
 void ctl_mainloop(void)
 {
+    // When the program is reach here, the following things will happen:
+    // 1. software non-block delay 500ms
+    // 2. judge if spll theta error convergence has occurred
+    // 3. then enable system
+
+    if (flag_system_enable)
+    {
+
+        // first time flag
+        // log the first time enable the system
+        if (firsttime_flag == 0)
+        {
+            tick_bias = gmp_base_get_system_tick();
+            firsttime_flag = 1;
+        }
+
+        // a delay of 500ms
+        if ((started_flag == 0) && ((gmp_base_get_system_tick() - tick_bias) > 500) && (startup_flag == 0))
+        {
+            startup_flag = 1;
+        }
+
+        // judge if PLL is close to target
+        if ((started_flag == 0) && (startup_flag == 1) && ctl_ready_mainloop())
+        {
+            ctl_enable_output();
+            started_flag = 1;
+        }
+    }
+    // if system is disabled
+    else // (flag_system_enable == 0)
+    {
+        ctl_disable_output();
+
+        // clear all flags
+        firsttime_flag = 0;
+        startup_flag = 0;
+        started_flag = 0;
+        tick_bias = 0;
+    }
 
     return;
+}
+
+// This mainloop will run again and again to judge if system meets online condition,
+// when flag_system_enable is set.
+// if return 1 the system is ready to enable.
+// if return 0 the system is not ready to enable
+fast_gt ctl_ready_mainloop(void)
+{
+    return 1;
 }

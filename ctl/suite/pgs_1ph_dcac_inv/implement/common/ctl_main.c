@@ -27,7 +27,7 @@ sinv_ctrl_t sinv_ctrl;
 ctl_pid_t current_outer;
 ctrl_gt ig_rms_ref = float2ctrl(0.1);
 
-// enable motor running
+// enable controller
 #if !defined SPECIFY_PC_ENVIRONMENT
 volatile fast_gt flag_system_enable = 0;
 #else
@@ -35,7 +35,6 @@ volatile fast_gt flag_system_enable = 1;
 #endif // SPECIFY_PC_ENVIRONMENT
 
 volatile fast_gt flag_system_running = 0;
-
 volatile fast_gt flag_error = 0;
 
 // CTL initialize routine

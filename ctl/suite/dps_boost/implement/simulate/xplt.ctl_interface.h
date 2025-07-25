@@ -44,9 +44,14 @@ void ctl_input_callback(void)
 GMP_STATIC_INLINE
 void ctl_output_callback(void)
 {
-
+    //
+    // PWM Channel
+    //
     simulink_tx_buffer.pwm_cmp[0] = ctl_calc_pwm_channel(&pwm_out, ctl_get_boost_ctrl_modulation(&boost_ctrl));
 
+    //
+    // Monitor
+    //
     simulink_tx_buffer.monitor[0] = boost_adc_channel[ADC_RESULT_IL].control_port.value;
     simulink_tx_buffer.monitor[1] = boost_adc_channel[ADC_RESULT_UIN].control_port.value;
     simulink_tx_buffer.monitor[2] = boost_adc_channel[ADC_RESULT_UOUT].control_port.value;
@@ -62,13 +67,18 @@ void ctl_output_callback(void)
 GMP_STATIC_INLINE
 void ctl_enable_output()
 {
+    ctl_enable_boost_ctrl(&boost_ctrl);
+
     csp_sl_enable_output();
+
+    flag_system_running = 1;
 }
 
 // Disable Output
 GMP_STATIC_INLINE
 void ctl_disable_output()
 {
+    flag_system_running = 0;
     csp_sl_disable_output();
 }
 

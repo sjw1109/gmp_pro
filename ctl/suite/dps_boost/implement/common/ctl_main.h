@@ -47,6 +47,11 @@ extern adc_bias_calibrator_t adc_calibrator;
 extern fast_gt flag_enable_adc_calibrator;
 extern fast_gt index_adc_calibrator;
 
+
+extern volatile fast_gt flag_system_enable;
+extern volatile fast_gt flag_system_running;
+
+
 // Boost Controller Suite
 extern boost_ctrl_t boost_ctrl;
 

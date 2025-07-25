@@ -50,7 +50,7 @@ extern sinv_ctrl_t sinv_ctrl;
 GMP_STATIC_INLINE
 void ctl_input_callback(void)
 {
-    //// invoke ADC p.u. routine
+    // invoke ADC p.u. routine
     for (size_gt i = 0; i < SINV_ADC_SENSOR_NUMBER; ++i)
         ctl_step_ptr_adc_channel(&sinv_adc[i]);
 }

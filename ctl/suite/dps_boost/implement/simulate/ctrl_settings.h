@@ -2,13 +2,10 @@
 #ifndef _FILE_CTRL_SETTINGS_H_
 #define _FILE_CTRL_SETTINGS_H_
 
-// BUILD_LEVEL 1: inverter, Voltage open loop
-// BUILD_LEVEL 2: inverter, current close loop
-// BUILD_LEVEL 3: inverter, current close loop, with harm control
-// BUILD_LEVEL 4: rectifier, voltage loop, without harm control
-// BUILD_LEVEL_5: rectifier voltage loop, with harm control
-// BUILD_LEVEL_6:
-#define BUILD_LEVEL (2)
+// BUILD_LEVEL 1: Voltage open loop
+// BUILD_LEVEL 2: current close loop
+// BUILD_LEVEL 3: voltage close loop
+#define BUILD_LEVEL (1)
 
 // low voltage half bridge parameters
 #include <ctl/component/digital_power/hardware_preset/gmp_lvhb_v1.h>
