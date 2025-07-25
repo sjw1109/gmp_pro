@@ -24,6 +24,9 @@
 
 sinv_ctrl_t sinv_ctrl;
 
+ctl_pid_t current_outer;
+ctrl_gt ig_rms_ref = float2ctrl(0.1);
+
 // enable motor running
 #if !defined SPECIFY_PC_ENVIRONMENT
 volatile fast_gt flag_system_enable = 0;
@@ -78,8 +81,12 @@ void ctl_init()
     init.i_ctrl_kp = 1.0e-5f;
     init.i_ctrl_kr = 80.0f;
     init.i_ctrl_cut_freq = 8.0f;
-
-#elif BUILD_LEVEL <= 8
+#elif BUILD_LEVEL <= 9
+    // current controller parameters
+    init.i_ctrl_kp = 1.0e-5f;
+    init.i_ctrl_kr = 80.0f;
+    init.i_ctrl_cut_freq = 8.0f;
+#elif BUILD_LEVEL == 10
     // current controller parameters
     init.i_ctrl_kp = 1.0e-5f;
     init.i_ctrl_kr = 80.0f;
@@ -105,6 +112,10 @@ void ctl_init()
 
     // init sinv Controller
     ctl_init_sinv_ctrl(&sinv_ctrl, &init);
+
+#if BUILD_LEVEL == 10
+    ctl_init_pid_ser(&current_outer, 0.7, 0.1, 0, CONTROLLER_FREQUENCY);
+#endif // BUILD_LEVEL
 
 #if BUILD_LEVEL == 1
     // Voltage open loop, inverter
@@ -160,10 +171,10 @@ void ctl_init()
     ctl_set_sinv_pll(&sinv_ctrl);
 
 #elif BUILD_LEVEL == 8
-    // inverter voltage loop, with harm control
+    // inverter voltage loop, without harm control
     ctl_set_sinv_voltage_closeloop_inverter(&sinv_ctrl);
     ctl_set_sinv_voltage_ref(&sinv_ctrl, float2ctrl(0.1));
-    ctl_enable_sinv_harm_ctrl(&sinv_ctrl);
+    ctl_disable_sinv_harm_ctrl(&sinv_ctrl);
     ctl_set_sinv_freerun(&sinv_ctrl);
 
 #elif BUILD_LEVEL == 9
@@ -172,6 +183,8 @@ void ctl_init()
     ctl_set_sinv_voltage_ref(&sinv_ctrl, float2ctrl(0.4));
     ctl_enable_sinv_harm_ctrl(&sinv_ctrl);
     ctl_set_sinv_freerun(&sinv_ctrl);
+
+#elif BUILD_LEVEL == 10
 
 #endif // BUILD_LEVEL
 

@@ -107,7 +107,7 @@ void ctl_output_callback(void)
     simulink_tx_buffer.monitor[4] = sinv_adc[SINV_ADC_ID_VG].control_port.value;
     simulink_tx_buffer.monitor[5] = sinv_adc[SINV_ADC_ID_IG].control_port.value;
 
-#elif BUILD_LEVEL == 4 || BUILD_LEVEL == 5
+#elif BUILD_LEVEL == 4 || BUILD_LEVEL == 5 || BUILD_LEVEL == 10
 
     // Scope 1: Current set / fbk
     simulink_tx_buffer.monitor[0] = sinv_ctrl.adc_igrid->value;
@@ -147,7 +147,7 @@ void ctl_output_callback(void)
     simulink_tx_buffer.monitor[8] = sinv_ctrl.v_set;
     simulink_tx_buffer.monitor[9] = sinv_ctrl.adc_udc->value;
 
-    #elif BUILD_LEVEL == 8
+    #elif BUILD_LEVEL == 8 || BUILD_LEVEL == 9
 
     // Scope 1: Current set / fbk
     simulink_tx_buffer.monitor[0] = sinv_ctrl.adc_igrid->value;
@@ -169,6 +169,7 @@ void ctl_output_callback(void)
     simulink_tx_buffer.monitor[8] = sinv_ctrl.v_set;
     simulink_tx_buffer.monitor[9] = sinv_ctrl.vg_rms;
 
+    // Zero Cross detect
     simulink_tx_buffer.monitor[10] = sinv_ctrl.ac_current_measure.curr_sign;
     
 

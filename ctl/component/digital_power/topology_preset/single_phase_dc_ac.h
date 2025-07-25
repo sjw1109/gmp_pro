@@ -95,6 +95,7 @@ typedef struct _tag_sinv_ctrl_type
 
     // ac voltage rms
     ctrl_gt vg_rms;
+    ctrl_gt ig_rms;
 
     //
     // Controller object
@@ -134,6 +135,7 @@ typedef struct _tag_sinv_ctrl_type
 #ifdef CTL_SINV_CTRL_ENABLE_SINE_ANALYZER
     // this module is for AC current calculate
     sine_analyzer_t ac_current_measure;
+    sine_analyzer_t ac_voltage_measure;
 #endif // CTL_SINV_CTRL_ENABLE_SINE_ANALYZER
 
     //
@@ -145,6 +147,9 @@ typedef struct _tag_sinv_ctrl_type
 
     // enable current controller
     fast_gt flag_enable_current_ctrl;
+
+    // enable ac side measurement
+    fast_gt flag_enable_ac_measurement;
 
     // current controller add an addition harmonic controller
     fast_gt flag_enable_harmonic_ctrl;
@@ -208,6 +213,27 @@ ctrl_gt ctl_step_sinv(sinv_ctrl_t *sinv)
             ctl_get_lowpass_filter_result(&sinv->lpf_ugrid));
     }
 
+    // AC side voltage & current measurement
+    if (sinv->flag_enable_ac_measurement)
+    {
+#ifdef CTL_SINV_CTRL_ENABLE_SINE_ANALYZER
+        // true RMS calculator
+        sinv->vg_rms =
+            ctl_step_sine_analyzer(&sinv->ac_voltage_measure, ctl_get_lowpass_filter_result(&sinv->lpf_ugrid));
+
+        sinv->ig_rms =
+            ctl_step_sine_analyzer(&sinv->ac_current_measure, ctl_get_lowpass_filter_result(&sinv->lpf_igrid));
+#else
+        // sample voltage only at specified point
+        // when angle is sqrt(2)/2
+        if (target_phase == 0.707)
+        {
+            sinv->vg_rms = ctl_get_lowpass_filter_result(&sinv->lpf_ugrid);
+            sinv->ig_rms = ctl_get_lowpass_filter_result(&sinv->lpf_igrid);
+        }
+#endif
+    }
+
     if (sinv->flag_enable_system)
     {
 
@@ -246,17 +272,6 @@ ctrl_gt ctl_step_sinv(sinv_ctrl_t *sinv)
             // Converter DC -> AC mode
             else
             {
-#ifdef CTL_SINV_CTRL_ENABLE_SINE_ANALYZER
-                // true RMS calculator
-                sinv->vg_rms =
-                    ctl_step_sine_analyzer(&sinv->ac_current_measure, ctl_get_lowpass_filter_result(&sinv->lpf_ugrid));
-#else
-                // sample voltage only at specified point
-                // when angle is sqrt(2)/2
-                if (target_phase == 0.707)
-                    sinv->vg_rms = ctl_get_lowpass_filter_result(&sinv->lpf_ugrid);
-#endif // CTL_SINV_CTRL_ENABLE_SINE_ANALYZER
-
                 // voltage controller
                 sinv->ig_set = ctl_step_pid_ser(&sinv->voltage_pid, sinv->v_set - sinv->vg_rms);
             }
@@ -343,6 +358,9 @@ void ctl_set_sinv_openloop_inverter(sinv_ctrl_t *sinv)
 
     // enable single phase PLL
     sinv->flag_enable_spll = 1;
+
+    // enable AC measurement
+    sinv->flag_enable_ac_measurement = 1;
 }
 
 // function set for change controller state
@@ -375,6 +393,9 @@ void ctl_set_sinv_current_closeloop_inverter(sinv_ctrl_t *sinv)
 
     // enable single phase PLL
     sinv->flag_enable_spll = 1;
+
+    // enable AC measurement
+    sinv->flag_enable_ac_measurement = 1;
 }
 
 // Current controller is on for inverter
@@ -405,6 +426,9 @@ void ctl_set_sinv_voltage_closeloop_inverter(sinv_ctrl_t *sinv)
 
     // enable single phase PLL
     sinv->flag_enable_spll = 1;
+
+    // enable AC measurement
+    sinv->flag_enable_ac_measurement = 1;
 }
 
 //
@@ -435,6 +459,9 @@ void ctl_set_sinv_voltage_closeloop_rectifier(sinv_ctrl_t *sinv)
 
     // enable single phase PLL
     sinv->flag_enable_spll = 1;
+
+    // enable AC measurement
+    sinv->flag_enable_ac_measurement = 1;
 }
 
 // set target value
@@ -496,6 +523,18 @@ GMP_STATIC_INLINE
 fast_gt ctl_is_sinv_inverter_mode(sinv_ctrl_t *sinv)
 {
     return (sinv->flag_rectifier_mode == 0);
+}
+
+GMP_STATIC_INLINE
+void ctl_enable_sinv_ac_measurement(sinv_ctrl_t *sinv)
+{
+    sinv->flag_enable_ac_measurement = 1;
+}
+
+GMP_STATIC_INLINE
+void ctl_disable_sinv_ac_measurement(sinv_ctrl_t *sinv)
+{
+    sinv->flag_enable_ac_measurement = 0;
 }
 
 // init structure for sinv
