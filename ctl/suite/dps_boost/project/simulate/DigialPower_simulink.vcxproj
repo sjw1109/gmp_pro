@@ -155,6 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\component\dsa\src\dsa_trigger.c" />
     <ClCompile Include="..\..\implement\common\ctl_main.c" />
     <ClCompile Include="..\..\implement\common\user_main.c" />
     <ClCompile Include="..\..\implement\simulate\xplt.peripheral.c" />

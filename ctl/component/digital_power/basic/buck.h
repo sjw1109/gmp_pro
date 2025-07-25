@@ -14,7 +14,7 @@ extern "C"
 #define CTL_BUCK_CTRL_OUTPUT_WITHOUT_UIN
 
 // Boost Controller
-typedef struct _tag_boost_ctrl_type
+typedef struct _tag_buck_ctrl_type
 {
     //
     // Controller port
@@ -119,6 +119,9 @@ void ctl_clear_buck_ctrl(buck_ctrl_t *buck)
 {
     ctl_clear_pid(&buck->current_pid);
     ctl_clear_pid(&buck->voltage_pid);
+
+    buck->current_ff = 0;
+    buck->voltage_ff = 0;
 }
 
 GMP_STATIC_INLINE
@@ -134,13 +137,13 @@ ctrl_gt ctl_step_buck_ctrl(buck_ctrl_t *buck)
         if (buck->flag_enable_voltage_ctrl)
         {
             buck->current_set =
-                ctl_step_pid_ser(&buck->voltage_pid, buck->voltage_set - buck->lpf_uo->value) + buck->current_ff;
+                ctl_step_pid_ser(&buck->voltage_pid, buck->voltage_set - buck->lpf_uo.out) + buck->current_ff;
         }
 
         if (buck->flag_enable_current_ctrl)
         {
             buck->voltage_out =
-                ctl_step_pid_ser(&buck->current_pid, buck->current_set - buck->lpf_il->value) + buck->voltage_ff;
+                ctl_step_pid_ser(&buck->current_pid, buck->current_set - buck->lpf_il.out) + buck->voltage_ff;
         }
 
 #ifdef CTL_BUCK_CTRL_OUTPUT_WITHOUT_UIN

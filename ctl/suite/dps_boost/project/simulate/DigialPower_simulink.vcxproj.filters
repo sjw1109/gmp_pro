@@ -99,6 +99,9 @@
     <ClCompile Include="gmp_src\ctl_dp_topology_sinv.c">
       <Filter>GMP Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\component\dsa\src\dsa_trigger.c">
+      <Filter>implement_interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\implement\common\ctl_main.h">

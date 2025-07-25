@@ -11,13 +11,21 @@ extern "C"
 #endif // __cplusplus
 
 // You may enable this macro to enter debug mode.
-// Duty of Boost will not calculated by Uin.
-#define CTL_BOOST_CTRL_OUTPUT_WITHOUT_UIN
+// Duty of Boost will not calculated by Uout.
+// #define CTL_BOOST_CTRL_OUTPUT_WITHOUT_UOUT
+//
 
 // BOOST CONTROLLER Global parameters
 #ifndef CTL_BOOST_CTRL_UIN_MIN
 #define CTL_BOOST_CTRL_UIN_MIN ((float2ctrl(0.01)))
 #endif // CTL_BOOST_CTRL_UIN_MIN
+
+// BOOST HALF BRIDGE
+// if this macro is enable,  PWM output will control upper side
+// M = 1 / D
+// if this macro is disabled, PWM output will control lower side
+// M = 1 / (1-D)
+#define CTL_BOOST_CTRL_HALF_BRIDGE
 
 // Boost Controller
 typedef struct _tag_boost_ctrl_type
@@ -27,13 +35,13 @@ typedef struct _tag_boost_ctrl_type
     //
 
     // capacitor voltage
-    adc_ift *uc;
+    adc_ift *adc_uo;
 
     // inductor current
-    adc_ift *il;
+    adc_ift *adc_il;
 
     // input voltage
-    adc_ift *uin;
+    adc_ift *adc_ui;
 
     //
     // Output
@@ -47,6 +55,17 @@ typedef struct _tag_boost_ctrl_type
     //
     pid_regular_t current_pid;
     pid_regular_t voltage_pid;
+
+    // input filter
+    ctl_low_pass_filter_t lpf_ui;
+    ctl_low_pass_filter_t lpf_uo;
+    ctl_low_pass_filter_t lpf_il;
+
+    // modulate uin saturation
+    // in order to avoid divided by 0
+    ctl_saturation_t modulation_saturation;
+
+    ctrl_gt vo_sat;
 
     //
     // feed forward
@@ -78,9 +97,6 @@ typedef struct _tag_boost_ctrl_type
     // enable controller
     fast_gt flag_enable_system;
 
-    // enable output
-    fast_gt flag_enable_output;
-
     // enable current controller
     fast_gt flag_enable_current_ctrl;
 
@@ -96,6 +112,8 @@ void ctl_init_boost_ctrl(
     parameter_gt v_kp, parameter_gt v_Ti, parameter_gt v_Td,
     // Current PID controller
     parameter_gt i_kp, parameter_gt i_Ti, parameter_gt i_Td,
+    // valid voltage output range
+    parameter_gt vo_min, parameter_gt vo_max,
     // Controller frequency, Hz
     parameter_gt fs);
 
@@ -112,46 +130,46 @@ void ctl_attach_boost_ctrl_input(
 GMP_STATIC_INLINE
 ctrl_gt ctl_step_boost_ctrl(boost_ctrl_t *boost)
 {
+    ctl_step_lowpass_filter(&boost->lpf_il, boost->adc_il->value);
+    ctl_step_lowpass_filter(&boost->lpf_uo, boost->adc_uo->value);
+    ctl_step_lowpass_filter(&boost->lpf_ui, boost->adc_ui->value);
+
     if (boost->flag_enable_system)
     {
 
         if (boost->flag_enable_voltage_ctrl)
         {
             boost->current_set =
-                ctl_step_pid_ser(&boost->voltage_pid, boost->voltage_set - boost->uc->value) + boost->current_ff;
+                ctl_step_pid_ser(&boost->voltage_pid, boost->voltage_set - boost->lpf_uo.out) + boost->current_ff;
         }
 
         if (boost->flag_enable_current_ctrl)
         {
             boost->voltage_out =
-                ctl_step_pid_ser(&boost->current_pid, boost->current_set - boost->il->value) + boost->voltage_ff;
+                ctl_step_pid_ser(&boost->current_pid, boost->current_set - boost->lpf_il.out) + boost->voltage_ff;
         }
 
-        if (boost->flag_enable_output)
-        {
-#ifdef CTL_BOOST_CTRL_OUTPUT_WITHOUT_UIN
-            // Boost duty is generated without input voltage
-            boost->pwm_out_pu = float2ctrl(1) - boost->voltage_out;
+#ifdef CTL_BOOST_CTRL_OUTPUT_WITHOUT_UOUT
+
+#if defined CTL_BOOST_CTRL_HALF_BRIDGE
+        // Boost duty is generated without input voltage
+        boost->pwm_out_pu = float2ctrl(1) - boost->voltage_out;
 #else
-            if (boost->uin->value > CTL_BOOST_CTRL_UIN_MIN)
-            {
-                // Boost duty is generated with voltage input
-                boost->pwm_out_pu = (boost->voltage_out - boost->uin->value) / boost->voltage_out;
-            }
-            else
-            {
-                // if boost input is too low, just output.
-                boost->pwm_out_pu = float2ctrl(1);
-            }
+        boost->pwm_out_pu = boost->voltage_out;
+#endif // CTL_BOOST_CTRL_HALF_BRIDGE
 
-#endif // CTL_BOOST_CTRL_OUTPUT_WITHOUT_UIN
-        }
-        else
-        {
-            // For safety design considerations,
-            // it is necessary to make Boost bridge conductive by default.
-            boost->pwm_out_pu = float2ctrl(1);
-        }
+#else // CTL_BOOST_CTRL_OUTPUT_WITHOUT_UOUT
+
+        boost->vo_sat = ctl_step_saturation(&boost->modulation_saturation, boost->lpf_uo.out);
+#if defined CTL_BOOST_CTRL_HALF_BRIDGE
+        // upper bridge is controlled
+        boost->pwm_out_pu = ctl_div(boost->lpf_ui.out, boost->vo_sat);
+#else
+        // lower bridge is controlled
+        boost->pwm_out_pu = GMP_CONST_1 - ctl_div(boost->lpf_ui.out, boost->vo_sat);
+#endif // CTL_BOOST_CTRL_HALF_BRIDGE
+
+#endif // CTL_BOOST_CTRL_OUTPUT_WITHOUT_UOUT
     }
     else
     {
@@ -166,19 +184,8 @@ ctrl_gt ctl_step_boost_ctrl(boost_ctrl_t *boost)
 GMP_STATIC_INLINE
 ctrl_gt ctl_get_boost_ctrl_modulation(boost_ctrl_t *boost)
 {
+
     return boost->pwm_out_pu;
-}
-
-GMP_STATIC_INLINE
-void ctl_disable_boost_ctrl_output(boost_ctrl_t *boost)
-{
-    boost->flag_enable_output = 0;
-}
-
-GMP_STATIC_INLINE
-void ctl_enable_boost_ctrl_output(boost_ctrl_t *boost)
-{
-    boost->flag_enable_output = 1;
 }
 
 GMP_STATIC_INLINE
@@ -189,8 +196,6 @@ void ctl_clear_boost_ctrl(boost_ctrl_t *boost)
 
     boost->current_ff = 0;
     boost->voltage_ff = 0;
-
-    ctl_disable_boost_ctrl_output(boost);
 }
 
 // .....................................................................//
@@ -204,9 +209,6 @@ void ctl_boost_ctrl_voltage_mode(boost_ctrl_t *boost)
 {
     // enable controller
     boost->flag_enable_system = 1;
-
-    // enable output
-    // boost->flag_enable_output = 1;
 
     // enable current controller
     boost->flag_enable_current_ctrl = 1;
@@ -281,6 +283,18 @@ GMP_STATIC_INLINE
 void ctl_set_boost_ctrl_voltage_openloop(boost_ctrl_t *boost, ctrl_gt v_set)
 {
     boost->voltage_out = v_set;
+}
+
+GMP_STATIC_INLINE
+void ctl_disable_boost_ctrl(boost_ctrl_t *boost)
+{
+    boost->flag_enable_system = 0;
+}
+
+GMP_STATIC_INLINE
+void ctl_enable_boost_ctrl(boost_ctrl_t *boost)
+{
+    boost->flag_enable_system = 1;
 }
 
 #ifdef __cplusplus

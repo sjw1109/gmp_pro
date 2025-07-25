@@ -48,6 +48,8 @@ void ctl_init()
         1.5, 0.02, 0,
         // Current PID controller
         3, 0.01, 0,
+        // valid voltage output range
+        0.1, 1,
         // Controller frequency, Hz
         CONTROLLER_FREQUENCY);
 
@@ -59,13 +61,18 @@ void ctl_init()
     // Current Loop
     ctl_boost_ctrl_current_mode(&boost_ctrl);
     ctl_set_boost_ctrl_current(&boost_ctrl, float2ctrl(0.5));
-#else
+#elif (BUILD_LEVEL == 3)
     // Voltage loop
     ctl_boost_ctrl_voltage_mode(&boost_ctrl);
     ctl_set_boost_ctrl_voltage(&boost_ctrl, float2ctrl(0.8));
-#endif // BUILD_LEVEL
 
-    ctl_disable_boost_ctrl_output(&boost_ctrl);
+#elif (BUILD_LEVEL == 4)
+    // Current loop for DC bus
+
+#elif (BUILD_LEVEL == 5)
+    // Current loop MPPT
+
+#endif // BUILD_LEVEL
 
     // if in simulation mode, enable system
 #if !defined SPECIFY_PC_ENVIRONMENT
@@ -76,18 +83,8 @@ void ctl_init()
 
 #endif // SPECIFY_PC_ENVIRONMENT
 
-    ctl_enable_boost_ctrl_output(&boost_ctrl);
     ctl_enable_output();
 
-//#if defined SPECIFY_ENABLE_ADC_CALIBRATE    
-//    // Enable ADC calibrate
-//    flag_enable_adc_calibrator = 1;
-//    index_adc_calibrator = 0;
-//
-//    // Select ADC calibrate
-//    // ctl_disable_pmsm_ctrl_output(&pmsm_ctrl);
-//    ctl_enable_adc_calibrator(&adc_calibrator);
-//#endif // SPECIFY_ENABLE_ADC_CALIBRATE
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -97,21 +94,6 @@ uint16_t sgen_out = 0;
 
 void ctl_mainloop(void)
 {
-    // int spd_target = gmp_base_get_system_tick() / 100 - 4;
-
-    // ctl_set_pmsm_ctrl_speed(&pmsm_ctrl, float2ctrl(0.1) * spd_target - float2ctrl(1.0));
-
-    //
-    // Judge if PWM is enabled
-    //
-    // if (pmsm_ctrl.flag_enable_output)
-    //{
-    //    ctl_enable_output();
-    //}
-    // else
-    //{
-    //    ctl_disable_output();
-    //}
 
     return;
 }

@@ -40,32 +40,32 @@ void setup_peripheral(void)
 // Step 1 Init all the ADC & PWM standard ports
 //
 
-    ctl_init_ptr_adc_channel(
-        // ptr_adc object
-        &il,
-        // pointer to ADC raw data
-        &simulink_rx_buffer.adc_result[ADC_RESULT_IL],
-        // ADC Channel settings.
-        // iqn is valid only when ctrl_gt is a fixed point type.
-        2, 0.5, 12, 24);
+    //ctl_init_ptr_adc_channel(
+    //    // ptr_adc object
+    //    &il,
+    //    // pointer to ADC raw data
+    //    &simulink_rx_buffer.adc_result[ADC_RESULT_IL],
+    //    // ADC Channel settings.
+    //    // iqn is valid only when ctrl_gt is a fixed point type.
+    //    2, 0.5, 12, 24);
 
-    ctl_init_ptr_adc_channel(
-        // ptr_adc object
-        &uin,
-        // pointer to ADC raw data
-        &simulink_rx_buffer.adc_result[ADC_RESULT_UIN],
-        // ADC Channel settings.
-        // iqn is valid only when ctrl_gt is a fixed point type.
-        2, 0.5, 12, 24);
+    //ctl_init_ptr_adc_channel(
+    //    // ptr_adc object
+    //    &uin,
+    //    // pointer to ADC raw data
+    //    &simulink_rx_buffer.adc_result[ADC_RESULT_UIN],
+    //    // ADC Channel settings.
+    //    // iqn is valid only when ctrl_gt is a fixed point type.
+    //    2, 0.5, 12, 24);
 
-    ctl_init_ptr_adc_channel(
-        // ptr_adc object
-        &uc,
-        // pointer to ADC raw data
-        &simulink_rx_buffer.adc_result[ADC_RESULT_UOUT],
-        // ADC Channel settings.
-        // iqn is valid only when ctrl_gt is a fixed point type.
-        2, 0.5, 12, 24);
+    //ctl_init_ptr_adc_channel(
+    //    // ptr_adc object
+    //    &uc,
+    //    // pointer to ADC raw data
+    //    &simulink_rx_buffer.adc_result[ADC_RESULT_UOUT],
+    //    // ADC Channel settings.
+    //    // iqn is valid only when ctrl_gt is a fixed point type.
+    //    2, 0.5, 12, 24);
 
     ctl_init_pwm_channel(&pwm_out, 0, CONTROLLER_PWM_CMP_MAX);
 
@@ -74,15 +74,15 @@ void setup_peripheral(void)
     //
 
     // Attach ADC channel to Boost Controller
-    ctl_attach_boost_ctrl_input(
-        // Boost controller
-        &boost_ctrl,
-        // output capacitor voltage
-        &uc.control_port,
-        // inductor current
-        &il.control_port,
-        // input voltage
-        &uin.control_port);
+    //ctl_attach_boost_ctrl_input(
+    //    // Boost controller
+    //    &boost_ctrl,
+    //    // output capacitor voltage
+    //    &uc.control_port,
+    //    // inductor current
+    //    &il.control_port,
+    //    // input voltage
+    //    &uin.control_port);
 
 
 }
