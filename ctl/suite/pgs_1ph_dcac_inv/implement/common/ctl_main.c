@@ -45,10 +45,18 @@ void ctl_init()
 
     init.base_freq = 50.0f;
 
+#if BUILD_LEVEL >= 8
+    // AC Voltage PID
+    init.v_ctrl_kp = 0.7f;
+    init.v_ctrl_Ti = 0.01f;
+    init.v_ctrl_Td = 0;
+
+#else
     // voltage controller parameters
     init.v_ctrl_kp = 0.8f;
     init.v_ctrl_Ti = 0.02f;
     init.v_ctrl_Td = 0;
+#endif // BUILD_LEVEL
 
     // PLL parameters
     init.pll_ctrl_kp = 0.75f / 20;
@@ -70,6 +78,13 @@ void ctl_init()
     init.i_ctrl_kp = 1.0e-5f;
     init.i_ctrl_kr = 80.0f;
     init.i_ctrl_cut_freq = 8.0f;
+
+#elif BUILD_LEVEL <= 8
+    // current controller parameters
+    init.i_ctrl_kp = 1.0e-5f;
+    init.i_ctrl_kr = 80.0f;
+    init.i_ctrl_cut_freq = 8.0f;
+
 #endif // BUILD_LEVEL
 
     // harmonic controller parameters
@@ -145,18 +160,18 @@ void ctl_init()
     ctl_set_sinv_pll(&sinv_ctrl);
 
 #elif BUILD_LEVEL == 8
-    // inverter voltage loop, without harm control
+    // inverter voltage loop, with harm control
     ctl_set_sinv_voltage_closeloop_inverter(&sinv_ctrl);
-    ctl_set_sinv_voltage_ref(&sinv_ctrl, float2ctrl(0.4));
-    ctl_disable_sinv_harm_ctrl(&sinv_ctrl);
-    ctl_set_sinv_pll(&sinv_ctrl);
+    ctl_set_sinv_voltage_ref(&sinv_ctrl, float2ctrl(0.1));
+    ctl_enable_sinv_harm_ctrl(&sinv_ctrl);
+    ctl_set_sinv_freerun(&sinv_ctrl);
 
 #elif BUILD_LEVEL == 9
     // inverter voltage loop, with harm control
     ctl_set_sinv_voltage_closeloop_inverter(&sinv_ctrl);
     ctl_set_sinv_voltage_ref(&sinv_ctrl, float2ctrl(0.4));
     ctl_enable_sinv_harm_ctrl(&sinv_ctrl);
-    ctl_set_sinv_pll(&sinv_ctrl);
+    ctl_set_sinv_freerun(&sinv_ctrl);
 
 #endif // BUILD_LEVEL
 

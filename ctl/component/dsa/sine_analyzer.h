@@ -105,9 +105,6 @@ ctrl_gt ctl_step_sine_analyzer(sine_analyzer_t *sine, ctrl_gt wave_input)
     sine->sumup_sqr = sine->sumup_sqr + (sine->wave_norm * sine->wave_norm);
     sine->zero_cross = 0;
 
-    // update last sign
-    sine->prev_sign = sine->curr_sign;
-
     // judge if a whole cycle is complete
     if (sine->prev_sign != sine->curr_sign && sine->curr_sign == 1)
     {

@@ -1,18 +1,12 @@
 ﻿
 
+#ifndef _FILE_SINGLE_PHASE_DC_AC_H_
+#define _FILE_SINGLE_PHASE_DC_AC_H_
+
 #include <ctl/component/digital_power/single_phase/spll.h>
 #include <ctl/component/intrinsic/continuous/continuous_pid.h>
 #include <ctl/component/intrinsic/discrete/discrete_filter.h>
 #include <ctl/component/intrinsic/discrete/proportional_resonant.h>
-
-#ifndef _FILE_SINGLE_PHASE_DC_AC_H_
-#define _FILE_SINGLE_PHASE_DC_AC_H_
-
-typedef enum _tag_single_phase_name
-{
-    PHASE_N = 0,
-    PHASE_L = 1
-} single_phase_name_num;
 
 // SINV modulation method select
 // enable the following macro
@@ -22,11 +16,27 @@ typedef enum _tag_single_phase_name
 //
 // #define CTL_SINV_CTRL_UNIPOLAR_MODULATION
 
+// SINV RMS value calculation method
+// only when the ctrl_gt is float the module is enable
+#define CTL_SINV_CTRL_ENABLE_SINE_ANALYZER
+
+#ifdef CTL_SINV_CTRL_ENABLE_SINE_ANALYZER
+#include <ctl/component/dsa/sine_analyzer.h>
+#endif // CTL_SINV_CTRL_ENABLE_SINE_ANALYZER
+
+typedef enum _tag_single_phase_name
+{
+    PHASE_N = 0,
+    PHASE_L = 1
+} single_phase_name_num;
+
 // DC/AC Converter with LC filter
 typedef struct _tag_sinv_ctrl_type
 {
     //
     // input port
+    //
+    // positive direction: inverter
     //
 
     // DC Bus voltage
@@ -83,6 +93,9 @@ typedef struct _tag_sinv_ctrl_type
     // target phase
     ctrl_gt target_phase;
 
+    // ac voltage rms
+    ctrl_gt vg_rms;
+
     //
     // Controller object
     //
@@ -117,6 +130,11 @@ typedef struct _tag_sinv_ctrl_type
 
     // PID controller for voltage
     pid_regular_t voltage_pid;
+
+#ifdef CTL_SINV_CTRL_ENABLE_SINE_ANALYZER
+    // this module is for AC current calculate
+    sine_analyzer_t ac_current_measure;
+#endif // CTL_SINV_CTRL_ENABLE_SINE_ANALYZER
 
     //
     // flag stack
@@ -228,11 +246,19 @@ ctrl_gt ctl_step_sinv(sinv_ctrl_t *sinv)
             // Converter DC -> AC mode
             else
             {
-                // Need a true RMS calculator
+#ifdef CTL_SINV_CTRL_ENABLE_SINE_ANALYZER
+                // true RMS calculator
+                sinv->vg_rms =
+                    ctl_step_sine_analyzer(&sinv->ac_current_measure, ctl_get_lowpass_filter_result(&sinv->lpf_ugrid));
+#else
+                // sample voltage only at specified point
+                // when angle is sqrt(2)/2
+                if (target_phase == 0.707)
+                    sinv->vg_rms = ctl_get_lowpass_filter_result(&sinv->lpf_ugrid);
+#endif // CTL_SINV_CTRL_ENABLE_SINE_ANALYZER
 
-                // sinv->ig_set =
-                //     ctl_step_pid_ser(&sinv->voltage_pid, sinv->v_set -
-                //     ctl_get_lowpass_filter_result(&sinv->lpf_ugrid));
+                // voltage controller
+                sinv->ig_set = ctl_step_pid_ser(&sinv->voltage_pid, sinv->v_set - sinv->vg_rms);
             }
         }
 

@@ -41,6 +41,10 @@ void ctl_upgrade_sinv_param(sinv_ctrl_t *sinv, sinv_init_t *init)
                            init->f_ctrl);
     ctl_init_qr_controller(&sinv->sinv_qr_9, init->harm_ctrl_kr_9, init->base_freq * 9.0f, init->harm_ctrl_cut_freq_9,
                            init->f_ctrl);
+
+    // sinv sine measurement module
+    ctl_init_sine_analyzer(&sinv->ac_current_measure, 0.01f, init->base_freq * 0.8, init->base_freq * 1.2,
+                           init->base_freq, init->f_ctrl);
 }
 
 void ctl_init_sinv_ctrl(sinv_ctrl_t *sinv, sinv_init_t *init)
