@@ -1,6 +1,46 @@
 #include <gmp_core.h>
 
 //////////////////////////////////////////////////////////////////////////
+// Buck Control
+#include <ctl/component/digital_power/basic/buck.h>
+
+void ctl_init_buck_ctrl(
+    // Buck controller
+    buck_ctrl_t *buck,
+    // Voltage PID controller
+    parameter_gt v_kp, parameter_gt v_Ti, parameter_gt v_Td,
+    // Current PID controller
+    parameter_gt i_kp, parameter_gt i_Ti, parameter_gt i_Td,
+    // valid uin range
+    parameter_gt uin_min, parameter_gt uin_max,
+    // Controller frequency, Hz
+    parameter_gt fs);
+{
+    ctl_disable_buck_ctrl(&buck);
+
+    ctl_init_saturation(&buck->modulation_saturation, uin_min, uin_out);
+    ctl_init_pid_ser(&buck->current_pid, i_kp, i_Ti, i_Td);
+    ctl_init_pid_ser(&buck->voltage_pid, v_kp, v_Ti, v_Td);
+
+    ctl_clear_buck_ctrl(buck);
+}
+
+void ctl_attach_buck_ctrl_input(
+    // Buck controller
+    buck_ctrl_t *buck,
+    // output capacitor voltage
+    adc_ift *uo,
+    // inductor current
+    adc_ift *il,
+    // input voltage
+    adc_ift *uin)
+{
+    buck->adc_il = il;
+    buck->adc_ui = uin;
+    buck->adc_uo = uo;
+}
+
+//////////////////////////////////////////////////////////////////////////
 // BOOST Control
 #include <ctl/component/digital_power/basic/boost.h>
 

@@ -13,11 +13,6 @@ extern "C"
 // Duty of Buck will not calculated by Uin.
 #define CTL_BUCK_CTRL_OUTPUT_WITHOUT_UIN
 
-// BOOST CONTROLLER Global parameters
-#ifndef CTL_BOOST_CTRL_UIN_MIN
-#define CTL_BOOST_CTRL_UIN_MIN ((float2ctrl(0.01)))
-#endif // CTL_BOOST_CTRL_UIN_MIN
-
 // Boost Controller
 typedef struct _tag_boost_ctrl_type
 {
@@ -25,7 +20,7 @@ typedef struct _tag_boost_ctrl_type
     // Controller port
     //
 
-    // capacitor voltage
+    // output capacitor voltage
     adc_ift *adc_uo;
 
     // inductor current
@@ -104,14 +99,10 @@ void ctl_init_buck_ctrl(
     parameter_gt v_kp, parameter_gt v_Ti, parameter_gt v_Td,
     // Current PID controller
     parameter_gt i_kp, parameter_gt i_Ti, parameter_gt i_Td,
+    // valid uin range
+    parameter_gt uin_min, parameter_gt uin_max,
     // Controller frequency, Hz
-    parameter_gt fs)
-{
-    ctl_init_pid_ser(&buck->current_pid, i_kp, i_Ti, i_Td);
-    ctl_init_pid_ser(&buck->voltage_pid, v_kp, v_Ti, v_Td);
-
-    ctl_clear_buck_ctrl(buck);
-}
+    parameter_gt fs);
 
 void ctl_attach_buck_ctrl_input(
     // Buck controller
@@ -121,12 +112,7 @@ void ctl_attach_buck_ctrl_input(
     // inductor current
     adc_ift *il,
     // input voltage
-    adc_ift *uin)
-{
-    buck->adc_il = il;
-    buck->adc_ui = uin;
-    buck->adc_uo = uo;
-}
+    adc_ift *uin);
 
 GMP_STATIC_INLINE
 void ctl_clear_buck_ctrl(buck_ctrl_t *buck)
@@ -222,7 +208,7 @@ void ctl_set_buck_uo(buck_ctrl_t *buck, ctrl_gt uo)
     buck->voltage_set = uo;
 }
 
-GMP_STATIC_INLINE 
+GMP_STATIC_INLINE
 void ctl_enable_buck_ctrl(buck_ctrl_t *buck)
 {
     buck->flag_enable_system = 1;
