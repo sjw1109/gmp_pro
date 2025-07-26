@@ -286,11 +286,11 @@ void ctl_ct_ipark2(
     //tex:
     // $$i_\alpha = i_d \times \cos\;(\theta) - i_q \times \sin\;(\theta) $$
     ab->dat[phase_alpha] =
-        ctl_mul(dq0->dat[phase_d], phasor->dat[phasor_cos]) - ctl_mul(dq0->dat[phase_q], phasor->dat[phasor_sin]);
+        ctl_mul(dq->dat[phase_d], phasor->dat[phasor_cos]) - ctl_mul(dq->dat[phase_q], phasor->dat[phasor_sin]);
     //tex:
     // $$ i_\beta = i_d \times \sin\;(\theta) + i_q \times \cos\;(\theta) $$
     ab->dat[phase_beta] =
-        ctl_mul(dq0->dat[phase_d], phasor->dat[phasor_sin]) + ctl_mul(dq0->dat[phase_q], phasor->dat[phasor_cos]);
+        ctl_mul(dq->dat[phase_d], phasor->dat[phasor_sin]) + ctl_mul(dq->dat[phase_q], phasor->dat[phasor_cos]);
 }
 
 // iClarke coordinate axes transform
