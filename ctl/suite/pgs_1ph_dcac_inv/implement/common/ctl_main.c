@@ -94,20 +94,20 @@ void ctl_init()
 #endif // BUILD_LEVEL
 
     // harmonic controller parameters
-    init.harm_ctrl_kr_3 = 20;
-    init.harm_ctrl_cut_freq_3 = 5.0f;
+    init.harm_ctrl_kr_3 = 40;
+    init.harm_ctrl_cut_freq_3 = 1.0f;
     init.harm_ctrl_kr_5 = 10;
-    init.harm_ctrl_cut_freq_5 = 5.0f;
-    init.harm_ctrl_kr_7 = 20;
-    init.harm_ctrl_cut_freq_7 = 5.0f;
+    init.harm_ctrl_cut_freq_5 = 1.0f;
+    init.harm_ctrl_kr_7 = 30;
+    init.harm_ctrl_cut_freq_7 = 1.0f;
     init.harm_ctrl_kr_9 = 10;
-    init.harm_ctrl_cut_freq_9 = 5.0f;
-    init.harm_ctrl_kr_11 = 10;
-    init.harm_ctrl_cut_freq_11 = 5.0f;
-    init.harm_ctrl_kr_13 = 10;
-    init.harm_ctrl_cut_freq_13 = 5.0f;
-    init.harm_ctrl_kr_15 = 5;
-    init.harm_ctrl_cut_freq_15 = 5.0f;
+    init.harm_ctrl_cut_freq_9 = 1.0f;
+    init.harm_ctrl_kr_11 = 15;
+    init.harm_ctrl_cut_freq_11 = 1.0f;
+    init.harm_ctrl_kr_13 = 20;
+    init.harm_ctrl_cut_freq_13 = 1.0f;
+    init.harm_ctrl_kr_15 = -3;
+    init.harm_ctrl_cut_freq_15 = 1.0f;
 
     // adc input filter cut frequency
     init.adc_filter_fc = 1000.0;
