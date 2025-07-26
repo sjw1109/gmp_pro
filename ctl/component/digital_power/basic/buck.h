@@ -101,6 +101,8 @@ void ctl_init_buck_ctrl(
     parameter_gt i_kp, parameter_gt i_Ti, parameter_gt i_Td,
     // valid uin range
     parameter_gt uin_min, parameter_gt uin_max,
+    // input filter cut frequency
+    parameter_gt fc,
     // Controller frequency, Hz
     parameter_gt fs);
 
