@@ -36,15 +36,20 @@ typedef enum _tag_sinv_adc_index_items
     SINV_ADC_ID_IC = 3,
     SINV_ADC_ID_VG = 4,
     SINV_ADC_ID_IG = 5,
-    SINV_ADC_SENSOR_NUMBER = 6
+    SINV_ADC_ID_BUCK_IL = 6,
+    SINV_ADC_ID_BUCK_VIN = 7,
+    SINV_ADC_ID_BUCK_VOUT = 8,
+    SINV_ADC_SENSOR_NUMBER = 9
 
 } sinv_adc_index_items;
 
 extern ptr_adc_channel_t sinv_adc[SINV_ADC_SENSOR_NUMBER];
 
-extern pwm_channel_t sinv_pwm_out[2];
+extern pwm_channel_t sinv_pwm_out[3];
 
 extern sinv_ctrl_t sinv_ctrl;
+
+extern buck_ctrl_t buck_ctrl;
 
 // Input Callback
 GMP_STATIC_INLINE
@@ -64,6 +69,7 @@ void ctl_output_callback(void)
     //
     simulink_tx_buffer.pwm_cmp[0] = ctl_calc_pwm_channel(&sinv_pwm_out[0], sinv_ctrl.sinv_pwm_pu[0]);
     simulink_tx_buffer.pwm_cmp[1] = ctl_calc_pwm_channel(&sinv_pwm_out[1], sinv_ctrl.sinv_pwm_pu[1]);
+    simulink_tx_buffer.pwm_cmp[2] = ctl_calc_pwm_channel(&sinv_pwm_out[2], buck_ctrl.pwm_out_pu);
 
     //
     // monitor
@@ -171,9 +177,18 @@ void ctl_output_callback(void)
 
     // Zero Cross detect
     simulink_tx_buffer.monitor[10] = sinv_ctrl.ac_current_measure.curr_sign;
-    
+
+
 
 #endif // BUILD LEVEL
+
+
+
+    // Buck controller
+    simulink_tx_buffer.monitor[10] = sinv_adc[SINV_ADC_ID_BUCK_IL].control_port.value;
+    simulink_tx_buffer.monitor[11] = sinv_adc[SINV_ADC_ID_BUCK_VIN].control_port.value;
+    simulink_tx_buffer.monitor[12] = sinv_adc[SINV_ADC_ID_BUCK_VOUT].control_port.value;
+
 }
 
 // Enable Motor Controller
@@ -182,7 +197,9 @@ GMP_STATIC_INLINE
 void ctl_enable_output()
 {
     ctl_enable_sinv_ctrl(&sinv_ctrl);
-
+    // enable buck controller
+    ctl_enable_buck_ctrl(&buck_ctrl);
+    //
     csp_sl_enable_output();
 
     flag_system_running = 1;
