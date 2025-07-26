@@ -225,6 +225,12 @@ void ctl_disable_buck_ctrl(buck_ctrl_t *buck)
     buck->flag_enable_system = 0;
 }
 
+GMP_STATIC_INLINE
+ctrl_gt ctl_get_buck_ctrl_modulation(buck_ctrl_t* buck)
+{
+    return buck->pwm_out_pu;
+}
+
 #ifdef __cplusplus
 }
 #endif // __cplusplus

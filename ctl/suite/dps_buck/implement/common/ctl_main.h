@@ -22,7 +22,7 @@
 
 #include <ctl/component/interface/adc_channel.h>
 
-#include <ctl\component\digital_power\basic/boost.h>
+#include <ctl/component/digital_power/basic/buck.h>
 
 #include <xplt.peripheral.h>
 
@@ -40,7 +40,7 @@ typedef enum _tag_adc_result_nameplate
     ADC_RESULT_IL = 0,
     ADC_RESULT_UIN = 1,
     ADC_RESULT_UOUT = 2,
-    ADC_BOOST_CHANNEL_NUM = 3
+    ADC_BUCK_CHANNEL_NUM = 3
 } adc_result_nameplate_t;
 
 extern adc_bias_calibrator_t adc_calibrator;
@@ -53,13 +53,13 @@ extern volatile fast_gt flag_system_running;
 
 
 // Boost Controller Suite
-extern boost_ctrl_t boost_ctrl;
+extern buck_ctrl_t buck_ctrl;
 
 // periodic callback function things.
 GMP_STATIC_INLINE
 void ctl_dispatch(void)
 {
-    ctl_step_boost_ctrl(&boost_ctrl);
+    ctl_step_buck_ctrl(&buck_ctrl);
 }
 
 #ifdef __cplusplus

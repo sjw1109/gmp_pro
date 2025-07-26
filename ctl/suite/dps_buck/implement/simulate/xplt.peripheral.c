@@ -22,8 +22,9 @@
 
 // SIL standard port for Motor control
 
-ptr_adc_channel_t boost_adc_channel[ADC_BOOST_CHANNEL_NUM];
+ptr_adc_channel_t buck_adc_channel[ADC_BUCK_CHANNEL_NUM];
 pwm_channel_t pwm_out;
+
 
 //////////////////////////////////////////////////////////////////////////
 // peripheral setup function
@@ -38,7 +39,7 @@ void setup_peripheral(void)
 
     ctl_init_ptr_adc_channel(
         // ptr_adc object
-        &boost_adc_channel[ADC_RESULT_IL],
+        &buck_adc_channel[ADC_RESULT_IL],
         // pointer to ADC raw data
         &simulink_rx_buffer.adc_result[ADC_RESULT_IL],
         // ADC Channel settings.
@@ -49,23 +50,23 @@ void setup_peripheral(void)
 
     ctl_init_ptr_adc_channel(
         // ptr_adc object
-        &boost_adc_channel[ADC_RESULT_UIN],
+        &buck_adc_channel[ADC_RESULT_UIN],
         // pointer to ADC raw data
         &simulink_rx_buffer.adc_result[ADC_RESULT_UIN],
         // ADC Channel settings.
-        ctl_gain_calc_via_gain(CTRL_ADC_VOLTAGE_REF, CTRL_CURRENT_ADC_GAIN, CTRL_CURRENT_BASE),
-        ctl_bias_calc_via_Vref_Vbias(CTRL_ADC_VOLTAGE_REF, CTRL_CURRENT_ADC_BIAS),
+        ctl_gain_calc_via_gain(CTRL_ADC_VOLTAGE_REF, CTRL_VOLTAGE_ADC_GAIN, CTRL_VOLTAGE_BASE),
+        ctl_bias_calc_via_Vref_Vbias(CTRL_ADC_VOLTAGE_REF, CTRL_VOLTAGE_ADC_BIAS),
         // iqn is valid only when ctrl_gt is a fixed point type.
         CTRL_ADC_RESOLUTION, 24);
 
     ctl_init_ptr_adc_channel(
         // ptr_adc object
-        &boost_adc_channel[ADC_RESULT_UOUT],
+        &buck_adc_channel[ADC_RESULT_UOUT],
         // pointer to ADC raw data
         &simulink_rx_buffer.adc_result[ADC_RESULT_UOUT],
         // ADC Channel settings.
-        ctl_gain_calc_via_gain(CTRL_ADC_VOLTAGE_REF, CTRL_CURRENT_ADC_GAIN, CTRL_CURRENT_BASE),
-        ctl_bias_calc_via_Vref_Vbias(CTRL_ADC_VOLTAGE_REF, CTRL_CURRENT_ADC_BIAS),
+        ctl_gain_calc_via_gain(CTRL_ADC_VOLTAGE_REF, CTRL_VOLTAGE_ADC_GAIN, CTRL_VOLTAGE_BASE),
+        ctl_bias_calc_via_Vref_Vbias(CTRL_ADC_VOLTAGE_REF, CTRL_VOLTAGE_ADC_BIAS),
         // iqn is valid only when ctrl_gt is a fixed point type.
         CTRL_ADC_RESOLUTION, 24);
 
@@ -75,13 +76,13 @@ void setup_peripheral(void)
     // Step II Connect Standard Interface to controller
     //
 
-ctl_attach_boost_ctrl_input(
+    ctl_attach_buck_ctrl_input(
         // Boost controller
-        &boost_ctrl,
+        &buck_ctrl,
         // output capacitor voltage
-        &boost_adc_channel[ADC_RESULT_UOUT].control_port,
+        &buck_adc_channel[ADC_RESULT_UOUT].control_port,
         // inductor current
-        &boost_adc_channel[ADC_RESULT_IL].control_port,
+        &buck_adc_channel[ADC_RESULT_IL].control_port,
         // input voltage
-        &boost_adc_channel[ADC_RESULT_UIN].control_port);
+        &buck_adc_channel[ADC_RESULT_UIN].control_port);
 }

@@ -22,10 +22,7 @@
 
 #include <ctl/component/intrinsic/continuous/continuous_pid.h>
 
-#include <ctl/component/digital_power/basic/boost.h>
-
-pid_regular_t current_pid, voltage_pid;
-ctrl_gt pwm_out_pu;
+#include <ctl/component/digital_power/basic/buck.h>
 
 // enable controller
 #if !defined SPECIFY_PC_ENVIRONMENT
@@ -38,7 +35,7 @@ volatile fast_gt flag_system_running = 0;
 volatile fast_gt flag_error = 0;
 
 // Boost Controller Suite
-boost_ctrl_t boost_ctrl;
+buck_ctrl_t buck_ctrl;
 
 //
 adc_bias_calibrator_t adc_calibrator;
@@ -51,9 +48,9 @@ volatile fast_gt flag_enable_system = 0;
 // CTL initialize routine
 void ctl_init()
 {
-    ctl_init_boost_ctrl(
+    ctl_init_buck_ctrl(
         // Boost controller
-        &boost_ctrl,
+        &buck_ctrl,
         // Voltage PID controller
         1.5f, 0.02f, 0,
         // Current PID controller
@@ -67,8 +64,8 @@ void ctl_init()
 
 #if (BUILD_LEVEL == 1)
     // Open loop
-    ctl_boost_ctrl_openloop_mode(&boost_ctrl);
-    ctl_set_boost_ctrl_voltage_openloop(&boost_ctrl, float2ctrl(0.5));
+    ctl_set_buck_openloop_mode(&buck_ctrl);
+    ctl_set_buck_uo_openloop(&buck_ctrl, float2ctrl(0.18));
 
 #elif (BUILD_LEVEL == 2)
     // Current Loop
@@ -162,7 +159,7 @@ void ctl_mainloop(void)
 // if return 0 the system is not ready to enable
 fast_gt ctl_ready_mainloop(void)
 {
-    ctl_clear_boost_ctrl(&boost_ctrl);
+    ctl_clear_buck_ctrl(&buck_ctrl);
 
     return 1;
 }

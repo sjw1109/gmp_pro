@@ -27,7 +27,7 @@ extern "C"
 // Controller interface
 //
 
-extern ptr_adc_channel_t boost_adc_channel[ADC_BOOST_CHANNEL_NUM];
+extern ptr_adc_channel_t buck_adc_channel[ADC_BUCK_CHANNEL_NUM];
 
 extern pwm_channel_t pwm_out;
 
@@ -36,8 +36,8 @@ GMP_STATIC_INLINE
 void ctl_input_callback(void)
 {
     // invoke ADC p.u. routine
-    for (size_gt index = 0; index < ADC_BOOST_CHANNEL_NUM; ++index)
-        ctl_step_ptr_adc_channel(&boost_adc_channel[index]);
+    for (size_gt index = 0; index < ADC_BUCK_CHANNEL_NUM; ++index)
+        ctl_step_ptr_adc_channel(&buck_adc_channel[index]);
 }
 
 // Output Callback
@@ -47,17 +47,17 @@ void ctl_output_callback(void)
     //
     // PWM Channel
     //
-    simulink_tx_buffer.pwm_cmp[0] = ctl_calc_pwm_channel(&pwm_out, ctl_get_boost_ctrl_modulation(&boost_ctrl));
+    simulink_tx_buffer.pwm_cmp[0] = ctl_calc_pwm_channel(&pwm_out, ctl_get_buck_ctrl_modulation(&buck_ctrl));
 
     //
     // Monitor
     //
-    simulink_tx_buffer.monitor[0] = boost_adc_channel[ADC_RESULT_IL].control_port.value;
-    simulink_tx_buffer.monitor[1] = boost_adc_channel[ADC_RESULT_UIN].control_port.value;
-    simulink_tx_buffer.monitor[2] = boost_adc_channel[ADC_RESULT_UOUT].control_port.value;
+    simulink_tx_buffer.monitor[0] = buck_adc_channel[ADC_RESULT_IL].control_port.value;
+    simulink_tx_buffer.monitor[1] = buck_adc_channel[ADC_RESULT_UIN].control_port.value;
+    simulink_tx_buffer.monitor[2] = buck_adc_channel[ADC_RESULT_UOUT].control_port.value;
 
-    simulink_tx_buffer.monitor[3] = boost_ctrl.voltage_pid.out;
-    simulink_tx_buffer.monitor[4] = boost_ctrl.current_pid.out;
+    simulink_tx_buffer.monitor[3] = buck_ctrl.voltage_pid.out;
+    simulink_tx_buffer.monitor[4] = buck_ctrl.current_pid.out;
 
     simulink_tx_buffer.dac[0] = 20;
 }
@@ -67,7 +67,7 @@ void ctl_output_callback(void)
 GMP_STATIC_INLINE
 void ctl_enable_output()
 {
-    ctl_enable_boost_ctrl(&boost_ctrl);
+    ctl_enable_buck_ctrl(&buck_ctrl);
 
     csp_sl_enable_output();
 
