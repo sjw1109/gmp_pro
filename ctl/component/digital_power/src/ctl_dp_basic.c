@@ -16,7 +16,7 @@ void ctl_init_buck_ctrl(
     // Controller frequency, Hz
     parameter_gt fs)
 {
-    ctl_disable_buck_ctrl(&buck);
+    ctl_disable_buck_ctrl(buck);
 
     ctl_init_saturation(&buck->modulation_saturation, uin_min, uin_max);
     ctl_init_pid_ser(&buck->current_pid, i_kp, i_Ti, i_Td, fs);
@@ -56,7 +56,7 @@ void ctl_init_boost_ctrl(
     // Controller frequency, Hz
     parameter_gt fs)
 {
-    ctl_disable_boost_ctrl(&boost);
+    ctl_disable_boost_ctrl(boost);
 
     ctl_init_pid(
         // continuous PID handle
@@ -73,6 +73,8 @@ void ctl_init_boost_ctrl(
         i_kp, i_Ti, i_Td,
         // controller frequency
         fs);
+
+    ctl_init_saturation(&boost->modulation_saturation, vo_min, vo_max);
 
     ctl_clear_boost_ctrl(boost);
 }
