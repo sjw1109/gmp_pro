@@ -62,7 +62,7 @@ void ctl_init_three_phase_bridge_modulation(
     // current deadband
     ctrl_gt current_deadband);
 
-GMP_STATIC_INLINE 
+GMP_STATIC_INLINE
 void ctl_step_three_phase_bridge_modulation(
     // handle of three phase bridge
     three_phase_bridge_modulation_t *bridge,
@@ -71,9 +71,16 @@ void ctl_step_three_phase_bridge_modulation(
     // current
     ctrl_gt iA, ctrl_gt iB, ctrl_gt iC)
 {
-
-    pwm_gt comp_val_A = 0, comp_val_B = 0, comp_val_C = 0;
     pwm_gt deadband_half = bridge->pwm_deadband / 2;
+
+    ctrl_gt duty_A = ctl_div2(1.0f + uA);
+    pwm_gt phase_A_raw = pwm_mul(duty_A, bridge->pwm_full_scale);
+
+    ctrl_gt duty_B = ctl_div2(1.0f + uB);
+    pwm_gt phase_B_raw = pwm_mul(duty_B, bridge->pwm_full_scale);
+
+    ctrl_gt duty_C = ctl_div2(1.0f + uC);
+    pwm_gt phase_C_raw = pwm_mul(duty_C, bridge->pwm_full_scale);
 
     // --- Phase A Processing ---
     if (iA > bridge->current_deadband)
@@ -82,13 +89,9 @@ void ctl_step_three_phase_bridge_modulation(
         bridge->current_dir_A = -1;
 
     if (bridge->current_dir_A == 1)
-        comp_val_A = deadband_half;
+        bridge->phase_A = pwm_sat(phase_A_raw + deadband_half, bridge->pwm_full_scale, 0);
     else if (bridge->current_dir_A == -1)
-        comp_val_A = -deadband_half;
-
-    ctrl_gt duty_A = ctl_div2(1.0f + uA);
-    pwm_gt phase_A_raw = pwm_mul(duty_A, bridge->pwm_full_scale);
-    bridge->phase_A = pwm_sat(phase_A_raw + comp_val_A, bridge->pwm_full_scale, 0);
+        bridge->phase_A = pwm_sat(phase_A_raw - deadband_half, bridge->pwm_full_scale, 0);
 
     // --- Phase B Processing ---
     if (iB > bridge->current_deadband)
@@ -97,13 +100,9 @@ void ctl_step_three_phase_bridge_modulation(
         bridge->current_dir_B = -1;
 
     if (bridge->current_dir_B == 1)
-        comp_val_B = deadband_half;
+        bridge->phase_B = pwm_sat(phase_B_raw + deadband_half, bridge->pwm_full_scale, 0);
     else if (bridge->current_dir_B == -1)
-        comp_val_B = -deadband_half;
-
-    ctrl_gt duty_B = ctl_div2(1.0f + uB);
-    pwm_gt phase_B_raw = pwm_mul(duty_B, bridge->pwm_full_scale);
-    bridge->phase_B = pwm_sat(phase_B_raw + comp_val_B, bridge->pwm_full_scale, 0);
+        bridge->phase_B = pwm_sat(phase_B_raw - deadband_half, bridge->pwm_full_scale, 0);
 
     // --- Phase C Processing ---
     if (iC > bridge->current_deadband)
@@ -112,17 +111,13 @@ void ctl_step_three_phase_bridge_modulation(
         bridge->current_dir_C = -1;
 
     if (bridge->current_dir_C == 1)
-        comp_val_C = deadband_half;
+        bridge->phase_C = pwm_sat(phase_C_raw + deadband_half, bridge->pwm_full_scale, 0);
     else if (bridge->current_dir_C == -1)
-        comp_val_C = -deadband_half;
-
-    ctrl_gt duty_C = ctl_div2(1.0f + uC);
-    pwm_gt phase_C_raw = pwm_mul(duty_C, bridge->pwm_full_scale);
-    bridge->phase_C = pwm_sat(phase_C_raw + comp_val_C, bridge->pwm_full_scale, 0);
+        bridge->phase_C = pwm_sat(phase_C_raw - deadband_half, bridge->pwm_full_scale, 0);
 }
 
 // get modulation result
-GMP_STATIC_INLINE 
+GMP_STATIC_INLINE
 pwm_gt ctl_get_three_phase_modulation_result(
     // bridge handle
     three_phase_bridge_modulation_t *bridge,
