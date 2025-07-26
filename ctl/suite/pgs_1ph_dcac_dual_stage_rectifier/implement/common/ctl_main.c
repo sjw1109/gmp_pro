@@ -22,10 +22,17 @@
 
 #include <ctl/component/digital_power/topology_preset/single_phase_dc_ac.h>
 
-sinv_ctrl_t sinv_ctrl;
+#include<ctl/component/digital_power/basic/buck.h>
 
+
+sinv_ctrl_t sinv_ctrl;
+ctrl_gt V_set = float2ctrl(0.36f);
 ctl_pid_t current_outer;
 ctrl_gt ig_rms_ref = float2ctrl(0.1);
+//
+// buck controller
+buck_ctrl_t buck_ctrl;
+//
 
 // enable motor running
 #if !defined SPECIFY_PC_ENVIRONMENT
@@ -117,6 +124,24 @@ void ctl_init()
     ctl_init_pid_ser(&current_outer, 0.7, 0.1, 0, CONTROLLER_FREQUENCY);
 #endif // BUILD_LEVEL
 
+
+
+
+    //buck_initialization
+    ctl_init_buck_ctrl(
+        // Buck controller
+        &buck_ctrl,
+        // Voltage PID controller parameters
+        1.0f, 0.00005f, 0,
+        // Current PID controller parameters
+        0.7f, 10.0f, 0,
+        // valid uin range
+        0.1, 1,
+        // Controller frequency, Hz
+        1000,
+        CONTROLLER_FREQUENCY);
+
+
 #if BUILD_LEVEL == 1
     // Voltage open loop, inverter
     ctl_set_sinv_openloop_inverter(&sinv_ctrl);
@@ -188,6 +213,11 @@ void ctl_init()
 
 #endif // BUILD_LEVEL
 
+    
+    // buck controller settings
+    ctl_set_buck_voltage_loop_mode(&buck_ctrl);
+   // ctl_set_buck_uo(&buck_ctrl, float2ctrl(0.2f));
+    
     ctl_disable_output();
 
     // if in simulation mode, enable system automatically
