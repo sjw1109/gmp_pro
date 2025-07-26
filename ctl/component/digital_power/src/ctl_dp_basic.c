@@ -82,9 +82,9 @@ void ctl_init_boost_ctrl(
         // controller frequency
         fs);
 
-    ctl_init_lp_filter(&buck->lpf_il, fs, fc);
-    ctl_init_lp_filter(&buck->lpf_ui, fs, fc);
-    ctl_init_lp_filter(&buck->lpf_uo, fs, fc);
+    ctl_init_lp_filter(&boost->lpf_il, fs, fc);
+    ctl_init_lp_filter(&boost->lpf_ui, fs, fc);
+    ctl_init_lp_filter(&boost->lpf_uo, fs, fc);
 
     ctl_init_saturation(&boost->modulation_saturation, vo_min, vo_max);
 

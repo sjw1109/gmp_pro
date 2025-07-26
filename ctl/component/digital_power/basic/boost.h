@@ -169,7 +169,7 @@ ctrl_gt ctl_step_boost_ctrl(boost_ctrl_t *boost)
 
 #else // CTL_BOOST_CTRL_OUTPUT_WITHOUT_UOUT
 
-        boost->vo_sat = ctl_step_saturation(&boost->modulation_saturation, boost->lpf_uo.out);
+        boost->vo_sat = ctl_step_saturation(&boost->modulation_saturation, boost->voltage_out);
 #if CTL_BOOST_CTRL_POSITION == UPPER_BRIDGE
         // upper bridge is controlled
         boost->pwm_out_pu = ctl_div(boost->lpf_ui.out, boost->vo_sat);
