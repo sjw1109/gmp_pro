@@ -11,7 +11,7 @@ extern "C"
 
 // You may enable this macro to enter debug mode.
 // Duty of Buck will not calculated by Uin.
-#define CTL_BUCK_CTRL_OUTPUT_WITHOUT_UIN
+//#define CTL_BUCK_CTRL_OUTPUT_WITHOUT_UIN
 
 // Boost Controller
 typedef struct _tag_buck_ctrl_type

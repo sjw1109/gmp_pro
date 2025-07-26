@@ -20,12 +20,19 @@ extern "C"
 #define CTL_BOOST_CTRL_UIN_MIN ((float2ctrl(0.01)))
 #endif // CTL_BOOST_CTRL_UIN_MIN
 
+// BOOST will control upper side
+#define UPPER_BRIDGE (0)
+// BOOST will control lower side
+#define LOWER_BRIDGE (1)
+
 // BOOST HALF BRIDGE
 // if this macro is enable,  PWM output will control upper side
 // M = 1 / D
 // if this macro is disabled, PWM output will control lower side
 // M = 1 / (1-D)
-#define CTL_BOOST_CTRL_HALF_BRIDGE
+#ifndef CTL_BOOST_CTRL_POSITION
+#define CTL_BOOST_CTRL_POSITION UPPER_BRIDGE
+#endif // CTL_BOOST_CTRL_POSITION
 
 // Boost Controller
 typedef struct _tag_boost_ctrl_type
@@ -153,23 +160,23 @@ ctrl_gt ctl_step_boost_ctrl(boost_ctrl_t *boost)
 
 #ifdef CTL_BOOST_CTRL_OUTPUT_WITHOUT_UOUT
 
-#if defined CTL_BOOST_CTRL_HALF_BRIDGE
+#if CTL_BOOST_CTRL_POSITION == LOWER_BRIDGE
         // Boost duty is generated without input voltage
         boost->pwm_out_pu = float2ctrl(1) - boost->voltage_out;
-#else
+#elif CTL_BOOST_CTRL_POSITION == UPPER_BRIDGE
         boost->pwm_out_pu = boost->voltage_out;
-#endif // CTL_BOOST_CTRL_HALF_BRIDGE
+#endif // CTL_BOOST_CTRL_POSITION
 
 #else // CTL_BOOST_CTRL_OUTPUT_WITHOUT_UOUT
 
         boost->vo_sat = ctl_step_saturation(&boost->modulation_saturation, boost->lpf_uo.out);
-#if defined CTL_BOOST_CTRL_HALF_BRIDGE
+#if CTL_BOOST_CTRL_POSITION == UPPER_BRIDGE
         // upper bridge is controlled
         boost->pwm_out_pu = ctl_div(boost->lpf_ui.out, boost->vo_sat);
-#else
+#elif CTL_BOOST_CTRL_POSITION == LOWER_BRIDGE
         // lower bridge is controlled
         boost->pwm_out_pu = GMP_CONST_1 - ctl_div(boost->lpf_ui.out, boost->vo_sat);
-#endif // CTL_BOOST_CTRL_HALF_BRIDGE
+#endif // CTL_BOOST_CTRL_POSITION
 
 #endif // CTL_BOOST_CTRL_OUTPUT_WITHOUT_UOUT
     }
