@@ -29,6 +29,8 @@ sinv_ctrl_t sinv_ctrl;
 ctrl_gt V_set = float2ctrl(0.36f);
 ctl_pid_t current_outer;
 ctrl_gt ig_rms_ref = float2ctrl(0.1);
+
+
 //
 // buck controller
 buck_ctrl_t buck_ctrl;
@@ -127,7 +129,9 @@ void ctl_init()
 
 
 
-    //buck_initialization
+    // buck_initialization
+    // current tend to have a lower kp.
+    // if output voltage has high frequency noise select less current kp.
     ctl_init_buck_ctrl(
         // Buck controller
         &buck_ctrl,
