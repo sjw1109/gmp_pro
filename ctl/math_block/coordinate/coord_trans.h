@@ -203,6 +203,53 @@ void ctl_ct_park2(
         -ctl_mul(ab->dat[phase_alpha], phasor->dat[phasor_sin]) + ctl_mul(ab->dat[phase_beta], phasor->dat[phasor_cos]);
 }
 
+// park coordinate axes transform
+// alpha-beta-0 to dq0
+GMP_STATIC_INLINE
+void ctl_ct_park_neg(
+    // alpha beta 0
+    ctl_vector3_t *ab, 
+    // phasor
+    ctl_vector2_t *phasor, 
+    // dq0
+    GMP_CTL_OUTPUT_TAG ctl_vector3_t *dq0_neg)
+{
+    //tex:
+    // $$i_d = i_\alpha \times cos\;(\theta) - i_\beta \times sin\;(\theta) $$
+    dq0_neg->dat[phase_d] =
+        ctl_mul(ab->dat[phase_alpha], phasor->dat[phasor_cos]) - ctl_mul(ab->dat[phase_beta], phasor->dat[phasor_sin]);
+    //tex:
+    // $$i_q =  i_\alpha \times sin\;(\theta) + i_\beta \times cos\;(\theta)$$
+    dq0_neg->dat[phase_q] =
+        ctl_mul(ab->dat[phase_alpha], phasor->dat[phasor_sin]) + ctl_mul(ab->dat[phase_beta], phasor->dat[phasor_cos]);
+    //tex:
+    // $$i_0 = i_0$$
+    dq0_neg->dat[phase_0] = ab->dat[phase_0];
+}
+
+// park coordinate axes transform
+// alpha-beta to dq
+GMP_STATIC_INLINE
+void ctl_ct_park2_neg(
+    // alpha beta
+    ctl_vector2_t *ab,
+    // phasor
+    ctl_vector2_t *phasor,
+    // dq0
+    GMP_CTL_OUTPUT_TAG ctl_vector2_t *dq0)
+{
+    //tex:
+    // $$i_d = i_\alpha \times cos\;(\theta) - i_\beta \times sin\;(\theta) $$
+    dq0->dat[phase_d] =
+        ctl_mul(ab->dat[phase_alpha], phasor->dat[phasor_cos]) - ctl_mul(ab->dat[phase_beta], phasor->dat[phasor_sin]);
+    //tex:
+    // $$i_q = i_\alpha \times sin\;(\theta) + i_\beta \times cos\;(\theta)$$
+    dq0->dat[phase_q] =
+        ctl_mul(ab->dat[phase_alpha], phasor->dat[phasor_sin]) + ctl_mul(ab->dat[phase_beta], phasor->dat[phasor_cos]);
+}
+
+
+
 // ipark coordinate axes transform
 // DQ to alpha_beta
 GMP_STATIC_INLINE
@@ -318,12 +365,12 @@ void ctl_ct_svpwm_calc(
     ctrl_gt Ualpha_tmp = -ctl_div2(ab0->dat[phase_alpha]);
     ctrl_gt Ubeta_tmp = ctl_mul(ab0->dat[phase_beta], GMP_CONST_SQRT_3_OVER_2);
 
-    //tex: 
-    // $$
-    // U_a = U_\alpha, \\
+    // tex:
+    //  $$
+    //  U_a = U_\alpha, \\
     // U_b = -U_\alpha /2 + \sqrt{3}/2\cdot U_\beta, \\
     // U_c = -U_\alpha /2 - \sqrt{3}/2\cdot U_\beta
-    // $$
+    //  $$
 
     Ua = ab0->dat[phase_alpha];
     Ub = Ualpha_tmp + Ubeta_tmp;
