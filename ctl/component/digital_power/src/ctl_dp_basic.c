@@ -57,7 +57,8 @@ void ctl_init_boost_ctrl(
     parameter_gt v_kp, parameter_gt v_Ti, parameter_gt v_Td,
     // Current PID controller
     parameter_gt i_kp, parameter_gt i_Ti, parameter_gt i_Td,
-    // valid voltage input range
+    // valid voltage input range,
+    // NOTE vo_min should greater than vin
     parameter_gt vo_min, parameter_gt vo_max,
     // input filter cut frequency
     parameter_gt fc,

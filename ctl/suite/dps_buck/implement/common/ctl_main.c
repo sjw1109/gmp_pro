@@ -56,9 +56,9 @@ void ctl_init()
         // Current PID controller
         3.0f, 0.01f, 0,
         // valid voltage output range
-        0.1f, 1,
+        0.1f, 1.0f,
         // input filter cut frequency
-        1000.0,
+        1000.0f,
         // Controller frequency, Hz
         CONTROLLER_FREQUENCY);
 
