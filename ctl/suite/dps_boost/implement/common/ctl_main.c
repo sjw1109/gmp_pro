@@ -24,8 +24,6 @@
 
 #include <ctl/component/digital_power/basic/boost.h>
 
-pid_regular_t current_pid, voltage_pid;
-ctrl_gt pwm_out_pu;
 
 // enable controller
 #if !defined SPECIFY_PC_ENVIRONMENT
@@ -39,6 +37,11 @@ volatile fast_gt flag_error = 0;
 
 // Boost Controller Suite
 boost_ctrl_t boost_ctrl;
+
+#if BUILD_LEVEL >= 4
+mppt_PnO_algo_t mppt;
+ctrl_gt mppt_set;
+#endif // BUILD_LEVEL
 
 //
 adc_bias_calibrator_t adc_calibrator;
@@ -65,6 +68,26 @@ void ctl_init()
         // Controller frequency, Hz
         CONTROLLER_FREQUENCY);
 
+#if BUILD_LEVEL >= 4
+
+    ctl_init_mppt_PnO_algo(
+        // MPPT object handle
+        &mppt,
+        // initial voltage reference
+        0.8f,
+        // scope of search
+        0.95f, 0.4f,
+        // Range of search speed
+        0.05f, 0.001f,
+        // Convergence time constant of search speed when reaching steady state
+        1.0f,
+        // MPPT algorithm divider
+        20.0f,
+        // ISR frequency
+        CONTROLLER_FREQUENCY);
+
+#endif
+
 #if (BUILD_LEVEL == 1)
     // Open loop
     ctl_boost_ctrl_openloop_mode(&boost_ctrl);
@@ -81,7 +104,11 @@ void ctl_init()
     ctl_set_boost_ctrl_voltage(&boost_ctrl, float2ctrl(0.5));
 
 #elif (BUILD_LEVEL == 4)
-    // Current loop for DC bus
+    // MPPT open loop
+    ctl_boost_ctrl_openloop_mode(&boost_ctrl);
+    ctl_set_boost_ctrl_voltage_openloop(&boost_ctrl, float2ctrl(0.5));
+
+    ctl_disable_mppt_PnO_algo(&mppt);
 
 #elif (BUILD_LEVEL == 5)
     // Current loop MPPT
@@ -140,6 +167,15 @@ void ctl_mainloop(void)
             ctl_enable_output();
             started_flag = 1;
         }
+
+#if BUILD_LEVEL >= 4
+
+        if (gmp_base_get_system_tick() - tick_bias > 300)
+        {
+            ctl_enable_mppt_PnO_algo(&mppt);
+        }
+
+#endif // BUILD_LEVEL
     }
     // if system is disabled
     else // (flag_system_enable == 0)

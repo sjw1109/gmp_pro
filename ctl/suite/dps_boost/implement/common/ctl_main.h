@@ -24,6 +24,8 @@
 
 #include <ctl\component\digital_power\basic/boost.h>
 
+#include <ctl/component/digital_power/mppt/PnO_algorithm.h>
+
 #include <xplt.peripheral.h>
 
 #ifndef _FILE_CTL_MAIN_H_
@@ -47,18 +49,26 @@ extern adc_bias_calibrator_t adc_calibrator;
 extern fast_gt flag_enable_adc_calibrator;
 extern fast_gt index_adc_calibrator;
 
-
 extern volatile fast_gt flag_system_enable;
 extern volatile fast_gt flag_system_running;
 
-
 // Boost Controller Suite
 extern boost_ctrl_t boost_ctrl;
+
+#if BUILD_LEVEL >= 4
+extern ctrl_gt mppt_set;
+extern mppt_PnO_algo_t mppt;
+#endif // BUILD_LEVEL
 
 // periodic callback function things.
 GMP_STATIC_INLINE
 void ctl_dispatch(void)
 {
+#if BUILD_LEVEL >= 4
+    mppt_set = ctl_step_mppt_PnO_algo(&mppt, boost_ctrl.lpf_ui.out, boost_ctrl.lpf_il.out);
+    ctl_set_boost_ctrl_voltage_openloop(&boost_ctrl, 1.0f - mppt_set);
+#endif // BUILD_LEVEL
+
     ctl_step_boost_ctrl(&boost_ctrl);
 }
 
