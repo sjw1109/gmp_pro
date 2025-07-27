@@ -123,7 +123,7 @@ void ctl_ct_clark(
 GMP_STATIC_INLINE
 void ctl_ct_clark_2ph(
     // A and B phase voltage/current
-    ctl_vector3_t *ab0,
+    ctl_vector2_t *ab0,
     // alpha beta
     GMP_CTL_OUTPUT_TAG ctl_vector2_t *ab)
 {
